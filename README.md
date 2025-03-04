@@ -1,4 +1,4 @@
-# TuituionToAll-v2
+# TuitionToAll-v2
  
 - Tuition to all is a centralized lms system that allows every institute, teachers and students to connect to together
 
