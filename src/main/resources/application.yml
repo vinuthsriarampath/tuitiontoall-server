@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: TuitionToAll-V2
+
+  datasource:
+    url: ${DB_URL}?createDatabaseIfNotExist=true
+    username: ${DB_USERNAME}
+    password: ${DB_PWD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  security:
+    user:
+      name: admin
+      password: admin
