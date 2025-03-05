@@ -29,3 +29,11 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'temurin'
           cache: 'maven'
+
+      - name: Extract Project Version
+        id: get_version
+        run: |
+            VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+            echo "PROJECT_VERSION=$VERSION" >> $GITHUB_OUTPUT
+            echo "TAG_VERSION=v$VERSION" >> $GITHUB_OUTPUT
+            echo "Extracted version: $VERSION"
