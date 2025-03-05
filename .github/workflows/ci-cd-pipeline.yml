@@ -70,8 +70,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}
-            ghcr.io/${{ github.repository }}
+            ${{ secrets.DOCKER_USERNAME }}/$(echo "${{ github.event.repository.name }}" | tr '[:upper:]' '[:lower:]')
+            ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           tags: |
             type=raw,value=${{ steps.get_version.outputs.PROJECT_VERSION }}
             type=sha
