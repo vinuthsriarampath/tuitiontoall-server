@@ -21,6 +21,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Convert repository name to lowercase
+        run: |
+          LOWERCASE_REPO_NAME=$(echo '${{ github.event.repository.name }}' | tr '[:upper:]' '[:lower:]')
+          echo "REPO_NAME=$LOWERCASE_REPO_NAME" >> $GITHUB_ENV
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -76,10 +81,6 @@ jobs:
             type=raw,value=${{ steps.get_version.outputs.PROJECT_VERSION }}
             type=sha
 
-      - name: Convert repository name to lowercase
-        run: echo "REPO_NAME=$(echo '${{ github.event.repository.name }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
-
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -95,7 +96,7 @@ jobs:
 
       - name: Publish Docker Package
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ steps.get_version.outputs.PROJECT_VERSION }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ steps.get_version.outputs.PROJECT_VERSION }}
           docker push ghcr.io/${{ github.repository }}:${{ steps.get_version.outputs.PROJECT_VERSION }}
 
       - name: Create GitHub Release
