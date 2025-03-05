@@ -38,13 +38,13 @@ jobs:
             echo "TAG_VERSION=v$VERSION" >> $GITHUB_OUTPUT
             echo "Extracted version: $VERSION"
 
-      - name: Create Git Tag
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git tag ${{ steps.get_version.outputs.TAG_VERSION }}
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
-          git push origin ${{ steps.get_version.outputs.TAG_VERSION }}
+#      - name: Create Git Tag
+#        run: |
+#          git config --global user.name "github-actions"
+#          git config --global user.email "github-actions@github.com"
+#          git tag ${{ steps.get_version.outputs.TAG_VERSION }}
+#          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
+#          git push origin ${{ steps.get_version.outputs.TAG_VERSION }}
 
       - name: Build with Maven
         run: mvn clean package -DskipTests
