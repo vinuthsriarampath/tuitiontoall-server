@@ -9,6 +9,7 @@ on:
       - release/production
     tags:
       - 'v*.*.*'
+
 env:
   JAVA_VERSION: 22
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -22,7 +23,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        
+
       - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
@@ -33,31 +34,20 @@ jobs:
       - name: Extract Project Version
         id: get_version
         run: |
-            VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-            echo "PROJECT_VERSION=$VERSION" >> $GITHUB_OUTPUT
-            echo "TAG_VERSION=v$VERSION" >> $GITHUB_OUTPUT
-            echo "Extracted version: $VERSION"
-
-#      - name: Create Git Tag
-#        run: |
-#          git config --global user.name "github-actions"
-#          git config --global user.email "github-actions@github.com"
-#          git tag ${{ steps.get_version.outputs.TAG_VERSION }}
-#          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git
-#          git push origin ${{ steps.get_version.outputs.TAG_VERSION }}
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "PROJECT_VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "TAG_VERSION=v$VERSION" >> $GITHUB_OUTPUT
+          echo "Extracted version: $VERSION"
 
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      - name: List files in target directory
-        run: ls -l target
-
       - name: Find JAR file
         id: find_jar
         run: |
-            JAR_PATH=$(find target -name "*.jar" | grep -v "original")
-            echo "JAR_PATH=$JAR_PATH"
-            echo "JAR_PATH=$JAR_PATH" >> $GITHUB_ENV
+          JAR_PATH=$(find target -name "*.jar" | grep -v "original")
+          echo "JAR_PATH=$JAR_PATH" >> $GITHUB_ENV
+          echo "JAR_PATH=$JAR_PATH" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -93,17 +83,24 @@ jobs:
           file: Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ steps.get_version.outputs.PROJECT_VERSION }}
+            ghcr.io/${{ github.repository }}:${{ steps.get_version.outputs.PROJECT_VERSION }}
           build-args: |
-              JAR_FILE=${{ steps.find_jar.outputs.JAR_PATH }}
+            JAR_FILE=${{ steps.find_jar.outputs.JAR_PATH }}
+
+      - name: Publish Docker Package
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}:${{ steps.get_version.outputs.PROJECT_VERSION }}
+          docker push ghcr.io/${{ github.repository }}:${{ steps.get_version.outputs.PROJECT_VERSION }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-            tag_name: ${{ steps.get_version.outputs.TAG_VERSION }}
-            name: Release ${{ steps.get_version.outputs.PROJECT_VERSION }}
-            draft: false
-            prerelease: false
-            generate_release_notes: true
-            files: |
-              ${{ steps.find_jar.outputs.JAR_PATH }}
+          tag_name: ${{ steps.get_version.outputs.TAG_VERSION }}
+          name: Release ${{ steps.get_version.outputs.PROJECT_VERSION }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            ${{ steps.find_jar.outputs.JAR_PATH }}
