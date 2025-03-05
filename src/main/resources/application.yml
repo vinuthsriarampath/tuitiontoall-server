@@ -3,7 +3,7 @@ spring:
     name: TuitionToAll-V2
 
   datasource:
-    url: ${DB_URL}?createDatabaseIfNotExist=true
+    url: ${DB_URL}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
     username: ${DB_USERNAME}
     password: ${DB_PWD}
 
