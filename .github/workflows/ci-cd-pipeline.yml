@@ -58,10 +58,6 @@ jobs:
             echo "JAR_PATH=$JAR_PATH"
             echo "JAR_PATH=$JAR_PATH" >> $GITHUB_ENV
 
-      - name: Debug JAR path
-        run:
-          echo "Using JAR file: ${{ env.JAR_PATH }}"
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
