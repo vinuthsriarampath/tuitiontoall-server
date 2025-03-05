@@ -53,3 +53,14 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GH_TOKEN }}
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}
+            ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=${{ steps.get_version.outputs.PROJECT_VERSION }}
+            type=sha
