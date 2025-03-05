@@ -37,6 +37,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Find JAR file
+        id: find_jar
+        run: |
+          JAR_PATH=$(find target -name "*.jar" | grep -v "original")
+          echo "JAR_PATH=$JAR_PATH" >> $GITHUB_ENV
+          echo "JAR_PATH=$JAR_PATH" >> $GITHUB_OUTPUT
+
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
       - name: Install cosign

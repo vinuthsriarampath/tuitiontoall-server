@@ -82,28 +82,18 @@ jobs:
             type=raw,value=${{ steps.get_version.outputs.PROJECT_VERSION }}
             type=sha
 
-#      - name: Build and push Docker image
-#        uses: docker/build-push-action@v5
-#        with:
-#          context: .
-#          file: Dockerfile
-#          push: true
-#          platforms: linux/amd64
-#          tags: |
-#            ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME_SHORT }}:${{ steps.get_version.outputs.PROJECT_VERSION }}
-#            ghcr.io/${{ env.REPO_NAME }}:${{ steps.get_version.outputs.PROJECT_VERSION }}
-#          build-args: |
-#            JAR_FILE=${{ steps.find_jar.outputs.JAR_PATH }}
       - name: Build and push Docker image
-        id: build-and-push
-        uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
+        uses: docker/build-push-action@v5
         with:
           context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          file: Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME_SHORT }}:${{ steps.get_version.outputs.PROJECT_VERSION }}
+            ghcr.io/${{ env.REPO_NAME }}:${{ steps.get_version.outputs.PROJECT_VERSION }}
+          build-args: |
+            JAR_FILE=${{ steps.find_jar.outputs.JAR_PATH }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
