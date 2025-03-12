@@ -15,7 +15,6 @@ package edu.vinu.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.vinu.common.BaseAuditingEntity;
 import edu.vinu.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,13 +22,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends BaseAuditingEntity {
+public class User{
     private Long id;
     private String firstName;
     private String lastName;

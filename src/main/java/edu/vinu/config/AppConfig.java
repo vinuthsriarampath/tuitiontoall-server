@@ -13,7 +13,6 @@
 
 package edu.vinu.config;
 
-import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,11 +23,6 @@ public class AppConfig {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder(12);
-    }
-
-    @Bean
-    public EmailValidator emailValidator(){
-        return new EmailValidator();
     }
 
     @Bean

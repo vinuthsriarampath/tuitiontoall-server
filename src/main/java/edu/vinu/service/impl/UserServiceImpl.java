@@ -13,7 +13,6 @@
 
 package edu.vinu.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.vinu.entity.UserEntity;
 import edu.vinu.model.User;
 import edu.vinu.repository.UserRepository;
@@ -31,5 +30,10 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(String email) {
         UserEntity userEntity=userRepository.findByEmail(email);
         return mapper.map(userEntity, User.class);
+    }
+
+    @Override
+    public boolean isUserExist(String email) {
+        return userRepository.existsByEmail(email);
     }
 }

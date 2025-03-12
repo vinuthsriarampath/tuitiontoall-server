@@ -1,21 +1,8 @@
-/*
- * Copyright (c) 2025 vinuth sri arampath
- *
- * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
- * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
- * without prior written permission is strictly prohibited.
- *
- * Portions of this code may be generated with AI and modified by vinuth sri arampath
- * All rights reserved.
- *
- *
- */
-
 package edu.vinu.request;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import edu.vinu.enums.Role;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,19 +15,32 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRegistrationRequest {
-    @NotNull
-    @NotBlank
+
+    @NotBlank(message = "First Name cannot be blank")
     private String firstName;
+
+    @NotBlank(message = "Last Name cannot be blank")
     private String lastName;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Past(message = "Date of Birth must be in the past")
+    @NotNull(message = "Date of Birth cannot be null")
     private LocalDate dob;
+
+    @NotBlank(message = "Address cannot be blank")
     private String address;
+
+    @NotBlank(message = "Contact cannot be blank")
+    @Size(min = 10, max = 10, message = "Contact must be 10 digits long")
     private String contact;
-    @NotNull
-    @NotBlank
+
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Invalid Email Address")
     private String email;
-    @NotNull
-    @NotBlank
+
+    @NotBlank(message = "Password cannot be null")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
+
     private Role role;
 }

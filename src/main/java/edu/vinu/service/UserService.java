@@ -17,4 +17,5 @@ import edu.vinu.model.User;
 
 public interface UserService {
     User getUserByEmail(String email);
+    boolean isUserExist(String email);
 }
