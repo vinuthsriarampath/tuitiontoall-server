@@ -14,7 +14,7 @@
 package edu.vinu.enums;
 
 public enum Role {
-    TEACHER,
-    STUDENT,
-    INSTITUTE
+    ROLE_TEACHER,
+    ROLE_STUDENT,
+    ROLE_INSTITUTE
 }

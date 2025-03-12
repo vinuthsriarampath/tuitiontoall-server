@@ -28,7 +28,7 @@ public class UserPrinciple implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(userEntity.getRole().toString()));
+        return Collections.singleton(new SimpleGrantedAuthority(userEntity.getRole().name()));
     }
 
     @Override
@@ -39,6 +39,21 @@ public class UserPrinciple implements UserDetails {
     @Override
     public String getUsername() {
         return userEntity.getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
     @Override

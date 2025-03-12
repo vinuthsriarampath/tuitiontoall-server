@@ -42,18 +42,23 @@ public class JwtService {
         }
     }
     public String generateToken(Authentication authentication) {
-        UserPrinciple userPrinciple =(UserPrinciple) authentication.getPrincipal();
-        List<String> roles = userPrinciple.getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority).toList();
+        UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("roles", userPrincipal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList());
+
+
         return Jwts.builder()
-                .subject(userPrinciple.getUsername())
-                .claim("role",roles)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))
+                .claims(claims)
+                .subject(userPrincipal.getUsername())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours validity
                 .signWith(getKey())
                 .compact();
     }
+
 
     private SecretKey getKey(){
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -87,7 +92,4 @@ public class JwtService {
         final String username= extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
-
-
-
 }

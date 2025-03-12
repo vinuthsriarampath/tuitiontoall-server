@@ -21,7 +21,6 @@ import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Setter
 @Getter
@@ -29,7 +28,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity extends BaseAuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
