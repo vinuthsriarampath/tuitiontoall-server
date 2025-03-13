@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   app:
-    image: vinuthsriarampath/tuitiontoall:2.0.1
+    image: vinuthsriarampath/tuitiontoall:2.1.1
     ports:
       - "8080:8080"
     environment:
