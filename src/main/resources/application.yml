@@ -8,11 +8,8 @@ spring:
     password: ${DB_PWD}
 
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: update
     show-sql: true
 
-  security:
-    user:
-      name: admin
-      password: admin

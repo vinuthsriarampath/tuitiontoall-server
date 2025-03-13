@@ -11,14 +11,19 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.model.user_models;
 
-import edu.vinu.entity.user_entities.UserEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Repository
-public interface UserRepository extends JpaRepository<UserEntity,Long> {
-    UserEntity findByEmail(String username);
-    boolean existsByEmail(String email);
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Institute extends User {
+    @JsonProperty(index = 2)
+    private String instituteName;
 }

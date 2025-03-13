@@ -11,8 +11,9 @@
  *
  */
 
-package edu.vinu.service.impl;
+package edu.vinu.service.auth.impl;
 
+import edu.vinu.exception.custom.InternalServerErrorException;
 import edu.vinu.model.UserPrinciple;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -26,19 +27,22 @@ import org.springframework.stereotype.Service;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private String secretKey;
+    private final String secretKey;
     public JwtService(){
         try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
             SecretKey sk =keyGenerator.generateKey();
             secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            throw new InternalServerErrorException("Internal Server Error while generating secret key");
         }
     }
     public String generateToken(Authentication authentication) {
@@ -49,16 +53,14 @@ public class JwtService {
                 .map(GrantedAuthority::getAuthority)
                 .toList());
 
-
         return Jwts.builder()
                 .claims(claims)
                 .subject(userPrincipal.getUsername())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours validity
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 .signWith(getKey())
                 .compact();
     }
-
 
     private SecretKey getKey(){
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);

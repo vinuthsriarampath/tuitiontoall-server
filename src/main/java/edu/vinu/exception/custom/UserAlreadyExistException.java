@@ -11,15 +11,10 @@
  *
  */
 
-package edu.vinu.service;
+package edu.vinu.exception.custom;
 
-import edu.vinu.model.User;
-import edu.vinu.request.UserLoginRequest;
-import edu.vinu.request.UserRegistrationRequest;
-import edu.vinu.response.AuthResponse;
-
-public interface UserAuthenticationService {
-    User registerUser(UserRegistrationRequest user);
-
-    AuthResponse verify(UserLoginRequest request);
+public class UserAlreadyExistException extends RuntimeException {
+    public UserAlreadyExistException() {
+        super("User Already Exist");
+    }
 }

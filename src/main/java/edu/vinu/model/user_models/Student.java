@@ -11,33 +11,27 @@
  *
  */
 
-package edu.vinu.model;
+package edu.vinu.model.user_models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import edu.vinu.enums.Role;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticatedUserData {
-    private Long id;
+@AllArgsConstructor
+public class Student extends User {
+    @JsonProperty(index = 2)
     private String firstName;
+    @JsonProperty(index = 3)
     private String lastName;
+    @JsonProperty(index = 4)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dob;
-    private String address;
-    private String contact;
-    private String email;
-    private Role role;
-    private boolean isDisabled;
-
 }

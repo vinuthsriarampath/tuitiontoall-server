@@ -13,14 +13,13 @@
 
 package edu.vinu.filter;
 
-import edu.vinu.exception.UnauthorizedException;
-import edu.vinu.service.impl.JwtService;
-import edu.vinu.service.impl.UserDetailsServiceImpl;
+import edu.vinu.exception.custom.UnauthorizedException;
+import edu.vinu.service.auth.impl.JwtService;
+import edu.vinu.service.auth.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

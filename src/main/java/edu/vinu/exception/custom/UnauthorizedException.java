@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.exception;
+package edu.vinu.exception.custom;
 
-public class UserAlreadyExistException extends RuntimeException {
-    public UserAlreadyExistException() {
-        super("User Already Exist");
+public class UnauthorizedException extends RuntimeException {
+    public UnauthorizedException(String message) {
+        super(message);
     }
 }

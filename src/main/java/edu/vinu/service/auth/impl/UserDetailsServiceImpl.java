@@ -11,9 +11,9 @@
  *
  */
 
-package edu.vinu.service.impl;
+package edu.vinu.service.auth.impl;
 
-import edu.vinu.entity.UserEntity;
+import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.model.UserPrinciple;
 import edu.vinu.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

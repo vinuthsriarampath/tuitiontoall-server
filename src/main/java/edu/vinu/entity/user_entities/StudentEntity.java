@@ -11,19 +11,27 @@
  *
  */
 
-package edu.vinu.response;
+package edu.vinu.entity.user_entities;
 
-import edu.vinu.model.user_models.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponse {
-    private String token;
-    private User user;
+@Entity
+@DiscriminatorValue("STUDENT")
+public class StudentEntity extends UserEntity {
+    private String firstName;
+    private String lastName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dob;
 }

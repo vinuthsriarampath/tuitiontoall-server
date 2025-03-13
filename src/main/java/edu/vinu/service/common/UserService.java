@@ -11,10 +11,11 @@
  *
  */
 
-package edu.vinu.exception;
+package edu.vinu.service.common;
 
-public class UnauthorizedException extends RuntimeException {
-    public UnauthorizedException(String message) {
-        super(message);
-    }
+import edu.vinu.model.user_models.User;
+
+public interface UserService {
+    User getUserByEmail(String email);
+    boolean isUserExist(String email);
 }

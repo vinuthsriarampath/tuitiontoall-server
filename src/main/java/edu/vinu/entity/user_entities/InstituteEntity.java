@@ -11,14 +11,21 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.entity.user_entities;
 
-import edu.vinu.entity.user_entities.UserEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Repository
-public interface UserRepository extends JpaRepository<UserEntity,Long> {
-    UserEntity findByEmail(String username);
-    boolean existsByEmail(String email);
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@DiscriminatorValue("INSTITUTE")
+public class InstituteEntity extends UserEntity {
+    private String instituteName;
 }

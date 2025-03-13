@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.exception;
+package edu.vinu.exception.custom;
 
-public class InvalidInputException extends RuntimeException {
-    public InvalidInputException(String message) {
+public class InternalServerErrorException extends RuntimeException {
+    public InternalServerErrorException(String message) {
         super(message);
     }
 }
