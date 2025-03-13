@@ -11,11 +11,10 @@
  *
  */
 
-package edu.vinu.service;
+package edu.vinu.exception.custom;
 
-import edu.vinu.model.User;
-
-public interface UserService {
-    User getUserByEmail(String email);
-    boolean isUserExist(String email);
+public class InvalidInputException extends RuntimeException {
+    public InvalidInputException(String message) {
+        super(message);
+    }
 }

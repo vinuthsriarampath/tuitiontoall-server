@@ -11,9 +11,11 @@
  *
  */
 
-package edu.vinu.response;
+package edu.vinu.model.user_models;
 
-import edu.vinu.model.user_models.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.vinu.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,9 +23,16 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponse {
-    private String token;
-    private User user;
+@AllArgsConstructor
+public class User{
+    @JsonProperty(index = 1)
+    private Long id;
+    private String address;
+    private String contact;
+    private String email;
+    @JsonIgnore
+    private String password;
+    private Role role;
+    private boolean isDisabled;
 }

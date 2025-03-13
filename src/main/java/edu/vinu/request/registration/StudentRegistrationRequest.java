@@ -11,14 +11,16 @@
  *
  */
 
-package edu.vinu.entity;
+package edu.vinu.request.registration;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import edu.vinu.common.BaseAuditingEntity;
-import edu.vinu.enums.Role;
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.NaturalId;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -26,21 +28,15 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "users")
-public class UserEntity extends BaseAuditingEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class StudentRegistrationRequest extends UserRegistrationRequest {
+    @NotBlank(message = "First Name cannot be blank")
     private String firstName;
+
+    @NotBlank(message = "Last Name cannot be blank")
     private String lastName;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Past(message = "Date of Birth must be in the past")
+    @NotNull(message = "Date of Birth cannot be null")
     private LocalDate dob;
-    private String address;
-    private String contact;
-    @NaturalId
-    private String email;
-    private String password;
-    private Role role;
-    private boolean isDisabled;
 }

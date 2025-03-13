@@ -13,6 +13,10 @@
 
 package edu.vinu.exception;
 
+import edu.vinu.exception.custom.InternalServerErrorException;
+import edu.vinu.exception.custom.InvalidInputException;
+import edu.vinu.exception.custom.UnauthorizedException;
+import edu.vinu.exception.custom.UserAlreadyExistException;
 import edu.vinu.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,5 +56,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handleDateTimeParseException(DateTimeParseException ex) {
         ApiResponse response = new ApiResponse(ex.getMessage(),null);
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
+    }
+
+    @ExceptionHandler(InternalServerErrorException.class)
+    public ResponseEntity<ApiResponse> handleInternalServerErrorException(InternalServerErrorException ex) {
+        ApiResponse response = new ApiResponse(ex.getMessage(), null);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }

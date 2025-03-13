@@ -11,12 +11,18 @@
  *
  */
 
-package edu.vinu.service.impl;
+package edu.vinu.service.common.impl;
 
-import edu.vinu.entity.UserEntity;
-import edu.vinu.model.User;
+import edu.vinu.entity.user_entities.InstituteEntity;
+import edu.vinu.entity.user_entities.StudentEntity;
+import edu.vinu.entity.user_entities.TeacherEntity;
+import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.model.user_models.Institute;
+import edu.vinu.model.user_models.Student;
+import edu.vinu.model.user_models.Teacher;
+import edu.vinu.model.user_models.User;
 import edu.vinu.repository.UserRepository;
-import edu.vinu.service.UserService;
+import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -29,7 +35,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         UserEntity userEntity=userRepository.findByEmail(email);
-        return mapper.map(userEntity, User.class);
+        if (userEntity instanceof InstituteEntity) {
+            return mapper.map(userEntity, Institute.class);
+        } else if (userEntity instanceof StudentEntity) {
+            return mapper.map(userEntity, Student.class);
+        } else if (userEntity instanceof TeacherEntity) {
+            return mapper.map(userEntity, Teacher.class);
+        } else {
+            return mapper.map(userEntity, User.class);
+        }
     }
 
     @Override
