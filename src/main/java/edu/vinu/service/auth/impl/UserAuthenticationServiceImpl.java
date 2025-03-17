@@ -42,6 +42,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -128,28 +129,32 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             throw new InvalidInputException("Invalid email");
         }
 
-        Authentication authentication = authManager
-                .authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                request.getEmail(),
-                                request.getPassword()
-                        )
-                );
+        try {
+            Authentication authentication = authManager
+                    .authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    request.getEmail(),
+                                    request.getPassword()
+                            )
+                    );
 
-        if (authentication.isAuthenticated()){
-            String token = jwtService.generateToken(authentication);
-            UserEntity userEntity = userRepository.findByEmail(request.getEmail());
+            if (authentication.isAuthenticated()){
+                String token = jwtService.generateToken(authentication);
+                UserEntity userEntity = userRepository.findByEmail(request.getEmail());
 
-            if (userEntity instanceof InstituteEntity) {
-                return new AuthResponse(token, mapper.map(userEntity, Institute.class));
-            } else if (userEntity instanceof StudentEntity) {
-                return new AuthResponse(token, mapper.map(userEntity, Student.class));
-            } else if (userEntity instanceof TeacherEntity) {
-                return new AuthResponse(token, mapper.map(userEntity, Teacher.class));
-            } else {
-                return new AuthResponse(token, mapper.map(userEntity, User.class));
+                if (userEntity instanceof InstituteEntity) {
+                    return new AuthResponse(token, mapper.map(userEntity, Institute.class));
+                } else if (userEntity instanceof StudentEntity) {
+                    return new AuthResponse(token, mapper.map(userEntity, Student.class));
+                } else if (userEntity instanceof TeacherEntity) {
+                    return new AuthResponse(token, mapper.map(userEntity, Teacher.class));
+                } else {
+                    return new AuthResponse(token, mapper.map(userEntity, User.class));
+                }
             }
+            throw new UnauthorizedException("Invalid access !");
+        } catch (AuthenticationException e) {
+            throw new UnauthorizedException("UnAuthorized access!");
         }
-        throw new UnauthorizedException("Invalid access");
     }
 }
