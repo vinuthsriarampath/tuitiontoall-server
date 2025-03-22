@@ -105,12 +105,10 @@ jobs:
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Debug Repository Name
-        run:
-          echo "Repository Name: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}"
+        run: echo " ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}"
 
       - name: Debug Docker Image Path
-        run:
-          echo "Docker Image: ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ steps.get_version.outputs.PROJECT_VERSION }}"
+        run: echo "${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:${{ steps.get_version.outputs.PROJECT_VERSION }}"
 
       - name: Docker metadata
         if: steps.version-check.outputs.VERSION_CHANGED == 'true'
