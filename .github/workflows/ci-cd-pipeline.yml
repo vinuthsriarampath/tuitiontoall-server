@@ -80,9 +80,11 @@ jobs:
           echo "Version Changed: ${{ steps.version-check.outputs.VERSION_CHANGED }}"
 
       - name: Build with Maven
+        if: steps.version-check.outputs.VERSION_CHANGED == 'true'
         run: mvn clean package -DskipTests
 
       - name: Find JAR file
+        if: steps.version-check.outputs.VERSION_CHANGED == 'true'
         id: find_jar
         run: |
           JAR_PATH=$(find target -name "*.jar" -not -name "*-original.jar" | head -n 1)
