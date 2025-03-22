@@ -58,6 +58,8 @@ jobs:
           echo "JAR_PATH=$JAR_PATH" >> $GITHUB_OUTPUT
           echo "Found JAR: $JAR_PATH"
 
+#      GitHub Release
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
