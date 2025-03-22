@@ -1,7 +1,22 @@
 version: '3.8'
+
 services:
-  app:
-    image: vinuthsriarampath/tuitiontoall:2.1.1
+  ui:
+    container_name: tuitiontoall-client
+    image: vinuthsriarampath/tuitiontoall-client:latest
+    ports:
+      - "4200:4200"
+    environment:
+      - AUTH_API=http://localhost:8080/api/v2/auth
+    networks:
+      - tuitiontoall-network
+    depends_on:
+      - server
+      - db
+
+  server:
+    container_name: tuitiontoall-server
+    image: vinuthsriarampath/tuituiontoall-server:latest
     ports:
       - "8080:8080"
     environment:
@@ -12,9 +27,10 @@ services:
       db:
         condition: service_healthy
     networks:
-      - app-network
+      - tuitiontoall-network
 
   db:
+    container_name: tuitiontoall-database
     image: mysql:8.0
     environment:
       - MYSQL_ROOT_PASSWORD=password
@@ -24,7 +40,7 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
-      - app-network
+      - tuitiontoall-network
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$DB_PWD"]
       interval: 10s
@@ -35,4 +51,4 @@ volumes:
   mysql-data:
 
 networks:
-  app-network:
+  tuitiontoall-network:
