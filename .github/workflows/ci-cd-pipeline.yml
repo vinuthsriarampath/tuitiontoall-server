@@ -50,8 +50,12 @@ jobs:
       - name: Get previous pom version
         id: previous-version
         run: |
+          git log --oneline -- pom.xml
+          
           PREV_VERSION=$(git show HEAD^:pom.xml | sed -n 's/.*<version>\(.*\)<\/version>.*/\1/p' | head -n 1)
+        
           echo "PREV_VERSION=$PREV_VERSION" >> $GITHUB_OUTPUT
+
 
       - name: Check if version changed
         id: version-check
