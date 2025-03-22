@@ -47,22 +47,15 @@ jobs:
           VERSION=$(sed -n 's/.*<version>\(.*\)<\/version>.*/\1/p' pom.xml | head -n 1)
           echo "CUR_VERSION=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Debug previous pom.xml
+        run: |
+          git show HEAD^:pom.xml
+
       - name: Get previous pom version
         id: previous-version
         run: |
-          # Check if there is at least one previous commit
-          if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
-            # If previous commit exists, extract version using sed
-            PREV_VERSION=$(git show HEAD^:pom.xml | sed -n 's/.*<version>\(.*\)<\/version>.*/\1/p' | head -n 1)
-          else
-            echo "No previous commit found. Setting PREV_VERSION to 'initial'." 
-            PREV_VERSION="initial"  # Set to a default value or handle accordingly
-          fi
-          
-          # Output the previous version
+          PREV_VERSION=$(git show HEAD^:pom.xml | grep -oP '(?<=<version>).*?(?=</version>)' | head -n 1)
           echo "PREV_VERSION=$PREV_VERSION" >> $GITHUB_OUTPUT
-
-
 
       - name: Check if version changed
         id: version-check
