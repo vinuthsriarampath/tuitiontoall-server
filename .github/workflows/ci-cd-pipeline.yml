@@ -43,48 +43,11 @@ jobs:
           echo "TAG_VERSION=v$VERSION" >> $GITHUB_OUTPUT
           echo "Extracted version: $VERSION"
 
-      - name: Get current pom version
-        id: current-version
-        run: |
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "CUR_VERSION=$VERSION" >> $GITHUB_OUTPUT
-          echo "Current version: $VERSION"
-
-      - name: Get previous pom version
-        id: previous-version
-        run: |
-          PREV_VERSION=$(git show HEAD^:pom.xml | xmllint --xpath 'string(/project/version)' - 2>/dev/null || echo "unknown")
-          echo "PREV_VERSION=$PREV_VERSION" >> $GITHUB_OUTPUT
-          echo "Previous version: $PREV_VERSION"
-
-      - name: Check if version changed
-        id: version-check
-        run: |
-          CUR_VERSION="${{ steps.current-version.outputs.CUR_VERSION }}"
-          PREV_VERSION="${{ steps.previous-version.outputs.PREV_VERSION }}"
-          if [ -z "$CUR_VERSION" ] || [ -z "$PREV_VERSION" ] || [ "$CUR_VERSION" = "unknown" ] || [ "$PREV_VERSION" = "unknown" ]; then
-            echo "Version check inconclusive (current: $CUR_VERSION, previous: $PREV_VERSION), defaulting to false"
-            echo "VERSION_CHANGED=false" >> $GITHUB_OUTPUT
-          elif [ "$CUR_VERSION" != "$PREV_VERSION" ]; then
-            echo "Version changed from $PREV_VERSION to $CUR_VERSION"
-            echo "VERSION_CHANGED=true" >> $GITHUB_OUTPUT
-          else
-            echo "Version unchanged: $CUR_VERSION"
-            echo "VERSION_CHANGED=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Debug Versions
-        run: |
-          echo "Current Version: ${{ steps.current-version.outputs.CUR_VERSION }}"
-          echo "Previous Version: ${{ steps.previous-version.outputs.PREV_VERSION }}"
-          echo "Version Changed: ${{ steps.version-check.outputs.VERSION_CHANGED }}"
 
       - name: Build with Maven
-        if: steps.version-check.outputs.VERSION_CHANGED == 'true'
         run: mvn clean package -DskipTests
 
       - name: Find JAR file
-        if: steps.version-check.outputs.VERSION_CHANGED == 'true'
         id: find_jar
         run: |
           JAR_PATH=$(find target -name "*.jar" -not -name "*-original.jar" | head -n 1)
@@ -97,7 +60,6 @@ jobs:
           echo "Found JAR: $JAR_PATH"
 
       - name: Create GitHub Release
-        if: steps.version-check.outputs.VERSION_CHANGED == 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.get_version.outputs.TAG_VERSION }}
@@ -108,18 +70,15 @@ jobs:
           files: ${{ steps.find_jar.outputs.JAR_PATH }}
 
       - name: Set up Docker Buildx
-        if: steps.version-check.outputs.VERSION_CHANGED == 'true'
         uses: docker/setup-buildx-action@v3
 
       - name: Login to Docker Hub
-        if: steps.version-check.outputs.VERSION_CHANGED == 'true'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker metadata
-        if: steps.version-check.outputs.VERSION_CHANGED == 'true'
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -129,7 +88,6 @@ jobs:
             type=sha
 
       - name: Build and push Docker image
-        if: steps.version-check.outputs.VERSION_CHANGED == 'true'
         uses: docker/build-push-action@v5
         with:
           context: .
