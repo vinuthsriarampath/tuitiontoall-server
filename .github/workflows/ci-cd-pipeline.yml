@@ -3,7 +3,7 @@ name: CI/CD pipeline
 on:
   push:
     branches:
-      - chore/CI-CD-v2
+      - main
     tags:
       - 'v*.*.*'
 
@@ -21,7 +21,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 2  # Ensures previous commit is available for git show
+          fetch-depth: 2
 
       - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
