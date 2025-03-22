@@ -72,16 +72,17 @@ jobs:
           echo "JAR_PATH=$JAR_PATH" >> $GITHUB_ENV
           echo "JAR_PATH=$JAR_PATH" >> $GITHUB_OUTPUT
 
-      #      - name: Create GitHub Release
-      #        uses: softprops/action-gh-release@v2
-      #        with:
-      #          tag_name: ${{ steps.get_version.outputs.TAG_VERSION }}
-      #          name: Release ${{ steps.get_version.outputs.PROJECT_VERSION }}
-      #          draft: false
-      #          prerelease: false
-      #          generate_release_notes: true
-      #          files: |
-      #            ${{ steps.find_jar.outputs.JAR_PATH }}
+      - name: Create GitHub Release
+        if: steps.version-check.outputs.VERSION_CHANGED == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.get_version.outputs.TAG_VERSION }}
+          name: Release ${{ steps.get_version.outputs.PROJECT_VERSION }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            ${{ steps.find_jar.outputs.JAR_PATH }}
 
       #      Docker Steps
 
@@ -95,12 +96,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Debug Repository Name
-        run: echo " ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME_SHORT }}"
-
-      - name: Debug Docker Image Path
-        run: echo "${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME_SHORT }}:${{ steps.get_version.outputs.PROJECT_VERSION }}"
 
       - name: Docker metadata
         if: steps.version-check.outputs.VERSION_CHANGED == 'true'
