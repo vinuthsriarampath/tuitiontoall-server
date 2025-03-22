@@ -61,6 +61,8 @@ jobs:
           else
             echo "VERSION_CHANGED=false" >> $GITHUB_OUTPUT
           fi
+      - name: Condition
+        run: echo "${{ steps.version-check.outputs.VERSION_CHANGED }}"
 
       - name: Build with Maven
         run: mvn clean package -DskipTests
