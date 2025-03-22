@@ -5,7 +5,7 @@ FROM eclipse-temurin:22-jdk-alpine
 WORKDIR /app
 
 # Copy the JAR file
-COPY target/tuitiontoall-2.1.1.jar /app/app.jar
+COPY target/tuitiontoall-2.0.0.jar /app/app.jar
 
 # Expose port
 EXPOSE 8080
