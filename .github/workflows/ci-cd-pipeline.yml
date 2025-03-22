@@ -47,10 +47,6 @@ jobs:
           VERSION=$(sed -n 's/.*<version>\(.*\)<\/version>.*/\1/p' pom.xml | head -n 1)
           echo "CUR_VERSION=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Debug previous pom.xml
-        run: |
-          git show HEAD^:pom.xml
-
       - name: Get previous pom version
         id: previous-version
         run: |
