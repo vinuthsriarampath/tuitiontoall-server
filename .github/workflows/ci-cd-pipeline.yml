@@ -61,6 +61,13 @@ jobs:
           else
             echo "VERSION_CHANGED=false" >> $GITHUB_OUTPUT
           fi
+
+      - name: Current Version Output
+        run: echo "${{ steps.current-version.outputs.CUR_VERSION }}"
+
+      - name: Previous Version Output
+        run: echo "${{ steps.previous-version.outputs.PREV_VERSION }}"
+
       - name: Condition
         run: echo "${{ steps.version-check.outputs.VERSION_CHANGED }}"
 
