@@ -13,17 +13,34 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.model.user_models.User;
+import edu.vinu.response.ApiResponse;
 import edu.vinu.service.auth.UserAuthenticationService;
+import edu.vinu.service.auth.impl.JwtService;
+import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
 @RequestMapping("api/v2/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserAuthenticationService userService;
+    private final UserService userService;
+    private final JwtService jwtService;
+
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse> getUserDetails(@RequestHeader("Authorization") String authHeader){
+        if (authHeader == null || !authHeader.startsWith("Bearer ")){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authHeader.substring(7);
+        String username = jwtService.extractUsername(token);
+        User user = userService.getUserByEmail(username);
+        return ResponseEntity.ok(new ApiResponse("User Verified!",user));
+    }
 
 }
