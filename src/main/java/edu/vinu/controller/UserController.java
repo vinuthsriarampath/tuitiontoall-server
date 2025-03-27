@@ -15,13 +15,11 @@ package edu.vinu.controller;
 
 import edu.vinu.model.user_models.User;
 import edu.vinu.response.ApiResponse;
-import edu.vinu.service.auth.UserAuthenticationService;
 import edu.vinu.service.auth.impl.JwtService;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
