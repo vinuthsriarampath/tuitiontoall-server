@@ -35,6 +35,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @RequiredArgsConstructor
 @EnableMethodSecurity
+@SuppressWarnings("unused")
 public class SecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtFilter jwtFilter;
