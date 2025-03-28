@@ -13,7 +13,6 @@
 
 package edu.vinu.filter;
 
-import com.mysql.cj.log.Log;
 import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.service.auth.impl.JwtService;
 import edu.vinu.service.auth.impl.UserDetailsServiceImpl;
