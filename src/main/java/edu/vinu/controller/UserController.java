@@ -18,9 +18,13 @@ import edu.vinu.response.ApiResponse;
 import edu.vinu.service.auth.impl.JwtService;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @CrossOrigin
 @RestController
@@ -34,7 +38,7 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<ApiResponse> getUserDetails(@RequestHeader("Authorization") String authHeader){
         if (authHeader == null || !authHeader.startsWith("Bearer ")){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(UNAUTHORIZED).build();
         }
         String token = authHeader.substring(7);
         String username = jwtService.extractUsername(token);
@@ -45,7 +49,12 @@ public class UserController {
     @GetMapping("/user/by-email")
     public ResponseEntity<ApiResponse> getUserByEmail(@RequestParam String email){
         User userByEmail = userService.getUserByEmail(email);
-        return ResponseEntity.status(HttpStatus.FOUND).body(new ApiResponse("User Found By "+email,userByEmail));
+        return ResponseEntity.status(FOUND).body(new ApiResponse("User Found By "+email,userByEmail));
     }
 
+    @GetMapping("/by-firstname/{firstName}")
+    public ResponseEntity<ApiResponse> getUsersByFirstName(@PathVariable String firstName){
+        List<User> userList = userService.getAllUsersByFirstNameLike(firstName);
+        return ResponseEntity.status(FOUND).body(new ApiResponse("User List Found by "+firstName,userList));
+    }
 }
