@@ -17,6 +17,7 @@ import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.entity.user_entities.StudentEntity;
 import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.exception.custom.UserNotFoundException;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
@@ -36,6 +37,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         UserEntity userEntity=userRepository.findByEmail(email);
+        if (userEntity == null){
+            throw new UserNotFoundException("A user from "+email+" not found!!");
+        }
         if (userEntity instanceof InstituteEntity) {
             return mapper.map(userEntity, Institute.class);
         } else if (userEntity instanceof StudentEntity) {

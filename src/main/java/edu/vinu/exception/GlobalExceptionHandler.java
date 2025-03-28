@@ -13,10 +13,7 @@
 
 package edu.vinu.exception;
 
-import edu.vinu.exception.custom.InternalServerErrorException;
-import edu.vinu.exception.custom.InvalidInputException;
-import edu.vinu.exception.custom.UnauthorizedException;
-import edu.vinu.exception.custom.UserAlreadyExistException;
+import edu.vinu.exception.custom.*;
 import edu.vinu.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,5 +60,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handleInternalServerErrorException(InternalServerErrorException ex) {
         ApiResponse response = new ApiResponse(ex.getMessage(), null);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiResponse> handleUserNotFoundException(UserNotFoundException ex){
+        ApiResponse response = new ApiResponse(ex.getMessage(), null);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 }
