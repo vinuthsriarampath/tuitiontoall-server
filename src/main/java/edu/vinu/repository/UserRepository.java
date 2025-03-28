@@ -13,12 +13,24 @@
 
 package edu.vinu.repository;
 
+import edu.vinu.entity.user_entities.StudentEntity;
+import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity,Long> {
     UserEntity findByEmail(String username);
     boolean existsByEmail(String email);
+
+    @Query("SELECT s from StudentEntity s WHERE LOWER(s.firstName) LIKE LOWER(CONCAT(:firstName, '%'))")
+    List<StudentEntity> getStudentsByFirstNameLike(@Param("firstName") String firstName);
+
+    @Query("SELECT t FROM TeacherEntity t WHERE LOWER(t.firstName) LIKE LOWER(CONCAT(:firstName, '%'))")
+    List<TeacherEntity> getTeachersByFirstNameLike(@Param("firstName") String firstName);
 }
