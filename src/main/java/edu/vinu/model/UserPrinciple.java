@@ -19,12 +19,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 
 @AllArgsConstructor
-public class UserPrinciple implements UserDetails {
-    private UserEntity userEntity;
+public class UserPrinciple implements UserDetails, Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+    private transient UserEntity userEntity;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
