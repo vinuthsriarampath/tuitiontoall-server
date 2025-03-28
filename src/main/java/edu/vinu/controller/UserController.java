@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/v2/users")
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class UserController {
     private final UserService userService;
     private final JwtService jwtService;

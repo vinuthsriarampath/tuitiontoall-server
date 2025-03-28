@@ -37,6 +37,7 @@ import static edu.vinu.validator.UserValidator.USER_VALIDATION_FAILED_ERROR;
 @RestController
 @RequestMapping("api/v2/auth")
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class AuthController {
     private final UserAuthenticationService userAuthService;
 
