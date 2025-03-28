@@ -42,4 +42,10 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse("User Verified!",user));
     }
 
+    @GetMapping("/user/by-email")
+    public ResponseEntity<ApiResponse> getUserByEmail(@RequestParam String email){
+        User userByEmail = userService.getUserByEmail(email);
+        return ResponseEntity.status(HttpStatus.FOUND).body(new ApiResponse("User Found By "+email,userByEmail));
+    }
+
 }
