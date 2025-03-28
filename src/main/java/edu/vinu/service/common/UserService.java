@@ -13,9 +13,17 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.model.user_models.Student;
+import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
+
+import java.util.List;
 
 public interface UserService {
     User getUserByEmail(String email);
     boolean isUserExist(String email);
+
+    List<User> getAllUsersByFirstNameLike(String firstname);
+    List<Student> getAllStudentsByFirstNameLike(String firstName);
+    List<Teacher> getAllTeachersByFirsNameLike(String lastName);
 }
