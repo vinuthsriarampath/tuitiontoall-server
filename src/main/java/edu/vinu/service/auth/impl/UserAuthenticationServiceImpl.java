@@ -52,6 +52,7 @@ import static edu.vinu.validator.UserValidator.*;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class UserAuthenticationServiceImpl implements UserAuthenticationService {
     private final AuthenticationManager authManager;
     private final UserRepository userRepository;
