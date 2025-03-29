@@ -13,6 +13,7 @@
 
 package edu.vinu.repository;
 
+import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.entity.user_entities.StudentEntity;
 import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
@@ -36,4 +37,7 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
     List<TeacherEntity> getTeachersByFirstNameLike(@Param("firstName") String firstName);
 
     List<UserEntity> findAllByRole(Role role);
+
+    @Query("SELECT i FROM InstituteEntity i WHERE LOWER(i.instituteName) LIKE LOWER(CONCAT('%', :instituteName, '%'))")
+    List<InstituteEntity> findByInstituteName(@Param("instituteName") String instituteName);
 }
