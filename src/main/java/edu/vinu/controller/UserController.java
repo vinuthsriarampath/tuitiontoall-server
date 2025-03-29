@@ -13,6 +13,7 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.User;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.auth.impl.JwtService;
@@ -56,5 +57,11 @@ public class UserController {
     public ResponseEntity<ApiResponse> getUsersByFirstName(@PathVariable String firstName){
         List<User> userList = userService.getAllUsersByFirstNameLike(firstName);
         return ResponseEntity.status(FOUND).body(new ApiResponse("User List Found by "+firstName,userList));
+    }
+
+    @GetMapping("/all-students")
+    public ResponseEntity<ApiResponse> getAllStudents(){
+        List<Student> studentList = userService.getAllStudents();
+        return ResponseEntity.status(FOUND).body(new ApiResponse("All Students!",studentList));
     }
 }
