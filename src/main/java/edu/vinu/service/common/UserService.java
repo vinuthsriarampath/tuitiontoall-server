@@ -33,4 +33,6 @@ public interface UserService {
     List<Teacher> getAllTeachers();
 
     List<Institute> getAllInstitutes();
+
+    List<Institute> getAllInstitutesByInstituteName(String instituteName);
 }
