@@ -113,6 +113,14 @@ public class UserServiceImpl implements UserService {
         return instituteList;
     }
 
+    @Override
+    public List<Institute> getAllInstitutesByInstituteName(String instituteName) {
+        return userRepository.findByInstituteName(instituteName)
+                .stream()
+                .map(this::convertToInstituteModel)
+                .toList();
+    }
+
     public User convertToModel(UserEntity userEntity){
         if (userEntity instanceof StudentEntity){
             return mapper.map(userEntity, Student.class);
