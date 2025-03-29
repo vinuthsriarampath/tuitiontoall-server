@@ -16,6 +16,7 @@ package edu.vinu.repository;
 import edu.vinu.entity.user_entities.StudentEntity;
 import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,4 +34,6 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
 
     @Query("SELECT t FROM TeacherEntity t WHERE LOWER(t.firstName) LIKE LOWER(CONCAT(:firstName, '%'))")
     List<TeacherEntity> getTeachersByFirstNameLike(@Param("firstName") String firstName);
+
+    List<UserEntity> findAllByRole(Role role);
 }
