@@ -27,6 +27,7 @@ import edu.vinu.repository.UserRepository;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -99,6 +100,18 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("No Teachers Found!");
         }
         return teacherList;
+    }
+
+    @Override
+    public List<Institute> getAllInstitutes() {
+        List<Institute> instituteList =  userRepository.findAllByRole(Role.ROLE_INSTITUTE)
+                .stream()
+                .map(instituteEntity -> (Institute) convertToModel(instituteEntity))
+                .toList();
+        if (instituteList.isEmpty()){
+            throw new UserNotFoundException("No Institutes Found!");
+        }
+        return instituteList;
     }
 
     public User convertToModel(UserEntity userEntity){
