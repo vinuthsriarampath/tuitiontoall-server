@@ -89,6 +89,18 @@ public class UserServiceImpl implements UserService {
         return studentList;
     }
 
+    @Override
+    public List<Teacher> getAllTeachers() {
+        List<Teacher> teacherList = userRepository.findAllByRole(Role.ROLE_TEACHER)
+                .stream()
+                .map(teacherEntity -> (Teacher) convertToModel(teacherEntity))
+                .toList();
+        if (teacherList.isEmpty()){
+            throw new UserNotFoundException("No Teachers Found!");
+        }
+        return teacherList;
+    }
+
     public User convertToModel(UserEntity userEntity){
         if (userEntity instanceof StudentEntity){
             return mapper.map(userEntity, Student.class);
