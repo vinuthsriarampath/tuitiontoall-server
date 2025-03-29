@@ -17,6 +17,8 @@ import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.entity.user_entities.StudentEntity;
 import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.enums.Role;
+import edu.vinu.exception.custom.UserNotFoundException;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
@@ -27,6 +29,9 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @SuppressWarnings("unused")
@@ -36,19 +41,107 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         UserEntity userEntity=userRepository.findByEmail(email);
-        if (userEntity instanceof InstituteEntity) {
-            return mapper.map(userEntity, Institute.class);
-        } else if (userEntity instanceof StudentEntity) {
-            return mapper.map(userEntity, Student.class);
-        } else if (userEntity instanceof TeacherEntity) {
-            return mapper.map(userEntity, Teacher.class);
-        } else {
-            return mapper.map(userEntity, User.class);
+        if (userEntity == null){
+            throw new UserNotFoundException("A user from "+email+" not found!!");
         }
+        return convertToModel(userEntity);
     }
 
     @Override
     public boolean isUserExist(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public List<User> getAllUsersByFirstNameLike(String firstname) {
+        List<User> userList =new ArrayList<>();
+        userList.addAll(getAllStudentsByFirstNameLike(firstname));
+        userList.addAll(getAllTeachersByFirsNameLike(firstname));
+        if (userList.isEmpty()){
+            throw new UserNotFoundException("There are no users starts with "+firstname);
+        }
+        return userList;
+    }
+
+    @Override
+    public List<Student> getAllStudentsByFirstNameLike(String firstName) {
+        return userRepository.getStudentsByFirstNameLike(firstName).stream()
+                .map(this::convertToStudentModel)
+                .toList();
+    }
+
+    @Override
+    public List<Teacher> getAllTeachersByFirsNameLike(String firstName) {
+        return userRepository.getTeachersByFirstNameLike(firstName).stream()
+                .map(this::convertToTeacherModel)
+                .toList();
+    }
+
+    @Override
+    public List<Student> getAllStudents() {
+        List<Student> studentList = userRepository.findAllByRole(Role.ROLE_STUDENT)
+                .stream()
+                .map(studentEntity -> (Student) convertToModel(studentEntity))
+                .toList();
+        if (studentList.isEmpty()){
+            throw new UserNotFoundException("No Students Found");
+        }
+        return studentList;
+    }
+
+    @Override
+    public List<Teacher> getAllTeachers() {
+        List<Teacher> teacherList = userRepository.findAllByRole(Role.ROLE_TEACHER)
+                .stream()
+                .map(teacherEntity -> (Teacher) convertToModel(teacherEntity))
+                .toList();
+        if (teacherList.isEmpty()){
+            throw new UserNotFoundException("No Teachers Found!");
+        }
+        return teacherList;
+    }
+
+    @Override
+    public List<Institute> getAllInstitutes() {
+        List<Institute> instituteList =  userRepository.findAllByRole(Role.ROLE_INSTITUTE)
+                .stream()
+                .map(instituteEntity -> (Institute) convertToModel(instituteEntity))
+                .toList();
+        if (instituteList.isEmpty()){
+            throw new UserNotFoundException("No Institutes Found!");
+        }
+        return instituteList;
+    }
+
+    @Override
+    public List<Institute> getAllInstitutesByInstituteName(String instituteName) {
+        return userRepository.findByInstituteName(instituteName)
+                .stream()
+                .map(this::convertToInstituteModel)
+                .toList();
+    }
+
+    public User convertToModel(UserEntity userEntity){
+        if (userEntity instanceof StudentEntity){
+            return mapper.map(userEntity, Student.class);
+        }else if (userEntity instanceof TeacherEntity){
+            return mapper.map(userEntity, Teacher.class);
+        }else if (userEntity instanceof InstituteEntity){
+            return mapper.map(userEntity, Institute.class);
+        }else {
+            return mapper.map(userEntity, User.class);
+        }
+    }
+
+    public Institute convertToInstituteModel(InstituteEntity instituteEntity){
+        return mapper.map(instituteEntity, Institute.class);
+    }
+
+    public Student convertToStudentModel(StudentEntity studentEntity){
+        return mapper.map(studentEntity, Student.class);
+    }
+
+    public Teacher convertToTeacherModel(TeacherEntity teacherEntity){
+        return mapper.map(teacherEntity, Teacher.class);
     }
 }

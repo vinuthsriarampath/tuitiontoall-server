@@ -13,14 +13,21 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.model.user_models.Institute;
+import edu.vinu.model.user_models.Student;
+import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.auth.impl.JwtService;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @CrossOrigin
 @RestController
@@ -34,12 +41,48 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<ApiResponse> getUserDetails(@RequestHeader("Authorization") String authHeader){
         if (authHeader == null || !authHeader.startsWith("Bearer ")){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(UNAUTHORIZED).build();
         }
         String token = authHeader.substring(7);
         String username = jwtService.extractUsername(token);
         User user = userService.getUserByEmail(username);
         return ResponseEntity.ok(new ApiResponse("User Verified!",user));
+    }
+
+    @GetMapping("/user/by-email")
+    public ResponseEntity<ApiResponse> getUserByEmail(@RequestParam String email){
+        User userByEmail = userService.getUserByEmail(email);
+        return ResponseEntity.status(FOUND).body(new ApiResponse("User Found By "+email,userByEmail));
+    }
+
+    @GetMapping("/by-firstname/{firstName}")
+    public ResponseEntity<ApiResponse> getUsersByFirstName(@PathVariable String firstName){
+        List<User> userList = userService.getAllUsersByFirstNameLike(firstName);
+        return ResponseEntity.status(FOUND).body(new ApiResponse("User List Found by "+firstName,userList));
+    }
+
+    @GetMapping("/all-students")
+    public ResponseEntity<ApiResponse> getAllStudents(){
+        List<Student> studentList = userService.getAllStudents();
+        return ResponseEntity.status(FOUND).body(new ApiResponse("All Students!",studentList));
+    }
+
+    @GetMapping("/all-teachers")
+    public ResponseEntity<ApiResponse> getAllTeachers(){
+        List<Teacher> teacherList = userService.getAllTeachers();
+        return ResponseEntity.status(FOUND).body(new ApiResponse("All Teachers!",teacherList));
+    }
+
+    @GetMapping("all-institutes")
+    public ResponseEntity<ApiResponse> getAllInstitutes(){
+        List<Institute> instituteList=userService.getAllInstitutes();
+        return ResponseEntity.status(FOUND).body(new ApiResponse("All Institutes!",instituteList));
+    }
+
+    @GetMapping("/institutes/by-name/{instituteName}")
+    public ResponseEntity<ApiResponse> getInstitutesByName(@PathVariable String instituteName){
+        List<Institute> instituteList = userService.getAllInstitutesByInstituteName(instituteName);
+        return ResponseEntity.status(FOUND).body(new ApiResponse("Related institutes for "+instituteName,instituteList));
     }
 
 }
