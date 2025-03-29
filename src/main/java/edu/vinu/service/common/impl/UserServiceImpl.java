@@ -24,6 +24,7 @@ import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
 import edu.vinu.repository.UserRepository;
+import edu.vinu.request.update_user_details.InstituteDetailsUpdateRequest;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -119,6 +121,24 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(this::convertToInstituteModel)
                 .toList();
+    }
+
+    @Override
+    public Institute updateInstituteDetails(String email, InstituteDetailsUpdateRequest instituteDetailsUpdateRequest) {
+        if (!isUserExist(email)) {
+            throw new UserNotFoundException("User not found for " + email);
+        }
+        return Optional.ofNullable(userRepository.findByEmail(email))
+                .filter(InstituteEntity.class::isInstance)
+                .map(userEntity -> {
+                    InstituteEntity instituteEntity = (InstituteEntity) userEntity;
+                    instituteEntity.setAddress(instituteDetailsUpdateRequest.getAddress());
+                    instituteEntity.setContact(instituteDetailsUpdateRequest.getContact());
+                    instituteEntity.setInstituteName(instituteDetailsUpdateRequest.getInstituteName());
+
+                    return convertToInstituteModel(userRepository.save(instituteEntity));
+                })
+                .orElseThrow(() -> new UserNotFoundException("Institute not found for " + email));
     }
 
     public User convertToModel(UserEntity userEntity){

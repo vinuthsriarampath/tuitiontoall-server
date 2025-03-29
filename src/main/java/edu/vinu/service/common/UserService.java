@@ -17,6 +17,7 @@ import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
+import edu.vinu.request.update_user_details.InstituteDetailsUpdateRequest;
 
 import java.util.List;
 
@@ -35,4 +36,6 @@ public interface UserService {
     List<Institute> getAllInstitutes();
 
     List<Institute> getAllInstitutesByInstituteName(String instituteName);
+
+    Institute updateInstituteDetails(String currentEmail, InstituteDetailsUpdateRequest instituteDetailsUpdateRequest);
 }
