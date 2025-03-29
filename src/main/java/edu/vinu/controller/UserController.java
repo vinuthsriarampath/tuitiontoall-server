@@ -13,6 +13,7 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
@@ -70,5 +71,11 @@ public class UserController {
     public ResponseEntity<ApiResponse> getAllTeachers(){
         List<Teacher> teacherList = userService.getAllTeachers();
         return ResponseEntity.status(FOUND).body(new ApiResponse("All Teachers!",teacherList));
+    }
+
+    @GetMapping("all-institutes")
+    public ResponseEntity<ApiResponse> getAllInstitutes(){
+        List<Institute> instituteList=userService.getAllInstitutes();
+        return ResponseEntity.status(FOUND).body(new ApiResponse("All Institutes!",instituteList));
     }
 }
