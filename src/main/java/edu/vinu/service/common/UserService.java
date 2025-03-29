@@ -26,4 +26,6 @@ public interface UserService {
     List<User> getAllUsersByFirstNameLike(String firstname);
     List<Student> getAllStudentsByFirstNameLike(String firstName);
     List<Teacher> getAllTeachersByFirsNameLike(String lastName);
+
+    List<Student> getAllStudents();
 }

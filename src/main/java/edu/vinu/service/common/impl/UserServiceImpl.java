@@ -17,6 +17,7 @@ import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.entity.user_entities.StudentEntity;
 import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.enums.Role;
 import edu.vinu.exception.custom.UserNotFoundException;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
@@ -43,15 +44,7 @@ public class UserServiceImpl implements UserService {
         if (userEntity == null){
             throw new UserNotFoundException("A user from "+email+" not found!!");
         }
-        if (userEntity instanceof InstituteEntity) {
-            return mapper.map(userEntity, Institute.class);
-        } else if (userEntity instanceof StudentEntity) {
-            return mapper.map(userEntity, Student.class);
-        } else if (userEntity instanceof TeacherEntity) {
-            return mapper.map(userEntity, Teacher.class);
-        } else {
-            return mapper.map(userEntity, User.class);
-        }
+        return convertToModel(userEntity);
     }
 
     @Override
@@ -84,8 +77,28 @@ public class UserServiceImpl implements UserService {
                 .toList();
     }
 
-    public User convertToUserModel(UserEntity userEntity){
-        return mapper.map(userEntity, User.class);
+    @Override
+    public List<Student> getAllStudents() {
+        List<Student> studentList = userRepository.findAllByRole(Role.ROLE_STUDENT)
+                .stream()
+                .map(studentEntity -> (Student) convertToModel(studentEntity))
+                .toList();
+        if (studentList.isEmpty()){
+            throw new UserNotFoundException("No Students Found");
+        }
+        return studentList;
+    }
+
+    public User convertToModel(UserEntity userEntity){
+        if (userEntity instanceof StudentEntity){
+            return mapper.map(userEntity, Student.class);
+        }else if (userEntity instanceof TeacherEntity){
+            return mapper.map(userEntity, Teacher.class);
+        }else if (userEntity instanceof InstituteEntity){
+            return mapper.map(userEntity, Institute.class);
+        }else {
+            return mapper.map(userEntity, User.class);
+        }
     }
 
     public Institute convertToInstituteModel(InstituteEntity instituteEntity){
