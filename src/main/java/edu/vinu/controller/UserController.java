@@ -17,17 +17,18 @@ import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
+import edu.vinu.request.update_user_details.InstituteDetailsUpdateRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.auth.impl.JwtService;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.FOUND;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 
 @CrossOrigin
 @RestController
@@ -83,6 +84,13 @@ public class UserController {
     public ResponseEntity<ApiResponse> getInstitutesByName(@PathVariable String instituteName){
         List<Institute> instituteList = userService.getAllInstitutesByInstituteName(instituteName);
         return ResponseEntity.status(FOUND).body(new ApiResponse("Related institutes for "+instituteName,instituteList));
+    }
+
+    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @PatchMapping("/institute/update/{email}/details")
+    public ResponseEntity<ApiResponse> updateInstituteDetails(@PathVariable String email, @RequestBody InstituteDetailsUpdateRequest instituteDetailsUpdateRequest){
+        Institute updateInstituteDetails = userService.updateInstituteDetails(email,instituteDetailsUpdateRequest);
+        return ResponseEntity.status(OK).body(new ApiResponse("Profile Updated",updateInstituteDetails));
     }
 
 }
