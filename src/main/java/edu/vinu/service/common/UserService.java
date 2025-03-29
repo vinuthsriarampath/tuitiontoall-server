@@ -13,6 +13,7 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
@@ -30,4 +31,6 @@ public interface UserService {
     List<Student> getAllStudents();
 
     List<Teacher> getAllTeachers();
+
+    List<Institute> getAllInstitutes();
 }
