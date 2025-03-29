@@ -28,4 +28,6 @@ public interface UserService {
     List<Teacher> getAllTeachersByFirsNameLike(String lastName);
 
     List<Student> getAllStudents();
+
+    List<Teacher> getAllTeachers();
 }
