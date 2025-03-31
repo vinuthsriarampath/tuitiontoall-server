@@ -18,9 +18,11 @@ import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
 import edu.vinu.request.update_user_details.InstituteDetailsUpdateRequest;
+import edu.vinu.request.update_user_details.TeacherDetailsUpdateRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.auth.impl.JwtService;
 import edu.vinu.service.common.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -88,9 +90,16 @@ public class UserController {
 
     @PreAuthorize("hasRole('ROLE_INSTITUTE')")
     @PatchMapping("/institute/update/{email}/details")
-    public ResponseEntity<ApiResponse> updateInstituteDetails(@PathVariable String email, @RequestBody InstituteDetailsUpdateRequest instituteDetailsUpdateRequest){
+    public ResponseEntity<ApiResponse> updateInstituteDetails(@PathVariable String email,@Valid @RequestBody InstituteDetailsUpdateRequest instituteDetailsUpdateRequest){
         Institute updateInstituteDetails = userService.updateInstituteDetails(email,instituteDetailsUpdateRequest);
         return ResponseEntity.status(OK).body(new ApiResponse("Profile Updated",updateInstituteDetails));
+    }
+
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
+    @PatchMapping("/teacher/update/{email}/details")
+    public ResponseEntity<ApiResponse> updateTeacherDetails(@PathVariable String email,@Valid @RequestBody TeacherDetailsUpdateRequest teacherDetailsUpdateRequest){
+        Teacher updatedTeacherDetails = userService.updateTeacherDetails(email,teacherDetailsUpdateRequest);
+        return ResponseEntity.status(OK).body(new ApiResponse("Teacher Profile Updated!",updatedTeacherDetails));
     }
 
 }
