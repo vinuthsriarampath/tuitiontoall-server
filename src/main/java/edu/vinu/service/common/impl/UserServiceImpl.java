@@ -18,6 +18,7 @@ import edu.vinu.entity.user_entities.StudentEntity;
 import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.enums.Role;
+import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.UserNotFoundException;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
@@ -25,6 +26,7 @@ import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
 import edu.vinu.repository.UserRepository;
 import edu.vinu.request.update_user_details.InstituteDetailsUpdateRequest;
+import edu.vinu.request.update_user_details.TeacherDetailsUpdateRequest;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -33,6 +35,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static edu.vinu.validator.UserValidator.isValidDob;
 
 @Service
 @RequiredArgsConstructor
@@ -139,6 +143,29 @@ public class UserServiceImpl implements UserService {
                     return convertToInstituteModel(userRepository.save(instituteEntity));
                 })
                 .orElseThrow(() -> new UserNotFoundException("Institute not found for " + email));
+    }
+
+    @Override
+    public Teacher updateTeacherDetails(String email, TeacherDetailsUpdateRequest teacherDetailsUpdateRequest) {
+        if (!isUserExist(email)){
+            throw new UserNotFoundException("No User Found By "+email);
+        }
+        if (!isValidDob(teacherDetailsUpdateRequest.getDob())) {
+            throw new InvalidInputException("You must be at least 6 years old");
+        }
+        return Optional.ofNullable(userRepository.findByEmail(email))
+                .filter(TeacherEntity.class::isInstance)
+                .map(userEntity -> {
+                    TeacherEntity teacherEntity = (TeacherEntity) userEntity;
+                    teacherEntity.setContact(teacherDetailsUpdateRequest.getContact());
+                    teacherEntity.setAddress(teacherDetailsUpdateRequest.getAddress());
+                    teacherEntity.setFirstName(teacherDetailsUpdateRequest.getFirstName());
+                    teacherEntity.setLastName(teacherDetailsUpdateRequest.getLastName());
+                    teacherEntity.setDob(teacherDetailsUpdateRequest.getDob());
+
+                    return convertToTeacherModel(userRepository.save(teacherEntity));
+                })
+                .orElseThrow(() -> new UserNotFoundException("No teacher found by "+email));
     }
 
     public User convertToModel(UserEntity userEntity){
