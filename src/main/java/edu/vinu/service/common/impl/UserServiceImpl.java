@@ -26,6 +26,7 @@ import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
 import edu.vinu.repository.UserRepository;
 import edu.vinu.request.update_user_details.InstituteDetailsUpdateRequest;
+import edu.vinu.request.update_user_details.StudentDetailsUpdateRequest;
 import edu.vinu.request.update_user_details.TeacherDetailsUpdateRequest;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
@@ -166,6 +167,29 @@ public class UserServiceImpl implements UserService {
                     return convertToTeacherModel(userRepository.save(teacherEntity));
                 })
                 .orElseThrow(() -> new UserNotFoundException("No teacher found by "+email));
+    }
+
+    @Override
+    public Student updateStudentDetails(String email, StudentDetailsUpdateRequest studentDetailsUpdateRequest) {
+        if (!isUserExist(email)){
+            throw new UserNotFoundException("No User Found By "+email);
+        }
+        if (!isValidDob(studentDetailsUpdateRequest.getDob())){
+            throw new InvalidInputException("You must be at least 6 years old");
+        }
+        return Optional.ofNullable(userRepository.findByEmail(email))
+                .filter(StudentEntity.class::isInstance)
+                .map(userEntity -> {
+                    StudentEntity studentEntity = (StudentEntity) userEntity;
+                    studentEntity.setContact(studentDetailsUpdateRequest.getContact());
+                    studentEntity.setAddress(studentDetailsUpdateRequest.getAddress());
+                    studentEntity.setFirstName(studentDetailsUpdateRequest.getFirstName());
+                    studentEntity.setLastName(studentDetailsUpdateRequest.getLastName());
+                    studentEntity.setDob(studentDetailsUpdateRequest.getDob());
+
+                    return convertToStudentModel(userRepository.save(studentEntity));
+                })
+                .orElseThrow(() -> new UserNotFoundException("No Student found by "+email));
     }
 
     public User convertToModel(UserEntity userEntity){
