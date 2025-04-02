@@ -18,6 +18,7 @@ import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
 import edu.vinu.request.update_user_details.InstituteDetailsUpdateRequest;
+import edu.vinu.request.update_user_details.StudentDetailsUpdateRequest;
 import edu.vinu.request.update_user_details.TeacherDetailsUpdateRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.auth.impl.JwtService;
@@ -100,6 +101,13 @@ public class UserController {
     public ResponseEntity<ApiResponse> updateTeacherDetails(@PathVariable String email,@Valid @RequestBody TeacherDetailsUpdateRequest teacherDetailsUpdateRequest){
         Teacher updatedTeacherDetails = userService.updateTeacherDetails(email,teacherDetailsUpdateRequest);
         return ResponseEntity.status(OK).body(new ApiResponse("Teacher Profile Updated!",updatedTeacherDetails));
+    }
+
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @PatchMapping("/student/update/{email}/details")
+    public ResponseEntity<ApiResponse> updateStudentDetails(@PathVariable String email, @Valid @RequestBody StudentDetailsUpdateRequest studentDetailsUpdateRequest){
+        Student updatedStudentDetails = userService.updateStudentDetails(email,studentDetailsUpdateRequest);
+        return ResponseEntity.status(OK).body(new ApiResponse("Student Profile Updated!",updatedStudentDetails));
     }
 
 }
