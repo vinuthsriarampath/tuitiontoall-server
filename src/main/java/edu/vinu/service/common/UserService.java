@@ -18,7 +18,9 @@ import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
 import edu.vinu.request.update_user_details.InstituteDetailsUpdateRequest;
+import edu.vinu.request.update_user_details.StudentDetailsUpdateRequest;
 import edu.vinu.request.update_user_details.TeacherDetailsUpdateRequest;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -41,4 +43,6 @@ public interface UserService {
     Institute updateInstituteDetails(String currentEmail, InstituteDetailsUpdateRequest instituteDetailsUpdateRequest);
 
     Teacher updateTeacherDetails(String email, TeacherDetailsUpdateRequest teacherDetailsUpdateRequest);
+
+    Student updateStudentDetails(String email, @Valid StudentDetailsUpdateRequest studentDetailsUpdateRequest);
 }
