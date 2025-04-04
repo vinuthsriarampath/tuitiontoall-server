@@ -36,7 +36,6 @@ import edu.vinu.response.AuthResponse;
 import edu.vinu.service.auth.UserAuthenticationService;
 import edu.vinu.service.common.UserService;
 import edu.vinu.validator.UserValidator;
-import jakarta.servlet.ServletException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
