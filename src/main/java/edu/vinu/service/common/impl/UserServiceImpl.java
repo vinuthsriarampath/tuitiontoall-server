@@ -193,26 +193,42 @@ public class UserServiceImpl implements UserService {
     }
 
     public User convertToModel(UserEntity userEntity){
-        if (userEntity instanceof StudentEntity){
-            return mapper.map(userEntity, Student.class);
-        }else if (userEntity instanceof TeacherEntity){
-            return mapper.map(userEntity, Teacher.class);
-        }else if (userEntity instanceof InstituteEntity){
-            return mapper.map(userEntity, Institute.class);
-        }else {
-            return mapper.map(userEntity, User.class);
+        try {
+            if (userEntity instanceof StudentEntity) {
+                return mapper.map(userEntity, Student.class);
+            } else if (userEntity instanceof TeacherEntity) {
+                return mapper.map(userEntity, Teacher.class);
+            } else if (userEntity instanceof InstituteEntity) {
+                return mapper.map(userEntity, Institute.class);
+            } else {
+                return mapper.map(userEntity, User.class);
+            }
+        } catch (ClassCastException e) {
+            throw new InternalServerErrorException(e.getMessage());
         }
     }
 
     public Institute convertToInstituteModel(InstituteEntity instituteEntity){
-        return mapper.map(instituteEntity, Institute.class);
+        try {
+            return mapper.map(instituteEntity, Institute.class);
+        } catch (ClassCastException e) {
+            throw new InternalServerErrorException(e.getMessage());
+        }
     }
 
     public Student convertToStudentModel(StudentEntity studentEntity){
-        return mapper.map(studentEntity, Student.class);
+        try {
+            return mapper.map(studentEntity, Student.class);
+        } catch (ClassCastException e) {
+            throw new InternalServerErrorException(e.getMessage());
+        }
     }
 
     public Teacher convertToTeacherModel(TeacherEntity teacherEntity){
-        return mapper.map(teacherEntity, Teacher.class);
+        try {
+            return mapper.map(teacherEntity, Teacher.class);
+        } catch (ClassCastException e) {
+            throw new InternalServerErrorException(e.getMessage());
+        }
     }
 }
