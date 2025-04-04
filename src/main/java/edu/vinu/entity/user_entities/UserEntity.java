@@ -16,11 +16,12 @@ package edu.vinu.entity.user_entities;
 import edu.vinu.common.BaseAuditingEntity;
 import edu.vinu.enums.Role;
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.*;
 
 @Setter
 @Getter
@@ -29,6 +30,9 @@ import org.hibernate.annotations.NaturalId;
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.JOINED)
+@SQLDelete(sql = "UPDATE users SET is_disabled = true WHERE id = ?")
+@FilterDef(name = "softDeleteFilter", parameters = @ParamDef(name = "isDisabled",type = Boolean.class))
+@Filter(name = "softDeleteFilter", condition = "is_disabled = :isDisabled")
 public class UserEntity extends BaseAuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,5 +46,5 @@ public class UserEntity extends BaseAuditingEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    private boolean isDisabled;
+    private boolean isDisabled=false;
 }
