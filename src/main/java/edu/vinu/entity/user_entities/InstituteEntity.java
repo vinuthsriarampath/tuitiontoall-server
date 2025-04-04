@@ -19,6 +19,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.SQLDelete;
 
 @Setter
 @Getter
@@ -26,6 +28,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @DiscriminatorValue("INSTITUTE")
+@SQLDelete(sql = "UPDATE users SET is_disabled = true WHERE id = ?")
+@Filter(name = "softDeleteFilter", condition = "is_disabled = :isDisabled")
 public class InstituteEntity extends UserEntity {
     private String instituteName;
 }
