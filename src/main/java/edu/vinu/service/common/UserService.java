@@ -45,4 +45,6 @@ public interface UserService {
     Teacher updateTeacherDetails(String email, TeacherDetailsUpdateRequest teacherDetailsUpdateRequest);
 
     Student updateStudentDetails(String email, @Valid StudentDetailsUpdateRequest studentDetailsUpdateRequest);
+
+    void deleteInstituteByEmail(String email);
 }

@@ -18,6 +18,7 @@ import edu.vinu.entity.user_entities.StudentEntity;
 import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.enums.Role;
+import edu.vinu.exception.custom.InternalServerErrorException;
 import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.UserNotFoundException;
 import edu.vinu.model.user_models.Institute;
@@ -190,6 +191,16 @@ public class UserServiceImpl implements UserService {
                     return convertToStudentModel(userRepository.save(studentEntity));
                 })
                 .orElseThrow(() -> new UserNotFoundException("No Student found by "+email));
+    }
+
+    @Override
+    public void deleteInstituteByEmail(String email) {
+        Optional.ofNullable(userRepository.findByEmail(email))
+                .ifPresentOrElse(
+                        userRepository::delete,
+                        () -> {
+                            throw new UserNotFoundException("Institute not found by " + email);
+                        });
     }
 
     public User convertToModel(UserEntity userEntity){
