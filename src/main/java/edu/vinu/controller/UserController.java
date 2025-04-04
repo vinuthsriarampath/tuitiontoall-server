@@ -77,7 +77,7 @@ public class UserController {
         return ResponseEntity.status(FOUND).body(new ApiResponse("All Teachers!",teacherList));
     }
 
-    @GetMapping("all-institutes")
+    @GetMapping("/all-institutes")
     public ResponseEntity<ApiResponse> getAllInstitutes(){
         List<Institute> instituteList=userService.getAllInstitutes();
         return ResponseEntity.status(FOUND).body(new ApiResponse("All Institutes!",instituteList));
@@ -108,6 +108,13 @@ public class UserController {
     public ResponseEntity<ApiResponse> updateStudentDetails(@PathVariable String email, @Valid @RequestBody StudentDetailsUpdateRequest studentDetailsUpdateRequest){
         Student updatedStudentDetails = userService.updateStudentDetails(email,studentDetailsUpdateRequest);
         return ResponseEntity.status(OK).body(new ApiResponse("Student Profile Updated!",updatedStudentDetails));
+    }
+
+    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @DeleteMapping("/institute/delete/{email}")
+    public ResponseEntity<ApiResponse> deleteInstituteByEmail(@PathVariable String email){
+        userService.deleteInstituteByEmail(email);
+        return ResponseEntity.status(OK).body(new ApiResponse("Institute by "+email+" removed successfully!",null));
     }
 
 }
