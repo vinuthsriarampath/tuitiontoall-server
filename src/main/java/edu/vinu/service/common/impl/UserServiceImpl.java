@@ -87,9 +87,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Student> getAllStudents() {
-        List<Student> studentList = userRepository.findAllByRole(Role.ROLE_STUDENT)
+        List<Student> studentList = userRepository.getAllStudents()
                 .stream()
-                .map(studentEntity -> (Student) convertToModel(studentEntity))
+                .map(this::convertToStudentModel)
                 .toList();
         if (studentList.isEmpty()){
             throw new UserNotFoundException("No Students Found");
@@ -99,9 +99,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Teacher> getAllTeachers() {
-        List<Teacher> teacherList = userRepository.findAllByRole(Role.ROLE_TEACHER)
+        List<Teacher> teacherList = userRepository.getAllTeachers()
                 .stream()
-                .map(teacherEntity -> (Teacher) convertToModel(teacherEntity))
+                .map(this::convertToTeacherModel)
                 .toList();
         if (teacherList.isEmpty()){
             throw new UserNotFoundException("No Teachers Found!");
@@ -111,9 +111,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Institute> getAllInstitutes() {
-        List<Institute> instituteList =  userRepository.findAllByRole(Role.ROLE_INSTITUTE)
+        List<Institute> instituteList =  userRepository.getAllInstitutes()
                 .stream()
-                .map(instituteEntity -> (Institute) convertToModel(instituteEntity))
+                .map(this::convertToInstituteModel)
                 .toList();
         if (instituteList.isEmpty()){
             throw new UserNotFoundException("No Institutes Found!");
@@ -195,12 +195,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteInstituteByEmail(String email) {
-        Optional.ofNullable(userRepository.findByEmail(email))
-                .ifPresentOrElse(
-                        userRepository::delete,
-                        () -> {
-                            throw new UserNotFoundException("Institute not found by " + email);
-                        });
+        try {
+            Optional.ofNullable(userRepository.findByEmail(email))
+                    .ifPresentOrElse(
+                            userRepository::delete,
+                            () -> {
+                                throw new UserNotFoundException("Institute not found by " + email);
+                            });
+        } catch (Exception e) {
+            throw new InternalServerErrorException("Internal server error : "+e.getMessage());
+        }
     }
 
     public User convertToModel(UserEntity userEntity){
