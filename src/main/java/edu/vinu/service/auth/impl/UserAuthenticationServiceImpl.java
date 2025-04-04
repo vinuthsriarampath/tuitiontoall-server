@@ -36,12 +36,15 @@ import edu.vinu.response.AuthResponse;
 import edu.vinu.service.auth.UserAuthenticationService;
 import edu.vinu.service.common.UserService;
 import edu.vinu.validator.UserValidator;
+import jakarta.servlet.ServletException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeansException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -125,32 +128,43 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
     @Override
     public AuthResponse verify(UserLoginRequest request){
-        if (!UserValidator.isValidateEmail(request.getEmail())) {
-            throw new InvalidInputException("Invalid email");
-        }
-
-        Authentication authentication = authManager
-                .authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                request.getEmail(),
-                                request.getPassword()
-                        )
-                );
-
-        if (authentication.isAuthenticated()){
-            String token = jwtService.generateToken(authentication);
-            UserEntity userEntity = userRepository.findByEmail(request.getEmail());
-
-            if (userEntity instanceof InstituteEntity) {
-                return new AuthResponse(token, mapper.map(userEntity, Institute.class));
-            } else if (userEntity instanceof StudentEntity) {
-                return new AuthResponse(token, mapper.map(userEntity, Student.class));
-            } else if (userEntity instanceof TeacherEntity) {
-                return new AuthResponse(token, mapper.map(userEntity, Teacher.class));
-            } else {
-                return new AuthResponse(token, mapper.map(userEntity, User.class));
+        try {
+            if (!UserValidator.isValidateEmail(request.getEmail())) {
+                throw new InvalidInputException("Invalid email");
             }
+
+            Authentication authentication = authManager
+                    .authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    request.getEmail(),
+                                    request.getPassword()
+                            )
+                    );
+
+            if (authentication.isAuthenticated()){
+                String token = jwtService.generateToken(authentication);
+                UserEntity userEntity = userRepository.findByEmail(request.getEmail());
+
+                if (userEntity instanceof InstituteEntity) {
+                    return new AuthResponse(token, mapper.map(userEntity, Institute.class));
+                } else if (userEntity instanceof StudentEntity) {
+                    return new AuthResponse(token, mapper.map(userEntity, Student.class));
+                } else if (userEntity instanceof TeacherEntity) {
+                    return new AuthResponse(token, mapper.map(userEntity, Teacher.class));
+                } else {
+                    return new AuthResponse(token, mapper.map(userEntity, User.class));
+                }
+            }
+            throw new UnauthorizedException("Invalid access");
+        } catch (AuthenticationException e) {
+            log.error("UserAuthenticationServiceImpl Section 1: {}", e.getMessage());
+            throw new UnauthorizedException(e.getMessage());
+        } catch (NullPointerException | IndexOutOfBoundsException | BeansException e) {
+            log.error("UserAuthenticationServiceImpl Section 2: {}", e.getMessage());
+            throw new InternalServerErrorException(e.getMessage());
+        } catch (RuntimeException e) {
+            log.error("RuntimeException in UserAuthenticationServiceImpl: {}", e.getMessage());
+            throw new InternalServerErrorException(e.getMessage());
         }
-        throw new UnauthorizedException("Invalid access");
     }
 }
