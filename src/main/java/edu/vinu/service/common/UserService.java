@@ -26,10 +26,13 @@ import java.util.List;
 
 public interface UserService {
     User getUserByEmail(String email);
+
     boolean isUserExist(String email);
 
     List<User> getAllUsersByFirstNameLike(String firstname);
+
     List<Student> getAllStudentsByFirstNameLike(String firstName);
+
     List<Teacher> getAllTeachersByFirsNameLike(String lastName);
 
     List<Student> getAllStudents();
