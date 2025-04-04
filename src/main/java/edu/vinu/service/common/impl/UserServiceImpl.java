@@ -17,7 +17,6 @@ import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.entity.user_entities.StudentEntity;
 import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
-import edu.vinu.enums.Role;
 import edu.vinu.exception.custom.InternalServerErrorException;
 import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.UserNotFoundException;
