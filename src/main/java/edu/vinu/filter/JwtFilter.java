@@ -13,6 +13,8 @@
 
 package edu.vinu.filter;
 
+import edu.vinu.exception.custom.InternalServerErrorException;
+import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.service.auth.impl.JwtService;
 import edu.vinu.service.auth.impl.UserDetailsServiceImpl;
@@ -34,7 +36,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -43,13 +44,13 @@ public class JwtFilter extends OncePerRequestFilter {
     private final ApplicationContext context;
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,@NonNull FilterChain filterChain){
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) {
         if (request.getServletPath().startsWith("/api/v2/auth/")) {
             try {
                 filterChain.doFilter(request, response);
             } catch (IOException | ServletException e) {
-                log.error("1: {}", e.getMessage());
-                throw new UnauthorizedException("You are not authorized to access this resource or perform this action");
+                log.error("JWTFilter Section 1: {}", e.getMessage());
+                throw new InternalServerErrorException(e.getMessage());
             }
             return;
         }
@@ -73,9 +74,18 @@ public class JwtFilter extends OncePerRequestFilter {
                 }
             }
             filterChain.doFilter(request, response);
-        } catch (NullPointerException | IndexOutOfBoundsException | AuthenticationException | BeansException | ServletException | IOException  e) {
-            log.error("2: {}", e.getMessage());
+        } catch (AuthenticationException | ServletException e) {
+            log.error("JWTFilter Section 2: {}", e.getMessage());
             throw new UnauthorizedException("You are not authorized to access this resource or perform this action");
+        } catch (NullPointerException | IndexOutOfBoundsException | BeansException e) {
+            log.error("JWTFilter Section 3: {}", e.getMessage());
+            throw new InternalServerErrorException(e.getMessage());
+        } catch (IOException e) {
+            log.error("JWTFilter Section 4: {}", e.getMessage());
+            throw new InvalidInputException(e.getMessage());
+        } catch (RuntimeException e) {
+            log.error("RuntimeException in JWTFilter: {}", e.getMessage());
+            throw new InternalServerErrorException(e.getMessage());
         }
     }
 }
