@@ -13,6 +13,7 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
@@ -50,4 +51,6 @@ public interface UserService {
     Student updateStudentDetails(String email, @Valid StudentDetailsUpdateRequest studentDetailsUpdateRequest);
 
     void deleteInstituteByEmail(String email);
+
+    boolean isUserDisabled(UserEntity userEntity);
 }
