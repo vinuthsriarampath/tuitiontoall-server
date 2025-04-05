@@ -15,6 +15,8 @@ package edu.vinu.exception;
 
 import edu.vinu.exception.custom.*;
 import edu.vinu.response.ApiResponse;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -77,5 +79,17 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage()));
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ApiResponse> handleJwtException(JwtException ex) {
+        ApiResponse error = new ApiResponse("Authentication Error", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ApiResponse> handleExpiredJwtException(ExpiredJwtException ex) {
+        ApiResponse error = new ApiResponse("Token Expired", "Your authentication token has expired");
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 }

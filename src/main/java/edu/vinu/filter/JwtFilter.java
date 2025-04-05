@@ -13,9 +13,7 @@
 
 package edu.vinu.filter;
 
-import edu.vinu.exception.custom.InternalServerErrorException;
 import edu.vinu.exception.custom.InvalidInputException;
-import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.service.auth.impl.JwtService;
 import edu.vinu.service.auth.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
@@ -34,6 +32,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 @Slf4j
@@ -42,6 +41,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final ApplicationContext context;
+    private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) {
@@ -50,7 +50,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             } catch (IOException | ServletException e) {
                 log.error("JWTFilter Section 1: {}", e.getMessage());
-                throw new InternalServerErrorException(e.getMessage());
+                handlerExceptionResolver.resolveException(request, response, null, e);
             }
             return;
         }
@@ -76,16 +76,16 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (AuthenticationException | ServletException e) {
             log.error("JWTFilter Section 2: {}", e.getMessage());
-            throw new UnauthorizedException("You are not authorized to access this resource or perform this action");
+            handlerExceptionResolver.resolveException(request, response, null, e);
         } catch (NullPointerException | IndexOutOfBoundsException | BeansException e) {
             log.error("JWTFilter Section 3: {}", e.getMessage());
-            throw new InternalServerErrorException(e.getMessage());
+            handlerExceptionResolver.resolveException(request, response, null, e);
         } catch (IOException e) {
             log.error("JWTFilter Section 4: {}", e.getMessage());
             throw new InvalidInputException(e.getMessage());
         } catch (RuntimeException e) {
             log.error("RuntimeException in JWTFilter: {}", e.getMessage());
-            throw new InternalServerErrorException(e.getMessage());
+            handlerExceptionResolver.resolveException(request, response, null, e);
         }
     }
 }
