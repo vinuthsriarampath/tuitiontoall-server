@@ -18,7 +18,6 @@ import edu.vinu.entity.user_entities.StudentEntity;
 import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.enums.Role;
-import edu.vinu.filter.repository_filter.FilteredRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,7 +26,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity,Long>, FilteredRepositoryCustom{
+public interface UserRepository extends JpaRepository<UserEntity,Long>{
     UserEntity findByEmail(String username);
 
     @Query("SELECT i FROM InstituteEntity i WHERE i.email = :email AND i.isDisabled = false")
@@ -60,4 +59,7 @@ public interface UserRepository extends JpaRepository<UserEntity,Long>, Filtered
 
     @Query("SELECT i FROM InstituteEntity i WHERE LOWER(i.instituteName) LIKE LOWER(CONCAT('%', :instituteName, '%')) AND i.isDisabled = false")
     List<InstituteEntity> findByInstituteName(@Param("instituteName") String instituteName);
+
+    @Query("SELECT u.isDisabled From UserEntity u WHERE u.email = :email")
+    Boolean isUserDisabledByEmail(String email);
 }
