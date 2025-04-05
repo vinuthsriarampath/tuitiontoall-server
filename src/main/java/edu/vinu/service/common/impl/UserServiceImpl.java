@@ -31,6 +31,7 @@ import edu.vinu.request.update_user_details.TeacherDetailsUpdateRequest;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -194,16 +195,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteInstituteByEmail(String email) {
-        try {
-            Optional.ofNullable(userRepository.findByEmail(email))
-                    .ifPresentOrElse(
-                            userRepository::delete,
-                            () -> {
-                                throw new UserNotFoundException("Institute not found by " + email);
-                            });
-        } catch (Exception e) {
-            throw new InternalServerErrorException("Internal server error : "+e.getMessage());
-        }
+        Optional.ofNullable(userRepository.findByEmail(email))
+                .map(userEntity -> {
+                    if (isUserDisabled(userEntity)) {
+                        throw new DisabledException("User is disabled Already");
+                    }
+                    return userEntity;
+                })
+                .ifPresentOrElse(
+                        userRepository::delete,
+                        () -> {
+                            throw new UserNotFoundException("Institute not found by " + email);
+                        });
+    }
+
+    @Override
+    public boolean isUserDisabled(UserEntity userEntity) {
+        return userRepository.isUserDisabledByEmail(userEntity.getEmail());
     }
 
     public User convertToModel(UserEntity userEntity){
