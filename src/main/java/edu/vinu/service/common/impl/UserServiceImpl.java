@@ -46,6 +46,7 @@ import static edu.vinu.validator.UserValidator.isValidDob;
 public class UserServiceImpl implements UserService {
     private final ModelMapper mapper;
     private final UserRepository userRepository;
+
     @Override
     public User getUserByEmail(String email) {
         UserEntity userEntity=userRepository.findByEmail(email);
