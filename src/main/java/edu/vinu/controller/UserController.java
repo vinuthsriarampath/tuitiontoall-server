@@ -21,7 +21,6 @@ import edu.vinu.request.update_user_details.InstituteDetailsUpdateRequest;
 import edu.vinu.request.update_user_details.StudentDetailsUpdateRequest;
 import edu.vinu.request.update_user_details.TeacherDetailsUpdateRequest;
 import edu.vinu.response.ApiResponse;
-import edu.vinu.service.auth.impl.JwtService;
 import edu.vinu.service.common.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,20 +40,14 @@ import static org.springframework.http.HttpStatus.*;
 @SuppressWarnings("unused")
 public class UserController {
     private final UserService userService;
-    private final JwtService jwtService;
 
     @GetMapping("/me")
-    public ResponseEntity<ApiResponse> getUserDetails(@RequestHeader("Authorization") String authHeader){
-        if (authHeader == null || !authHeader.startsWith("Bearer ")){
-            return ResponseEntity.status(UNAUTHORIZED).build();
-        }
-        String token = authHeader.substring(7);
-        String username = jwtService.extractUsername(token);
-        User user = userService.getUserByEmail(username);
+    public ResponseEntity<ApiResponse> getUserDetails(){
+        User user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(new ApiResponse("User Verified!",user));
     }
 
-    @GetMapping("/user/by-email")
+    @GetMapping("/by-email")
     public ResponseEntity<ApiResponse> getUserByEmail(@RequestParam String email){
         User userByEmail = userService.getUserByEmail(email);
         return ResponseEntity.status(FOUND).body(new ApiResponse("User Found By "+email,userByEmail));
@@ -66,19 +59,19 @@ public class UserController {
         return ResponseEntity.status(FOUND).body(new ApiResponse("User List Found by "+firstName,userList));
     }
 
-    @GetMapping("/all-students")
+    @GetMapping("/students")
     public ResponseEntity<ApiResponse> getAllStudents(){
         List<Student> studentList = userService.getAllStudents();
         return ResponseEntity.status(FOUND).body(new ApiResponse("All Students!",studentList));
     }
 
-    @GetMapping("/all-teachers")
+    @GetMapping("/teachers")
     public ResponseEntity<ApiResponse> getAllTeachers(){
         List<Teacher> teacherList = userService.getAllTeachers();
         return ResponseEntity.status(FOUND).body(new ApiResponse("All Teachers!",teacherList));
     }
 
-    @GetMapping("/all-institutes")
+    @GetMapping("/institutes")
     public ResponseEntity<ApiResponse> getAllInstitutes(){
         List<Institute> instituteList=userService.getAllInstitutes();
         return ResponseEntity.status(FOUND).body(new ApiResponse("All Institutes!",instituteList));
@@ -91,27 +84,27 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ROLE_INSTITUTE')")
-    @PatchMapping("/institute/update/{email}/details")
-    public ResponseEntity<ApiResponse> updateInstituteDetails(@PathVariable String email,@Valid @RequestBody InstituteDetailsUpdateRequest instituteDetailsUpdateRequest){
-        Institute updateInstituteDetails = userService.updateInstituteDetails(email,instituteDetailsUpdateRequest);
+    @PatchMapping("/institutes/update/me")
+    public ResponseEntity<ApiResponse> updateInstituteDetails(@Valid @RequestBody InstituteDetailsUpdateRequest instituteDetailsUpdateRequest){
+        Institute updateInstituteDetails = userService.updateInstituteDetails(SecurityContextHolder.getContext().getAuthentication().getName(),instituteDetailsUpdateRequest);
         return ResponseEntity.status(OK).body(new ApiResponse("Profile Updated",updateInstituteDetails));
     }
 
     @PreAuthorize("hasRole('ROLE_TEACHER')")
-    @PatchMapping("/teacher/update/{email}/details")
-    public ResponseEntity<ApiResponse> updateTeacherDetails(@PathVariable String email,@Valid @RequestBody TeacherDetailsUpdateRequest teacherDetailsUpdateRequest){
-        Teacher updatedTeacherDetails = userService.updateTeacherDetails(email,teacherDetailsUpdateRequest);
+    @PatchMapping("/teachers/update/me")
+    public ResponseEntity<ApiResponse> updateTeacherDetails(@Valid @RequestBody TeacherDetailsUpdateRequest teacherDetailsUpdateRequest){
+        Teacher updatedTeacherDetails = userService.updateTeacherDetails(SecurityContextHolder.getContext().getAuthentication().getName(),teacherDetailsUpdateRequest);
         return ResponseEntity.status(OK).body(new ApiResponse("Teacher Profile Updated!",updatedTeacherDetails));
     }
 
     @PreAuthorize("hasRole('ROLE_STUDENT')")
-    @PatchMapping("/student/update/{email}/details")
-    public ResponseEntity<ApiResponse> updateStudentDetails(@PathVariable String email, @Valid @RequestBody StudentDetailsUpdateRequest studentDetailsUpdateRequest){
-        Student updatedStudentDetails = userService.updateStudentDetails(email,studentDetailsUpdateRequest);
+    @PatchMapping("/student/update/me")
+    public ResponseEntity<ApiResponse> updateStudentDetails(@Valid @RequestBody StudentDetailsUpdateRequest studentDetailsUpdateRequest){
+        Student updatedStudentDetails = userService.updateStudentDetails(SecurityContextHolder.getContext().getAuthentication().getName(),studentDetailsUpdateRequest);
         return ResponseEntity.status(OK).body(new ApiResponse("Student Profile Updated!",updatedStudentDetails));
     }
 
-    @DeleteMapping("/user/disable/me")
+    @DeleteMapping("/disable/me")
     public ResponseEntity<ApiResponse> disableMyAccount(){
         userService.disableUserAccountByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.status(OK).body(new ApiResponse("User disabled successfully!",null));
