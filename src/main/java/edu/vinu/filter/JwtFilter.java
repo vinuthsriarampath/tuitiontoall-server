@@ -13,7 +13,6 @@
 
 package edu.vinu.filter;
 
-import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.service.auth.impl.JwtService;
 import edu.vinu.service.auth.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
@@ -82,7 +81,7 @@ public class JwtFilter extends OncePerRequestFilter {
             handlerExceptionResolver.resolveException(request, response, null, e);
         } catch (IOException e) {
             log.error("JWTFilter Section 4: {}", e.getMessage());
-            throw new InvalidInputException(e.getMessage());
+            handlerExceptionResolver.resolveException(request, response, null, e);
         } catch (RuntimeException e) {
             log.error("RuntimeException in JWTFilter: {}", e.getMessage());
             handlerExceptionResolver.resolveException(request, response, null, e);
