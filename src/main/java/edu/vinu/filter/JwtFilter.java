@@ -77,7 +77,7 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (AuthenticationException | ServletException e) {
             log.error("JWTFilter Section 2: {}", e.getMessage());
             handlerExceptionResolver.resolveException(request, response, null, e);
-        } catch (NullPointerException | IndexOutOfBoundsException | BeansException e) {
+        } catch (BeansException e) {
             log.error("JWTFilter Section 3: {}", e.getMessage());
             handlerExceptionResolver.resolveException(request, response, null, e);
         } catch (IOException e) {
