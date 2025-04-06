@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<ApiResponse> handleInternalServerErrorException(InternalServerErrorException ex) {
         ApiResponse response = new ApiResponse(ex.getMessage(), null);
-        return ResponseEntity.badRequest().body(response);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
