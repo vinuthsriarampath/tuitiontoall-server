@@ -24,6 +24,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InstituteDetailsUpdateRequest extends UserDetailsUpdateRequest{
-    @NotBlank(message = "Last Name cannot be blank")
+    @NotBlank(message = "Institute Name cannot be blank")
     private String instituteName;
 }
