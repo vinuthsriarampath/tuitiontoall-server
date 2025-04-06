@@ -194,7 +194,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteInstituteByEmail(String email) {
+    public void disableUserAccountByEmail(String email) {
         Optional.ofNullable(userRepository.findByEmail(email))
                 .map(userEntity -> {
                     if (isUserDisabled(userEntity)) {
@@ -205,7 +205,7 @@ public class UserServiceImpl implements UserService {
                 .ifPresentOrElse(
                         userRepository::delete,
                         () -> {
-                            throw new UserNotFoundException("Institute not found by " + email);
+                            throw new UserNotFoundException("User not found by " + email);
                         });
     }
 

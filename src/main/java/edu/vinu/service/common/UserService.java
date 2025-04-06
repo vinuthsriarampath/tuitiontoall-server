@@ -50,7 +50,7 @@ public interface UserService {
 
     Student updateStudentDetails(String email, @Valid StudentDetailsUpdateRequest studentDetailsUpdateRequest);
 
-    void deleteInstituteByEmail(String email);
+    void disableUserAccountByEmail(String email);
 
     boolean isUserDisabled(UserEntity userEntity);
 }
