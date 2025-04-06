@@ -112,7 +112,7 @@ public class UserController {
     }
 
     @DeleteMapping("/user/disable/me")
-    public ResponseEntity<ApiResponse> deleteUserAccountByEmail(){
+    public ResponseEntity<ApiResponse> disableMyAccount(){
         userService.disableUserAccountByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.status(OK).body(new ApiResponse("User disabled successfully!",null));
     }
