@@ -27,6 +27,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -110,11 +111,10 @@ public class UserController {
         return ResponseEntity.status(OK).body(new ApiResponse("Student Profile Updated!",updatedStudentDetails));
     }
 
-    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
-    @DeleteMapping("/institute/delete/{email}")
-    public ResponseEntity<ApiResponse> deleteInstituteByEmail(@PathVariable String email){
-        userService.deleteInstituteByEmail(email);
-        return ResponseEntity.status(OK).body(new ApiResponse("Institute by "+email+" removed successfully!",null));
+    @DeleteMapping("/user/disable/me")
+    public ResponseEntity<ApiResponse> deleteUserAccountByEmail(){
+        userService.disableUserAccountByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        return ResponseEntity.status(OK).body(new ApiResponse("User disabled successfully!",null));
     }
 
 }
