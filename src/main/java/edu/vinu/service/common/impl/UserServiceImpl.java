@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsersByFirstNameLike(String firstname) {
         List<User> userList =new ArrayList<>();
         userList.addAll(getAllStudentsByFirstNameLike(firstname));
-        userList.addAll(getAllTeachersByFirsNameLike(firstname));
+        userList.addAll(getAllTeachersByFirstNameLike(firstname));
         if (userList.isEmpty()){
             throw new UserNotFoundException("There are no users starts with "+firstname);
         }
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Teacher> getAllTeachersByFirsNameLike(String firstName) {
+    public List<Teacher> getAllTeachersByFirstNameLike(String firstName) {
         return userRepository.getTeachersByFirstNameLike(firstName).stream()
                 .map(this::convertToTeacherModel)
                 .toList();
