@@ -20,6 +20,7 @@ import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -47,24 +48,24 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidInputException.class)
     public ResponseEntity<ApiResponse> handleInvalidInputException(InvalidInputException ex) {
         ApiResponse response = new ApiResponse(ex.getMessage(), null);
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
+        return ResponseEntity.badRequest().body(response);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse> handleJsonParseException(HttpMessageNotReadableException ex) {
         ApiResponse response = new ApiResponse("Invalid JSON input: " +ex.getMessage(),null);
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
+        return ResponseEntity.badRequest().body(response);
     }
     @ExceptionHandler(DateTimeParseException.class)
     public ResponseEntity<ApiResponse> handleDateTimeParseException(DateTimeParseException ex) {
         ApiResponse response = new ApiResponse(ex.getMessage(),null);
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(response);
+        return ResponseEntity.badRequest().body(response);
     }
 
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<ApiResponse> handleInternalServerErrorException(InternalServerErrorException ex) {
         ApiResponse response = new ApiResponse(ex.getMessage(), null);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        return ResponseEntity.badRequest().body(response);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -84,12 +85,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(JwtException.class)
     public ResponseEntity<ApiResponse> handleJwtException(JwtException ex) {
         ApiResponse error = new ApiResponse("Authentication Error", ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<ApiResponse> handleExpiredJwtException(ExpiredJwtException ex) {
         ApiResponse error = new ApiResponse("Token Expired", "Your authentication token has expired");
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(error);
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ApiResponse> handleDisabledException(DisabledException ex) {
+        ApiResponse error = new ApiResponse(ex.getMessage(), null);
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(error);
     }
 }
