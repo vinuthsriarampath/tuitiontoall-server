@@ -34,7 +34,7 @@ public interface UserService {
 
     List<Student> getAllStudentsByFirstNameLike(String firstName);
 
-    List<Teacher> getAllTeachersByFirsNameLike(String lastName);
+    List<Teacher> getAllTeachersByFirstNameLike(String lastName);
 
     List<Student> getAllStudents();
 
