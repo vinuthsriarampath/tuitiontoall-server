@@ -16,6 +16,7 @@ package edu.vinu.service.auth.impl;
 import edu.vinu.exception.custom.InternalServerErrorException;
 import edu.vinu.model.UserPrinciple;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -92,6 +93,15 @@ public class JwtService {
 
     public boolean validateToken(String token, UserDetails userDetails){
         final String username= extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && userDetails.isEnabled());
+        if(!username.equals(userDetails.getUsername())){
+            throw new JwtException("Username dose not match with the token subject!");
+        }
+        if (isTokenExpired(token)){
+            throw new JwtException("Token is Expired!");
+        }
+        if (!userDetails.isEnabled()){
+            throw new JwtException("User is Disabled!");
+        }
+        return (true);
     }
 }
