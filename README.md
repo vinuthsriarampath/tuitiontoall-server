@@ -13,138 +13,37 @@
 
 <hr />
 
+### Latest Version Features (v2.1.0)
+
+1. Verify user by jet token
+2. 1Get all users by email
+3. Get teachers and students by first name
+4. Get all students
+5. Get all teachers
+6. get all institutes
+7. Get institutes by institute name
+8. Update institute details (without password and email address)
+9. Update teacher details (without password and email address)
+10. Update student details (without password and email address)
+11. Disable users own account
+    
 ### All Features 
 
 1. User Registration
 2. User Login
-   1. Using email and password
+3. Verify user by jet token
+4. Get all users by email
+5. Get teachers and students by first name
+6. Get all students
+7. Get all teachers
+8. get all institutes
+9. Get institutes by institute name
+10. Update institute details (without password and email address)
+11. Update teacher details (without password and email address)
+12. Update student details (without password and email address)
+13. Disable users own account 
 
-### API Endpoints and Request/Response Body
-
-1. User Registration
-   - User can register as a institute, teacher or student.
-     - ### Institute registration
-        ``` 
-        http://localhost:8080/api/v2/auth/register/institute
-        ```
-       - #### Request Body
-           ```json
-           {
-             "instituteName": "Sample Institute",
-             "address": "sample address",
-             "contact": "0000000000",
-             "email": "example@email.com",
-             "password": "Password@123"
-           }
-           ```
-       - #### Response Body
-           ```json
-           {
-             "message": "Institute Registered Successfully!",
-              "data": {
-                "id": 61,
-                "instituteName": "Sample Institute",
-                "address": "sample address",
-                "contact": "0000000000",
-                "email": "example@email.com",
-                "role": "ROLE_INSTITUTE",
-                "disabled": false
-              }    
-           }
-           ```    
-     - ### Teacher registration
-        ``` 
-        http://localhost:8080/api/v2/auth/register/teacher
-        ```
-       - #### Request Body
-           ```json
-           {
-             "firstName": "SampleFirstName",
-             "lastName": "SampleLastName",
-             "dob": "yyyy-mm-dd",
-             "address": "sample address",
-             "contact": "0000000000",
-             "email": "example@email.com",
-             "password": "Password@123"
-           }
-           ```
-       - #### Response Body
-           ```json
-           {
-             "message": "Teacher Registered Successfully!",
-              "data": {
-                "id": 62,
-                "firstName": "SampleFirstName",
-                "lastName": "SampleLastName",
-                "dob": "yyyy-mm-dd",
-                "address": "sample address",
-                "contact": "0000000000",
-                "email": "example@email.com",
-                "role": "ROLE_TEACHER",
-                "disabled": false
-              }    
-           }
-           ```    
-     - ### Student registration
-        ``` 
-        http://localhost:8080/api/v2/auth/register/student
-        ```
-       - #### Request Body
-           ```json
-           {
-             "firstName": "SampleFirstName",
-             "lastName": "SampleLastName",
-             "dob": "yyyy-mm-dd",
-             "address": "sample address",
-             "contact": "0000000000",
-             "email": "example@email.com",
-             "password": "Password@123"
-           }
-           ```
-       - #### Response Body
-           ```json
-           {
-             "message": "Student Registered Successfully!",
-              "data": {
-                "id": 62,
-                "firstName": "SampleFirstName",
-                "lastName": "SampleLastName",
-                "dob": "yyyy-mm-dd",
-                "address": "sample address",
-                "contact": "0000000000",
-                "email": "example@email.com",
-                "role": "ROLE_TEACHER",
-                "disabled": false
-              }     
-           }
-           ```
-2. User Login
-   1. Using email and password
-        - ### Institute login
-            ``` 
-            http://localhost:8080/api/v2/auth/login
-            ```
-        - #### Request Body
-            ```json
-            {
-                "token": "YOUR_JWT_TOKEN",
-                "user": {
-                     "id": 5,
-                    "firstName": "Vinuth",
-                    "lastName": "Sri Arampath",
-                    "dob": "2004-09-18",
-                    "address": "75/6A Kottikawaththa Road,Gothatuwa New Town,Angoda",
-                    "contact": "0719401853",
-                    "email": "vinuthsriarampath.testing@outlook.com",
-                    "role": "ROLE_STUDENT",
-                    "disabled": false
-                } 
-            }
-            ```
-  
-
-      
-
+**_All features and steps to setup this project on your computer are described in the github [wiki page]() of this project._**
 
 ### Keep your eye open to this project readme to get to know about the status of this project...
 #### `system.out.println("Bye Bye for now...👋👋👋")`
