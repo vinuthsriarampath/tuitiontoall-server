@@ -16,7 +16,7 @@
 ### Latest Version Features (v2.1.0)
 
 1. Verify user by jet token
-2. 1Get all users by email
+2. Get all users by email
 3. Get teachers and students by first name
 4. Get all students
 5. Get all teachers
