@@ -9,6 +9,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import java.util.List;
 
 @Configuration
+@SuppressWarnings("unused")
 public class CorsConfig {
 
     @Bean
