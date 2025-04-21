@@ -47,4 +47,7 @@ public class UserEntity extends BaseAuditingEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
     private boolean isDisabled=false;
+
+    @Column(unique = true , nullable = false)
+    private String userSlug;
 }
