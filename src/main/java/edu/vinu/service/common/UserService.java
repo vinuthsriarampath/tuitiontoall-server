@@ -46,6 +46,8 @@ public interface UserService {
 
     Institute updateInstituteDetails(String currentEmail, InstituteDetailsUpdateRequest instituteDetailsUpdateRequest);
 
+    String generateUserSlug(String base);
+
     Teacher updateTeacherDetails(String email, TeacherDetailsUpdateRequest teacherDetailsUpdateRequest);
 
     Student updateStudentDetails(String email, @Valid StudentDetailsUpdateRequest studentDetailsUpdateRequest);

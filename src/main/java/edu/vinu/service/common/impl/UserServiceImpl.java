@@ -149,6 +149,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String generateUserSlug(String base) {
+        String slug = base.trim().toLowerCase().replaceAll("[^a-z0-9]+", "-");
+        String uniqueSlug = slug;
+        int counter = 1;
+
+        while (userRepository.existsByUserSlug(uniqueSlug)) {
+            uniqueSlug = slug + "-" + counter++;
+        }
+
+        return uniqueSlug;
+    }
+
+    @Override
     public Teacher updateTeacherDetails(String email, TeacherDetailsUpdateRequest teacherDetailsUpdateRequest) {
         if (!isUserExist(email)){
             throw new UserNotFoundException("No User Found By "+email);
