@@ -87,19 +87,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             UserEntity userEntity = mapper.map(userRequest, entityClass);
             userEntity.setRole(role);
 
-            String baseSlug;
-            if (userEntity instanceof StudentEntity student) {
-                baseSlug = student.getFirstName() + "-" + student.getLastName();
-            } else if (userEntity instanceof TeacherEntity teacher) {
-                baseSlug = teacher.getFirstName() + "-" + teacher.getLastName();
-            } else if (userEntity instanceof InstituteEntity institute) {
-                baseSlug = institute.getInstituteName();
-            } else {
-                baseSlug = "user";
-            }
-
-            userEntity.setUserSlug(userService.generateUserSlug(baseSlug));
-
+            userEntity.setUserSlug(userService.generateUserSlug(getBaseSlug(userEntity)));
 
             try {
                 UserEntity savedEntity = userRepository.save(userEntity);
@@ -109,6 +97,18 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             }
         } else {
             throw new IllegalArgumentException("Invalid request type");
+        }
+    }
+
+    private static String getBaseSlug(UserEntity userEntity) {
+        if (userEntity instanceof StudentEntity student) {
+            return student.getFirstName() + "-" + student.getLastName();
+        } else if (userEntity instanceof TeacherEntity teacher) {
+            return teacher.getFirstName() + "-" + teacher.getLastName();
+        } else if (userEntity instanceof InstituteEntity institute) {
+            return institute.getInstituteName();
+        } else {
+            return "user";
         }
     }
 
