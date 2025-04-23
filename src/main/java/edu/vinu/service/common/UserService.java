@@ -55,4 +55,6 @@ public interface UserService {
     void disableUserAccountByEmail(String email);
 
     boolean isUserDisabled(UserEntity userEntity);
+
+    User getUserByUserSlug(String userSlug);
 }

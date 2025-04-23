@@ -64,4 +64,7 @@ public interface UserRepository extends JpaRepository<UserEntity,Long>{
     Boolean isUserDisabledByEmail(String email);
 
     boolean existsByUserSlug(String uniqueSlug);
+
+    @Query("SELECT u FROM UserEntity u WHERE u.userSlug = :userSlug AND u.isDisabled = false")
+    UserEntity findByUserSlug(String userSlug);
 }
