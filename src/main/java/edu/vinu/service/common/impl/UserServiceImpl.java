@@ -228,6 +228,18 @@ public class UserServiceImpl implements UserService {
         return userRepository.isUserDisabledByEmail(userEntity.getEmail());
     }
 
+    @Override
+    public User getUserByUserSlug(String userSlug) {
+        return  Optional.ofNullable(userRepository.findByUserSlug(userSlug))
+                .map(userEntity -> {
+                    if (isUserDisabled(userEntity)) {
+                        throw new DisabledException("User is disabled");
+                    }
+                    return convertToModel(userEntity);
+                })
+                .orElseThrow(()-> new UserNotFoundException("No user found by "+userSlug));
+    }
+
     public User convertToModel(UserEntity userEntity){
         try {
             if (userEntity instanceof StudentEntity) {
