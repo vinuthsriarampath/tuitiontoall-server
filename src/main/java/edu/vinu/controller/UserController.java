@@ -110,4 +110,10 @@ public class UserController {
         return ResponseEntity.status(OK).body(new ApiResponse("User disabled successfully!",null));
     }
 
+    @GetMapping("/by-user-slug/{userSlug}")
+    public ResponseEntity<ApiResponse> getUserByUserSlug(@PathVariable String userSlug){
+        User user = userService.getUserByUserSlug(userSlug);
+        return ResponseEntity.status(OK).body(new ApiResponse("User Found By "+userSlug,user));
+    }
+
 }
