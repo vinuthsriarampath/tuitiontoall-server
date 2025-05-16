@@ -32,6 +32,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -167,5 +169,204 @@ class UserServiceTest {
             userService.convertToModel(userEntity);
         });
         assertEquals("Mapping error", ex.getMessage());
+    }
+
+    @Test
+    void testGetAllUsersByFirstNameLike_shouldReturnListOfTeachersAndStudents_whenUserFirstNameIsLike() {
+        String firstName = "John";
+
+        List<StudentEntity> mockStudentEntities = List.of(new StudentEntity(), new StudentEntity());
+        List<TeacherEntity> mockTeacherEntities = List.of(new TeacherEntity(), new TeacherEntity());
+
+        List<Student> expectedStudents = List.of(new Student(), new Student());
+        List<Teacher> expectedTeachers = List.of(new Teacher(), new Teacher());
+
+        List<User> expectedUsers = List.of(new Student(), new Teacher(), new Student(), new Teacher());
+
+        when(userRepository.getStudentsByFirstNameLike(firstName)).thenReturn(mockStudentEntities);
+        when(userRepository.getTeachersByFirstNameLike(firstName)).thenReturn(mockTeacherEntities);
+
+        when(mapper.map(mockStudentEntities.get(0), Student.class)).thenReturn(expectedStudents.get(0));
+        when(mapper.map(mockStudentEntities.get(1), Student.class)).thenReturn(expectedStudents.get(1));
+        when(mapper.map(mockTeacherEntities.get(0), Teacher.class)).thenReturn(expectedTeachers.get(0));
+        when(mapper.map(mockTeacherEntities.get(1), Teacher.class)).thenReturn(expectedTeachers.get(1));
+
+        List<User> actualUsers = userService.getAllUsersByFirstNameLike(firstName);
+
+        assertNotNull(actualUsers);
+
+        assertEquals(expectedUsers.size(), actualUsers.size());
+
+        verify(userRepository).getTeachersByFirstNameLike(firstName);
+        verify(userRepository).getStudentsByFirstNameLike(firstName);
+    }
+
+    @Test
+    void testGetAllUsersByFirstNameLike_shouldThrowUserNotFoundException_whenEmptyListOfUsers(){
+        String firstName = "John";
+        List<StudentEntity> mockStudentEntities = List.of();
+        List<TeacherEntity> mockTeacherEntities = List.of();
+
+        when(userRepository.getStudentsByFirstNameLike(firstName)).thenReturn(mockStudentEntities);
+        when(userRepository.getTeachersByFirstNameLike(firstName)).thenReturn(mockTeacherEntities);
+
+        assertThrowsExactly(UserNotFoundException.class, () -> userService.getAllUsersByFirstNameLike(firstName),"There are no users starts with "+firstName);
+
+        verify(userRepository).getTeachersByFirstNameLike(firstName);
+        verify(userRepository).getStudentsByFirstNameLike(firstName);
+    }
+
+    @Test
+    void testGetAllStudentsByFirstNameLike_shouldReturnListOfStudents_whenUserFirstNameIsLike() {
+        String firstName = "John";
+        List<StudentEntity> mockStudentEntities = List.of(new StudentEntity(), new StudentEntity());
+        List<Student> expectedStudents = List.of(new Student(), new Student());
+
+        when(userRepository.getStudentsByFirstNameLike(firstName)).thenReturn(mockStudentEntities);
+
+        for (int i = 0; i < mockStudentEntities.size(); i++) {
+            when(mapper.map(mockStudentEntities.get(i), Student.class)).thenReturn(expectedStudents.get(i));
+        }
+
+        List<Student> actualStudents = userService.getAllStudentsByFirstNameLike(firstName);
+
+        assertNotNull(actualStudents);
+        assertEquals(expectedStudents.size(), actualStudents.size());
+
+        verify(userRepository).getStudentsByFirstNameLike(firstName);
+    }
+
+    @Test
+    void testGetAllStudentsByFirstNameLike_shouldReturnEmptyListOfStudents_whenUserFirstNameIsLike() {
+        String firstName = "John";
+        List<StudentEntity> mockStudentEntities = List.of();
+
+        when(userRepository.getStudentsByFirstNameLike(firstName)).thenReturn(mockStudentEntities);
+
+        List<Student> actualStudents = userService.getAllStudentsByFirstNameLike(firstName);
+
+        assertNotNull(actualStudents);
+        assertEquals(0, actualStudents.size());
+
+        verify(userRepository).getStudentsByFirstNameLike(firstName);
+    }
+
+    @Test
+    void testGetAllTeachersByFirstNameLike_shouldReturnListOfTeachers_whenUserFirstNameIsLike() {
+        String firstName = "John";
+        List<TeacherEntity> mockTeacherEntities = List.of(new TeacherEntity(), new TeacherEntity());
+        List<Teacher> expectedTeachers = List.of(new Teacher(), new Teacher());
+
+        when(userRepository.getTeachersByFirstNameLike(firstName)).thenReturn(mockTeacherEntities);
+
+        for (int i = 0; i < mockTeacherEntities.size(); i++) {
+            when(mapper.map(mockTeacherEntities.get(i), Teacher.class)).thenReturn(expectedTeachers.get(i));
+        }
+
+        List<Teacher> actualTeachers = userService.getAllTeachersByFirstNameLike(firstName);
+
+        assertNotNull(actualTeachers);
+        assertEquals(expectedTeachers.size(), actualTeachers.size());
+
+        verify(userRepository).getTeachersByFirstNameLike(firstName);
+    }
+
+    @Test
+    void testGetAllTeachersByFirstNameLike_shouldReturnEmptyListOfTeachers_whenUserFirstNameIsLike() {
+        String firstName = "John";
+        List<TeacherEntity> mockTeacherEntities = List.of();
+
+        when(userRepository.getTeachersByFirstNameLike(firstName)).thenReturn(mockTeacherEntities);
+
+        List<Teacher> actualTeachers = userService.getAllTeachersByFirstNameLike(firstName);
+
+        assertNotNull(actualTeachers);
+        assertEquals(0, actualTeachers.size());
+
+        verify(userRepository).getTeachersByFirstNameLike(firstName);
+    }
+
+    @Test
+    void testGetAllStudents_shouldReturnListOfAllStudents(){
+        List<StudentEntity> mockStudentEntities = List.of(new StudentEntity(), new StudentEntity());
+        List<Student> expectedStudents = List.of(new Student(), new Student());
+
+        when(userRepository.getAllStudents()).thenReturn(mockStudentEntities);
+
+        List<Student> actualStudents = userService.getAllStudents();
+
+        assertNotNull(actualStudents);
+        assertEquals(expectedStudents.size(), actualStudents.size());
+
+        verify(userRepository).getAllStudents();
+    }
+
+    @Test
+    void testGetAllStudents_ShouldThrowUserNotFoundException_whenNoStudentsFound(){
+        List<StudentEntity> mockStudentEntities = List.of();
+
+        when(userRepository.getAllStudents()).thenReturn(mockStudentEntities);
+
+        assertThrowsExactly(UserNotFoundException.class, () ->{
+            userService.getAllStudents();
+        }, "No Students Found");
+
+        verify(userRepository).getAllStudents();
+    }
+
+    @Test
+    void testGetAllTeachers_shouldReturnListOfAllTeachers(){
+        List<TeacherEntity> mockTeacherEntities = List.of(new TeacherEntity(), new TeacherEntity());
+        List<Teacher> expectedTeachers = List.of(new Teacher(), new Teacher());
+
+        when(userRepository.getAllTeachers()).thenReturn(mockTeacherEntities);
+
+        List<Teacher> actualTeachers = userService.getAllTeachers();
+
+        assertNotNull(actualTeachers);
+        assertEquals(expectedTeachers.size(), actualTeachers.size());
+
+        verify(userRepository).getAllTeachers();
+    }
+
+    @Test
+    void testGetAllTeachers_ShouldThrowUserNotFoundException_whenNoTeachersFound(){
+        List<TeacherEntity> mockTeacherEntities = List.of();
+
+        when(userRepository.getAllTeachers()).thenReturn(mockTeacherEntities);
+
+        assertThrowsExactly(UserNotFoundException.class, () ->{
+            userService.getAllTeachers();
+        }, "No Teachers Found!");
+
+        verify(userRepository).getAllTeachers();
+    }
+
+    @Test
+    void testGetAllInstitutes_shouldReturnListOfAllInstitutes(){
+        List<InstituteEntity> mockInstituteEntities = List.of(new InstituteEntity(), new InstituteEntity());
+        List<Institute> expectedInstitutes = List.of(new Institute(), new Institute());
+
+        when(userRepository.getAllInstitutes()).thenReturn(mockInstituteEntities);
+
+        List<Institute> actualInstitutes = userService.getAllInstitutes();
+
+        assertNotNull(actualInstitutes);
+        assertEquals(expectedInstitutes.size(), actualInstitutes.size());
+
+        verify(userRepository).getAllInstitutes();
+    }
+
+    @Test
+    void testGetAllInstitutes_ShouldThrowUserNotFoundException_whenNoInstitutesFound(){
+        List<InstituteEntity> mockInstituteEntities = List.of();
+
+        when(userRepository.getAllInstitutes()).thenReturn(mockInstituteEntities);
+
+        assertThrowsExactly(UserNotFoundException.class, () ->{
+            userService.getAllInstitutes();
+        }, "No Institutes Found!");
+
+        verify(userRepository).getAllInstitutes();
     }
 }
