@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="tuitiontoall_v2" type="Application" factoryName="Application" activateToolWindowBeforeRun="false">
+    <envs>
+      <env name="DB_URL" value="jdbc:mysql://localhost:3306/tuitiontoall_v2" />
+      <env name="DB_USERNAME" value="root" />
+      <env name="DB_PWD" value="123456" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="edu.vinu.Main" />
+    <module name="tuitiontoall-server" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
