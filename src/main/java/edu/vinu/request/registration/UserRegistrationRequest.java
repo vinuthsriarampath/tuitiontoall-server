@@ -15,7 +15,7 @@ package edu.vinu.request.registration;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +30,7 @@ public class UserRegistrationRequest {
     private String address;
 
     @NotBlank(message = "Contact cannot be blank")
-    @Size(min = 10, max = 10, message = "Contact must be 10 digits long")
+    @Pattern(regexp = "\\d{10}", message = "Contact must be 10 digits long")
     private String contact;
 
     @NotBlank(message = "Email cannot be blank")
@@ -38,6 +38,6 @@ public class UserRegistrationRequest {
     private String email;
 
     @NotBlank(message = "Password cannot be null")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @Pattern(regexp = ".{8,}", message = "Password must be at least 8 characters long")
     private String password;
 }
