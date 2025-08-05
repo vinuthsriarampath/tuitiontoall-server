@@ -61,3 +61,4 @@ build/
 .DS_Store
 /META-INF/MANIFEST.MF
 /jar
+/uploads/
