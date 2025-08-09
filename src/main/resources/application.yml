@@ -13,3 +13,14 @@ spring:
       ddl-auto: update
     show-sql: true
 
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 30MB
+      max-request-size: 30MB
+
+file:
+  upload-dir: uploads
+  profile:
+    pic-path: uploads/profiles/dp
+    banner-path: uploads/profiles/banner

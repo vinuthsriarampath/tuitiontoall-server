@@ -15,6 +15,7 @@ package edu.vinu.entity.user_entities;
 
 import edu.vinu.common.BaseAuditingEntity;
 import edu.vinu.enums.Role;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -50,4 +51,10 @@ public class UserEntity extends BaseAuditingEntity {
 
     @Column(unique = true , nullable = false)
     private String userSlug;
+
+    @Nullable
+    private String dp;
+
+    @Nullable
+    private String banner;
 }

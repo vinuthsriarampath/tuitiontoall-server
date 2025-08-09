@@ -44,11 +44,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) {
-        if (request.getServletPath().startsWith("/api/v2/auth/")) {
+        String path = request.getServletPath();
+
+        // ✅ Skip JWT check for public endpoints and static file loads
+        if (isPublicPath(path)) {
             try {
                 filterChain.doFilter(request, response);
             } catch (IOException | ServletException e) {
-                log.error("JWTFilter Section 1: {}", e.getMessage());
+                log.error("JWTFilter Public Path Error: {}", e.getMessage());
                 handlerExceptionResolver.resolveException(request, response, null, e);
             }
             return;
@@ -72,6 +75,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
+
             filterChain.doFilter(request, response);
         } catch (AuthenticationException | ServletException e) {
             log.error("JWTFilter Section 2: {}", e.getMessage());
@@ -87,4 +91,11 @@ public class JwtFilter extends OncePerRequestFilter {
             handlerExceptionResolver.resolveException(request, response, null, e);
         }
     }
+
+    private boolean isPublicPath(String path) {
+        return path.startsWith("/api/v2/auth/")
+                || path.startsWith("/uploads/")
+                || path.startsWith("/api/v2/profile-files/load/");
+    }
+
 }
