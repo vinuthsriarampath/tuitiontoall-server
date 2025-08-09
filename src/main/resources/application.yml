@@ -22,5 +22,5 @@ spring:
 file:
   upload-dir: uploads
   profile:
-    pic-path: uploads/profile/pic
-    banner-path: uploads/profile/banner
+    pic-path: uploads/profiles/dp
+    banner-path: uploads/profiles/banner
