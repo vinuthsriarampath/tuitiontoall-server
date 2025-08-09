@@ -13,10 +13,14 @@
 
 package edu.vinu.service.common.impl;
 
+import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.exception.custom.UserNotFoundException;
 import edu.vinu.model.user_models.User;
+import edu.vinu.repository.UserRepository;
 import edu.vinu.service.common.ProfileFileService;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -24,9 +28,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.*;
+import java.util.Optional;
 
 @Service
 @SuppressWarnings("unused")
@@ -35,14 +41,18 @@ public class ProfileFileServiceImpl implements ProfileFileService {
 
     private final Environment env;
     private final UserService userService;
+    private final ModelMapper mapper;
+    private final UserRepository userRepository;
 
     @Override
-    public String uploadFile(MultipartFile file, String folder) {
+    public User uploadFile(MultipartFile file, String type) {
         try {
 
-            User user =userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            UserEntity userEntity = Optional.ofNullable(userRepository.findByEmail(email))
+                    .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-            Path dir = Paths.get("uploads\\profiles\\"+folder);
+            Path dir = Paths.get("uploads\\profiles\\"+type);
             Files.createDirectories(dir);
 
             String originalFilename = file.getOriginalFilename();
@@ -51,7 +61,7 @@ public class ProfileFileServiceImpl implements ProfileFileService {
                 extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
             }
 
-            String baseFilename = user.getUserSlug();
+            String baseFilename = userEntity.getUserSlug();
 
             // Delete any existing file with the same base name (regardless of extension)
             try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, baseFilename + ".*")) {
@@ -60,11 +70,17 @@ public class ProfileFileServiceImpl implements ProfileFileService {
                 }
             }
 
-            String filename = user.getUserSlug() + extension;
+            String filename = userEntity.getUserSlug() + extension;
             Path filePath = dir.resolve(filename);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            return filename;
+            switch (type){
+                case "dp" -> userEntity.setDp("/api/v2/profile-files/load/dp/"+filename);
+                case "banner" -> userEntity.setBanner("/api/v2/profile-files/load/banner/"+filename);
+                default -> throw new IllegalArgumentException("Invalid type: " + type);
+            }
+            UserEntity savedEntity=userRepository.save(userEntity);
+            return mapper.map(savedEntity, User.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -72,13 +88,9 @@ public class ProfileFileServiceImpl implements ProfileFileService {
     }
 
     @Override
-    public Resource loadFile(String type, String fileName) {
-        try {
-            Path filePath = Paths.get(getPath(type)).resolve(fileName);
-            return new UrlResource(filePath.toUri());
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+    public File loadFile(String type, String fileName) {
+        Path filePath = Paths.get(getPath(type)).resolve(fileName);
+        return filePath.toFile();
     }
 
     private String getPath(String type) {

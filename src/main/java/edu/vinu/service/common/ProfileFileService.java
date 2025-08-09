@@ -13,10 +13,13 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.model.user_models.User;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+
 public interface ProfileFileService {
-    String uploadFile(MultipartFile file, String type);
-    Resource loadFile(String type, String fileName);
+    User uploadFile(MultipartFile file, String type);
+    File loadFile(String type, String fileName);
 }
