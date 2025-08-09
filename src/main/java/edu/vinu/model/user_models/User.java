@@ -36,4 +36,6 @@ public class User{
     private Role role;
     private boolean isDisabled;
     private String userSlug;
+    private String dp;
+    private String banner;
 }
