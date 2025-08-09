@@ -17,8 +17,6 @@ import edu.vinu.model.user_models.User;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.common.ProfileFileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 
 @CrossOrigin
 @RestController
