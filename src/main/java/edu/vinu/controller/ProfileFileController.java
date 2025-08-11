@@ -37,8 +37,8 @@ public class ProfileFileController {
 
     @PostMapping("/upload/{type:dp|banner}")
     public ResponseEntity<ApiResponse> uploadFile(@PathVariable String type, @RequestParam("file") MultipartFile file){
-        User user = profileFileService.uploadFile(file, type);
-        return ResponseEntity.status(200).body(new ApiResponse("File uploaded successfully", user));
+        String path = profileFileService.uploadFile(file, type);
+        return ResponseEntity.status(200).body(new ApiResponse("File uploaded successfully", path));
     }
 
     @GetMapping("/load/{type:dp|banner}/{filename:.+}")

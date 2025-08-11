@@ -42,7 +42,7 @@ public class ProfileFileServiceImpl implements ProfileFileService {
     private final UserRepository userRepository;
 
     @Override
-    public User uploadFile(MultipartFile file, String type) {
+    public String uploadFile(MultipartFile file, String type) {
         try {
 
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -72,12 +72,12 @@ public class ProfileFileServiceImpl implements ProfileFileService {
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
             switch (type){
-                case "dp" -> userEntity.setDp("/api/v2/profile-files/load/dp/"+filename);
-                case "banner" -> userEntity.setBanner("/api/v2/profile-files/load/banner/"+filename);
+                case "dp" -> userEntity.setDp("/load/dp/"+filename);
+                case "banner" -> userEntity.setBanner("/load/banner/"+filename);
                 default -> throw new IllegalArgumentException("Invalid type: " + type);
             }
             UserEntity savedEntity=userRepository.save(userEntity);
-            return mapper.map(savedEntity, User.class);
+            return savedEntity.getDp();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
