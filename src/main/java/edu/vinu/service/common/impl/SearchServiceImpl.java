@@ -1,0 +1,67 @@
+/*
+ * Copyright (c) 2025 vinuth sri arampath
+ *
+ * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
+ * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
+ * without prior written permission is strictly prohibited.
+ *
+ * Portions of this code may be generated with AI and modified by vinuth sri arampath
+ * All rights reserved.
+ *
+ *
+ */
+
+package edu.vinu.service.common.impl;
+
+import edu.vinu.model.user_models.Institute;
+import edu.vinu.model.user_models.Student;
+import edu.vinu.model.user_models.Teacher;
+import edu.vinu.response.SearchResponse;
+import edu.vinu.service.common.SearchService;
+import edu.vinu.service.common.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+@Service
+@SuppressWarnings("unused")
+@RequiredArgsConstructor
+public class SearchServiceImpl implements SearchService {
+    private final UserService userService;
+
+    @Async
+    private CompletableFuture<List<Student>> searchStudents(String query){
+        return CompletableFuture.completedFuture(userService.getAllStudentsByFirstNameLike(query));
+    }
+    
+    @Async
+    private CompletableFuture<List<Teacher>> searchTeachers(String query){
+        return CompletableFuture.completedFuture(userService.getAllTeachersByFirstNameLike(query));
+    }
+    
+    @Async
+    private CompletableFuture<List<Institute>> searchInstitutes(String query){
+        return CompletableFuture.completedFuture(userService.getAllInstitutesByInstituteName(query));
+    }
+
+    @Override
+    public SearchResponse search(String query) {
+        try {
+            CompletableFuture<List<Student>> students = searchStudents(query);
+            CompletableFuture<List<Teacher>> teachers = searchTeachers(query);
+            CompletableFuture<List<Institute>> institutes = searchInstitutes(query);
+
+            CompletableFuture.allOf(students, teachers, institutes).join();
+            return new SearchResponse(
+                    students.get(),
+                    teachers.get(),
+                    institutes.get()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
