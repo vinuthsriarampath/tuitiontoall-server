@@ -34,6 +34,7 @@ import edu.vinu.request.registration.TeacherRegistrationRequest;
 import edu.vinu.request.registration.UserRegistrationRequest;
 import edu.vinu.response.AuthResponse;
 import edu.vinu.service.auth.UserAuthenticationService;
+import edu.vinu.service.common.EmailService;
 import edu.vinu.service.common.UserService;
 import edu.vinu.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +63,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     private final JwtService jwtService;
     private final ModelMapper mapper;
     private final BCryptPasswordEncoder encoder;
+    private final EmailService emailService;
 
     @Override
     public Institute registerInstitute(InstituteRegistrationRequest request) {
@@ -91,6 +93,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
             try {
                 UserEntity savedEntity = userRepository.save(userEntity);
+                emailService.SendRegistrationSuccessEmail(savedEntity.getEmail(), savedEntity.getUserSlug(), savedEntity.getRole());
                 return mapper.map(savedEntity, modelClass);
             } catch (Exception e) {
                 throw new InternalServerErrorException("Registration Failed Due to Internal Error");
