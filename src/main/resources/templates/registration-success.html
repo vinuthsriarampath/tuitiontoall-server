@@ -8,20 +8,83 @@
   ~ Portions of this code may be generated with AI and modified by vinuth sri arampath
   ~ All rights reserved.
   ~
-  ~
-  -->
+-->
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome!</title>
+    <title>Welcome To TuitionToAll</title>
+    <style>
+        body {
+          margin: 0;
+          padding: 0;
+          background-color: #f9fafb;
+          font-family: Arial, sans-serif;
+          color: #111827; /* gray-900 */
+        }
+        .header {
+          background-color: #1e3a8a;
+          text-align: center;
+          padding: 40px 0;
+        }
+        .header h1 {
+          color: #ffffff;
+          font-size: 28px;
+          margin: 0;
+          font-weight: bold;
+        }
+        .container {
+          max-width: 600px;
+          margin: 10px auto;
+          background: #ffffff;
+          border-radius: 8px;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+          padding: 30px;
+        }
+        h2 {
+          color: #1e3a8a;
+          font-size: 24px;
+          margin-bottom: 20px;
+        }
+        p {
+          font-size: 16px;
+          color: #4b5563; /* gray-600 */
+          line-height: 1.6;
+          margin: 10px 0;
+        }
+
+        .footer {
+          background-color: #1e3a8a;
+          text-align: center;
+          color: #ffffff;
+          font-size: 14px;
+          padding: 20px;
+        }
+    </style>
 </head>
 <body>
-<h2>Welcome, <span th:text="${name}">User</span>!</h2>
-<p>Thank you for registering as a <strong th:text="${role}">Role</strong> on our platform.</p>
-<p>We’re excited to have you with us!</p>
-<br>
-<p>Best regards,<br>TuitionToAll Team</p>
+<div class="header">
+    <h1>TuitionToAll</h1>
+</div>
+
+<div class="container">
+    <h2>Welcome, <span th:text="${name}">User</span>!</h2>
+    <p>
+        Thank you for registering as a <strong th:text="${role}">Role</strong> on our platform.
+    </p>
+    <p>
+        We’re excited to have you with us! Get ready to unify your courses, notes, and assignments in one place.
+    </p>
+
+    <p>
+        Best regards,<br>
+        <strong>TuitionToAll Team</strong>
+    </p>
+</div>
+
+<div class="footer">
+    &copy; 2025 TuitionToAll. All rights reserved.
+</div>
 </body>
 </html>
