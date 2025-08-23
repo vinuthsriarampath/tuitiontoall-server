@@ -63,6 +63,15 @@ public class JwtService {
                 .compact();
     }
 
+    public String generateResetToken(String email){
+        return Jwts.builder()
+                .subject(email)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15)) // 15 minutes expiration
+                .signWith(getKey())
+                .compact();
+    }
+
     private SecretKey getKey(){
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
