@@ -22,4 +22,6 @@ public interface EmailService {
     void sendEmail(String to, String subject, String templateName, Map<String, Object> templateVariables) throws MessagingException;
 
     void SendRegistrationSuccessEmail(String email, String name, Role role);
+
+    void SendPasswordResetEmail(String email, String name, String Link);
 }

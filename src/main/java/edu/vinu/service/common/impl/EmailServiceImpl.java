@@ -19,6 +19,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -37,6 +38,9 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender javaMailSender;
     private final TemplateEngine templateEngine;
 
+    @Value("${spring.mail.username}")
+    String fromMail;
+
     @Override
     public void sendEmail(String to, String subject, String templateName, Map<String, Object> templateVariables) throws MessagingException {
         Context context =  new Context();
@@ -47,13 +51,14 @@ public class EmailServiceImpl implements EmailService {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        helper.setFrom("vinuthsriarampth@gmail.com");
+        helper.setFrom(fromMail);
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlContent, true);
 
         try{
             javaMailSender.send(message);
+            log.info("Email sent to {}", to);
         }catch (MailException ex){
             log.error("Failed to send email",ex);
         }
@@ -72,6 +77,20 @@ public class EmailServiceImpl implements EmailService {
         }catch (MessagingException ex){
             log.error("Error sending registration success email to {}: {}", email, ex.getMessage());
             throw new RuntimeException("Failed to send registration success email", ex);
+        }
+    }
+
+    @Override
+    public void SendPasswordResetEmail(String email, String name, String Link) {
+        try {
+            Map<String,Object> templateVariables = new HashMap<>();
+            templateVariables.put("name", name);
+            templateVariables.put("link", Link);
+
+            sendEmail(email, "Password Reset", "reset-password", templateVariables);
+        } catch (Exception ex) {
+            log.error("Error sending Reset Link email to {}: {}", email, ex.getMessage());
+            throw new RuntimeException("Failed to send password reset email", ex);
         }
     }
 }
