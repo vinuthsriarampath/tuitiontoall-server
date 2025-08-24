@@ -113,4 +113,15 @@ public class JwtService {
         }
         return (true);
     }
+
+    public boolean validateResetToken(String token){
+        try {
+            if (isTokenExpired(token)) {
+                throw new JwtException("Reset token is expired");
+            }
+            return true;
+        } catch (JwtException e) {
+            throw new JwtException("Invalid reset token: " + e.getMessage());
+        }
+    }
 }
