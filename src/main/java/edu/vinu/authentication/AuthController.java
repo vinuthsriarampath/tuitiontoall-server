@@ -92,4 +92,9 @@ public class AuthController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PostMapping("/forgot-password/reset")
+    public ResponseEntity<ApiResponse> resetPassword(@RequestParam String token, @RequestBody String newPassword){
+        ApiResponse apiResponse = userAuthService.resetPassword(token, newPassword);
+        return ResponseEntity.ok(apiResponse);
+    }
 }
