@@ -34,4 +34,5 @@ public interface UserAuthenticationService {
 
     ApiResponse startForgotPassword(String email);
 
+    ApiResponse resetPassword(String token, String newPassword);
 }

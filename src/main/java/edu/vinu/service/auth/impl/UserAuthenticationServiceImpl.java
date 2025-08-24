@@ -207,4 +207,25 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
         }
     }
 
+    @Override
+    public ApiResponse resetPassword(String token, String newPassword) {
+        if (!jwtService.validateResetToken(token)) {
+            throw new InvalidInputException("Invalid or expired reset token");
+        }
+        if (jwtService.validateResetToken(token)) {
+            String email = jwtService.extractUsername(token);
+            UserEntity userEntity = userRepository.findByEmail(email);
+
+            if (!UserValidator.isValidatePassword(newPassword)) {
+                throw new InvalidInputException("Password does not meet security requirements.");
+            }
+            userEntity.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+            userRepository.save(userEntity);
+            log.info("Password reset successful for user: {}", email);
+            return new ApiResponse("Password reset successfully", null);
+        }else {
+            throw new InvalidInputException("Invalid reset token");
+        }
+    }
+
 }
