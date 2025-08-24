@@ -85,4 +85,16 @@ public class AuthController {
         AuthResponse authResponse = userAuthService.verify(userLoginRequest);
         return ResponseEntity.ok(authResponse);
     }
+
+    @PostMapping("/forgot-password/request")
+    public ResponseEntity<ApiResponse> startForgotPassword(@RequestBody String email){
+        ApiResponse apiResponse = userAuthService.startForgotPassword(email);
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("/forgot-password/reset")
+    public ResponseEntity<ApiResponse> resetPassword(@RequestParam String token, @RequestBody String newPassword){
+        ApiResponse apiResponse = userAuthService.resetPassword(token, newPassword);
+        return ResponseEntity.ok(apiResponse);
+    }
 }

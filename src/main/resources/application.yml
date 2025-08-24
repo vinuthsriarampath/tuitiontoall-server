@@ -12,4 +12,34 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+        hibernate:
+            format_sql: true
 
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 30MB
+      max-request-size: 30MB
+
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+file:
+  upload-dir: uploads
+  profile:
+    pic-path: uploads/profiles/dp
+    banner-path: uploads/profiles/banner
+
+app:
+  reset:
+    frontend-reset-url: "http://localhost:4200/reset?token="

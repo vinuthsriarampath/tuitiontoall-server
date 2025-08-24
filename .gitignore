@@ -61,3 +61,6 @@ build/
 .DS_Store
 /META-INF/MANIFEST.MF
 /jar
+/uploads/
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/runConfigurations/tuitiontoall_v2.xml

@@ -63,6 +63,15 @@ public class JwtService {
                 .compact();
     }
 
+    public String generateResetToken(String email){
+        return Jwts.builder()
+                .subject(email)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15)) // 15 minutes expiration
+                .signWith(getKey())
+                .compact();
+    }
+
     private SecretKey getKey(){
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
@@ -103,5 +112,16 @@ public class JwtService {
             throw new JwtException("User is Disabled!");
         }
         return (true);
+    }
+
+    public boolean validateResetToken(String token){
+        try {
+            if (isTokenExpired(token)) {
+                throw new JwtException("Reset token is expired");
+            }
+            return true;
+        } catch (JwtException e) {
+            throw new JwtException("Invalid reset token: " + e.getMessage());
+        }
     }
 }

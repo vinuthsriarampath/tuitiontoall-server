@@ -20,6 +20,7 @@ import edu.vinu.request.UserLoginRequest;
 import edu.vinu.request.registration.InstituteRegistrationRequest;
 import edu.vinu.request.registration.StudentRegistrationRequest;
 import edu.vinu.request.registration.TeacherRegistrationRequest;
+import edu.vinu.response.ApiResponse;
 import edu.vinu.response.AuthResponse;
 
 public interface UserAuthenticationService {
@@ -30,4 +31,8 @@ public interface UserAuthenticationService {
     Teacher registerTeacher(TeacherRegistrationRequest request);
 
     AuthResponse verify(UserLoginRequest request);
+
+    ApiResponse startForgotPassword(String email);
+
+    ApiResponse resetPassword(String token, String newPassword);
 }

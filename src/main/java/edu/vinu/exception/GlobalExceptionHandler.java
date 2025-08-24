@@ -24,6 +24,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
@@ -98,5 +99,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handleDisabledException(DisabledException ex) {
         ApiResponse error = new ApiResponse(ex.getMessage(), null);
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(error);
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiResponse> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex){
+        ApiResponse error = new ApiResponse(ex.getMessage(), null);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 }

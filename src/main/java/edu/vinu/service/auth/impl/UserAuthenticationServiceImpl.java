@@ -18,10 +18,7 @@ import edu.vinu.entity.user_entities.StudentEntity;
 import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.enums.Role;
-import edu.vinu.exception.custom.InternalServerErrorException;
-import edu.vinu.exception.custom.InvalidInputException;
-import edu.vinu.exception.custom.UnauthorizedException;
-import edu.vinu.exception.custom.UserAlreadyExistException;
+import edu.vinu.exception.custom.*;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
@@ -32,14 +29,17 @@ import edu.vinu.request.registration.InstituteRegistrationRequest;
 import edu.vinu.request.registration.StudentRegistrationRequest;
 import edu.vinu.request.registration.TeacherRegistrationRequest;
 import edu.vinu.request.registration.UserRegistrationRequest;
+import edu.vinu.response.ApiResponse;
 import edu.vinu.response.AuthResponse;
 import edu.vinu.service.auth.UserAuthenticationService;
+import edu.vinu.service.common.EmailService;
 import edu.vinu.service.common.UserService;
 import edu.vinu.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -62,6 +62,10 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     private final JwtService jwtService;
     private final ModelMapper mapper;
     private final BCryptPasswordEncoder encoder;
+    private final EmailService emailService;
+
+    @Value("${app.reset.frontend-reset-url}")
+    String resetUrl;
 
     @Override
     public Institute registerInstitute(InstituteRegistrationRequest request) {
@@ -91,6 +95,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
 
             try {
                 UserEntity savedEntity = userRepository.save(userEntity);
+                emailService.SendRegistrationSuccessEmail(savedEntity.getEmail(), savedEntity.getUserSlug(), savedEntity.getRole());
                 return mapper.map(savedEntity, modelClass);
             } catch (Exception e) {
                 throw new InternalServerErrorException("Registration Failed Due to Internal Error");
@@ -180,4 +185,47 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             throw new InternalServerErrorException(e.getMessage());
         }
     }
+
+    @Override
+    public ApiResponse startForgotPassword(String email) {
+        try {
+            User user = userService.getUserByEmail(email);
+            String resetToken = jwtService.generateResetToken(email);
+            String link = resetUrl + resetToken;
+            String name="";
+            if (user.getRole()==Role.ROLE_INSTITUTE) {
+                name=((Institute) user).getInstituteName();
+            } else if (user.getRole()==Role.ROLE_TEACHER) {
+                name=((Teacher) user).getFirstName()+" "+((Teacher) user).getLastName();
+            }else if (user.getRole()==Role.ROLE_STUDENT) {
+                name=((Student) user).getFirstName()+" "+((Student) user).getLastName();
+            }
+            emailService.SendPasswordResetEmail(email, name, link );
+            return new ApiResponse("Reset token generated successfully Please check your email for the reset link.",null );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public ApiResponse resetPassword(String token, String newPassword) {
+        if (!jwtService.validateResetToken(token)) {
+            throw new InvalidInputException("Invalid or expired reset token");
+        }
+        if (jwtService.validateResetToken(token)) {
+            String email = jwtService.extractUsername(token);
+            UserEntity userEntity = userRepository.findByEmail(email);
+
+            if (!UserValidator.isValidatePassword(newPassword)) {
+                throw new InvalidInputException("Password does not meet security requirements.");
+            }
+            userEntity.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+            userRepository.save(userEntity);
+            log.info("Password reset successful for user: {}", email);
+            return new ApiResponse("Password reset successfully", null);
+        }else {
+            throw new InvalidInputException("Invalid reset token");
+        }
+    }
+
 }

@@ -52,7 +52,7 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/v2/auth/**","/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/v2/auth/**","/swagger-ui/**", "/v3/api-docs/**", "/api/v2/profile-files/load/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
