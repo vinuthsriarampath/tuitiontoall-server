@@ -13,14 +13,19 @@
 
 package edu.vinu.entity.user_entities;
 
+import edu.vinu.entity.CourseEntity;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.SQLDelete;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -32,4 +37,6 @@ import org.hibernate.annotations.SQLDelete;
 @Filter(name = "softDeleteFilter", condition = "is_disabled = :isDisabled")
 public class InstituteEntity extends UserEntity {
     private String instituteName;
+    @OneToMany(mappedBy = "institute")
+    private List<CourseEntity> courses = new ArrayList<>();
 }
