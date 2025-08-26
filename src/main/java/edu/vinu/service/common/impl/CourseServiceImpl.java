@@ -15,11 +15,13 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.CourseEntity;
 import edu.vinu.entity.user_entities.InstituteEntity;
-import edu.vinu.exception.custom.UserNotFoundException;
+import edu.vinu.exception.custom.UnauthorizedException;
+import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.model.Course;
 import edu.vinu.repository.CourseRepository;
 import edu.vinu.repository.UserRepository;
 import edu.vinu.request.CourseCreateRequest;
+import edu.vinu.request.CourseUpdateRequest;
 import edu.vinu.service.common.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -40,10 +42,27 @@ public class CourseServiceImpl implements CourseService {
     public Course createCourse(CourseCreateRequest course) {
         CourseEntity courseEntity= mapper.map(course,CourseEntity.class);
         InstituteEntity institute = Optional.ofNullable(userRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName()))
-                .orElseThrow(() -> new UserNotFoundException("User not found!"));
+                .orElseThrow(() -> new NotFoundException("User not found!"));
 
         courseEntity.setInstitute(institute);
         CourseEntity savedEntity = courseRepository.save(courseEntity);
         return mapper.map(savedEntity,Course.class);
+    }
+
+    @Override
+    public Course updateCourse(Long courseId, CourseUpdateRequest updatedCourseDetails) {
+        return courseRepository.findById(courseId)
+                .map(courseEntity -> {
+                    if (courseEntity.getInstitute().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+                        CourseEntity newCourseDetails = mapper.map(updatedCourseDetails, CourseEntity.class);
+                        newCourseDetails.setId(courseEntity.getId());
+                        newCourseDetails.setInstitute(courseEntity.getInstitute());
+                        CourseEntity saved = courseRepository.save(newCourseDetails);
+                        return mapper.map(saved, Course.class);
+                    } else {
+                        throw new UnauthorizedException("You are not authorized to update this course");
+                    }
+                })
+                .orElseThrow(() -> new NotFoundException("Course not found with id: " + courseId));
     }
 }

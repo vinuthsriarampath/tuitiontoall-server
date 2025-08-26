@@ -15,9 +15,11 @@ package edu.vinu.controller;
 
 import edu.vinu.model.Course;
 import edu.vinu.request.CourseCreateRequest;
+import edu.vinu.request.CourseUpdateRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.common.CourseService;
 import edu.vinu.service.common.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,7 +43,7 @@ public class CourseController {
 
     @PreAuthorize("hasRole('ROLE_INSTITUTE')")
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createCourse(@RequestBody CourseCreateRequest course, BindingResult bindingResult){
+    public ResponseEntity<ApiResponse> createCourse(@Valid @RequestBody CourseCreateRequest course, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             for (FieldError error : bindingResult.getFieldErrors()) {
@@ -51,5 +53,19 @@ public class CourseController {
         }
         Course createdCourse = courseService.createCourse(course);
         return ResponseEntity.status(201).body(new ApiResponse("Course created successfully", createdCourse ));
+    }
+
+    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @PatchMapping("/update/{courseId}")
+    public ResponseEntity<ApiResponse> updateCourse(@PathVariable Long courseId,@Valid @RequestBody CourseUpdateRequest updatedCourseDetails, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(new ApiResponse(USER_VALIDATION_FAILED_ERROR, errors));
+        }
+        Course updatedCourse = courseService.updateCourse(courseId, updatedCourseDetails);
+        return ResponseEntity.status(200).body(new ApiResponse("Course updated successfully", updatedCourse ));
     }
 }

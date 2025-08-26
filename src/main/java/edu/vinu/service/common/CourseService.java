@@ -15,7 +15,10 @@ package edu.vinu.service.common;
 
 import edu.vinu.model.Course;
 import edu.vinu.request.CourseCreateRequest;
+import edu.vinu.request.CourseUpdateRequest;
 
 public interface CourseService {
     Course createCourse(CourseCreateRequest course);
+
+    Course updateCourse(Long courseId, CourseUpdateRequest updatedCourseDetails);
 }
