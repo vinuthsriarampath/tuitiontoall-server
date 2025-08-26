@@ -14,6 +14,10 @@
 package edu.vinu.model;
 
 import edu.vinu.enums.*;
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,14 +26,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Course {
+    @Nullable
     private Long id;
+    @NotBlank(message = "Title is mandatory")
     private String title;
+    @NotBlank(message = "Description is mandatory")
     private String description;
+    @NotBlank(message = "Duration In Hours is mandatory")
+    @Positive(message = "Duration In Hours must be greater than zero ")
     private int durationInHours;
+    @NotBlank(message = "Price is mandatory")
+    @PositiveOrZero(message = "Price must be greater than or equal to zero ")
     private Double price;
-    private CourseCategory category;
     private CourseLevel level;
+    @NotBlank(message = "Category is mandatory")
+    private CourseCategory category;
+    @NotBlank(message = "Status is mandatory")
     private CourseStatus status;
+    @NotBlank(message = "Language is mandatory")
     private CourseLanguage language;
+    @NotBlank(message = "Mode is mandatory")
     private CourseMode mode;
 }
