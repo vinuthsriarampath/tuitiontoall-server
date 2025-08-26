@@ -11,9 +11,11 @@
  *
  */
 
-package edu.vinu.model;
+package edu.vinu.request;
+
 
 import edu.vinu.enums.*;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,15 +23,36 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Course {
+public class CourseCreateRequest {
+    @Null(message = "ID must be null when creating a new course")
     private Long id;
+
+    @NotBlank(message = "Title is mandatory")
     private String title;
+
+    @NotBlank(message = "Description is mandatory")
     private String description;
-    private int durationInHours;
+
+    @NotNull(message = "Duration In Hours is mandatory")
+    @Positive(message = "Duration In Hours must be greater than zero")
+    private Integer durationInHours;
+
+    @NotNull(message = "Price is mandatory")
+    @PositiveOrZero(message = "Price must be greater than or equal to zero")
     private Double price;
+
+    @NotNull(message = "Level is mandatory")
     private CourseLevel level;
+
+    @NotNull(message = "Category is mandatory")
     private CourseCategory category;
+
+    @NotNull(message = "Status is mandatory")
     private CourseStatus status;
+
+    @NotNull(message = "Language is mandatory")
     private CourseLanguage language;
+
+    @NotNull(message = "Mode is mandatory")
     private CourseMode mode;
 }

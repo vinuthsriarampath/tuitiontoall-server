@@ -14,6 +14,7 @@
 package edu.vinu.controller;
 
 import edu.vinu.model.Course;
+import edu.vinu.request.CourseCreateRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.common.CourseService;
 import edu.vinu.service.common.UserService;
@@ -22,10 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +41,7 @@ public class CourseController {
 
     @PreAuthorize("hasRole('ROLE_INSTITUTE')")
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createCourse(@RequestBody Course course, BindingResult bindingResult){
+    public ResponseEntity<ApiResponse> createCourse(@RequestBody CourseCreateRequest course, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             for (FieldError error : bindingResult.getFieldErrors()) {

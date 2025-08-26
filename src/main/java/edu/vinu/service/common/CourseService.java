@@ -14,7 +14,8 @@
 package edu.vinu.service.common;
 
 import edu.vinu.model.Course;
+import edu.vinu.request.CourseCreateRequest;
 
 public interface CourseService {
-    Course createCourse(Course course);
+    Course createCourse(CourseCreateRequest course);
 }

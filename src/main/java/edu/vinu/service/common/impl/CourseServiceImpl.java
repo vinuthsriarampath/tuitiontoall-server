@@ -19,6 +19,7 @@ import edu.vinu.exception.custom.UserNotFoundException;
 import edu.vinu.model.Course;
 import edu.vinu.repository.CourseRepository;
 import edu.vinu.repository.UserRepository;
+import edu.vinu.request.CourseCreateRequest;
 import edu.vinu.service.common.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -36,7 +37,7 @@ public class CourseServiceImpl implements CourseService {
     private final UserRepository userRepository;
 
     @Override
-    public Course createCourse(Course course) {
+    public Course createCourse(CourseCreateRequest course) {
         CourseEntity courseEntity= mapper.map(course,CourseEntity.class);
         InstituteEntity institute = Optional.ofNullable(userRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName()))
                 .orElseThrow(() -> new UserNotFoundException("User not found!"));
