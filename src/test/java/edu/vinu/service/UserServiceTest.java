@@ -19,7 +19,7 @@ import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.exception.custom.InternalServerErrorException;
 import edu.vinu.exception.custom.InvalidInputException;
-import edu.vinu.exception.custom.UserNotFoundException;
+import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
@@ -78,7 +78,7 @@ class UserServiceTest {
         String email = "missing@example.com";
         when(userRepository.findByEmail(email)).thenReturn(null);
 
-        assertThrowsExactly(UserNotFoundException.class, () -> userService.getUserByEmail(email),
+        assertThrowsExactly(NotFoundException.class, () -> userService.getUserByEmail(email),
                 "A user from " + email + " not found!!");
         verify(userRepository).findByEmail(email);
     }
@@ -146,7 +146,7 @@ class UserServiceTest {
         when(userRepository.getStudentsByFirstNameLike(firstName)).thenReturn(List.of());
         when(userRepository.getTeachersByFirstNameLike(firstName)).thenReturn(List.of());
 
-        assertThrowsExactly(UserNotFoundException.class, () ->
+        assertThrowsExactly(NotFoundException.class, () ->
                         userService.getAllUsersByFirstNameLike(firstName),
                 "There are no users starts with " + firstName);
         verify(userRepository).getTeachersByFirstNameLike(firstName);
@@ -237,7 +237,7 @@ class UserServiceTest {
     void testGetAllStudents_shouldThrowUserNotFoundException_whenNoStudentsFound() {
         when(userRepository.getAllStudents()).thenReturn(List.of());
 
-        assertThrowsExactly(UserNotFoundException.class, () -> userService.getAllStudents(),
+        assertThrowsExactly(NotFoundException.class, () -> userService.getAllStudents(),
                 "No Students Found");
         verify(userRepository).getAllStudents();
     }
@@ -264,7 +264,7 @@ class UserServiceTest {
     void testGetAllTeachers_shouldThrowUserNotFoundException_whenNoTeachersFound() {
         when(userRepository.getAllTeachers()).thenReturn(List.of());
 
-        assertThrowsExactly(UserNotFoundException.class, () -> userService.getAllTeachers(),
+        assertThrowsExactly(NotFoundException.class, () -> userService.getAllTeachers(),
                 "No Teachers Found!");
         verify(userRepository).getAllTeachers();
     }
@@ -290,7 +290,7 @@ class UserServiceTest {
     void testGetAllInstitutes_shouldThrowUserNotFoundException_whenNoInstitutesFound() {
         when(userRepository.getAllInstitutes()).thenReturn(List.of());
 
-        assertThrowsExactly(UserNotFoundException.class, () -> userService.getAllInstitutes(),
+        assertThrowsExactly(NotFoundException.class, () -> userService.getAllInstitutes(),
                 "No Institutes Found!");
         verify(userRepository).getAllInstitutes();
     }
@@ -372,7 +372,7 @@ class UserServiceTest {
 
         when(userRepository.existsByEmail(email)).thenReturn(false);
 
-        assertThrowsExactly(UserNotFoundException.class, () ->
+        assertThrowsExactly(NotFoundException.class, () ->
                         userService.updateInstituteDetails(email, request),
                 "User not found for " + email);
         verify(userRepository).existsByEmail(email);
@@ -389,7 +389,7 @@ class UserServiceTest {
         when(userRepository.existsByEmail(email)).thenReturn(true);
         when(userRepository.findByEmail(email)).thenReturn(userEntity);
 
-        assertThrowsExactly(UserNotFoundException.class, () ->
+        assertThrowsExactly(NotFoundException.class, () ->
                         userService.updateInstituteDetails(email, request),
                 "Institute not found for " + email);
         verify(userRepository).existsByEmail(email);
@@ -446,7 +446,7 @@ class UserServiceTest {
 
         when(userRepository.existsByEmail(email)).thenReturn(false);
 
-        assertThrowsExactly(UserNotFoundException.class, () ->
+        assertThrowsExactly(NotFoundException.class, () ->
                         userService.updateTeacherDetails(email, request),
                 "No User Found By " + email);
         verify(userRepository).existsByEmail(email);
@@ -479,7 +479,7 @@ class UserServiceTest {
         when(userRepository.existsByEmail(email)).thenReturn(true);
         when(userRepository.findByEmail(email)).thenReturn(userEntity);
 
-        assertThrowsExactly(UserNotFoundException.class, () ->
+        assertThrowsExactly(NotFoundException.class, () ->
                         userService.updateTeacherDetails(email, request),
                 "No teacher found by " + email);
         verify(userRepository).existsByEmail(email);
@@ -536,7 +536,7 @@ class UserServiceTest {
 
         when(userRepository.existsByEmail(email)).thenReturn(false);
 
-        assertThrowsExactly(UserNotFoundException.class, () ->
+        assertThrowsExactly(NotFoundException.class, () ->
                         userService.updateStudentDetails(email, request),
                 "No User Found By " + email);
         verify(userRepository).existsByEmail(email);
@@ -569,7 +569,7 @@ class UserServiceTest {
         when(userRepository.existsByEmail(email)).thenReturn(true);
         when(userRepository.findByEmail(email)).thenReturn(userEntity);
 
-        assertThrowsExactly(UserNotFoundException.class, () ->
+        assertThrowsExactly(NotFoundException.class, () ->
                         userService.updateStudentDetails(email, request),
                 "No Student found by " + email);
         verify(userRepository).existsByEmail(email);
@@ -599,7 +599,7 @@ class UserServiceTest {
         String email = "nonexistent@example.com";
         when(userRepository.findByEmail(email)).thenReturn(null);
 
-        assertThrowsExactly(UserNotFoundException.class, () ->
+        assertThrowsExactly(NotFoundException.class, () ->
                         userService.disableUserAccountByEmail(email),
                 "User not found by " + email);
         verify(userRepository).findByEmail(email);
@@ -651,7 +651,7 @@ class UserServiceTest {
         String userSlug = "nonexistent";
         when(userRepository.findByUserSlug(userSlug)).thenReturn(null);
 
-        assertThrowsExactly(UserNotFoundException.class, () ->
+        assertThrowsExactly(NotFoundException.class, () ->
                         userService.getUserByUserSlug(userSlug),
                 "No user found by " + userSlug);
         verify(userRepository).findByUserSlug(userSlug);

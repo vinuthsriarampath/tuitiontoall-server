@@ -14,8 +14,7 @@
 package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.user_entities.UserEntity;
-import edu.vinu.exception.custom.UserNotFoundException;
-import edu.vinu.model.user_models.User;
+import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.repository.UserRepository;
 import edu.vinu.service.common.ProfileFileService;
 import edu.vinu.service.common.UserService;
@@ -47,7 +46,7 @@ public class ProfileFileServiceImpl implements ProfileFileService {
 
             String email = SecurityContextHolder.getContext().getAuthentication().getName();
             UserEntity userEntity = Optional.ofNullable(userRepository.findByEmail(email))
-                    .orElseThrow(() -> new UserNotFoundException("User not found"));
+                    .orElseThrow(() -> new NotFoundException("User not found"));
 
             Path dir = Paths.get("uploads\\profiles\\"+type);
             Files.createDirectories(dir);

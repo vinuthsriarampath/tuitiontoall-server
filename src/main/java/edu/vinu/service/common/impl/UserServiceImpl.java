@@ -19,7 +19,7 @@ import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.exception.custom.InternalServerErrorException;
 import edu.vinu.exception.custom.InvalidInputException;
-import edu.vinu.exception.custom.UserNotFoundException;
+import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByEmail(String email) {
         UserEntity userEntity=userRepository.findByEmail(email);
         if (userEntity == null){
-            throw new UserNotFoundException("A user from "+email+" not found!!");
+            throw new NotFoundException("A user from "+email+" not found!!");
         }
         return convertToModel(userEntity);
     }
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
         userList.addAll(getAllStudentsByFirstNameLike(firstname));
         userList.addAll(getAllTeachersByFirstNameLike(firstname));
         if (userList.isEmpty()){
-            throw new UserNotFoundException("There are no users starts with "+firstname);
+            throw new NotFoundException("There are no users starts with "+firstname);
         }
         return userList;
     }
@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
                 .map(this::convertToStudentModel)
                 .toList();
         if (studentList.isEmpty()){
-            throw new UserNotFoundException("No Students Found");
+            throw new NotFoundException("No Students Found");
         }
         return studentList;
     }
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
                 .map(this::convertToTeacherModel)
                 .toList();
         if (teacherList.isEmpty()){
-            throw new UserNotFoundException("No Teachers Found!");
+            throw new NotFoundException("No Teachers Found!");
         }
         return teacherList;
     }
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
                 .map(this::convertToInstituteModel)
                 .toList();
         if (instituteList.isEmpty()){
-            throw new UserNotFoundException("No Institutes Found!");
+            throw new NotFoundException("No Institutes Found!");
         }
         return instituteList;
     }
@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Institute updateInstituteDetails(String email, InstituteDetailsUpdateRequest instituteDetailsUpdateRequest) {
         if (!isUserExist(email)) {
-            throw new UserNotFoundException("User not found for " + email);
+            throw new NotFoundException("User not found for " + email);
         }
         return Optional.ofNullable(userRepository.findByEmail(email))
                 .filter(InstituteEntity.class::isInstance)
@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
 
                     return convertToInstituteModel(userRepository.save(instituteEntity));
                 })
-                .orElseThrow(() -> new UserNotFoundException("Institute not found for " + email));
+                .orElseThrow(() -> new NotFoundException("Institute not found for " + email));
     }
 
     @Override
@@ -164,7 +164,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Teacher updateTeacherDetails(String email, TeacherDetailsUpdateRequest teacherDetailsUpdateRequest) {
         if (!isUserExist(email)){
-            throw new UserNotFoundException("No User Found By "+email);
+            throw new NotFoundException("No User Found By "+email);
         }
         if (!isValidDob(teacherDetailsUpdateRequest.getDob())) {
             throw new InvalidInputException("You must be at least 6 years old");
@@ -181,13 +181,13 @@ public class UserServiceImpl implements UserService {
 
                     return convertToTeacherModel(userRepository.save(teacherEntity));
                 })
-                .orElseThrow(() -> new UserNotFoundException("No teacher found by "+email));
+                .orElseThrow(() -> new NotFoundException("No teacher found by "+email));
     }
 
     @Override
     public Student updateStudentDetails(String email, StudentDetailsUpdateRequest studentDetailsUpdateRequest) {
         if (!isUserExist(email)){
-            throw new UserNotFoundException("No User Found By "+email);
+            throw new NotFoundException("No User Found By "+email);
         }
         if (!isValidDob(studentDetailsUpdateRequest.getDob())){
             throw new InvalidInputException("You must be at least 6 years old");
@@ -204,7 +204,7 @@ public class UserServiceImpl implements UserService {
 
                     return convertToStudentModel(userRepository.save(studentEntity));
                 })
-                .orElseThrow(() -> new UserNotFoundException("No Student found by "+email));
+                .orElseThrow(() -> new NotFoundException("No Student found by "+email));
     }
 
     @Override
@@ -219,7 +219,7 @@ public class UserServiceImpl implements UserService {
                 .ifPresentOrElse(
                         userRepository::delete,
                         () -> {
-                            throw new UserNotFoundException("User not found by " + email);
+                            throw new NotFoundException("User not found by " + email);
                         });
     }
 
@@ -237,7 +237,7 @@ public class UserServiceImpl implements UserService {
                     }
                     return convertToModel(userEntity);
                 })
-                .orElseThrow(()-> new UserNotFoundException("No user found by "+userSlug));
+                .orElseThrow(()-> new NotFoundException("No user found by "+userSlug));
     }
 
     public User convertToModel(UserEntity userEntity){
