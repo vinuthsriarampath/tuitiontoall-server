@@ -24,8 +24,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseCreateRequest {
-    @Null(message = "ID must be null when creating a new course")
-    private Long id;
 
     @NotBlank(message = "Title is mandatory")
     private String title;
