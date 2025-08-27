@@ -74,4 +74,11 @@ public class CourseController {
         courseService.deleteCourse(courseId);
         return ResponseEntity.status(200).body(new ApiResponse("Course deleted successfully", null ));
     }
+
+    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @PatchMapping("/archive/{courseId}")
+    public ResponseEntity<ApiResponse> archiveCourse(@PathVariable Long courseId){
+        Course archivedCourse=courseService.archiveCourse(courseId);
+        return ResponseEntity.status(200).body(new ApiResponse("Course archived successfully", archivedCourse ));
+    }
 }
