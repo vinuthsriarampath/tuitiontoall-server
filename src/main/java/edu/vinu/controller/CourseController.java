@@ -39,7 +39,6 @@ import static edu.vinu.validator.UserValidator.USER_VALIDATION_FAILED_ERROR;
 public class CourseController {
 
     private final CourseService courseService;
-    private final UserService userService;
 
     @PreAuthorize("hasRole('ROLE_INSTITUTE')")
     @PostMapping("/create")
@@ -67,5 +66,12 @@ public class CourseController {
         }
         Course updatedCourse = courseService.updateCourse(courseId, updatedCourseDetails);
         return ResponseEntity.status(200).body(new ApiResponse("Course updated successfully", updatedCourse ));
+    }
+
+    @PreAuthorize(("hasRole('ROLE_INSTITUTE')"))
+    @DeleteMapping("/delete/{courseId}")
+    public ResponseEntity<ApiResponse> deleteCourse(@PathVariable Long courseId){
+        courseService.deleteCourse(courseId);
+        return ResponseEntity.status(200).body(new ApiResponse("Course deleted successfully", null ));
     }
 }

@@ -38,6 +38,12 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
 
+    /**
+     * Creates a new course and associates it with the currently authenticated institute.
+     * @param course the details of the course to be created
+     * @return the created Course object
+     * @throws NotFoundException if the currently authenticated institute is not found
+     */
     @Override
     public Course createCourse(CourseCreateRequest course) {
         CourseEntity courseEntity= mapper.map(course,CourseEntity.class);
@@ -48,7 +54,14 @@ public class CourseServiceImpl implements CourseService {
         CourseEntity savedEntity = courseRepository.save(courseEntity);
         return mapper.map(savedEntity,Course.class);
     }
-
+    /**
+     * Updates an existing course with new details.
+     * @param courseId the ID of the course to be updated
+     * @param updatedCourseDetails the new details for the course
+     * @return the updated Course object
+     * @throws NotFoundException if the course with the given ID does not exist
+     * @throws UnauthorizedException if the current user is not authorized to update the course
+     */
     @Override
     public Course updateCourse(Long courseId, CourseUpdateRequest updatedCourseDetails) {
         return courseRepository.findById(courseId)
@@ -64,5 +77,23 @@ public class CourseServiceImpl implements CourseService {
                     }
                 })
                 .orElseThrow(() -> new NotFoundException("Course not found with id: " + courseId));
+    }
+
+    /**
+     * Deletes a course by its ID.
+     * @param courseId the ID of the course to be deleted
+     */
+    @Override
+    public void deleteCourse(Long courseId) {
+        courseRepository.findById(courseId)
+                .ifPresentOrElse(courseEntity -> {
+                    if (courseEntity.getInstitute().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+                        courseRepository.delete(courseEntity);
+                    } else {
+                        throw new UnauthorizedException("You are not authorized to delete this course");
+                    }
+                }, () -> {
+                    throw new NotFoundException("Course not found with id: " + courseId);
+                });
     }
 }
