@@ -2,6 +2,9 @@ spring:
   application:
     name: TuitionToAll-V2
 
+  profiles:
+    active: ${SPRING_PROFILE}
+
   datasource:
     url: ${DB_URL}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
     username: ${DB_USERNAME}
