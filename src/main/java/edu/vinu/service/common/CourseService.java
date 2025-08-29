@@ -50,4 +50,12 @@ public interface CourseService {
      * @param courseId the ID of the course to be archived
      */
     Course archiveCourse(Long courseId);
+
+    /**
+     * Retrieves a course by its ID.
+     * @param courseId the ID of the course to be retrieved
+     * @return the Course object
+     * @throws NotFoundException if the course with the given ID does not exist
+     */
+    Course getCourseById(Long courseId);
 }

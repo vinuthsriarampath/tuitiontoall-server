@@ -81,4 +81,11 @@ public class CourseController {
         Course archivedCourse=courseService.archiveCourse(courseId);
         return ResponseEntity.status(200).body(new ApiResponse("Course archived successfully", archivedCourse ));
     }
+
+    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @GetMapping("/get/{courseId}")
+    public ResponseEntity<ApiResponse> getCourseById(@PathVariable Long courseId){
+        Course course = courseService.getCourseById(courseId);
+        return ResponseEntity.status(200).body(new ApiResponse("Course Found!",course));
+    }
 }

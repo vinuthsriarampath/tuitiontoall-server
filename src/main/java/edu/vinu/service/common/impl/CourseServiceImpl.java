@@ -96,4 +96,17 @@ public class CourseServiceImpl implements CourseService {
                 })
                 .orElseThrow(() -> new NotFoundException("Course not found with id: " + courseId));
     }
+
+    @Override
+    public Course getCourseById(Long courseId) {
+        return courseRepository.findById(courseId)
+                .map(courseEntity -> {
+                    if (courseEntity.getInstitute().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+                        return mapper.map(courseEntity, Course.class);
+                    }else {
+                        throw new UnauthorizedException("You are not authorized to view this course");
+                    }
+                })
+                .orElseThrow(() -> new NotFoundException("Course not found with id: " + courseId));
+    }
 }
