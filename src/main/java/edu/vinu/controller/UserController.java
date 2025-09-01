@@ -116,4 +116,10 @@ public class UserController {
         return ResponseEntity.status(OK).body(new ApiResponse("User Found By "+userSlug,user));
     }
 
+    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @GetMapping("validate/institute-role")
+    public ResponseEntity<ApiResponse> validateInstituteRole(){
+        return ResponseEntity.status(OK).body(new ApiResponse("User has institute role!",null));
+    }
+
 }
