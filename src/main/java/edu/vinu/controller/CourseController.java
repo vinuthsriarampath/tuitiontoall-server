@@ -88,4 +88,10 @@ public class CourseController {
         Course course = courseService.getCourseById(courseId);
         return ResponseEntity.status(200).body(new ApiResponse("Course Found!",course));
     }
+
+    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @GetMapping("/institute/all")
+    public ResponseEntity<ApiResponse> getAllCoursesForInstitute(){
+        return ResponseEntity.status(200).body(new ApiResponse("All courses for the institute", courseService.getAllCoursesForInstitute()));
+    }
 }

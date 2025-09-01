@@ -19,6 +19,8 @@ import edu.vinu.model.Course;
 import edu.vinu.request.CourseCreateRequest;
 import edu.vinu.request.CourseUpdateRequest;
 
+import java.util.List;
+
 public interface CourseService {
 
     /**
@@ -58,4 +60,10 @@ public interface CourseService {
      * @throws NotFoundException if the course with the given ID does not exist
      */
     Course getCourseById(Long courseId);
+
+    /**
+     * Retrieves all courses associated with the currently authenticated institute.
+     * @return a list of Course objects
+     */
+    List<Course> getAllCoursesForInstitute();
 }

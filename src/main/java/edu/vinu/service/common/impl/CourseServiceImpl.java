@@ -29,6 +29,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -108,5 +109,16 @@ public class CourseServiceImpl implements CourseService {
                     }
                 })
                 .orElseThrow(() -> new NotFoundException("Course not found with id: " + courseId));
+    }
+
+    @Override
+    public List<Course> getAllCoursesForInstitute() {
+        InstituteEntity institute = Optional.ofNullable(userRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName()))
+                .orElseThrow(() -> new NotFoundException("User not found!"));
+
+        return courseRepository.findAllByInstituteId(institute.getId())
+                .stream()
+                .map( courseEntity -> mapper.map(courseEntity,Course.class))
+                .toList();
     }
 }
