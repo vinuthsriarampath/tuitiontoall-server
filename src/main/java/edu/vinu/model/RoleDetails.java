@@ -11,10 +11,7 @@
  *
  */
 
-package edu.vinu.enums;
+package edu.vinu.model;
 
-public enum Role {
-    ROLE_TEACHER,
-    ROLE_STUDENT,
-    ROLE_INSTITUTE
+public interface RoleDetails {
 }
