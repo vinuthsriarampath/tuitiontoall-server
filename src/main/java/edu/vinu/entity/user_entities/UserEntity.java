@@ -16,7 +16,6 @@ package edu.vinu.entity.user_entities;
 import edu.vinu.entity.RoleEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
