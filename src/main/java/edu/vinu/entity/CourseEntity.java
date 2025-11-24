@@ -14,7 +14,6 @@
 package edu.vinu.entity;
 
 
-import edu.vinu.common.BaseAuditingEntity;
 import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.enums.*;
 import jakarta.persistence.*;
@@ -22,6 +21,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -29,7 +32,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "courses")
-public class CourseEntity extends BaseAuditingEntity {
+public class CourseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,4 +48,12 @@ public class CourseEntity extends BaseAuditingEntity {
     @ManyToOne
     @JoinColumn(name="institute_id", nullable = false)
     private InstituteEntity institute;
+
+    @CreationTimestamp
+    @Column(name = "created_date",nullable = false,updatable = false)
+    private LocalDateTime creationTimeStamp;
+
+    @LastModifiedDate
+    @Column(name = "last_modified_date",insertable = false)
+    private LocalDateTime updatedAt;
 }

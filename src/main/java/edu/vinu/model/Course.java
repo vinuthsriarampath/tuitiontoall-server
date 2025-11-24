@@ -18,6 +18,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,4 +34,6 @@ public class Course {
     private CourseStatus status;
     private CourseLanguage language;
     private CourseMode mode;
+    private LocalDateTime creationTimeStamp;
+    private LocalDateTime updatedAt;
 }
