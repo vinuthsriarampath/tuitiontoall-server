@@ -13,9 +13,7 @@
 
 package edu.vinu.response;
 
-import edu.vinu.model.user_models.Institute;
-import edu.vinu.model.user_models.Student;
-import edu.vinu.model.user_models.Teacher;
+import edu.vinu.model.user_models.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,7 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchResponse {
-    private List<Student> students;
-    private List<Teacher> teachers;
-    private List<Institute> institutes;
+    private List<User> students;
+    private List<User> teachers;
+    private List<User> institutes;
 }

@@ -13,9 +13,7 @@
 
 package edu.vinu.service.common.impl;
 
-import edu.vinu.model.user_models.Institute;
-import edu.vinu.model.user_models.Student;
-import edu.vinu.model.user_models.Teacher;
+import edu.vinu.model.user_models.User;
 import edu.vinu.response.SearchResponse;
 import edu.vinu.service.common.SearchService;
 import edu.vinu.service.common.UserService;
@@ -33,26 +31,26 @@ public class SearchServiceImpl implements SearchService {
     private final UserService userService;
 
     @Async
-    private CompletableFuture<List<Student>> searchStudents(String query){
+    private CompletableFuture<List<User>> searchStudents(String query){
         return CompletableFuture.completedFuture(userService.getAllStudentsByFirstNameLike(query));
     }
     
     @Async
-    private CompletableFuture<List<Teacher>> searchTeachers(String query){
+    private CompletableFuture<List<User>> searchTeachers(String query){
         return CompletableFuture.completedFuture(userService.getAllTeachersByFirstNameLike(query));
     }
     
     @Async
-    private CompletableFuture<List<Institute>> searchInstitutes(String query){
+    private CompletableFuture<List<User>> searchInstitutes(String query){
         return CompletableFuture.completedFuture(userService.getAllInstitutesByInstituteName(query));
     }
 
     @Override
     public SearchResponse search(String query) {
         try {
-            CompletableFuture<List<Student>> students = searchStudents(query);
-            CompletableFuture<List<Teacher>> teachers = searchTeachers(query);
-            CompletableFuture<List<Institute>> institutes = searchInstitutes(query);
+            CompletableFuture<List<User>> students = searchStudents(query);
+            CompletableFuture<List<User>> teachers = searchTeachers(query);
+            CompletableFuture<List<User>> institutes = searchInstitutes(query);
 
             CompletableFuture.allOf(students, teachers, institutes).join();
             return new SearchResponse(
