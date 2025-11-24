@@ -13,7 +13,6 @@
 
 package edu.vinu.service.common;
 
-import edu.vinu.enums.Role;
 import jakarta.mail.MessagingException;
 
 import java.util.Map;
@@ -21,7 +20,7 @@ import java.util.Map;
 public interface EmailService {
     void sendEmail(String to, String subject, String templateName, Map<String, Object> templateVariables) throws MessagingException;
 
-    void SendRegistrationSuccessEmail(String email, String name, Role role);
+    void SendRegistrationSuccessEmail(String email, String name, String role);
 
     void SendPasswordResetEmail(String email, String name, String Link);
 }

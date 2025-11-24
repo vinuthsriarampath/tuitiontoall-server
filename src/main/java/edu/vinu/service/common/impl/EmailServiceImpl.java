@@ -13,7 +13,6 @@
 
 package edu.vinu.service.common.impl;
 
-import edu.vinu.enums.Role;
 import edu.vinu.service.common.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -68,7 +67,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void SendRegistrationSuccessEmail(String email, String name, Role role) {
+    public void SendRegistrationSuccessEmail(String email, String name, String role) {
         try{
 
             Map<String, Object> templateVariables = new HashMap<>();
