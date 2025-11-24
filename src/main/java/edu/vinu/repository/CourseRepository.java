@@ -15,9 +15,11 @@ package edu.vinu.repository;
 
 import edu.vinu.entity.CourseEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface CourseRepository extends JpaRepository<CourseEntity,Long> {
     List<CourseEntity> findAllByInstituteId(Long id);
 }
