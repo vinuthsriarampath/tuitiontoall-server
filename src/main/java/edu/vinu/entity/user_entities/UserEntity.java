@@ -13,16 +13,19 @@
 
 package edu.vinu.entity.user_entities;
 
-import edu.vinu.common.BaseAuditingEntity;
-import edu.vinu.enums.Role;
+import edu.vinu.entity.RoleEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.*;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -30,11 +33,10 @@ import org.hibernate.annotations.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
 @SQLDelete(sql = "UPDATE users SET is_disabled = true WHERE id = ?")
 @FilterDef(name = "softDeleteFilter", parameters = @ParamDef(name = "isDisabled",type = Boolean.class))
 @Filter(name = "softDeleteFilter", condition = "is_disabled = :isDisabled")
-public class UserEntity extends BaseAuditingEntity {
+public class UserEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,8 +47,6 @@ public class UserEntity extends BaseAuditingEntity {
     private String email;
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
     private boolean isDisabled=false;
 
     @Column(unique = true , nullable = false)
@@ -57,4 +57,26 @@ public class UserEntity extends BaseAuditingEntity {
 
     @Nullable
     private String banner;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id",nullable = false,updatable = false)
+    private RoleEntity role;
+
+    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY)
+    private StudentEntity student;
+
+    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY)
+    private TeacherEntity teacher;
+
+    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY)
+    private InstituteEntity institute;
+
+    @CreationTimestamp
+    @Column(name = "created_date",nullable = false,updatable = false)
+    private LocalDateTime creationTimeStamp;
+
+    @LastModifiedDate
+    @Column(name = "last_modified_date",insertable = false)
+    private LocalDateTime updatedAt;
+
 }

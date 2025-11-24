@@ -15,11 +15,14 @@ package edu.vinu.model.user_models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import edu.vinu.enums.Role;
+import edu.vinu.model.Role;
+import edu.vinu.model.RoleDetails;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -38,4 +41,8 @@ public class User{
     private String userSlug;
     private String dp;
     private String banner;
+    private LocalDateTime creationTimeStamp;
+    private LocalDateTime updatedAt;
+
+    private RoleDetails details;
 }
