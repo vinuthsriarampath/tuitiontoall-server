@@ -15,12 +15,14 @@ package edu.vinu.seeder;
 
 import com.github.javafaker.Faker;
 import edu.vinu.entity.CourseEntity;
+import edu.vinu.entity.RoleEntity;
 import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.enums.*;
 import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.UserAlreadyExistException;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.repository.CourseRepository;
+import edu.vinu.repository.RoleRepository;
 import edu.vinu.repository.UserRepository;
 import edu.vinu.request.registration.InstituteRegistrationRequest;
 import edu.vinu.request.registration.StudentRegistrationRequest;
@@ -35,6 +37,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -47,10 +50,13 @@ public class DatabaseSeeder implements CommandLineRunner {
     private final UserRepository userRepository;
     private final UserAuthenticationService authService;
     private final CourseRepository courseRepository;
+    private final RoleRepository roleRepository;
     private final ModelMapper mapper;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
+        seedRoles();
+
         if (userRepository.count() == 0){
             seedInstitutes();
             seedTeachers();
@@ -150,5 +156,20 @@ public class DatabaseSeeder implements CommandLineRunner {
             }
         }
         log.info("Seeded 100 Courses 📚");
+    }
+
+    private void seedRoles(){
+        List<String> roles = new ArrayList<>();
+        roles.add("institute");
+        roles.add("teacher");
+        roles.add("student");
+
+        for (String role : roles){
+            if(roleRepository.existsByRole(role)) continue;
+            RoleEntity newRole = new RoleEntity();
+            newRole.setRole(role);
+            roleRepository.save(newRole);
+        }
+        log.info("Roles Seeded successfully 🥷");
     }
 }
