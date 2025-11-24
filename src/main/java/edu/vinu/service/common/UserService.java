@@ -30,11 +30,11 @@ public interface UserService {
 
     boolean isUserExist(String email);
 
-    List<User> getAllUsersByFirstNameLike(String firstname);
+    List<Object> getAllUsersByFirstNameLike(String firstname);
 
-    List<Student> getAllStudentsByFirstNameLike(String firstName);
+    List<User> getAllStudentsByFirstNameLike(String firstName);
 
-    List<Teacher> getAllTeachersByFirstNameLike(String lastName);
+    List<User> getAllTeachersByFirstNameLike(String lastName);
 
     List<Student> getAllStudents();
 
@@ -42,7 +42,7 @@ public interface UserService {
 
     List<Institute> getAllInstitutes();
 
-    List<Institute> getAllInstitutesByInstituteName(String instituteName);
+    List<User> getAllInstitutesByInstituteName(String instituteName);
 
     Institute updateInstituteDetails(String currentEmail, InstituteDetailsUpdateRequest instituteDetailsUpdateRequest);
 

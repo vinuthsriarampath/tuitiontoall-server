@@ -24,6 +24,9 @@ import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
+import edu.vinu.repository.InstituteRepository;
+import edu.vinu.repository.StudentRepository;
+import edu.vinu.repository.TeacherRepository;
 import edu.vinu.repository.UserRepository;
 import edu.vinu.request.update_user_details.InstituteDetailsUpdateRequest;
 import edu.vinu.request.update_user_details.StudentDetailsUpdateRequest;
@@ -46,6 +49,9 @@ import static edu.vinu.validator.UserValidator.isValidDob;
 public class UserServiceImpl implements UserService {
     private final ModelMapper mapper;
     private final UserRepository userRepository;
+    private final InstituteRepository instituteRepository;
+    private final TeacherRepository teacherRepository;
+    private final StudentRepository studentRepository;
 
     @Override
     public User getUserByEmail(String email) {
@@ -53,7 +59,19 @@ public class UserServiceImpl implements UserService {
         if (userEntity == null){
             throw new NotFoundException("A user from "+email+" not found!!");
         }
-        return convertToModel(userEntity);
+        User user = mapper.map(userEntity, User.class);
+        switch (user.getRole().getRole()){
+            case "student":
+                user.setDetails(mapper.map(userEntity.getStudent(), Student.class));
+                break;
+            case "teacher":
+                user.setDetails(mapper.map(userEntity.getTeacher(), Teacher.class));
+                break;
+            case "institute":
+                user.setDetails(mapper.map(userEntity.getInstitute(), Institute.class));
+                break;
+        }
+        return user;
     }
 
     @Override
@@ -62,8 +80,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsersByFirstNameLike(String firstname) {
-        List<User> userList =new ArrayList<>();
+    public List<Object> getAllUsersByFirstNameLike(String firstname) {
+        List<Object> userList =new ArrayList<>();
         userList.addAll(getAllStudentsByFirstNameLike(firstname));
         userList.addAll(getAllTeachersByFirstNameLike(firstname));
         if (userList.isEmpty()){
@@ -73,22 +91,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Student> getAllStudentsByFirstNameLike(String firstName) {
-        return userRepository.getStudentsByFirstNameLike(firstName).stream()
-                .map(this::convertToStudentModel)
+    public List<User> getAllStudentsByFirstNameLike(String firstName) {
+        return studentRepository.getStudentsByFirstNameLike(firstName).stream()
+                .map(studentEntity -> {
+                    User user = mapper.map(studentEntity,User.class);
+                    user.setDetails(mapper.map(studentEntity, Student.class));
+                    return user;
+                })
                 .toList();
     }
 
     @Override
-    public List<Teacher> getAllTeachersByFirstNameLike(String firstName) {
-        return userRepository.getTeachersByFirstNameLike(firstName).stream()
-                .map(this::convertToTeacherModel)
+    public List<User> getAllTeachersByFirstNameLike(String firstName) {
+        return teacherRepository.getTeachersByFirstNameLike(firstName).stream()
+                .map(teacherEntity -> {
+                    User user = mapper.map(teacherEntity.getUser(), User.class);
+                    user.setDetails(mapper.map(teacherEntity, Teacher.class));
+                    return user;
+                })
                 .toList();
     }
 
     @Override
     public List<Student> getAllStudents() {
-        List<Student> studentList = userRepository.getAllStudents()
+        List<Student> studentList = studentRepository.getAllStudents()
                 .stream()
                 .map(this::convertToStudentModel)
                 .toList();
@@ -100,7 +126,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Teacher> getAllTeachers() {
-        List<Teacher> teacherList = userRepository.getAllTeachers()
+        List<Teacher> teacherList = teacherRepository.getAllTeachers()
                 .stream()
                 .map(this::convertToTeacherModel)
                 .toList();
@@ -112,10 +138,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Institute> getAllInstitutes() {
-        List<Institute> instituteList =  userRepository.getAllInstitutes()
+        List<Institute> instituteList =  instituteRepository.getAllInstitutes()
                 .stream()
                 .map(this::convertToInstituteModel)
                 .toList();
+
         if (instituteList.isEmpty()){
             throw new NotFoundException("No Institutes Found!");
         }
@@ -123,10 +150,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Institute> getAllInstitutesByInstituteName(String instituteName) {
-        return userRepository.findByInstituteName(instituteName)
+    public List<User> getAllInstitutesByInstituteName(String instituteName) {
+        return instituteRepository.findByInstituteName(instituteName)
                 .stream()
-                .map(this::convertToInstituteModel)
+                .map(instituteEntity -> {
+                    User user =  mapper.map(instituteEntity.getUser(), User.class);
+                    user.setDetails(mapper.map(instituteEntity, Institute.class));
+                    return user;
+                })
                 .toList();
     }
 
@@ -136,14 +167,15 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException("User not found for " + email);
         }
         return Optional.ofNullable(userRepository.findByEmail(email))
-                .filter(InstituteEntity.class::isInstance)
                 .map(userEntity -> {
-                    InstituteEntity instituteEntity = (InstituteEntity) userEntity;
-                    instituteEntity.setAddress(instituteDetailsUpdateRequest.getAddress());
-                    instituteEntity.setContact(instituteDetailsUpdateRequest.getContact());
-                    instituteEntity.setInstituteName(instituteDetailsUpdateRequest.getInstituteName());
+                    userEntity.setAddress(instituteDetailsUpdateRequest.getAddress());
+                    userEntity.setContact(instituteDetailsUpdateRequest.getContact());
 
-                    return convertToInstituteModel(userRepository.save(instituteEntity));
+                    userRepository.save(userEntity);
+
+                    userEntity.getInstitute().setInstituteName(instituteDetailsUpdateRequest.getInstituteName());
+
+                    return convertToInstituteModel(instituteRepository.save(userEntity.getInstitute()));
                 })
                 .orElseThrow(() -> new NotFoundException("Institute not found for " + email));
     }
@@ -170,16 +202,19 @@ public class UserServiceImpl implements UserService {
             throw new InvalidInputException("You must be at least 6 years old");
         }
         return Optional.ofNullable(userRepository.findByEmail(email))
-                .filter(TeacherEntity.class::isInstance)
                 .map(userEntity -> {
-                    TeacherEntity teacherEntity = (TeacherEntity) userEntity;
-                    teacherEntity.setContact(teacherDetailsUpdateRequest.getContact());
-                    teacherEntity.setAddress(teacherDetailsUpdateRequest.getAddress());
+                    userEntity.setAddress(teacherDetailsUpdateRequest.getAddress());
+                    userEntity.setContact(teacherDetailsUpdateRequest.getContact());
+
+                    userRepository.save(userEntity);
+
+                    TeacherEntity teacherEntity = userEntity.getTeacher();
+
                     teacherEntity.setFirstName(teacherDetailsUpdateRequest.getFirstName());
                     teacherEntity.setLastName(teacherDetailsUpdateRequest.getLastName());
                     teacherEntity.setDob(teacherDetailsUpdateRequest.getDob());
 
-                    return convertToTeacherModel(userRepository.save(teacherEntity));
+                    return convertToTeacherModel(teacherRepository.save(teacherEntity));
                 })
                 .orElseThrow(() -> new NotFoundException("No teacher found by "+email));
     }
@@ -193,16 +228,19 @@ public class UserServiceImpl implements UserService {
             throw new InvalidInputException("You must be at least 6 years old");
         }
         return Optional.ofNullable(userRepository.findByEmail(email))
-                .filter(StudentEntity.class::isInstance)
                 .map(userEntity -> {
-                    StudentEntity studentEntity = (StudentEntity) userEntity;
-                    studentEntity.setContact(studentDetailsUpdateRequest.getContact());
-                    studentEntity.setAddress(studentDetailsUpdateRequest.getAddress());
+                    userEntity.setAddress(studentDetailsUpdateRequest.getAddress());
+                    userEntity.setContact(studentDetailsUpdateRequest.getContact());
+
+                    userRepository.save(userEntity);
+
+                    StudentEntity studentEntity = userEntity.getStudent();
+
                     studentEntity.setFirstName(studentDetailsUpdateRequest.getFirstName());
                     studentEntity.setLastName(studentDetailsUpdateRequest.getLastName());
                     studentEntity.setDob(studentDetailsUpdateRequest.getDob());
 
-                    return convertToStudentModel(userRepository.save(studentEntity));
+                    return convertToStudentModel(studentRepository.save(studentEntity));
                 })
                 .orElseThrow(() -> new NotFoundException("No Student found by "+email));
     }
@@ -235,25 +273,21 @@ public class UserServiceImpl implements UserService {
                     if (isUserDisabled(userEntity)) {
                         throw new DisabledException("User is disabled");
                     }
-                    return convertToModel(userEntity);
+                    User user = mapper.map(userEntity, User.class);
+                    switch (user.getRole().getRole()){
+                        case "student":
+                            user.setDetails(mapper.map(userEntity.getStudent(), Student.class));
+                            break;
+                        case "teacher":
+                            user.setDetails(mapper.map(userEntity.getTeacher(), Teacher.class));
+                            break;
+                        case "institute":
+                        user.setDetails(mapper.map(userEntity.getInstitute(), Institute.class));
+                        break;
+                    }
+                    return user;
                 })
                 .orElseThrow(()-> new NotFoundException("No user found by "+userSlug));
-    }
-
-    public User convertToModel(UserEntity userEntity){
-        try {
-            if (userEntity instanceof StudentEntity) {
-                return mapper.map(userEntity, Student.class);
-            } else if (userEntity instanceof TeacherEntity) {
-                return mapper.map(userEntity, Teacher.class);
-            } else if (userEntity instanceof InstituteEntity) {
-                return mapper.map(userEntity, Institute.class);
-            } else {
-                return mapper.map(userEntity, User.class);
-            }
-        } catch (ClassCastException e) {
-            throw new InternalServerErrorException(e.getMessage());
-        }
     }
 
     public Institute convertToInstituteModel(InstituteEntity instituteEntity){
