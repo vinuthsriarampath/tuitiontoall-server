@@ -13,7 +13,6 @@
 
 package edu.vinu.service.common;
 
-import edu.vinu.model.user_models.User;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;

@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @SuppressWarnings("unused")
@@ -59,14 +60,13 @@ public class ProfileFileServiceImpl implements ProfileFileService {
 
             String baseFilename = userEntity.getUserSlug();
 
-            // Delete any existing file with the same base name (regardless of extension)
             try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, baseFilename + ".*")) {
                 for (Path existingFile : stream) {
                     Files.delete(existingFile);
                 }
             }
 
-            String filename = userEntity.getUserSlug() + extension;
+            String filename = String.format("%s-%s%s", userEntity.getUserSlug(), UUID.randomUUID().toString(), extension);
             Path filePath = dir.resolve(filename);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
@@ -76,7 +76,15 @@ public class ProfileFileServiceImpl implements ProfileFileService {
                 default -> throw new IllegalArgumentException("Invalid type: " + type);
             }
             UserEntity savedEntity=userRepository.save(userEntity);
-            return savedEntity.getDp();
+            switch (type){
+                case "dp" -> {
+                    return savedEntity.getDp();
+                }
+                case "banner" -> {
+                    return savedEntity.getBanner();
+                }
+                default -> throw new IllegalArgumentException("Invalid type: "+ type);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

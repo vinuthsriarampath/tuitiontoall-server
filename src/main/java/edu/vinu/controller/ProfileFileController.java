@@ -13,7 +13,6 @@
 
 package edu.vinu.controller;
 
-import edu.vinu.model.user_models.User;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.common.ProfileFileService;
 import lombok.RequiredArgsConstructor;
