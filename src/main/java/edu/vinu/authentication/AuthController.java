@@ -13,7 +13,9 @@
 
 package edu.vinu.authentication;
 
-import edu.vinu.model.user_models.User;
+import edu.vinu.model.user_models.Institute;
+import edu.vinu.model.user_models.Student;
+import edu.vinu.model.user_models.Teacher;
 import edu.vinu.request.UserLoginRequest;
 import edu.vinu.request.registration.InstituteRegistrationRequest;
 import edu.vinu.request.registration.StudentRegistrationRequest;
@@ -50,7 +52,7 @@ public class AuthController {
             }
             return ResponseEntity.badRequest().body(new ApiResponse(USER_VALIDATION_FAILED_ERROR, errors));
         }
-        User savedInstitute = userAuthService.registerInstitute(institute);
+        Institute savedInstitute = userAuthService.registerInstitute(institute);
         return ResponseEntity.ok(new ApiResponse("Institute Registered Successfully!", savedInstitute));
     }
 
@@ -63,7 +65,7 @@ public class AuthController {
             }
             return ResponseEntity.badRequest().body(new ApiResponse(USER_VALIDATION_FAILED_ERROR, errors));
         }
-        User savedTeacher = userAuthService.registerTeacher(teacher);
+        Teacher savedTeacher = userAuthService.registerTeacher(teacher);
         return ResponseEntity.ok(new ApiResponse("Teacher Registered Successfully!", savedTeacher));
     }
 
@@ -76,7 +78,7 @@ public class AuthController {
             }
             return ResponseEntity.badRequest().body(new ApiResponse(USER_VALIDATION_FAILED_ERROR, errors));
         }
-        User savedStudent = userAuthService.registerStudent(student);
+        Student savedStudent = userAuthService.registerStudent(student);
         return ResponseEntity.ok(new ApiResponse("Student Registered Successfully!", savedStudent));
     }
 

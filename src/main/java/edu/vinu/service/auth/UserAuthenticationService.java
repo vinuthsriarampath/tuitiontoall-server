@@ -13,9 +13,9 @@
 
 package edu.vinu.service.auth;
 
+import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
-import edu.vinu.model.user_models.User;
 import edu.vinu.request.UserLoginRequest;
 import edu.vinu.request.registration.InstituteRegistrationRequest;
 import edu.vinu.request.registration.StudentRegistrationRequest;
@@ -24,7 +24,7 @@ import edu.vinu.response.ApiResponse;
 import edu.vinu.response.AuthResponse;
 
 public interface UserAuthenticationService {
-    User registerInstitute(InstituteRegistrationRequest user);
+    Institute registerInstitute(InstituteRegistrationRequest user);
 
     Student registerStudent(StudentRegistrationRequest request);
 

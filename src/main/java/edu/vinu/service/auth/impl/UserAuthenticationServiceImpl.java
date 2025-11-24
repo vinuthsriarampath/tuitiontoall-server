@@ -13,22 +13,21 @@
 
 package edu.vinu.service.auth.impl;
 
+import edu.vinu.entity.RoleEntity;
 import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.entity.user_entities.StudentEntity;
 import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
-import edu.vinu.enums.Role;
 import edu.vinu.exception.custom.*;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
-import edu.vinu.repository.UserRepository;
+import edu.vinu.repository.*;
 import edu.vinu.request.UserLoginRequest;
 import edu.vinu.request.registration.InstituteRegistrationRequest;
 import edu.vinu.request.registration.StudentRegistrationRequest;
 import edu.vinu.request.registration.TeacherRegistrationRequest;
-import edu.vinu.request.registration.UserRegistrationRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.AuthResponse;
 import edu.vinu.service.auth.UserAuthenticationService;
@@ -36,6 +35,7 @@ import edu.vinu.service.common.EmailService;
 import edu.vinu.service.common.UserService;
 import edu.vinu.validator.UserValidator;
 import jakarta.annotation.Nullable;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -64,57 +64,112 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     private final ModelMapper mapper;
     private final BCryptPasswordEncoder encoder;
     private final @Nullable EmailService emailService;
+    private final RoleRepository roleRepository;
+    private final TeacherRepository teacherRepository;
+    private final StudentRepository studentRepository;
+    private final InstituteRepository instituteRepository;
 
     @Value("${app.reset.frontend-reset-url}")
     String resetUrl;
 
     @Override
+    @Transactional
     public Institute registerInstitute(InstituteRegistrationRequest request) {
         validateUser(request.getEmail(), request.getPassword());
-        return saveUser(request, InstituteEntity.class, Institute.class, Role.ROLE_INSTITUTE);
-    }
 
-    @Override
-    public Student registerStudent(StudentRegistrationRequest request) {
-        validateUser(request.getEmail(), request.getPassword(), request.getDob());
-        return saveUser(request, StudentEntity.class, Student.class, Role.ROLE_STUDENT);
-    }
+        UserEntity userEntity = mapper.map(request, UserEntity.class);
+        userEntity.setPassword(encoder.encode(userEntity.getPassword()));
+        userEntity.setUserSlug(userService.generateUserSlug(request.getInstituteName()));
 
-    @Override
-    public Teacher registerTeacher(TeacherRegistrationRequest request) {
-        validateUser(request.getEmail(), request.getPassword(), request.getDob());
-        return saveUser(request, TeacherEntity.class, Teacher.class, Role.ROLE_TEACHER);
-    }
+        RoleEntity instituteRole = roleRepository.findByRole("institute")
+                .orElseThrow(() -> new InternalServerErrorException("Role doesn't exist"));
+        userEntity.setRole(instituteRole);
+        userEntity.setInstitute(null);
 
-    private <T, U extends User> U saveUser(T request, Class<? extends UserEntity> entityClass, Class<U> modelClass, Role role) {
-        if (request instanceof UserRegistrationRequest userRequest) {
-            userRequest.setPassword(encoder.encode(userRequest.getPassword()));
-            UserEntity userEntity = mapper.map(userRequest, entityClass);
-            userEntity.setRole(role);
+        try {
+            UserEntity savedUser = userRepository.save(userEntity);
 
-            userEntity.setUserSlug(userService.generateUserSlug(getBaseSlug(userEntity)));
+            InstituteEntity instituteEntity = mapper.map(request, InstituteEntity.class);
+            instituteEntity.setUser(savedUser);
 
-            try {
-                UserEntity savedEntity = userRepository.save(userEntity);
-                if (emailService != null) emailService.SendRegistrationSuccessEmail(savedEntity.getEmail(), savedEntity.getUserSlug(), savedEntity.getRole());
-                return mapper.map(savedEntity, modelClass);
-            } catch (Exception e) {
-                throw new InternalServerErrorException("Registration Failed Due to Internal Error");
+            InstituteEntity savedInstitute = instituteRepository.save(instituteEntity);
+
+            if (emailService != null) {
+                emailService.SendRegistrationSuccessEmail(savedInstitute.getUser().getEmail(), savedInstitute.getUser().getUserSlug(), savedInstitute.getUser().getRole().getRole());
             }
-        } else {
-            throw new IllegalArgumentException("Invalid request type");
+            return mapper.map(savedInstitute, Institute.class);
+        } catch (Exception e) {
+            throw new InternalServerErrorException("Registration Failed Due to Internal Error: " + e.getMessage());
         }
     }
 
-    private static String getBaseSlug(UserEntity userEntity) {
-        if (userEntity instanceof StudentEntity student) {
-            return student.getFirstName() + "-" + student.getLastName();
-        } else if (userEntity instanceof TeacherEntity teacher) {
-            return teacher.getFirstName() + "-" + teacher.getLastName();
-        } else if (userEntity instanceof InstituteEntity institute) {
-            return institute.getInstituteName();
-        } else {
-            return "user";
+
+    @Override
+    @Transactional
+    public Student registerStudent(StudentRegistrationRequest request) {
+        validateUser(request.getEmail(), request.getPassword(), request.getDob());
+
+        UserEntity userEntity = mapper.map(request, UserEntity.class);
+
+        userEntity.setPassword(encoder.encode(userEntity.getPassword()));
+        userEntity.setUserSlug(
+                userService.generateUserSlug(
+                        request.getFirstName() + "-" + request.getLastName()
+                ));
+
+        RoleEntity studentRole = roleRepository.findByRole("student")
+                .orElseThrow(() -> new InternalServerErrorException("Role doesn't exist"));
+        userEntity.setRole(studentRole);
+        userEntity.setStudent(null);
+
+        try {
+            UserEntity savedUserEntity = userRepository.save(userEntity);
+
+            StudentEntity studentEntity = mapper.map(request, StudentEntity.class);
+            studentEntity.setUser(savedUserEntity);
+
+            StudentEntity savedStudent = studentRepository.save(studentEntity);
+
+            if (emailService != null) {
+                emailService.SendRegistrationSuccessEmail(savedStudent.getUser().getEmail(), savedStudent.getUser().getUserSlug(), savedStudent.getUser().getRole().getRole());
+            }
+            return mapper.map(savedStudent, Student.class);
+        } catch (Exception e) {
+            throw new InternalServerErrorException("Registration Failed Due to Internal Error");
+        }
+
+    }
+
+    @Override
+    @Transactional
+    public Teacher registerTeacher(TeacherRegistrationRequest request) {
+        validateUser(request.getEmail(), request.getPassword(), request.getDob());
+
+        UserEntity userEntity = mapper.map(request, UserEntity.class);
+
+        userEntity.setPassword(encoder.encode(userEntity.getPassword()));
+        userEntity.setUserSlug(
+                userService.generateUserSlug(
+                        request.getFirstName() + "-" + request.getLastName()
+                ));
+
+        RoleEntity teacherRole = roleRepository.findByRole("teacher")
+                .orElseThrow(() -> new InternalServerErrorException("Role doesn't exist"));
+        userEntity.setRole(teacherRole);
+        userEntity.setTeacher(null);
+        try {
+            UserEntity savedUserEntity = userRepository.save(userEntity);
+
+            TeacherEntity teacherEntity = mapper.map(request, TeacherEntity.class);
+            teacherEntity.setUser(savedUserEntity);
+            TeacherEntity savedTeacher = teacherRepository.save(teacherEntity);
+
+            if (emailService != null) {
+                emailService.SendRegistrationSuccessEmail(savedTeacher.getUser().getEmail(), savedTeacher.getUser().getUserSlug(), savedTeacher.getUser().getRole().getRole());
+            }
+            return mapper.map(savedTeacher, Teacher.class);
+        } catch (Exception e) {
+            throw new InternalServerErrorException("Registration Failed Due to Internal Error");
         }
     }
 
@@ -146,7 +201,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     }
 
     @Override
-    public AuthResponse verify(UserLoginRequest request){
+    public AuthResponse verify(UserLoginRequest request) {
         try {
             if (!UserValidator.isValidateEmail(request.getEmail())) {
                 throw new InvalidInputException("Invalid email");
@@ -160,19 +215,23 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
                             )
                     );
 
-            if (authentication.isAuthenticated()){
+            if (authentication.isAuthenticated()) {
                 String token = jwtService.generateToken(authentication);
                 UserEntity userEntity = userRepository.findByEmail(request.getEmail());
-
-                if (userEntity instanceof InstituteEntity) {
-                    return new AuthResponse(token, mapper.map(userEntity, Institute.class));
-                } else if (userEntity instanceof StudentEntity) {
-                    return new AuthResponse(token, mapper.map(userEntity, Student.class));
-                } else if (userEntity instanceof TeacherEntity) {
-                    return new AuthResponse(token, mapper.map(userEntity, Teacher.class));
-                } else {
-                    return new AuthResponse(token, mapper.map(userEntity, User.class));
+                User user = mapper.map(userEntity, User.class);
+                switch (user.getRole().getRole()){
+                    case "student":
+                        user.setDetails(mapper.map(userEntity.getStudent(), Student.class));
+                        break;
+                    case "teacher":
+                        user.setDetails(mapper.map(userEntity.getTeacher(), Teacher.class));
+                        break;
+                    case "institute":
+                        user.setDetails(mapper.map(userEntity.getInstitute(), Institute.class));
+                        break;
                 }
+
+                return new AuthResponse(token,user);
             }
             throw new UnauthorizedException("Invalid access");
         } catch (AuthenticationException e) {
@@ -193,16 +252,27 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             User user = userService.getUserByEmail(email);
             String resetToken = jwtService.generateResetToken(email);
             String link = resetUrl + resetToken;
-            String name="";
-            if (user.getRole()==Role.ROLE_INSTITUTE) {
-                name=((Institute) user).getInstituteName();
-            } else if (user.getRole()==Role.ROLE_TEACHER) {
-                name=((Teacher) user).getFirstName()+" "+((Teacher) user).getLastName();
-            }else if (user.getRole()==Role.ROLE_STUDENT) {
-                name=((Student) user).getFirstName()+" "+((Student) user).getLastName();
+            String name = "";
+            switch (user.getRole().getRole()) {
+                case "institute" -> {
+                    InstituteEntity instituteEntity = instituteRepository.findInstituteByEmail(email).
+                            orElseThrow(() -> new NotFoundException("Institute Not found!"));
+                    name = instituteEntity.getInstituteName();
+                }
+                case "teacher" -> {
+                    TeacherEntity teacherEntity = teacherRepository.findTeacherByEmail(email)
+                            .orElseThrow(() -> new NotFoundException("Teacher Not Found!"));
+                    name = teacherEntity.getFirstName() + " " + teacherEntity.getLastName();
+                }
+                case "student" -> {
+                    StudentEntity studentEntity = studentRepository.findStudentByEmail(email)
+                            .orElseThrow(() -> new NotFoundException("Student Not Found!"));
+                    name = studentEntity.getFirstName() + " " + studentEntity.getLastName();
+                }
             }
-            emailService.SendPasswordResetEmail(email, name, link );
-            return new ApiResponse("Reset token generated successfully Please check your email for the reset link.",null );
+            assert emailService != null;
+            emailService.SendPasswordResetEmail(email, name, link);
+            return new ApiResponse("Reset token generated successfully Please check your email for the reset link.", null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -224,7 +294,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             userRepository.save(userEntity);
             log.info("Password reset successful for user: {}", email);
             return new ApiResponse("Password reset successfully", null);
-        }else {
+        } else {
             throw new InvalidInputException("Invalid reset token");
         }
     }
