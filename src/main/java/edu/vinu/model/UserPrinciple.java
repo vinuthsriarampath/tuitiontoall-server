@@ -33,7 +33,7 @@ public class UserPrinciple implements UserDetails, Serializable {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(userEntity.getRole().name()));
+        return Collections.singleton(new SimpleGrantedAuthority(userEntity.getRole().getRole()));
     }
 
     @Override
