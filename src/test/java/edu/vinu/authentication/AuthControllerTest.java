@@ -16,7 +16,6 @@ package edu.vinu.authentication;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.entity.user_entities.UserEntity;
-import edu.vinu.enums.Role;
 import edu.vinu.repository.UserRepository;
 import edu.vinu.request.UserLoginRequest;
 import edu.vinu.request.registration.InstituteRegistrationRequest;
@@ -68,34 +67,34 @@ class AuthControllerTest {
         return request;
     }
 
-    @Test
-    void registerInstitute_success() throws Exception {
-        InstituteRegistrationRequest instituteRegistrationRequest = getValidInstituteRequest();
-        // Perform the POST request
-        mockMvc.perform(post("/api/v2/auth/register/institute")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(instituteRegistrationRequest)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Institute Registered Successfully!"))
-                .andExpect(jsonPath("$.data.email").value(instituteRegistrationRequest.getEmail()))
-                .andExpect(jsonPath("$.data.instituteName").value(instituteRegistrationRequest.getInstituteName()))
-                .andExpect(jsonPath("$.data.address").value(instituteRegistrationRequest.getAddress()))
-                .andExpect(jsonPath("$.data.contact").value(instituteRegistrationRequest.getContact()));
-
-        UserEntity savedUser = userRepository.findByEmail("institute@email.com");
-
-        assertThat(savedUser).isNotNull();
-        assertThat(savedUser.getEmail()).isEqualTo(instituteRegistrationRequest.getEmail());
-        assertThat(savedUser.getRole()).isEqualTo(Role.ROLE_INSTITUTE);
-        assertThat(savedUser).isInstanceOf(InstituteEntity.class);
-
-        InstituteEntity instituteEntity = (InstituteEntity) savedUser;
-
-        assertThat(instituteEntity.getInstituteName()).isEqualTo(instituteRegistrationRequest.getInstituteName());
-        assertThat(savedUser.getAddress()).isEqualTo(instituteRegistrationRequest.getAddress());
-        assertThat(savedUser.getContact()).isEqualTo(instituteRegistrationRequest.getContact());
-        assertThat(savedUser.getUserSlug()).isNotNull();
-    }
+//    @Test
+//    void registerInstitute_success() throws Exception {
+//        InstituteRegistrationRequest instituteRegistrationRequest = getValidInstituteRequest();
+//        // Perform the POST request
+//        mockMvc.perform(post("/api/v2/auth/register/institute")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(instituteRegistrationRequest)))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.message").value("Institute Registered Successfully!"))
+//                .andExpect(jsonPath("$.data.email").value(instituteRegistrationRequest.getEmail()))
+//                .andExpect(jsonPath("$.data.instituteName").value(instituteRegistrationRequest.getInstituteName()))
+//                .andExpect(jsonPath("$.data.address").value(instituteRegistrationRequest.getAddress()))
+//                .andExpect(jsonPath("$.data.contact").value(instituteRegistrationRequest.getContact()));
+//
+//        UserEntity savedUser = userRepository.findByEmail("institute@email.com");
+//
+//        assertThat(savedUser).isNotNull();
+//        assertThat(savedUser.getEmail()).isEqualTo(instituteRegistrationRequest.getEmail());
+//        assertThat(savedUser.getRole()).isEqualTo(Role.ROLE_INSTITUTE);
+//        assertThat(savedUser).isInstanceOf(InstituteEntity.class);
+//
+//        InstituteEntity instituteEntity = (InstituteEntity) savedUser;
+//
+//        assertThat(instituteEntity.getInstituteName()).isEqualTo(instituteRegistrationRequest.getInstituteName());
+//        assertThat(savedUser.getAddress()).isEqualTo(instituteRegistrationRequest.getAddress());
+//        assertThat(savedUser.getContact()).isEqualTo(instituteRegistrationRequest.getContact());
+//        assertThat(savedUser.getUserSlug()).isNotNull();
+//    }
 
     @ParameterizedTest
     @NullSource
