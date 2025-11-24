@@ -18,7 +18,6 @@ import edu.vinu.request.CourseCreateRequest;
 import edu.vinu.request.CourseUpdateRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.common.CourseService;
-import edu.vinu.service.common.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +39,7 @@ public class CourseController {
 
     private final CourseService courseService;
 
-    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @PreAuthorize("hasAuthority('institute')")
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createCourse(@Valid @RequestBody CourseCreateRequest course, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -54,7 +53,7 @@ public class CourseController {
         return ResponseEntity.status(201).body(new ApiResponse("Course created successfully", createdCourse ));
     }
 
-    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/update/{courseId}")
     public ResponseEntity<ApiResponse> updateCourse(@PathVariable Long courseId,@Valid @RequestBody CourseUpdateRequest updatedCourseDetails, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
@@ -68,28 +67,28 @@ public class CourseController {
         return ResponseEntity.status(200).body(new ApiResponse("Course updated successfully", updatedCourse ));
     }
 
-    @PreAuthorize(("hasRole('ROLE_INSTITUTE')"))
+    @PreAuthorize(("hasAuthority('institute')"))
     @DeleteMapping("/delete/{courseId}")
     public ResponseEntity<ApiResponse> deleteCourse(@PathVariable Long courseId){
         courseService.deleteCourse(courseId);
         return ResponseEntity.status(200).body(new ApiResponse("Course deleted successfully", null ));
     }
 
-    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/archive/{courseId}")
     public ResponseEntity<ApiResponse> archiveCourse(@PathVariable Long courseId){
         Course archivedCourse=courseService.archiveCourse(courseId);
         return ResponseEntity.status(200).body(new ApiResponse("Course archived successfully", archivedCourse ));
     }
 
-    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @PreAuthorize("hasAuthority('institute')")
     @GetMapping("/get/{courseId}")
     public ResponseEntity<ApiResponse> getCourseById(@PathVariable Long courseId){
         Course course = courseService.getCourseById(courseId);
         return ResponseEntity.status(200).body(new ApiResponse("Course Found!",course));
     }
 
-    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @PreAuthorize("hasAuthority('institute')")
     @GetMapping("/institute/all")
     public ResponseEntity<ApiResponse> getAllCoursesForInstitute(){
         return ResponseEntity.status(200).body(new ApiResponse("All courses for the institute", courseService.getAllCoursesForInstitute()));

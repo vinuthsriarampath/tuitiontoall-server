@@ -31,7 +31,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
 @CrossOrigin
 @RestController
@@ -55,7 +56,7 @@ public class UserController {
 
     @GetMapping("/by-firstname/{firstName}")
     public ResponseEntity<ApiResponse> getUsersByFirstName(@PathVariable String firstName){
-        List<User> userList = userService.getAllUsersByFirstNameLike(firstName);
+        List<Object> userList = userService.getAllUsersByFirstNameLike(firstName);
         return ResponseEntity.status(FOUND).body(new ApiResponse("User List Found by "+firstName,userList));
     }
 
@@ -79,25 +80,25 @@ public class UserController {
 
     @GetMapping("/institutes/by-name/{instituteName}")
     public ResponseEntity<ApiResponse> getInstitutesByName(@PathVariable String instituteName){
-        List<Institute> instituteList = userService.getAllInstitutesByInstituteName(instituteName);
+        List<User> instituteList = userService.getAllInstitutesByInstituteName(instituteName);
         return ResponseEntity.status(FOUND).body(new ApiResponse("Related institutes for "+instituteName,instituteList));
     }
 
-    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/institutes/update/me")
     public ResponseEntity<ApiResponse> updateInstituteDetails(@Valid @RequestBody InstituteDetailsUpdateRequest instituteDetailsUpdateRequest){
         Institute updateInstituteDetails = userService.updateInstituteDetails(SecurityContextHolder.getContext().getAuthentication().getName(),instituteDetailsUpdateRequest);
         return ResponseEntity.status(OK).body(new ApiResponse("Profile Updated",updateInstituteDetails));
     }
 
-    @PreAuthorize("hasRole('ROLE_TEACHER')")
+    @PreAuthorize("hasAuthority('teacher')")
     @PatchMapping("/teachers/update/me")
     public ResponseEntity<ApiResponse> updateTeacherDetails(@Valid @RequestBody TeacherDetailsUpdateRequest teacherDetailsUpdateRequest){
         Teacher updatedTeacherDetails = userService.updateTeacherDetails(SecurityContextHolder.getContext().getAuthentication().getName(),teacherDetailsUpdateRequest);
         return ResponseEntity.status(OK).body(new ApiResponse("Teacher Profile Updated!",updatedTeacherDetails));
     }
 
-    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @PreAuthorize("hasAuthority('student')")
     @PatchMapping("/student/update/me")
     public ResponseEntity<ApiResponse> updateStudentDetails(@Valid @RequestBody StudentDetailsUpdateRequest studentDetailsUpdateRequest){
         Student updatedStudentDetails = userService.updateStudentDetails(SecurityContextHolder.getContext().getAuthentication().getName(),studentDetailsUpdateRequest);
@@ -116,7 +117,7 @@ public class UserController {
         return ResponseEntity.status(OK).body(new ApiResponse("User Found By "+userSlug,user));
     }
 
-    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @PreAuthorize("hasAuthority('institute')")
     @GetMapping("validate/institute-role")
     public ResponseEntity<ApiResponse> validateInstituteRole(){
         return ResponseEntity.status(OK).body(new ApiResponse("User has institute role!",null));

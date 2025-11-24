@@ -27,20 +27,21 @@ import java.util.List;
 public class TestController {
     List<String> greetings = new ArrayList<>();
 
-    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    @PreAuthorize("hasAuthority('student')")
     @GetMapping("/get-all")
     public ResponseEntity<ApiResponse> getAllGreetings() {
         return ResponseEntity.ok(new ApiResponse("Greetings", greetings));
     }
 
-    @PreAuthorize("hasRole('ROLE_INSTITUTE')")
+    @PreAuthorize("hasAuthority('institute')")
     @PostMapping("/greet/add/{greet}")
     public ResponseEntity<ApiResponse> addGreet(@PathVariable String greet){
+        System.out.println("working");
         greetings.add(greet);
         return ResponseEntity.ok(new ApiResponse("Greet added", null));
     }
 
-    @PreAuthorize("hasRole('ROLE_TEACHER')")
+    @PreAuthorize("hasAuthority('teacher')")
     @DeleteMapping("/greet/delete/{greet}")
     public ResponseEntity<ApiResponse> deleteGreet(@PathVariable String greet) {
         greetings.remove(greet);
