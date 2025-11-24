@@ -11,35 +11,41 @@
  *
  */
 
-package edu.vinu.common;
+package edu.vinu.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import edu.vinu.entity.user_entities.UserEntity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Getter
-@Setter
+@Entity
+@Table(name = "role")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
-@MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
-public class BaseAuditingEntity {
-    @CreatedDate
+public class RoleEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true,nullable = false)
+    private String role;
+
+    @OneToMany(mappedBy = "role")
+    private List<UserEntity> users = new ArrayList<>();
+
+    @CreationTimestamp
     @Column(name = "created_date",nullable = false,updatable = false)
-    private LocalDateTime createdDate;
+    private LocalDateTime creationTimeStamp;
 
     @LastModifiedDate
     @Column(name = "last_modified_date",insertable = false)
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime updatedAt;
 }
