@@ -16,11 +16,11 @@ package edu.vinu.service.common.impl;
 import edu.vinu.entity.CourseEntity;
 import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.enums.CourseStatus;
-import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.exception.custom.NotFoundException;
+import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.model.Course;
 import edu.vinu.repository.CourseRepository;
-import edu.vinu.repository.UserRepository;
+import edu.vinu.repository.InstituteRepository;
 import edu.vinu.request.CourseCreateRequest;
 import edu.vinu.request.CourseUpdateRequest;
 import edu.vinu.service.common.CourseService;
@@ -30,7 +30,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,13 +37,13 @@ public class CourseServiceImpl implements CourseService {
 
     private final ModelMapper mapper;
     private final CourseRepository courseRepository;
-    private final UserRepository userRepository;
+    private final InstituteRepository instituteRepository;
 
     @Override
     public Course createCourse(CourseCreateRequest course) {
         CourseEntity courseEntity= mapper.map(course,CourseEntity.class);
-        InstituteEntity institute = Optional.ofNullable(userRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName()))
-                .orElseThrow(() -> new NotFoundException("User not found!"));
+        InstituteEntity institute = instituteRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
+                .orElseThrow(() -> new NotFoundException("Institute not found!"));
 
         courseEntity.setInstitute(institute);
         CourseEntity savedEntity = courseRepository.save(courseEntity);
@@ -55,7 +54,7 @@ public class CourseServiceImpl implements CourseService {
     public Course updateCourse(Long courseId, CourseUpdateRequest updatedCourseDetails) {
         return courseRepository.findById(courseId)
                 .map(courseEntity -> {
-                    if (courseEntity.getInstitute().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+                    if (courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
                         CourseEntity newCourseDetails = mapper.map(updatedCourseDetails, CourseEntity.class);
                         newCourseDetails.setId(courseEntity.getId());
                         newCourseDetails.setInstitute(courseEntity.getInstitute());
@@ -72,7 +71,7 @@ public class CourseServiceImpl implements CourseService {
     public void deleteCourse(Long courseId) {
         courseRepository.findById(courseId)
                 .ifPresentOrElse(courseEntity -> {
-                    if (courseEntity.getInstitute().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+                    if (courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
                         courseRepository.delete(courseEntity);
                     } else {
                         throw new UnauthorizedException("You are not authorized to delete this course");
@@ -87,7 +86,7 @@ public class CourseServiceImpl implements CourseService {
     public Course archiveCourse(Long courseId) {
         return courseRepository.findById(courseId)
                 .map(courseEntity -> {
-                    if (courseEntity.getInstitute().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+                    if (courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
                         courseEntity.setStatus(CourseStatus.ARCHIVED);
                         CourseEntity saved = courseRepository.save(courseEntity);
                         return mapper.map(saved, Course.class);
@@ -102,7 +101,7 @@ public class CourseServiceImpl implements CourseService {
     public Course getCourseById(Long courseId) {
         return courseRepository.findById(courseId)
                 .map(courseEntity -> {
-                    if (courseEntity.getInstitute().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+                    if (courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
                         return mapper.map(courseEntity, Course.class);
                     }else {
                         throw new UnauthorizedException("You are not authorized to view this course");
@@ -113,8 +112,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> getAllCoursesForInstitute() {
-        InstituteEntity institute = Optional.ofNullable(userRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName()))
-                .orElseThrow(() -> new NotFoundException("User not found!"));
+        InstituteEntity institute = instituteRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
+                .orElseThrow(() -> new NotFoundException("Institute not found!"));
 
         return courseRepository.findAllByInstituteId(institute.getId())
                 .stream()
