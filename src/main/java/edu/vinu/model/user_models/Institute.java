@@ -13,7 +13,7 @@
 
 package edu.vinu.model.user_models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.vinu.model.RoleDetails;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Institute extends User {
-    @JsonProperty(index = 2)
+public class Institute implements RoleDetails {
+    private Long id;
     private String instituteName;
 }

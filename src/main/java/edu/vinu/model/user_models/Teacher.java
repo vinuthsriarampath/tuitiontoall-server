@@ -14,7 +14,7 @@
 package edu.vinu.model.user_models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.vinu.model.RoleDetails;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,12 +26,10 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Teacher extends User {
-    @JsonProperty(index = 2)
+public class Teacher implements RoleDetails {
+    private Long id;
     private String firstName;
-    @JsonProperty(index = 3)
     private String lastName;
-    @JsonProperty(index = 4)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dob;
 }

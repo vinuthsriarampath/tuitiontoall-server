@@ -14,14 +14,11 @@
 package edu.vinu.entity.user_entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.SQLDelete;
 
 import java.time.LocalDate;
 
@@ -30,12 +27,19 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("STUDENT")
-@SQLDelete(sql = "UPDATE users SET is_disabled = true WHERE id = ?")
-@Filter(name = "softDeleteFilter", condition = "is_disabled = :isDisabled")
-public class StudentEntity extends UserEntity {
+@Table(name = "student")
+public class StudentEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String firstName;
     private String lastName;
+
+    @OneToOne
+    @JoinColumn(name = "user_id",nullable = false,unique = true)
+    private UserEntity user;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dob;
 }

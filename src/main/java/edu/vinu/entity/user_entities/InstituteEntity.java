@@ -14,15 +14,11 @@
 package edu.vinu.entity.user_entities;
 
 import edu.vinu.entity.CourseEntity;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.SQLDelete;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +28,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("INSTITUTE")
-@SQLDelete(sql = "UPDATE users SET is_disabled = true WHERE id = ?")
-@Filter(name = "softDeleteFilter", condition = "is_disabled = :isDisabled")
-public class InstituteEntity extends UserEntity {
+@Table(name = "institute")
+public class InstituteEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String instituteName;
+
+    @OneToOne
+    @JoinColumn(name = "user_id",nullable = false,unique = true)
+    private UserEntity user;
+
     @OneToMany(mappedBy = "institute")
     private List<CourseEntity> courses = new ArrayList<>();
 }
