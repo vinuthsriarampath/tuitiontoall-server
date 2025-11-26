@@ -34,6 +34,7 @@ public class Course {
     private CourseStatus status;
     private CourseLanguage language;
     private CourseMode mode;
+    private String thumbnail;
     private LocalDateTime creationTimeStamp;
     private LocalDateTime updatedAt;
 }

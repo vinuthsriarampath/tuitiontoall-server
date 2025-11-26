@@ -42,6 +42,8 @@ file:
   profile:
     pic-path: uploads/profiles/dp
     banner-path: uploads/profiles/banner
+  course:
+    thumbnail-path: uploads/courses/thumbnails
 
 app:
   reset:

@@ -26,10 +26,16 @@ import edu.vinu.request.CourseUpdateRequest;
 import edu.vinu.service.common.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -38,14 +44,44 @@ public class CourseServiceImpl implements CourseService {
     private final ModelMapper mapper;
     private final CourseRepository courseRepository;
     private final InstituteRepository instituteRepository;
+    private final Environment env;
 
     @Override
-    public Course createCourse(CourseCreateRequest course) {
-        CourseEntity courseEntity= mapper.map(course,CourseEntity.class);
+    public Course createCourse(CourseCreateRequest courseCreateRequest, MultipartFile thumbnail) {
+        CourseEntity courseEntity= mapper.map(courseCreateRequest,CourseEntity.class);
         InstituteEntity institute = instituteRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
                 .orElseThrow(() -> new NotFoundException("Institute not found!"));
 
         courseEntity.setInstitute(institute);
+
+        try {
+            if(thumbnail != null && !thumbnail.isEmpty()){
+                String path = env.getProperty("file.course.thumbnail-path");
+                if (path == null) {
+                    throw new RuntimeException("Thumbnail path not configured");
+                }
+                Path dir = Path.of(path);
+                Files.createDirectories(dir);
+
+                String originalFilename = thumbnail.getOriginalFilename();
+                String extension = "";
+                if (originalFilename != null && originalFilename.contains(".")) {
+                    extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
+                }
+
+                String courseName = courseEntity.getTitle().trim().toLowerCase().replaceAll("[^a-z0-9]+","-");
+                String instituteName = institute.getInstituteName().trim().toLowerCase().replaceAll("[^a-z0-9]+","-");
+
+                String filename = String.format("%s@%s-@%s%s",courseName,instituteName, UUID.randomUUID().toString(),extension);
+
+                Path filePath = dir.resolve(filename);
+                Files.copy(thumbnail.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                courseEntity.setThumbnail("/thumbnail/"+filename);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         CourseEntity savedEntity = courseRepository.save(courseEntity);
         return mapper.map(savedEntity,Course.class);
     }
@@ -119,5 +155,15 @@ public class CourseServiceImpl implements CourseService {
                 .stream()
                 .map( courseEntity -> mapper.map(courseEntity,Course.class))
                 .toList();
+    }
+
+    @Override
+    public File loadThumbnail(String filename) {
+        String path = env.getProperty("file.course.thumbnail-path");
+        if (path == null) {
+            throw new RuntimeException("Thumbnail path not configured");
+        }
+        Path filePath = Paths.get(path).resolve(filename);
+        return filePath.toFile();
     }
 }

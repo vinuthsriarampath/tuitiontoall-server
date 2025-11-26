@@ -18,18 +18,21 @@ import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.model.Course;
 import edu.vinu.request.CourseCreateRequest;
 import edu.vinu.request.CourseUpdateRequest;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 public interface CourseService {
 
     /**
      * Creates a new course and associates it with the currently authenticated institute.
-     * @param course the details of the course to be created
+     * @param courseCreateRequest the details of the course to be created
+     * @param thumbnail the thumbnail image file for the course
      * @return the created Course object
      * @throws NotFoundException if the currently authenticated institute is not found
      */
-    Course createCourse(CourseCreateRequest course);
+    Course createCourse(CourseCreateRequest courseCreateRequest, MultipartFile thumbnail);
 
     /**
      * Updates an existing course with new details.
@@ -66,4 +69,11 @@ public interface CourseService {
      * @return a list of Course objects
      */
     List<Course> getAllCoursesForInstitute();
+
+    /**
+     * Retrieves the thumbnail based on filename
+     * @param filename name of the filename
+     * @return File
+     */
+    File loadThumbnail(String filename);
 }

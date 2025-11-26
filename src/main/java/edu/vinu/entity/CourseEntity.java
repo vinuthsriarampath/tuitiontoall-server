@@ -16,6 +16,7 @@ package edu.vinu.entity;
 
 import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.enums.*;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,15 +37,42 @@ public class CourseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "title", nullable = false)
     private String title;
+
+    @Column(name = "description", nullable = false)
     private String description;
+
+    @Column(name = "duration_in_hours", nullable = false)
     private int durationInHours;
+
+    @Column(name = "price", nullable = false)
     private Double price;
+
+    @Enumerated
+    @Column(name = "category", nullable = false)
     private CourseCategory category;
+
+    @Enumerated
+    @Column(name = "level", nullable = false)
     private CourseLevel level;
+
+    @Enumerated
+    @Column(name = "status", nullable = false)
     private CourseStatus status;
+
+    @Enumerated
+    @Column(name = "language", nullable = false)
     private CourseLanguage language;
+
+    @Enumerated
+    @Column(name = "mode", nullable = false)
     private CourseMode mode;
+
+    @Nullable
+    private String thumbnail;
+
     @ManyToOne
     @JoinColumn(name="institute_id", nullable = false)
     private InstituteEntity institute;
