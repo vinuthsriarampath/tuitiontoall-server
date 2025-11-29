@@ -1,0 +1,2400 @@
+{
+  "info": {
+    "_postman_id": "cf71f205-560b-4141-96d4-f3fabea8dc85",
+    "name": "TuitionToAll",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "API-V1",
+      "item": [
+        {
+          "name": "Authentication",
+          "item": [
+            {
+              "name": "Student Login Authentication",
+              "id": "08af545d-ddb1-4810-b02f-cc83a11e42bf",
+              "request": {
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"userName\":\"I1\",\r\n    \"password\":\"Password@123\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/auth/institute/login",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "auth",
+                    "institute",
+                    "login"
+                  ]
+                }
+              }
+            }
+          ],
+          "id": "ff634db2-311c-41aa-b7b0-0c83d2cfe66e"
+        },
+        {
+          "name": "Notes-Related-Requests Copy",
+          "item": [
+            {
+              "name": "Get All Notes",
+              "id": "84c77696-1ad3-4916-8141-dfc980c69818",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "http://localhost:8080/notes/all",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "notes",
+                    "all"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get All Notes By Course Id",
+              "id": "ed1a49ab-d16d-454c-810e-713bbe503968",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "http://localhost:8080/notes/all/byCourseId/C2",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "notes",
+                    "all",
+                    "byCourseId",
+                    "C2"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Note Document By NoteId",
+              "id": "5e4219f0-6084-4f04-a642-b47df15e77c2",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "http://localhost:8080/notes/getDocumentByNoteId/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "notes",
+                    "getDocumentByNoteId",
+                    ""
+                  ]
+                }
+              }
+            }
+          ],
+          "id": "a31a687c-b10b-4073-ac87-2ea5dea78551"
+        },
+        {
+          "name": "Assignments-Related-Requests",
+          "item": [
+            {
+              "name": "Get All By CourseId",
+              "id": "24f29f36-88da-472a-99f1-3bb930230bcb",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "http://localhost:8080/assignment/all/byCourseId/C2",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "assignment",
+                    "all",
+                    "byCourseId",
+                    "C2"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Document By Assignemt Id",
+              "id": "fefb4253-f40b-4b50-8824-8257ddcd2cd1",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": ""
+                }
+              }
+            }
+          ],
+          "id": "dc79b9b5-ddae-45b3-82e7-270fb4a3c8cc"
+        },
+        {
+          "name": "Teacher-Related-Requests",
+          "item": [
+            {
+              "name": "Get-Request",
+              "item": [
+                {
+                  "name": "Search Teacher By Id",
+                  "id": "13dba16f-8eed-4aed-9d6f-e1b7c64ac712",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "http://localhost:8080/teachers/search/T1",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "teachers",
+                        "search",
+                        "T1"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Get All Teachers",
+                  "id": "ebd63c64-364f-4daa-846c-3ffd8ccb04df",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "http://localhost:8080/teachers/all",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "teachers",
+                        "all"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "12790ee0-fe66-4996-8255-5620d9f4ada3"
+            },
+            {
+              "name": "Post-Request",
+              "item": [
+                {
+                  "name": "Register-Teacher",
+                  "id": "3cf441ca-5d47-445f-9285-2b281d99952c",
+                  "request": {
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"firstName\":\"Kamal\",\r\n    \"lastName\":\"Perera\",\r\n    \"dob\":\"2004-01-01\",\r\n    \"contact\":\"0719401853\",\r\n    \"email\":\"kamalperera@gmail.com\",\r\n    \"address\":\"Colombo 1\",\r\n    \"password\":\"Password@123\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/teachers/register",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "teachers",
+                        "register"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "3a0d5b0f-54b3-41a9-b116-f645d5f135ae"
+            },
+            {
+              "name": "Patch-Request",
+              "item": [
+                {
+                  "name": "Update Teacher",
+                  "id": "711ebe6d-a3d2-4987-92c2-bfaa6517b56a",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"id\":\"T2\",\r\n    \"firstName\":\"Namal\",\r\n    \"lastName\":\"Silva\",\r\n    \"dob\":\"2004-01-10\",\r\n    \"contact\":\"0719401810\",\r\n    \"email\":\"namalsilva@gmail.com\",\r\n    \"address\":\"Colombo 2\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/teachers/update",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "teachers",
+                        "update"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "5dd904aa-01ac-42c3-a117-5de068183990"
+            },
+            {
+              "name": "Delete-Request",
+              "item": [
+                {
+                  "name": "Delete Teacher By Id",
+                  "id": "d6ffd7d6-6622-4455-9c15-93a9ef8f786b",
+                  "request": {
+                    "method": "DELETE",
+                    "url": {
+                      "raw": "http://localhost:8080/teachers/delete/T1",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "teachers",
+                        "delete",
+                        "T1"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "3b66fb38-8cf5-4ca9-b23c-11e9a0983130"
+            }
+          ],
+          "id": "4a3bebd0-7e95-441a-9576-e5ef61a380d2"
+        },
+        {
+          "name": "Student-Related-Requests",
+          "item": [
+            {
+              "name": "Get-Request",
+              "item": [
+                {
+                  "name": "Search Student By Id",
+                  "id": "4a008db6-e1cc-49c3-98d0-786319bcd296",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "http://localhost:8080/students/search/S1",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "students",
+                        "search",
+                        "S1"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Get All Students",
+                  "id": "c2432c49-f667-44a2-89a2-7bd4f4aeee67",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "http://localhost:8080/students/all",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "students",
+                        "all"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "1bc0c700-11b4-4575-b10f-43d4d3b758e0"
+            },
+            {
+              "name": "Post-Request",
+              "item": [
+                {
+                  "name": "Register-Students",
+                  "id": "e6d2cd69-ba26-4dbb-a348-4485dcdbd975",
+                  "request": {
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"firstName\":\"Kamal\",\r\n    \"lastName\":\"Perera\",\r\n    \"dob\":\"2004-01-01\",\r\n    \"contact\":\"0719401853\",\r\n    \"email\":\"kamalperera@gmail.com\",\r\n    \"address\":\"Colombo 1\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/students/register",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "students",
+                        "register"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "a7147916-0bb8-4831-8d0f-b11c0a7c4f4f"
+            },
+            {
+              "name": "Patch-Request",
+              "item": [
+                {
+                  "name": "Update Student",
+                  "id": "2df918df-382d-48e3-b2ce-07d5dc431ca7",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"id\":\"S1\",\r\n    \"firstName\":\"Kamal\",\r\n    \"lastName\":\"Perera\",\r\n    \"dob\":\"2004-01-01\",\r\n    \"contact\":\"0719401853\",\r\n    \"email\":\"kamalperera@gmail.com\",\r\n    \"address\":\"Colombo 2\",\r\n    \"password\":\"3\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/students/update",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "students",
+                        "update"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "ddbb1353-0e8c-4596-963f-b1188c394104"
+            },
+            {
+              "name": "Delete-Request",
+              "item": [
+                {
+                  "name": "Delete Student By Id",
+                  "id": "8cc3f9b2-459b-4f6a-9573-c74b2f947faf",
+                  "request": {
+                    "method": "DELETE",
+                    "url": {
+                      "raw": "http://localhost:8080/students/delete/S1",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "students",
+                        "delete",
+                        "S1"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "71103a9b-b8b0-49c1-93e5-3d383452988b"
+            }
+          ],
+          "id": "117ed318-2802-48bf-858f-3883a99a2782"
+        },
+        {
+          "name": "Course-Related-Requests",
+          "item": [
+            {
+              "name": "Get-Request",
+              "item": [
+                {
+                  "name": "Get All Courses Of Institute",
+                  "id": "9b04a79b-25ca-43e5-890a-7ec2e353c51f",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "http://localhost:8080/courses/getAll/I1",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "courses",
+                        "getAll",
+                        "I1"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Get All Courses",
+                  "id": "009e50db-dce2-47c1-8615-86f9c619e600",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "http://localhost:8080/courses/getAll",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "courses",
+                        "getAll"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Search Course By Id In Institute",
+                  "id": "674f9d95-da9a-4da4-bfca-1de6fe7d1ab8",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "http://localhost:8080/courses/search/C2/institute/I1",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "courses",
+                        "search",
+                        "C2",
+                        "institute",
+                        "I1"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "search course Id",
+                  "id": "02d5df9c-e1cd-4d30-8354-07f91c963a04",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "http://localhost:8080/courses/getAll/I3",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "courses",
+                        "getAll",
+                        "I3"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "21dd22fb-2cbf-4f43-ae93-0e588554ec6c"
+            },
+            {
+              "name": "Post-Request",
+              "item": [
+                {
+                  "name": "Add Course To Intitute",
+                  "id": "d8882cdd-a33c-4fdd-b869-b041cb1c9ba6",
+                  "request": {
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\":\"Sceince O/L\",\r\n    \"type\":\"Physical\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/courses/add/I4",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "courses",
+                        "add",
+                        "I4"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Add Student To Course",
+                  "id": "0de1ceef-1d29-4721-9fb8-4f64579ec01a",
+                  "request": {
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"studentId\":\"S1\",\r\n    \"courseId\":\"C2\",\r\n    \"date\":\"2004-01-01\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/courses/student/add",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "courses",
+                        "student",
+                        "add"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Add Teacher To Courses",
+                  "id": "3d993944-9752-4e02-8fe7-d752ff46aa4e",
+                  "request": {
+                    "method": "POST",
+                    "url": {
+                      "raw": "http://localhost:8080/courses/C2/teacher/add/T2",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "courses",
+                        "C2",
+                        "teacher",
+                        "add",
+                        "T2"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "a57650ec-6b58-4d07-a51c-239c98a9a70f"
+            },
+            {
+              "name": "Patch-Request",
+              "item": [
+                {
+                  "name": "update Course name/type",
+                  "id": "ee61b92e-d7dd-4702-97dd-5e0d15f94a28",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"id\":\"C1\",\r\n    \"name\": \"Sceince O/L\",\r\n    \"type\": \"Physical\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/courses/update/I1",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "courses",
+                        "update",
+                        "I1"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update Course Teacher",
+                  "id": "b1bfa02a-80f0-4306-92cd-b6e65567e840",
+                  "request": {
+                    "method": "PATCH",
+                    "url": {
+                      "raw": "http://localhost:8080/courses/C1/teachers/update/T2",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "courses",
+                        "C1",
+                        "teachers",
+                        "update",
+                        "T2"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "3a9609fb-e4a7-41d2-a5d1-3fc11e12bdbd"
+            },
+            {
+              "name": "Delete-Request",
+              "item": [
+                {
+                  "name": "Delete Course from institute",
+                  "id": "064a57e8-f685-4b97-969e-6914e0523fab",
+                  "request": {
+                    "method": "DELETE",
+                    "url": {
+                      "raw": "http://localhost:8080/courses/delete/C1/from/I1",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "courses",
+                        "delete",
+                        "C1",
+                        "from",
+                        "I1"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Remove Student From Course",
+                  "id": "253eb76c-de57-4ab2-9db4-aa90cf7695d0",
+                  "request": {
+                    "method": "DELETE",
+                    "url": {
+                      "raw": "http://localhost:8080/courses/C1/remove/student/S1",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "courses",
+                        "C1",
+                        "remove",
+                        "student",
+                        "S1"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "364082be-4036-48db-982a-97acbe4660ac"
+            }
+          ],
+          "id": "d20432b3-d3cf-4395-8d46-74495614836d"
+        },
+        {
+          "name": "Institute-Related-Requests",
+          "item": [
+            {
+              "name": "Get-Requests",
+              "item": [
+                {
+                  "name": "Search Institute By Id",
+                  "id": "beffbc11-dafe-4627-8b21-ddbc632b514b",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "http://localhost:8080/institutes/search/I1",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "institutes",
+                        "search",
+                        "I1"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Get All Institutes",
+                  "id": "0d906881-bcfc-4daf-b772-ba8b3c71c25d",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "http://localhost:8080/institutes/all",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "institutes",
+                        "all"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Get Otp",
+                  "id": "c1342fe3-80b5-4a39-a956-7680295ffa0c",
+                  "request": {
+                    "method": "GET",
+                    "url": {
+                      "raw": "http://localhost:8080/institutes/otp/vinuthsriarampath@outlook.com",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "institutes",
+                        "otp",
+                        "vinuthsriarampath@outlook.com"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "7931edf3-0405-46c4-8063-103352e874ac"
+            },
+            {
+              "name": "Post-Requests",
+              "item": [
+                {
+                  "name": "Register Institute",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "id": "9ea1393e-19c7-4e45-827a-a3d1c2efa047",
+                        "exec": [
+                          "pm.test(\"Response status code is 200\", function () {\r",
+                          "    pm.response.to.have.status(200);\r",
+                          "});\r",
+                          "\r",
+                          "\r",
+                          "pm.test(\"Response time is less than 200ms\", function () {\r",
+                          "  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+                          "});\r",
+                          "\r",
+                          "\r",
+                          "pm.test(\"Response has a valid XML content type\", function () {\r",
+                          "    pm.response.to.have.header(\"Content-Type\", \"text/xml\");\r",
+                          "});\r",
+                          "\r",
+                          "\r",
+                          "pm.test(\"Response body follows the expected XML schema\", function () {\r",
+                          "    const responseData = xml2Json(pm.response.text());\r",
+                          "\r",
+                          "    pm.expect(responseData).to.be.an('object');\r",
+                          "    // Add specific checks for the expected XML schema\r",
+                          "});\r",
+                          "\r",
+                          "\r",
+                          "pm.test(\"Response body is not null\", function () {\r",
+                          "    const responseData = xml2Json(pm.response.text());\r",
+                          "    \r",
+                          "    pm.expect(responseData).to.not.be.null;\r",
+                          "});\r",
+                          ""
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "id": "fde123e4-474f-4d91-bcdf-8a69f2924cfb",
+                  "request": {
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\" : \"Apex Institute\",\r\n    \"email\" : \"apexinstitute@gmial.com\",\r\n    \"contact\" : \"0719401820\",\r\n    \"address\" : \"Nugegoda\",\r\n    \"password\" : \"Password3\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/institutes/register",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "institutes",
+                        "register"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Add-Students",
+                  "id": "01b609df-f9ac-41bb-a14a-f9e8fce0b4b7",
+                  "request": {
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"studentId\":\"S2\",\r\n    \"instituteId\":\"I1\",\r\n    \"date\":\"2004-01-01\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/institutes/students/add",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "institutes",
+                        "students",
+                        "add"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Add-Teachers",
+                  "id": "f6ff6bc5-fd98-46ad-ac54-e39d42981723",
+                  "request": {
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"teacherId\":\"T2\",\r\n    \"instituteId\":\"I2\",\r\n    \"date\":\"2004-01-01\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/institutes/teachers/add",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "institutes",
+                        "teachers",
+                        "add"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "9652c1cd-5a55-4f26-9037-0ecca4e49471"
+            },
+            {
+              "name": "Patch-Requests",
+              "item": [
+                {
+                  "name": "Update Institute",
+                  "id": "c5c38993-7bdc-4d51-852e-76cc8cf5ef84",
+                  "request": {
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"id\" : \"I1\",\r\n    \"name\": \"ABC Institute\",\r\n    \"email\": \"abcinstitute@gmial.com\",\r\n    \"contact\": \"0719401800\",\r\n    \"address\": \"bambalapitiya\",\r\n    \"password\": \"Password@123\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/institutes/update",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "institutes",
+                        "update"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "483c131f-387f-46dc-b839-034427c0a3ab"
+            },
+            {
+              "name": "Delete-Requests",
+              "item": [
+                {
+                  "name": "Delete-Institute",
+                  "id": "495c341b-d0f5-4ff3-b9b8-84f2c70a8fbf",
+                  "request": {
+                    "method": "DELETE",
+                    "url": {
+                      "raw": "http://localhost:8080/institutes/delete/I1",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "institutes",
+                        "delete",
+                        "I1"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Remove Student From Institute",
+                  "id": "3fbcb6cb-a74a-4fef-90c8-24fafa3bc102",
+                  "request": {
+                    "method": "DELETE",
+                    "url": {
+                      "raw": "http://localhost:8080/institutes/delete/I1",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "institutes",
+                        "delete",
+                        "I1"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Remove Teacher From Institute Copy",
+                  "id": "01949598-3395-4158-b389-1fc98ae70ede",
+                  "request": {
+                    "method": "DELETE",
+                    "url": {
+                      "raw": "http://localhost:8080/institutes/I1/teacher/remove/T2",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "institutes",
+                        "I1",
+                        "teacher",
+                        "remove",
+                        "T2"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "b51e0a3b-e5a2-4a42-a547-e33a413a875a"
+            }
+          ],
+          "id": "58101264-6ae1-4bdf-9ae7-572b18a3ef25"
+        }
+      ],
+      "id": "3c167061-165b-4140-a1f6-43c022a2d016"
+    },
+    {
+      "name": "API-V2",
+      "item": [
+        {
+          "name": "Auth",
+          "item": [
+            {
+              "name": "Login",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "3c7a8851-eea3-441d-91fa-1dbc58ded0e0",
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.collectionVariables.set(\"JWT_TOKEN\", response.token);"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "id": "d1be968c-3d94-459d-ab85-be31108089e5",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\": \"voberer431@aperiol.com\",\r\n    \"password\":\"Password@123\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/auth/login",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "auth",
+                    "login"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Institute Register",
+              "id": "ca03c20d-d9b2-468c-9d76-0a705cf93ddd",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"instituteName\": \"DFG Institute\",\r\n  \"address\": \"Colombo 2\",\r\n  \"contact\": \"0719401810\",\r\n  \"email\": \"vinuthsriarampath@outlook.com\",\r\n  \"password\": \"Password@123\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/auth/register/institute",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "auth",
+                    "register",
+                    "institute"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Teacher Register",
+              "id": "3e5f3f88-3d47-4be8-b3ab-55ce2f612f68",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"firstName\":\"Vinuth\",\r\n  \"lastName\": \"Sri Arampath\",\r\n  \"dob\":\"2004-09-18\",\r\n  \"address\": \"75/6A Kottikawaththa Road,Gothatuwa New Town,Angoda\",\r\n  \"contact\": \"0719401853\",\r\n  \"email\": \"vinuthsriarampth@gmail.com\",\r\n  \"password\": \"Password@123\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/auth/register/teacher",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "auth",
+                    "register",
+                    "teacher"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Student Register",
+              "id": "7acbc47b-5618-4240-9cf1-4257ec87db97",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"firstName\":\"Vinuth\",\r\n  \"lastName\": \"Sri Arampath\",\r\n  \"dob\":\"2004-09-18\",\r\n  \"address\": \"75/6A Kottikawatta Road, Gothatuwa New Town, 2nd Lane, Angoda.\",\r\n  \"contact\": \"0719401853\",\r\n  \"email\": \"vinuthsriarampath@outlook.com\",\r\n  \"password\": \"Password@123\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/auth/register/student",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "auth",
+                    "register",
+                    "student"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "forgot-password request",
+              "id": "3004f079-1268-4063-8f6b-5853f3e4dd1c",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "vinuthsriarampath2@gmail.com",
+                  "options": {
+                    "raw": {
+                      "language": "text"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/auth/forgot-password/request",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "auth",
+                    "forgot-password",
+                    "request"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "forgot-password reset",
+              "id": "b1f9a1be-1e4e-455e-8962-b8a4004603c3",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"email\":\"studnet@email.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/auth/forgot-password/reset?token={{RESET_TOKEN}}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "auth",
+                    "forgot-password",
+                    "reset"
+                  ],
+                  "query": [
+                    {
+                      "key": "token",
+                      "value": "{{RESET_TOKEN}}"
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "id": "6c8c884a-a704-4c93-bc54-6ec68b1a4262"
+        },
+        {
+          "name": "User",
+          "item": [
+            {
+              "name": "Student",
+              "item": [
+                {
+                  "name": "All Students",
+                  "id": "0eb8384e-5003-4d5c-b965-f3c271c9c5a5",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{JWT_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "body": {
+                      "mode": "formdata"
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v2/users/students",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v2",
+                        "users",
+                        "students"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update student Details",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "id": "ab857ff3-7f4c-4bb5-8da3-d23e4de38cb6",
+                        "exec": [
+                          "pm.test(\"Response status code is 200\", function () {\r",
+                          "    pm.response.to.have.status(200);\r",
+                          "});\r",
+                          "\r",
+                          "\r",
+                          "pm.test(\"Response time is less than 200ms\", function () {\r",
+                          "  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+                          "});\r",
+                          "\r",
+                          "\r",
+                          "pm.test(\"Validate the data schema\", function () {\r",
+                          "    const responseData = pm.response.json();\r",
+                          "    \r",
+                          "    pm.expect(responseData).to.be.an('object');\r",
+                          "    pm.expect(responseData.data).to.be.an('object');\r",
+                          "    pm.expect(responseData.data.id).to.exist.and.to.be.a('number');\r",
+                          "    pm.expect(responseData.data.firstName).to.exist.and.to.be.a('string');\r",
+                          "    pm.expect(responseData.data.lastName).to.exist.and.to.be.a('string');\r",
+                          "    pm.expect(responseData.data.dob).to.exist.and.to.be.a('string'); // Assuming date is represented as a string\r",
+                          "    pm.expect(responseData.data.address).to.exist.and.to.be.a('string');\r",
+                          "    pm.expect(responseData.data.contact).to.exist.and.to.be.a('string');\r",
+                          "    pm.expect(responseData.data.email).to.exist.and.to.be.a('string');\r",
+                          "    pm.expect(responseData.data.role).to.exist.and.to.be.a('string');\r",
+                          "    pm.expect(responseData.data.disabled).to.exist.and.to.be.a('boolean');\r",
+                          "});\r",
+                          "\r",
+                          "\r",
+                          "pm.test(\"Email is in a valid format\", function () {\r",
+                          "    const responseData = pm.response.json();\r",
+                          "    \r",
+                          "    pm.expect(responseData.email).to.be.a('string');\r",
+                          "    pm.expect(responseData.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+                          "});\r",
+                          "\r",
+                          "\r",
+                          "pm.test(\"Ensure that the message field is empty\", function () {\r",
+                          "  const responseData = pm.response.json();\r",
+                          "  \r",
+                          "  pm.expect(responseData.message).to.equal(\"\");\r",
+                          "});\r",
+                          ""
+                        ],
+                        "type": "text/javascript"
+                      }
+                    }
+                  ],
+                  "id": "147e97f0-282b-467c-95e9-6f4d0b87fd53",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{JWT_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"address\": \"Gothatuwa\",\r\n    \"contact\": \"0719401853\",\r\n    \"firstName\": \"Vinuth\",\r\n    \"lastName\": \"Sri Arampath\",\r\n    \"dob\": \"2004-09-18\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v2/users/student/update/vinathkariyawasam.testing@outlook.com/details",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v2",
+                        "users",
+                        "student",
+                        "update",
+                        "vinathkariyawasam.testing@outlook.com",
+                        "details"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "1c063792-b8d7-4988-8f9b-477ea23ff57c"
+            },
+            {
+              "name": "Teacher",
+              "item": [
+                {
+                  "name": "All Teachers",
+                  "id": "d72c3604-0ddf-4dca-a542-1c211a0fdf29",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{JWT_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "body": {
+                      "mode": "formdata"
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v2/users/teachers",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v2",
+                        "users",
+                        "teachers"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update teacher Details",
+                  "id": "f991bef9-85ea-41ad-8cb1-309a6b255bca",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{JWT_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"address\": \"Gothatuwa\",\r\n    \"contact\": \"0719401853\",\r\n    \"firstName\": \"Vinuth\",\r\n    \"lastName\": \"Sri Arampath\",\r\n    \"dob\": \"2004-09-18\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v2/users/teacher/update/testuser5@email.com/details",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v2",
+                        "users",
+                        "teacher",
+                        "update",
+                        "testuser5@email.com",
+                        "details"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "20097d85-7fea-405a-b66a-e77377619f83"
+            },
+            {
+              "name": "Institute",
+              "item": [
+                {
+                  "name": "All Institutes",
+                  "id": "8613244f-60fc-4592-a330-6f3b2761a1e6",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{JWT_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "body": {
+                      "mode": "formdata"
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v2/users/institutes",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v2",
+                        "users",
+                        "institutes"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Institutes Related to Institute Name",
+                  "id": "7449fd74-0c82-4768-9c64-6d08341c2387",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{JWT_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "body": {
+                      "mode": "formdata"
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v2/users/institutes/by-name/4",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v2",
+                        "users",
+                        "institutes",
+                        "by-name",
+                        "4"
+                      ]
+                    }
+                  }
+                },
+                {
+                  "name": "Update Institute Details",
+                  "id": "9e78ac67-1502-49d8-813e-6cb2f06da8e8",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{JWT_TOKEN}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PATCH",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"address\": \"Gothatuwa\",\r\n    \"contact\": \"0719401800\",\r\n    \"instituteName\": \"Filpa\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "http://localhost:8080/api/v2/users/institute/update/testuser5@email.com/details",
+                      "protocol": "http",
+                      "host": [
+                        "localhost"
+                      ],
+                      "port": "8080",
+                      "path": [
+                        "api",
+                        "v2",
+                        "users",
+                        "institute",
+                        "update",
+                        "testuser5@email.com",
+                        "details"
+                      ]
+                    }
+                  }
+                }
+              ],
+              "id": "0c6d0b8f-b84f-4104-b02f-74e3cebe4b28"
+            },
+            {
+              "name": "verify me",
+              "id": "aad258ca-6bb3-4bd3-bdda-53be6a45a762",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/users/me",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "users",
+                    "me"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "User By Email",
+              "id": "fd89b22d-8476-4d9d-aeb8-db34b3fe1ff0",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "email",
+                      "value": "student@email.com",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/users/by-email",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "users",
+                    "by-email"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Users By Firstname",
+              "id": "f74ba26e-bb63-4e33-9ae7-107e74ab7cc7",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "formdata"
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/users/by-firstname/i",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "users",
+                    "by-firstname",
+                    "i"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "User By UserSlug",
+              "id": "a669b213-d183-4eb1-9880-e243c79b36f9",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "email",
+                      "value": "student1@email.com",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/users/by-user-slug/student-6-firstname-student-6-lastname",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "users",
+                    "by-user-slug",
+                    "student-6-firstname-student-6-lastname"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Disable user",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "ab857ff3-7f4c-4bb5-8da3-d23e4de38cb6",
+                    "exec": [
+                      "pm.test(\"Response status code is 200\", function () {\r",
+                      "    pm.response.to.have.status(200);\r",
+                      "});\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"Response time is less than 200ms\", function () {\r",
+                      "  pm.expect(pm.response.responseTime).to.be.below(200);\r",
+                      "});\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"Validate the data schema\", function () {\r",
+                      "    const responseData = pm.response.json();\r",
+                      "    \r",
+                      "    pm.expect(responseData).to.be.an('object');\r",
+                      "    pm.expect(responseData.data).to.be.an('object');\r",
+                      "    pm.expect(responseData.data.id).to.exist.and.to.be.a('number');\r",
+                      "    pm.expect(responseData.data.firstName).to.exist.and.to.be.a('string');\r",
+                      "    pm.expect(responseData.data.lastName).to.exist.and.to.be.a('string');\r",
+                      "    pm.expect(responseData.data.dob).to.exist.and.to.be.a('string'); // Assuming date is represented as a string\r",
+                      "    pm.expect(responseData.data.address).to.exist.and.to.be.a('string');\r",
+                      "    pm.expect(responseData.data.contact).to.exist.and.to.be.a('string');\r",
+                      "    pm.expect(responseData.data.email).to.exist.and.to.be.a('string');\r",
+                      "    pm.expect(responseData.data.role).to.exist.and.to.be.a('string');\r",
+                      "    pm.expect(responseData.data.disabled).to.exist.and.to.be.a('boolean');\r",
+                      "});\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"Email is in a valid format\", function () {\r",
+                      "    const responseData = pm.response.json();\r",
+                      "    \r",
+                      "    pm.expect(responseData.email).to.be.a('string');\r",
+                      "    pm.expect(responseData.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+                      "});\r",
+                      "\r",
+                      "\r",
+                      "pm.test(\"Ensure that the message field is empty\", function () {\r",
+                      "  const responseData = pm.response.json();\r",
+                      "  \r",
+                      "  pm.expect(responseData.message).to.equal(\"\");\r",
+                      "});\r",
+                      ""
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ],
+              "id": "cdbd615f-336f-43e8-9b97-a185ec23a679",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"address\": \"kollonnawa\",\r\n    \"contact\": \"0719401867\",\r\n    \"firstName\": \"Kasun\",\r\n    \"lastName\": \"Perera\",\r\n    \"dob\": \"2004-09-19\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/users/disable/me",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "users",
+                    "disable",
+                    "me"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Validate Institute Role",
+              "id": "b46e1e1a-d0dd-4c5c-b873-afafa94021ff",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/users/validate/institute-role",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "users",
+                    "validate",
+                    "institute-role"
+                  ]
+                }
+              }
+            }
+          ],
+          "id": "5b212e24-8e8f-45a3-b753-8f3b7f57a732"
+        },
+        {
+          "name": "Test Requests",
+          "item": [
+            {
+              "name": "Test Post sec",
+              "id": "28d698ad-45e7-479c-89e7-e4f7f46ddcbc",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/greetings/greet/add/hi",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "greetings",
+                    "greet",
+                    "add",
+                    "hi"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Test get sec",
+              "id": "2fb83775-fd80-4a73-870a-1893d775456d",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/greetings/get-all",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "greetings",
+                    "get-all"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Test Delete sec",
+              "id": "6a211a97-4c30-4a2b-ad04-2d8499165fe4",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/greetings/greet/delete/hello",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "greetings",
+                    "greet",
+                    "delete",
+                    "hello"
+                  ]
+                }
+              }
+            }
+          ],
+          "id": "d6497af8-158b-4d93-bf09-5d7ab6c3d2bc"
+        },
+        {
+          "name": "profile",
+          "item": [
+            {
+              "name": "upload file",
+              "id": "d9170f3a-fdfc-4a5b-a2d4-9c5a0bc6e347",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": "/C:/Users/vinut/OneDrive/Pictures/Screenshots 1/Screenshot (3).png"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/profile-files/upload/banner",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "profile-files",
+                    "upload",
+                    "banner"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "load file",
+              "id": "373b19ca-9e33-40a1-a990-d156a6e6dc68",
+              "request": {
+                "method": "GET",
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/profile-files/load/dp/student-firstname-student-lastname.png",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "profile-files",
+                    "load",
+                    "dp",
+                    "student-firstname-student-lastname.png"
+                  ]
+                }
+              }
+            }
+          ],
+          "id": "ecc1dcc6-1b24-4cf6-8be7-40eecc3adbd1"
+        },
+        {
+          "name": "search",
+          "item": [
+            {
+              "name": "search",
+              "id": "6702efa3-b788-4602-b25c-fb5b6a8ed7b8",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/search?query=k",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "search"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "k"
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "id": "51bcb80d-969d-4066-81fa-e30145135af6"
+        },
+        {
+          "name": "Course",
+          "item": [
+            {
+              "name": "Get Course By ID",
+              "id": "108c2770-56d3-410f-ae97-b5421acf0307",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/courses/get/3",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "courses",
+                    "get",
+                    "3"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get All Courses For Institute",
+              "id": "26364131-6b73-4b72-9f8c-775fe8cbba36",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/courses/institute/all",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "courses",
+                    "institute",
+                    "all"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get all courses by instituteId",
+              "id": "c9432df9-7341-44ec-ac3b-1f439def328f",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/courses/institute/all",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "courses",
+                    "institute",
+                    "all"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Create Course",
+              "id": "913daca1-4451-471f-b505-42f20a0d914c",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"title\": \"Introduction to Python\",\r\n  \"description\": \"A beginner-friendly course to learn Python programming fundementals.\",\r\n  \"durationInHours\": 40,\r\n  \"price\": -10,\r\n  \"level\": \"INTERMEDIATE\",\r\n  \"category\": \"TECHNOLOGY\",\r\n  \"status\": \"PUBLISHED\",\r\n  \"language\": \"ENGLISH\",\r\n  \"mode\": \"HYBRID\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/courses/create",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "courses",
+                    "create"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update Course",
+              "id": "a9a3fadc-872e-4fd3-95a6-a44c21e74566",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"title\": \"Java level two\",\r\n  \"description\": \"A beginner-friendly course to learn Java programming oop concepts.\",\r\n  \"durationInHours\": 20,\r\n  \"price\": 100,\r\n  \"level\": \"BEGINNER\",\r\n  \"category\": \"ENGINEERING\",\r\n  \"status\": \"DRAFT\",\r\n  \"language\": \"SINHALA\",\r\n  \"mode\": \"OFFLINE\"\r\n}\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/courses/update/3",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "courses",
+                    "update",
+                    "3"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Archive Course",
+              "id": "2cd503d3-c0e0-40ef-ae81-33163b8f363e",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/courses/archive/3",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "courses",
+                    "archive",
+                    "3"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Delete Course",
+              "id": "91caef0f-cb2e-474e-89b3-db2435619f0e",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{JWT_TOKEN}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/v2/courses/delete/3",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "v2",
+                    "courses",
+                    "delete",
+                    "3"
+                  ]
+                }
+              }
+            }
+          ],
+          "id": "c7ac765b-8198-40f4-ae58-deca7cdcf7af"
+        }
+      ],
+      "id": "0b1a5139-c324-42d2-ac57-3e81bb60fb30"
+    }
+  ],
+  "variable": [
+    {
+      "id": "5ce0f273-9672-4a74-a620-87b8dfe50d06",
+      "key": "JWT_TOKEN",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "id": "a8abf278-add5-4416-862f-19fe30908a42",
+      "key": "RESET_TOKEN",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
