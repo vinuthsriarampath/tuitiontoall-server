@@ -17,6 +17,7 @@ import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.model.Course;
 import edu.vinu.request.CourseCreateRequest;
+import edu.vinu.request.CourseFilterRequest;
 import edu.vinu.request.CourseUpdateRequest;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,4 +77,12 @@ public interface CourseService {
      * @return File
      */
     File loadThumbnail(String filename);
+
+    /**
+     * Get all courses by institute id
+     * @param instituteId id of the institute
+     * @param filters filters for the courses
+     * @return list of courses
+     */
+    List<Course> getAllCoursesByInstituteId(Long instituteId, CourseFilterRequest filters);
 }

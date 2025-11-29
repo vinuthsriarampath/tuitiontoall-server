@@ -22,8 +22,10 @@ import edu.vinu.model.Course;
 import edu.vinu.repository.CourseRepository;
 import edu.vinu.repository.InstituteRepository;
 import edu.vinu.request.CourseCreateRequest;
+import edu.vinu.request.CourseFilterRequest;
 import edu.vinu.request.CourseUpdateRequest;
 import edu.vinu.service.common.CourseService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.env.Environment;
@@ -165,5 +167,15 @@ public class CourseServiceImpl implements CourseService {
         }
         Path filePath = Paths.get(path).resolve(filename);
         return filePath.toFile();
+    }
+
+    @Override
+    @Transactional()
+    public List<Course> getAllCoursesByInstituteId(Long instituteId, CourseFilterRequest filters) {
+
+        return courseRepository.findAllByInstituteIdWithFilters(instituteId, filters.category(), filters.level(), filters.language(), filters.mode(), filters.status())
+                .stream()
+                .map(courseEntity -> mapper.map(courseEntity, Course.class))
+                .toList();
     }
 }

@@ -15,6 +15,7 @@ package edu.vinu.controller;
 
 import edu.vinu.model.Course;
 import edu.vinu.request.CourseCreateRequest;
+import edu.vinu.request.CourseFilterRequest;
 import edu.vinu.request.CourseUpdateRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.common.CourseService;
@@ -32,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static edu.vinu.validator.UserValidator.USER_VALIDATION_FAILED_ERROR;
@@ -111,6 +113,13 @@ public class CourseController {
         byte[] fileBytes = Files.readAllBytes(thumbnail.toPath());
 
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).body(fileBytes);
+    }
+
+    @GetMapping("/{instituteId}/all")
+    public ResponseEntity<ApiResponse> getAllCoursesByInstituteId(@PathVariable Long instituteId,CourseFilterRequest filters
+    ){
+        List<Course> courses = courseService.getAllCoursesByInstituteId(instituteId,filters);
+        return ResponseEntity.status(200).body(new ApiResponse("Courses for the institute", courses));
     }
 
 }
