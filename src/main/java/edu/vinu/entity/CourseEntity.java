@@ -50,23 +50,23 @@ public class CourseEntity{
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)
     private CourseCategory category;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "level", nullable = false)
     private CourseLevel level;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private CourseStatus status;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "language", nullable = false)
     private CourseLanguage language;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "mode", nullable = false)
     private CourseMode mode;
 
