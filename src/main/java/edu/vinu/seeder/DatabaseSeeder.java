@@ -36,6 +36,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -147,6 +148,8 @@ public class DatabaseSeeder implements CommandLineRunner {
                 request.setStatus(CourseStatus.values()[faker.random().nextInt(CourseStatus.values().length)]);
                 request.setLanguage(CourseLanguage.values()[faker.random().nextInt(CourseLanguage.values().length)]);
                 request.setMode(CourseMode.values()[faker.random().nextInt(CourseMode.values().length)]);
+                request.setAvg_rating(BigDecimal.valueOf(0.0));
+                request.setTotal_no_ratings(0);
 
                 request.setInstitute(mapper.map(institute, InstituteEntity.class));
 

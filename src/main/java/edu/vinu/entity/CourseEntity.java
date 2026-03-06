@@ -25,6 +25,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -45,7 +46,7 @@ public class CourseEntity{
     private String description;
 
     @Column(name = "duration_in_hours", nullable = false)
-    private int durationInHours;
+    private Integer durationInHours;
 
     @Column(name = "price", nullable = false)
     private Double price;
@@ -72,6 +73,12 @@ public class CourseEntity{
 
     @Nullable
     private String thumbnail;
+
+    @Column(name = "avg_rating", nullable = false, precision = 2, scale = 1)
+    private BigDecimal avg_rating= BigDecimal.ZERO;
+
+    @Column(name = "total_no_ratings", nullable = false)
+    private Integer total_no_ratings=0;
 
     @ManyToOne
     @JoinColumn(name="institute_id", nullable = false)
