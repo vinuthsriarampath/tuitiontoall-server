@@ -37,13 +37,15 @@ public interface CourseService {
 
     /**
      * Updates an existing course with new details.
-     * @param courseId the ID of the course to be updated
+     *
+     * @param courseId             the ID of the course to be updated
      * @param updatedCourseDetails the new details for the course
+     * @param thumbnail
      * @return the updated Course object
-     * @throws NotFoundException if the course with the given ID does not exist
+     * @throws NotFoundException     if the course with the given ID does not exist
      * @throws UnauthorizedException if the current user is not authorized to update the course
      */
-    Course updateCourse(Long courseId, CourseUpdateRequest updatedCourseDetails);
+    Course updateCourse(Long courseId, CourseUpdateRequest updatedCourseDetails, MultipartFile thumbnail);
 
     /**
      * Deletes a course by its ID.

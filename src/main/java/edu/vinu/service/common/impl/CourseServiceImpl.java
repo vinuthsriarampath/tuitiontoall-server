@@ -25,6 +25,7 @@ import edu.vinu.request.CourseCreateRequest;
 import edu.vinu.request.CourseFilterRequest;
 import edu.vinu.request.CourseUpdateRequest;
 import edu.vinu.service.common.CourseService;
+import edu.vinu.service.common.FileService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -34,8 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,56 +47,39 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final InstituteRepository instituteRepository;
     private final Environment env;
+    private final FileService fileService;
 
     @Override
     public Course createCourse(CourseCreateRequest courseCreateRequest, MultipartFile thumbnail) {
-        CourseEntity courseEntity= mapper.map(courseCreateRequest,CourseEntity.class);
+        CourseEntity courseEntity = mapper.map(courseCreateRequest, CourseEntity.class);
         InstituteEntity institute = instituteRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
                 .orElseThrow(() -> new NotFoundException("Institute not found!"));
 
         courseEntity.setInstitute(institute);
 
-        try {
-            if(thumbnail != null && !thumbnail.isEmpty()){
-                String path = env.getProperty("file.course.thumbnail-path");
-                if (path == null) {
-                    throw new RuntimeException("Thumbnail path not configured");
-                }
-                Path dir = Path.of(path);
-                Files.createDirectories(dir);
+        if (isValidThumbnail(thumbnail)) courseEntity.setThumbnail(saveThumbnail(thumbnail, courseEntity, institute));
 
-                String originalFilename = thumbnail.getOriginalFilename();
-                String extension = "";
-                if (originalFilename != null && originalFilename.contains(".")) {
-                    extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
-                }
-
-                String courseName = courseEntity.getTitle().trim().toLowerCase().replaceAll("[^a-z0-9]+","-");
-                String instituteName = institute.getInstituteName().trim().toLowerCase().replaceAll("[^a-z0-9]+","-");
-
-                String filename = String.format("%s@%s-@%s%s",courseName,instituteName, UUID.randomUUID().toString(),extension);
-
-                Path filePath = dir.resolve(filename);
-                Files.copy(thumbnail.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-                courseEntity.setThumbnail("/thumbnail/"+filename);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         CourseEntity savedEntity = courseRepository.save(courseEntity);
-        return mapper.map(savedEntity,Course.class);
+        return mapper.map(savedEntity, Course.class);
     }
 
     @Override
-    public Course updateCourse(Long courseId, CourseUpdateRequest updatedCourseDetails) {
+    public Course updateCourse(Long courseId, CourseUpdateRequest updatedCourseDetails, MultipartFile thumbnail) {
         return courseRepository.findById(courseId)
-                .map(courseEntity -> {
-                    if (courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
-                        CourseEntity newCourseDetails = mapper.map(updatedCourseDetails, CourseEntity.class);
-                        newCourseDetails.setId(courseEntity.getId());
-                        newCourseDetails.setInstitute(courseEntity.getInstitute());
-                        CourseEntity saved = courseRepository.save(newCourseDetails);
+                .map(oldCourseEntity -> {
+                    if (oldCourseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+                        CourseEntity updatedCourseEntity = mapper.map(updatedCourseDetails, CourseEntity.class);
+
+                        updatedCourseEntity.setId(oldCourseEntity.getId());
+                        updatedCourseEntity.setInstitute(oldCourseEntity.getInstitute());
+
+                        if (isValidThumbnail(thumbnail)) {
+                            updatedCourseEntity.setThumbnail(saveThumbnail(thumbnail, updatedCourseEntity, oldCourseEntity.getInstitute()));
+                        } else {
+                            updatedCourseEntity.setThumbnail(oldCourseEntity.getThumbnail());
+                        }
+
+                        CourseEntity saved = courseRepository.save(updatedCourseEntity);
                         return mapper.map(saved, Course.class);
                     } else {
                         throw new UnauthorizedException("You are not authorized to update this course");
@@ -139,9 +122,9 @@ public class CourseServiceImpl implements CourseService {
     public Course getCourseById(Long courseId) {
         return courseRepository.findById(courseId)
                 .map(courseEntity -> {
-                    if (courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+                    if (courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
                         return mapper.map(courseEntity, Course.class);
-                    }else {
+                    } else {
                         throw new UnauthorizedException("You are not authorized to view this course");
                     }
                 })
@@ -155,18 +138,13 @@ public class CourseServiceImpl implements CourseService {
 
         return courseRepository.findAllByInstituteId(institute.getId())
                 .stream()
-                .map( courseEntity -> mapper.map(courseEntity,Course.class))
+                .map(courseEntity -> mapper.map(courseEntity, Course.class))
                 .toList();
     }
 
     @Override
     public File loadThumbnail(String filename) {
-        String path = env.getProperty("file.course.thumbnail-path");
-        if (path == null) {
-            throw new RuntimeException("Thumbnail path not configured");
-        }
-        Path filePath = Paths.get(path).resolve(filename);
-        return filePath.toFile();
+        return fileService.loadFile(getCourseThumbnailPath(), filename);
     }
 
     @Override
@@ -177,5 +155,34 @@ public class CourseServiceImpl implements CourseService {
                 .stream()
                 .map(courseEntity -> mapper.map(courseEntity, Course.class))
                 .toList();
+    }
+
+    private String saveThumbnail(MultipartFile thumbnail, CourseEntity courseEntity, InstituteEntity instituteEntity) {
+        String filename = this.generateUniqueThumbnailFilename(courseEntity, instituteEntity, thumbnail.getOriginalFilename());
+        fileService.saveFile(thumbnail, filename, this.getCourseThumbnailPath(), StandardCopyOption.REPLACE_EXISTING);
+        return "/thumbnail/" + filename;
+    }
+
+    private String generateUniqueThumbnailFilename(CourseEntity courseEntity, InstituteEntity instituteEntity, String originalFileName) {
+        String courseName = courseEntity.getTitle().trim().toLowerCase().replaceAll("[^a-z0-9]+", "-");
+        String instituteName = instituteEntity.getInstituteName().trim().toLowerCase().replaceAll("[^a-z0-9]+", "-");
+
+        return String.format("%s@%s-@%s%s", courseName, instituteName, UUID.randomUUID(), fileService.extractFileExtension(originalFileName));
+    }
+
+    private String getCourseThumbnailPath() {
+        String path = env.getProperty("file.course.thumbnail-path");
+        if (path == null) {
+            throw new RuntimeException("Thumbnail path not configured");
+        }
+        return path;
+    }
+
+    private Boolean isValidThumbnail(MultipartFile thumbnail) {
+        if (thumbnail == null || thumbnail.isEmpty()) {
+            return false;
+        }
+        String contentType = thumbnail.getContentType();
+        return contentType != null && (contentType.equals("image/jpeg") || contentType.equals("image/png") || contentType.equals("image/gif"));
     }
 }
