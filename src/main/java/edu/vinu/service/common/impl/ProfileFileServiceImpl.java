@@ -14,8 +14,10 @@
 package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.repository.UserRepository;
+import edu.vinu.service.common.FileService;
 import edu.vinu.service.common.ProfileFileService;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,68 +44,67 @@ public class ProfileFileServiceImpl implements ProfileFileService {
     private final UserService userService;
     private final ModelMapper mapper;
     private final UserRepository userRepository;
+    private final FileService fileService;
 
     @Override
     public String uploadFile(MultipartFile file, String type) {
-        try {
 
-            String email = SecurityContextHolder.getContext().getAuthentication().getName();
-            UserEntity userEntity = Optional.ofNullable(userRepository.findByEmail(email))
-                    .orElseThrow(() -> new NotFoundException("User not found"));
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity userEntity = Optional.ofNullable(userRepository.findByEmail(email))
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
-            Path dir = Paths.get("uploads\\profiles\\"+type);
-            Files.createDirectories(dir);
+        if (!isValidFile(file)){
+            throw new InvalidInputException("Invalid file type. Only JPEG, PNG, and GIF are allowed.");
+        }
+        Path dir = fileService.createDirectoryIfNotExists(this.getProfileFilePath(type));
 
-            String originalFilename = file.getOriginalFilename();
-            String extension = "";
-            if (originalFilename != null && originalFilename.contains(".")) {
-                extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
+        String originalFilename = file.getOriginalFilename();
+
+        fileService.deleteFilesMatchingPattern(dir, userEntity.getUserSlug() + "-*");
+
+        String fileName = generateUniqueProfileFilename(userEntity.getUserSlug(), file.getOriginalFilename());
+        fileService.saveFile(file, fileName, this.getProfileFilePath(type), StandardCopyOption.REPLACE_EXISTING);
+
+        switch (type) {
+            case "dp" -> userEntity.setDp("/load/dp/" + fileName);
+            case "banner" -> userEntity.setBanner("/load/banner/" + fileName);
+            default -> throw new IllegalArgumentException("Invalid type: " + type);
+        }
+        UserEntity savedEntity = userRepository.save(userEntity);
+        switch (type) {
+            case "dp" -> {
+                return savedEntity.getDp();
             }
-
-            String baseFilename = userEntity.getUserSlug();
-
-            try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, baseFilename + ".*")) {
-                for (Path existingFile : stream) {
-                    Files.delete(existingFile);
-                }
+            case "banner" -> {
+                return savedEntity.getBanner();
             }
-
-            String filename = String.format("%s-%s%s", userEntity.getUserSlug(), UUID.randomUUID().toString(), extension);
-            Path filePath = dir.resolve(filename);
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-            switch (type){
-                case "dp" -> userEntity.setDp("/load/dp/"+filename);
-                case "banner" -> userEntity.setBanner("/load/banner/"+filename);
-                default -> throw new IllegalArgumentException("Invalid type: " + type);
-            }
-            UserEntity savedEntity=userRepository.save(userEntity);
-            switch (type){
-                case "dp" -> {
-                    return savedEntity.getDp();
-                }
-                case "banner" -> {
-                    return savedEntity.getBanner();
-                }
-                default -> throw new IllegalArgumentException("Invalid type: "+ type);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            default -> throw new IllegalArgumentException("Invalid type: " + type);
         }
 
     }
 
     @Override
     public File loadFile(String type, String fileName) {
-        Path filePath = Paths.get(getPath(type)).resolve(fileName);
-        return filePath.toFile();
+        return fileService.loadFile(getProfileFilePath(type), fileName);
     }
 
-    private String getPath(String type) {
+    private String getProfileFilePath(String type) {
         return switch (type) {
             case "dp" -> env.getProperty("file.profile.pic-path");
             case "banner" -> env.getProperty("file.profile.banner-path");
-            default -> throw new IllegalArgumentException("Invalid type");
+            default -> throw new IllegalArgumentException("Profile file type must be either 'dp' or 'banner'. Provided: " + type);
         };
+    }
+
+    private String generateUniqueProfileFilename(String userSlug, String originalFileName) {
+        return String.format("%s-%s%s", userSlug, UUID.randomUUID(), fileService.extractFileExtension(originalFileName));
+    }
+
+    private Boolean isValidFile(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return false;
+        }
+        String contentType = file.getContentType();
+        return contentType != null && (contentType.equals("image/jpeg") || contentType.equals("image/png") || contentType.equals("image/gif") || contentType.equals("image/webp"));
     }
 }
