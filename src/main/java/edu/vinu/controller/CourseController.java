@@ -61,8 +61,8 @@ public class CourseController {
     }
 
     @PreAuthorize("hasAuthority('institute')")
-    @PatchMapping("/update/{courseId}")
-    public ResponseEntity<ApiResponse> updateCourse(@PathVariable Long courseId,@Valid @RequestBody CourseUpdateRequest updatedCourseDetails, BindingResult bindingResult){
+    @PatchMapping(value = "/update/{courseId}", consumes = {"multipart/form-data"})
+    public ResponseEntity<ApiResponse> updateCourse(@PathVariable Long courseId,@Valid @RequestPart("course") CourseUpdateRequest updatedCourseDetails, @RequestPart(value = "thumbnail",required = false)MultipartFile thumbnail, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             for (FieldError error : bindingResult.getFieldErrors()) {
@@ -70,7 +70,7 @@ public class CourseController {
             }
             return ResponseEntity.badRequest().body(new ApiResponse(USER_VALIDATION_FAILED_ERROR, errors));
         }
-        Course updatedCourse = courseService.updateCourse(courseId, updatedCourseDetails);
+        Course updatedCourse = courseService.updateCourse(courseId, updatedCourseDetails, thumbnail);
         return ResponseEntity.status(200).body(new ApiResponse("Course updated successfully", updatedCourse ));
     }
 
