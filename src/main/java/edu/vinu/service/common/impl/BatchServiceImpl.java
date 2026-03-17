@@ -15,15 +15,17 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.BatchEntity;
 import edu.vinu.entity.CourseEntity;
+import edu.vinu.events.CourseCreatedEvent;
 import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.model.Batch;
-import edu.vinu.model.Course;
 import edu.vinu.repository.BatchRepository;
 import edu.vinu.request.BatchCreateRequest;
 import edu.vinu.service.common.BatchService;
 import edu.vinu.service.common.CourseService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -72,5 +74,15 @@ public class BatchServiceImpl implements BatchService {
 
     private Boolean isBatchStartDateValid(LocalDate date){
         return  date.isAfter(LocalDate.now());
+        return  !date.isBefore(LocalDate.now());
+    }
+
+    private Boolean isMaxSeatLimitValid(Boolean isSeatLimited, Integer maxSeatLimit){
+        if(isSeatLimited){
+            return maxSeatLimit != null && maxSeatLimit > 0;
+        }
+        return maxSeatLimit != null && maxSeatLimit == 0; // If seat is not limited, we consider it valid regardless of maxSeatLimit value
+    }
+
     }
 }
