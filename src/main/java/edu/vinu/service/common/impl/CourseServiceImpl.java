@@ -122,8 +122,21 @@ public class CourseServiceImpl implements CourseService {
     public Course getCourseById(Long courseId) {
         return courseRepository.findById(courseId)
                 .map(courseEntity -> {
-                    if (courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
+                    if (isCourseOwner(courseEntity)) {
                         return mapper.map(courseEntity, Course.class);
+                    } else {
+                        throw new UnauthorizedException("You are not authorized to view this course");
+                    }
+                })
+                .orElseThrow(() -> new NotFoundException("Course not found with id: " + courseId));
+    }
+
+    @Override
+    public CourseEntity getCourseEntityById(Long courseId) {
+        return courseRepository.findById(courseId)
+                .map(courseEntity -> {
+                    if (isCourseOwner(courseEntity)){
+                        return courseEntity;
                     } else {
                         throw new UnauthorizedException("You are not authorized to view this course");
                     }
@@ -155,6 +168,10 @@ public class CourseServiceImpl implements CourseService {
                 .stream()
                 .map(courseEntity -> mapper.map(courseEntity, Course.class))
                 .toList();
+    }
+
+    private Boolean isCourseOwner(CourseEntity courseEntity){
+        return courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
     private String saveThumbnail(MultipartFile thumbnail, CourseEntity courseEntity, InstituteEntity instituteEntity) {

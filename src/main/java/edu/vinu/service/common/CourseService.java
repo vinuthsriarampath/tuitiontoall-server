@@ -13,6 +13,7 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.entity.CourseEntity;
 import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.model.Course;
@@ -67,6 +68,8 @@ public interface CourseService {
      */
     Course getCourseById(Long courseId);
 
+
+    CourseEntity getCourseEntityById(Long courseId);
     /**
      * Retrieves all courses associated with the currently authenticated institute.
      * @return a list of Course objects
