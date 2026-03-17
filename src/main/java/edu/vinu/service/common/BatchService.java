@@ -13,9 +13,11 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.entity.CourseEntity;
 import edu.vinu.model.Batch;
 import edu.vinu.request.BatchCreateRequest;
 
 public interface BatchService {
     Batch createBatch(BatchCreateRequest request);
+    Batch createBatch(CourseEntity course,BatchCreateRequest request);
 }
