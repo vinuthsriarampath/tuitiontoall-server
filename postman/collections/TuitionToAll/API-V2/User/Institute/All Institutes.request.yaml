@@ -1,0 +1,11 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/users/institutes
+method: GET
+body:
+  type: formdata
+  content: []
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 1000

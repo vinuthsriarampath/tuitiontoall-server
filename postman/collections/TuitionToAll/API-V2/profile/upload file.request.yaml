@@ -1,0 +1,15 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/profile-files/upload/banner
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: file
+      src:
+        - /C:/Users/vinut/OneDrive/Pictures/Screenshots 1/Screenshot (3).png
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 1000

@@ -1,0 +1,11 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/courses/get/3
+method: GET
+body:
+  type: text
+  content: ""
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 1000

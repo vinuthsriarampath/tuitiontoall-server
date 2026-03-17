@@ -1,0 +1,23 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/users/teacher/update/testuser5@email.com/details
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"address\": \"Gothatuwa\",\r
+
+    \    \"contact\": \"0719401853\",\r
+
+    \    \"firstName\": \"Vinuth\",\r
+
+    \    \"lastName\": \"Sri Arampath\",\r
+
+    \    \"dob\": \"2004-09-18\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 2000

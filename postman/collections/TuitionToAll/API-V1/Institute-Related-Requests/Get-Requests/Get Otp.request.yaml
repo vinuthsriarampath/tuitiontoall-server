@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8080/institutes/otp/vinuthsriarampath@outlook.com
+method: GET
+order: 3000

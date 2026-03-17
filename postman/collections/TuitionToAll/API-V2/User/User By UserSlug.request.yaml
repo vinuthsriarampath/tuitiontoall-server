@@ -1,0 +1,14 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/users/by-user-slug/student-6-firstname-student-6-lastname
+method: GET
+body:
+  type: formdata
+  content:
+    - type: text
+      key: email
+      value: student1@email.com
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 7000

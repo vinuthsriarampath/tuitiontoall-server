@@ -1,0 +1,25 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/auth/register/teacher
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"firstName\":\"Vinuth\",\r
+
+    \  \"lastName\": \"Sri Arampath\",\r
+
+    \  \"dob\":\"2004-09-18\",\r
+
+    \  \"address\": \"75/6A Kottikawaththa Road,Gothatuwa New Town,Angoda\",\r
+
+    \  \"contact\": \"0719401853\",\r
+
+    \  \"email\": \"vinuthsriarampth@gmail.com\",\r
+
+    \  \"password\": \"Password@123\"\r
+
+    }\r\n"
+auth:
+  type: noauth
+order: 3000

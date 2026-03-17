@@ -1,0 +1,13 @@
+$kind: http-request
+url: http://localhost:8080/courses/add/I4
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\":\"Sceince O/L\",\r
+
+    \    \"type\":\"Physical\"\r
+
+    }"
+order: 1000

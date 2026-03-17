@@ -1,0 +1,112 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/users/student/update/vinathkariyawasam.testing@outlook.com/details
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"address\": \"Gothatuwa\",\r
+
+    \    \"contact\": \"0719401853\",\r
+
+    \    \"firstName\": \"Vinuth\",\r
+
+    \    \"lastName\": \"Sri Arampath\",\r
+
+    \    \"dob\": \"2004-09-18\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Response status code is 200\", function () {\r
+
+      \    pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      \r
+
+      pm.test(\"Response time is less than 200ms\", function () {\r
+
+      \  pm.expect(pm.response.responseTime).to.be.below(200);\r
+
+      });\r
+
+      \r
+
+      \r
+
+      pm.test(\"Validate the data schema\", function () {\r
+
+      \    const responseData = pm.response.json();\r
+
+      \    \r
+
+      \    pm.expect(responseData).to.be.an('object');\r
+
+      \    pm.expect(responseData.data).to.be.an('object');\r
+
+      \    pm.expect(responseData.data.id).to.exist.and.to.be.a('number');\r
+
+      \    pm.expect(responseData.data.firstName).to.exist.and.to.be.a('string'\
+      );\r
+
+      \    pm.expect(responseData.data.lastName).to.exist.and.to.be.a('string');\
+      \r
+
+      \    pm.expect(responseData.data.dob).to.exist.and.to.be.a('string'); //
+      Assuming date is represented as a string\r
+
+      \    pm.expect(responseData.data.address).to.exist.and.to.be.a('string');\
+      \r
+
+      \    pm.expect(responseData.data.contact).to.exist.and.to.be.a('string');\
+      \r
+
+      \    pm.expect(responseData.data.email).to.exist.and.to.be.a('string');\r
+
+      \    pm.expect(responseData.data.role).to.exist.and.to.be.a('string');\r
+
+      \    pm.expect(responseData.data.disabled).to.exist.and.to.be.a('boolean'\
+      );\r
+
+      });\r
+
+      \r
+
+      \r
+
+      pm.test(\"Email is in a valid format\", function () {\r
+
+      \    const responseData = pm.response.json();\r
+
+      \    \r
+
+      \    pm.expect(responseData.email).to.be.a('string');\r
+
+      \    pm.expect(responseData.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]\
+      +$/);\r
+
+      });\r
+
+      \r
+
+      \r
+
+      pm.test(\"Ensure that the message field is empty\", function () {\r
+
+      \  const responseData = pm.response.json();\r
+
+      \  \r
+
+      \  pm.expect(responseData.message).to.equal(\"\");\r
+
+      });\r\n"
+    language: text/javascript
+order: 2000

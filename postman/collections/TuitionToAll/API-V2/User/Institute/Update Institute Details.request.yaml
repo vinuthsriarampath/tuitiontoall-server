@@ -1,0 +1,19 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/users/institute/update/testuser5@email.com/details
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"address\": \"Gothatuwa\",\r
+
+    \    \"contact\": \"0719401800\",\r
+
+    \    \"instituteName\": \"Filpa\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 3000

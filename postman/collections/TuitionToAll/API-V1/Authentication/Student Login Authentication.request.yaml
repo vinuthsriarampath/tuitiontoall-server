@@ -1,0 +1,13 @@
+$kind: http-request
+url: http://localhost:8080/auth/institute/login
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"userName\":\"I1\",\r
+
+    \    \"password\":\"Password@123\"\r
+
+    }"
+order: 1000

@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8080/students/all
+method: GET
+order: 2000

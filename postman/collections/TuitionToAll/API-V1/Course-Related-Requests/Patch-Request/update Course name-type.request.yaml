@@ -1,0 +1,16 @@
+$kind: http-request
+name: update Course name/type
+url: http://localhost:8080/courses/update/I1
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"id\":\"C1\",\r
+
+    \    \"name\": \"Sceince O/L\",\r
+
+    \    \"type\": \"Physical\"\r
+
+    }"
+order: 1000

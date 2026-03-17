@@ -1,0 +1,25 @@
+$kind: http-request
+url: http://localhost:8080/students/update
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"id\":\"S1\",\r
+
+    \    \"firstName\":\"Kamal\",\r
+
+    \    \"lastName\":\"Perera\",\r
+
+    \    \"dob\":\"2004-01-01\",\r
+
+    \    \"contact\":\"0719401853\",\r
+
+    \    \"email\":\"kamalperera@gmail.com\",\r
+
+    \    \"address\":\"Colombo 2\",\r
+
+    \    \"password\":\"3\"\r
+
+    }"
+order: 1000

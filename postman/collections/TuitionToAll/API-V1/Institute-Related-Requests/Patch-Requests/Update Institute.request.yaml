@@ -1,0 +1,21 @@
+$kind: http-request
+url: http://localhost:8080/institutes/update
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"id\" : \"I1\",\r
+
+    \    \"name\": \"ABC Institute\",\r
+
+    \    \"email\": \"abcinstitute@gmial.com\",\r
+
+    \    \"contact\": \"0719401800\",\r
+
+    \    \"address\": \"bambalapitiya\",\r
+
+    \    \"password\": \"Password@123\"\r
+
+    }"
+order: 1000

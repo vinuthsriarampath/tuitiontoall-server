@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8080/courses/C1/teachers/update/T2
+method: PATCH
+order: 2000

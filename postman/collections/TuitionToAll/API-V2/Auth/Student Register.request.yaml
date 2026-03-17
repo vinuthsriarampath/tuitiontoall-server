@@ -1,0 +1,26 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/auth/register/student
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"firstName\":\"Vinuth\",\r
+
+    \  \"lastName\": \"Sri Arampath\",\r
+
+    \  \"dob\":\"2004-09-18\",\r
+
+    \  \"address\": \"75/6A Kottikawatta Road, Gothatuwa New Town, 2nd Lane,
+    Angoda.\",\r
+
+    \  \"contact\": \"0719401853\",\r
+
+    \  \"email\": \"vinuthsriarampath@outlook.com\",\r
+
+    \  \"password\": \"Password@123\"\r
+
+    }\r\n"
+auth:
+  type: noauth
+order: 4000

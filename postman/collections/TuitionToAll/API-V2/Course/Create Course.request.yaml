@@ -1,0 +1,32 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/courses/create
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"title\": \"Introduction to Python\",\r
+
+    \  \"description\": \"A beginner-friendly course to learn Python programming
+    fundementals.\",\r
+
+    \  \"durationInHours\": 40,\r
+
+    \  \"price\": -10,\r
+
+    \  \"level\": \"INTERMEDIATE\",\r
+
+    \  \"category\": \"TECHNOLOGY\",\r
+
+    \  \"status\": \"PUBLISHED\",\r
+
+    \  \"language\": \"ENGLISH\",\r
+
+    \  \"mode\": \"HYBRID\"\r
+
+    }\r\n"
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 4000
