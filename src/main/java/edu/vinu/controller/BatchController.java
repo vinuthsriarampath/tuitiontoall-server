@@ -44,4 +44,11 @@ public class BatchController {
         List<Batch> batches = batchService.getAllBatchesByCourseId(courseId);
         return ResponseEntity.status(200).body(new ApiResponse("All Batches Related to Course ID",batches));
     }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("/find/batch/{batchId}")
+    public ResponseEntity<ApiResponse> getBatchById(@PathVariable Long batchId){
+        Batch batch= batchService.getBatchById(batchId);
+        return ResponseEntity.status(200).body(new ApiResponse("Batch By Batch Id",batch));
+    }
 }

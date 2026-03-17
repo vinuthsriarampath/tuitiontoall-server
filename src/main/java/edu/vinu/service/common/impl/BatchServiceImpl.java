@@ -62,6 +62,15 @@ public class BatchServiceImpl implements BatchService {
                 .toList();
     }
 
+    @Override
+    public Batch getBatchById(Long batchId) {
+        BatchEntity batchEntity = batchRepository.findById(batchId)
+                .orElseThrow(() -> new InvalidInputException("Batch with the given id does not exist"));
+        Batch batch =  mapper.map(batchEntity, Batch.class);
+        batch.setCourseId(batchEntity.getCourse().getId());
+        return batch;
+    }
+
 
     private Batch createBatchInternally(CourseEntity courseEntity,BatchCreateRequest request){
         if(isBatchStartDateValid(request.getStart_date())){

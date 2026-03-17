@@ -24,4 +24,6 @@ public interface BatchService {
     Batch createBatch(CourseEntity course,BatchCreateRequest request);
 
     List<Batch> getAllBatchesByCourseId(Long courseId);
+
+    Batch getBatchById(Long batchId);
 }
