@@ -12,6 +12,8 @@ body:
 
     \  \"is_seat_limited\": false,\r
 
+    \  \"max_seat_limit\":0,\r
+
     \  \"start_date\": \"2026-04-15\",\r
 
     \  \"start_time\": \"09:00:00\"\r
