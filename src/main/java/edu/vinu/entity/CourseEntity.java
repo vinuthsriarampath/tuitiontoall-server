@@ -27,6 +27,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -83,6 +85,9 @@ public class CourseEntity{
     @ManyToOne
     @JoinColumn(name="institute_id", nullable = false)
     private InstituteEntity institute;
+
+    @OneToMany(mappedBy = "course")
+    private List<BatchEntity> batchEntities = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "created_date",nullable = false,updatable = false)
