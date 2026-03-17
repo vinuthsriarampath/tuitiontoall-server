@@ -21,10 +21,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v2/batches")
@@ -37,5 +36,12 @@ public class BatchController {
     public ResponseEntity<ApiResponse> createBatch(@Valid @RequestBody BatchCreateRequest request){
         Batch batch = batchService.createBatch(request);
         return ResponseEntity.status(201).body(new ApiResponse("Batch created successfully", batch));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("/{courseId}/all")
+    public ResponseEntity<ApiResponse> getAllBatchesOfCourse(@PathVariable Long courseId){
+        List<Batch> batches = batchService.getAllBatchesByCourseId(courseId);
+        return ResponseEntity.status(200).body(new ApiResponse("All Batches Related to Course ID",batches));
     }
 }

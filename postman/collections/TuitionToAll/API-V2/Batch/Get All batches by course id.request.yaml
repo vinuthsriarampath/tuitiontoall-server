@@ -1,0 +1,9 @@
+$kind: http-request
+name: Get All batches by course id
+url: http://localhost:8080/api/v2/batches/116/all
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 1332421089821375

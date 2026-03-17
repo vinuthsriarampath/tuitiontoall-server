@@ -29,6 +29,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +48,18 @@ public class BatchServiceImpl implements BatchService {
     @Override
     public Batch createBatch(CourseEntity course, BatchCreateRequest request) {
         return createBatchInternally(course,request);
+    }
+
+    @Override
+    public List<Batch> getAllBatchesByCourseId(Long courseId) {
+        return batchRepository.getAllBatchesByCourseId(courseId)
+                .stream()
+                .map(batchEntity -> {
+                    Batch batch = mapper.map(batchEntity, Batch.class);
+                    batch.setCourseId(courseId);
+                    return batch;
+                })
+                .toList();
     }
 
 
