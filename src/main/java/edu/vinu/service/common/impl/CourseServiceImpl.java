@@ -16,6 +16,7 @@ package edu.vinu.service.common.impl;
 import edu.vinu.entity.CourseEntity;
 import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.enums.CourseStatus;
+import edu.vinu.events.CourseCreatedEvent;
 import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.model.Course;
@@ -29,6 +30,7 @@ import edu.vinu.service.common.FileService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -48,7 +50,9 @@ public class CourseServiceImpl implements CourseService {
     private final InstituteRepository instituteRepository;
     private final Environment env;
     private final FileService fileService;
+    private final ApplicationEventPublisher eventPublisher;
 
+    @Transactional
     @Override
     public Course createCourse(CourseCreateRequest courseCreateRequest, MultipartFile thumbnail) {
         CourseEntity courseEntity = mapper.map(courseCreateRequest, CourseEntity.class);
@@ -60,6 +64,8 @@ public class CourseServiceImpl implements CourseService {
         if (isValidThumbnail(thumbnail)) courseEntity.setThumbnail(saveThumbnail(thumbnail, courseEntity, institute));
 
         CourseEntity savedEntity = courseRepository.save(courseEntity);
+
+        eventPublisher.publishEvent(new CourseCreatedEvent(savedEntity));
         return mapper.map(savedEntity, Course.class);
     }
 

@@ -73,7 +73,6 @@ public class BatchServiceImpl implements BatchService {
     }
 
     private Boolean isBatchStartDateValid(LocalDate date){
-        return  date.isAfter(LocalDate.now());
         return  !date.isBefore(LocalDate.now());
     }
 
@@ -84,5 +83,20 @@ public class BatchServiceImpl implements BatchService {
         return maxSeatLimit != null && maxSeatLimit == 0; // If seat is not limited, we consider it valid regardless of maxSeatLimit value
     }
 
+    @Transactional
+    @EventListener
+    public void handleCourseCreated(CourseCreatedEvent event) {
+        CourseEntity course = event.course();
+
+        BatchCreateRequest request = new BatchCreateRequest(
+                course.getId(),
+                "DEFAULT-" + course.getId(),
+                false,
+                0,
+                course.getCreationTimeStamp().toLocalDate().plusDays(1),
+                course.getCreationTimeStamp().toLocalTime()
+        );
+
+        createBatchInternally(course, request);
     }
 }
