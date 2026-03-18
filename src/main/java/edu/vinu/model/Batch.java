@@ -13,6 +13,8 @@
 
 package edu.vinu.model;
 
+import edu.vinu.enums.BatchEnrollmentStatus;
+import edu.vinu.enums.BatchStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,6 +34,8 @@ public class Batch {
     private Integer max_seat_limit;
     private LocalDate start_date;
     private LocalTime start_time;
+    private BatchStatus batch_status;
+    private BatchEnrollmentStatus enrollment_status;
     private LocalDateTime created_date;
     private LocalDateTime last_modified_date;
 }

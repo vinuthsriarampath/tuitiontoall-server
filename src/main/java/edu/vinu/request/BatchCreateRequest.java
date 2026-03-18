@@ -13,6 +13,8 @@
 
 package edu.vinu.request;
 
+import edu.vinu.enums.BatchEnrollmentStatus;
+import edu.vinu.enums.BatchStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -40,4 +42,8 @@ public class BatchCreateRequest {
     private LocalDate start_date;
     @NotNull(message = "Batch start time mandatory")
     private LocalTime start_time;
+    @NotNull(message = "Batch status is mandatory")
+    private BatchStatus batch_status;
+    @NotNull(message = "Batch enrollment status is mandatory")
+    private BatchEnrollmentStatus enrollment_status;
 }

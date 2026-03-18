@@ -13,6 +13,8 @@
 
 package edu.vinu.entity;
 
+import edu.vinu.enums.BatchEnrollmentStatus;
+import edu.vinu.enums.BatchStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -56,6 +58,14 @@ public class BatchEntity {
 
     @Column(nullable = false)
     private LocalTime start_time;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private BatchStatus batch_status=BatchStatus.PREPARATION;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private BatchEnrollmentStatus enrollment_status=BatchEnrollmentStatus.OPEN;
 
     @CreationTimestamp
     @Column(nullable = false,updatable = false)
