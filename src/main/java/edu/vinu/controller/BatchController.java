@@ -15,6 +15,7 @@ package edu.vinu.controller;
 
 import edu.vinu.model.Batch;
 import edu.vinu.request.BatchCreateRequest;
+import edu.vinu.request.BatchUpdateRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.common.BatchService;
 import jakarta.validation.Valid;
@@ -50,5 +51,12 @@ public class BatchController {
     public ResponseEntity<ApiResponse> getBatchById(@PathVariable Long batchId){
         Batch batch= batchService.getBatchById(batchId);
         return ResponseEntity.status(200).body(new ApiResponse("Batch By Batch Id",batch));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PatchMapping("/{batchId}/update")
+    public ResponseEntity<ApiResponse> updateBatchById(@PathVariable Long batchId, @Valid @RequestBody BatchUpdateRequest request){
+        Batch  batch = batchService.updateBatchById(batchId,request);
+        return ResponseEntity.status(200).body(new ApiResponse("Batch Updated Successfully",batch));
     }
 }

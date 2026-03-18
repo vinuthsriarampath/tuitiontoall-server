@@ -20,6 +20,7 @@ import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.model.Batch;
 import edu.vinu.repository.BatchRepository;
 import edu.vinu.request.BatchCreateRequest;
+import edu.vinu.request.BatchUpdateRequest;
 import edu.vinu.service.common.BatchService;
 import edu.vinu.service.common.CourseService;
 import jakarta.transaction.Transactional;
@@ -69,6 +70,37 @@ public class BatchServiceImpl implements BatchService {
         Batch batch =  mapper.map(batchEntity, Batch.class);
         batch.setCourseId(batchEntity.getCourse().getId());
         return batch;
+    }
+
+    @Override
+    public Batch updateBatchById(Long batchId, BatchUpdateRequest request) {
+        Batch oldBatch = this.getBatchById(batchId);
+        if(oldBatch.getStart_date()!=null && oldBatch.getStart_date().isBefore(LocalDate.now())){
+            if(!oldBatch.getName().equals(request.getName()) || !oldBatch.getCourseId().equals(request.getCourseId()) || !oldBatch.getStart_date().isEqual(request.getStart_date()) || !oldBatch.getStart_time().equals(request.getStart_time()) ){
+                throw new InvalidInputException("Batch name, course, start date & time cannot be updated for a batch that has already started");
+            }
+        }
+        if(isBatchStartDateValid(request.getStart_date())) {
+            if (isMaxSeatLimitValid(request.getIs_seat_limited(), request.getMax_seat_limit())) {
+                if (!batchRepository.existsByNameAndCourseId(request.getName(), request.getCourseId())) {
+                    BatchEntity newBatchEntity =  mapper.map(request, BatchEntity.class);
+                    newBatchEntity.setId(oldBatch.getId());
+                    if(!oldBatch.getCourseId().equals(request.getCourseId())){
+                        newBatchEntity.setCourse(courseService.getCourseEntityById(request.getCourseId()));
+                    }
+                    BatchEntity savedBatchEntity=batchRepository.save(newBatchEntity);
+                    Batch savedBatch =  mapper.map(savedBatchEntity, Batch.class);
+                    savedBatch.setCourseId(savedBatchEntity.getCourse().getId());
+                    return savedBatch;
+                }else{
+                    throw new InvalidInputException("Batch with the same name already exists for this courseEntity");
+                }
+            }else {
+                throw new InvalidInputException("Invalid max seat limit. If seat is limited, max seat limit should be a positive integer and greater than 0. If seat is not limited, max seat limit should be 0.");
+            }
+        }else{
+            throw new InvalidInputException("Start Date should be a present/future date");
+        }
     }
 
 

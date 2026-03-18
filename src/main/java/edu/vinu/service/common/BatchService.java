@@ -16,6 +16,8 @@ package edu.vinu.service.common;
 import edu.vinu.entity.CourseEntity;
 import edu.vinu.model.Batch;
 import edu.vinu.request.BatchCreateRequest;
+import edu.vinu.request.BatchUpdateRequest;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -26,4 +28,6 @@ public interface BatchService {
     List<Batch> getAllBatchesByCourseId(Long courseId);
 
     Batch getBatchById(Long batchId);
+
+    Batch updateBatchById(Long batchId, BatchUpdateRequest request);
 }
