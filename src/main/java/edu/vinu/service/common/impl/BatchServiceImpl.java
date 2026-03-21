@@ -78,36 +78,45 @@ public class BatchServiceImpl implements BatchService {
 
     @Override
     public Batch updateBatchById(Long batchId, BatchUpdateRequest request) {
+        List<FieldError> errors = new ArrayList<>();
+
         Batch oldBatch = this.getBatchById(batchId);
         if(oldBatch.getStart_date()!=null && oldBatch.getStart_date().isBefore(LocalDate.now())){
             if(!oldBatch.getName().equals(request.getName()) || !oldBatch.getCourseId().equals(request.getCourseId()) || !oldBatch.getStart_date().isEqual(request.getStart_date()) || !oldBatch.getStart_time().equals(request.getStart_time()) ){
                 throw new InvalidInputException("Batch name, course, start date & time cannot be updated for a batch that has already started");
             }
         }
-        if(isBatchStartDateValid(request.getStart_date())) {
-            if (isMaxSeatLimitValid(request.getIs_seat_limited(), request.getMax_seat_limit())) {
-                if (!isValidStatus(request.getBatch_status(), request.getEnrollment_status())) {
-                    throw new InvalidInputException("If batch status is COMPLETED, enrollment status should be CLOSED");
-                }
-                if (!batchRepository.existsByNameAndCourseId(request.getName(), request.getCourseId())) {
-                    BatchEntity newBatchEntity =  mapper.map(request, BatchEntity.class);
-                    newBatchEntity.setId(oldBatch.getId());
-                    if(!oldBatch.getCourseId().equals(request.getCourseId())){
-                        newBatchEntity.setCourse(courseService.getCourseEntityById(request.getCourseId()));
-                    }
-                    BatchEntity savedBatchEntity=batchRepository.save(newBatchEntity);
-                    Batch savedBatch =  mapper.map(savedBatchEntity, Batch.class);
-                    savedBatch.setCourseId(savedBatchEntity.getCourse().getId());
-                    return savedBatch;
-                }else{
-                    throw new InvalidInputException("Batch with the same name already exists for this courseEntity");
-                }
-            }else {
-                throw new InvalidInputException("Invalid max seat limit. If seat is limited, max seat limit should be a positive integer and greater than 0. If seat is not limited, max seat limit should be 0.");
-            }
-        }else{
-            throw new InvalidInputException("Start Date should be a present/future date");
+
+
+        if ((oldBatch.getStart_date() != null && !oldBatch.getStart_date().isEqual(request.getStart_date())) && !isBatchStartDateValid(request.getStart_date())) {
+            errors.add(new FieldError("start_date", "Start date must be present or future"));
         }
+
+        if (!isMaxSeatLimitValid(request.getIs_seat_limited(), request.getMax_seat_limit())) {
+            errors.add(new FieldError("max_seat_limit", "Invalid max seat limit. If seat is limited, max seat limit should be a positive integer and greater than 0. If seat is not limited, max seat limit should be 0."));
+        }
+
+        if (!isValidStatus(request.getBatch_status(), request.getEnrollment_status())) {
+            errors.add(new FieldError("enrollment_status", "Must be CLOSED if batch is COMPLETED"));
+        }
+
+        if (!oldBatch.getName().equals(request.getName()) && batchRepository.existsByNameAndCourseId(request.getName(), request.getCourseId())) {
+            errors.add(new FieldError("name", "Batch with the same name already exists for this courseEntity"));
+        }
+
+        if (!errors.isEmpty()) {
+            throw new InvalidInputException(errors);
+        }
+
+        BatchEntity newBatchEntity =  mapper.map(request, BatchEntity.class);
+        newBatchEntity.setId(oldBatch.getId());
+        if(!oldBatch.getCourseId().equals(request.getCourseId())){
+            newBatchEntity.setCourse(courseService.getCourseEntityById(request.getCourseId()));
+        }
+        BatchEntity savedBatchEntity=batchRepository.save(newBatchEntity);
+        Batch savedBatch =  mapper.map(savedBatchEntity, Batch.class);
+        savedBatch.setCourseId(savedBatchEntity.getCourse().getId());
+        return savedBatch;
     }
 
 
