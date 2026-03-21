@@ -15,6 +15,8 @@ package edu.vinu.exception;
 
 import edu.vinu.exception.custom.*;
 import edu.vinu.response.ApiResponse;
+import edu.vinu.response.ErrorResponse;
+import edu.vinu.response.FieldError;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
@@ -26,8 +28,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @ControllerAdvice
@@ -47,8 +51,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidInputException.class)
-    public ResponseEntity<ApiResponse> handleInvalidInputException(InvalidInputException ex) {
-        ApiResponse response = new ApiResponse(ex.getMessage(), null);
+    public ResponseEntity<ErrorResponse> handleInvalidInputException(InvalidInputException ex) {
+        ErrorResponse response = ErrorResponse.builder()
+                .message(ex.getMessage().isEmpty() ? "Validation Failed!" : ex.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .errors(ex.getErrors())
+                .timestamp(LocalDateTime.now())
+                .build();
+
         return ResponseEntity.badRequest().body(response);
     }
 
@@ -76,11 +86,24 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                errors.put(error.getField(), error.getDefaultMessage()));
-        return ResponseEntity.badRequest().body(errors);
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        List<FieldError> fieldErrors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> new FieldError(
+                        error.getField(),
+                        error.getDefaultMessage()
+                ))
+                .toList();
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message("Validation failed")
+                .status(HttpStatus.BAD_REQUEST.value())
+                .errors(fieldErrors)
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.badRequest().body(errorResponse);
     }
 
     @ExceptionHandler(JwtException.class)

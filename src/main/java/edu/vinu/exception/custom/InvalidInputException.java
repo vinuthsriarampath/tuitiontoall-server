@@ -13,8 +13,31 @@
 
 package edu.vinu.exception.custom;
 
+import edu.vinu.response.FieldError;
+import lombok.Data;
+import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
 public class InvalidInputException extends RuntimeException {
+    private final List<FieldError> errors;
+
     public InvalidInputException(String message) {
         super(message);
+        errors = new ArrayList<>();
+    }
+
+    // Single field error
+    public InvalidInputException(String field, String message) {
+        super(message);
+        this.errors = List.of(new FieldError(field, message));
+    }
+
+    // Multiple field errors
+    public InvalidInputException(List<FieldError> errors) {
+        super("Validation failed");
+        this.errors = errors;
     }
 }
