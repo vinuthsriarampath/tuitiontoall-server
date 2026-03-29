@@ -14,6 +14,7 @@
 package edu.vinu.controller;
 
 import edu.vinu.request.CreateVacancyRequest;
+import edu.vinu.request.UpdateVacancyRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.common.TeacherVacancyService;
 import jakarta.validation.Valid;
@@ -32,5 +33,33 @@ public class TeacherVacancyController {
     @PostMapping("/")
     public ResponseEntity<ApiResponse> create(@Valid @RequestBody CreateVacancyRequest request) {
         return ResponseEntity.status(201).body(new ApiResponse("New Vacancy created Successfully!",vacancyService.createVacancy(request)));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PatchMapping("/{vacancyId}")
+    public ResponseEntity<ApiResponse> update(
+            @PathVariable Long vacancyId,
+            @RequestBody UpdateVacancyRequest request
+    ) {
+        return ResponseEntity.status(200).body(new ApiResponse("Vacancy Updated Successfully!",vacancyService.updateVacancy(vacancyId, request)));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @DeleteMapping("/{vacancyId}")
+    public ResponseEntity<ApiResponse> delete(@PathVariable Long vacancyId) {
+        vacancyService.deleteVacancy(vacancyId);
+        return ResponseEntity.status(200).body(new ApiResponse("Vacancy Deleted Successfully!", null));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse> getByInstitute() {
+        return ResponseEntity.status(200).body(new ApiResponse("Vacancies By Institute Id",vacancyService.getAllByInstitute()));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("/{vacancyId}")
+    public ResponseEntity<ApiResponse> getById(@PathVariable Long vacancyId) {
+        return ResponseEntity.status(200).body(new ApiResponse("Found Vacancy By Id",vacancyService.getById(vacancyId)));
     }
 }
