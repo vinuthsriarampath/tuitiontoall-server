@@ -30,6 +30,6 @@ public class InstituteController {
 
     @GetMapping("/{instituteId}/vacancies")
     public ResponseEntity<ApiResponse> getByStatus(@PathVariable(name = "instituteId") Long instituteId, @RequestParam() String status) {
-        return ResponseEntity.status(200).body(new ApiResponse("All Active Vacancies",vacancyService.getAllByInstituteIdAndStatus(instituteId,status)));
+        return ResponseEntity.status(200).body(new ApiResponse("All Vacancies By provided status",vacancyService.getAllByInstituteIdAndStatus(instituteId,status)));
     }
 }
