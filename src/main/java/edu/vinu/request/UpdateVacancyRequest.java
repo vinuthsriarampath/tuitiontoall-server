@@ -24,9 +24,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateVacancyRequest {
-    private java.lang.String title;
+    private String title;
     private Integer requiredExperienceYears;
-    private java.lang.String jobDescription;
+    private String jobDescription;
     private TeacherVacancyStatus status;
     private LocalDateTime vacancyClosingDate;
 }
