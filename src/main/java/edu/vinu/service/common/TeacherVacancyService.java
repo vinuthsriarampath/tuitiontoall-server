@@ -17,6 +17,7 @@ import edu.vinu.enums.TeacherVacancyStatus;
 import edu.vinu.model.TeacherVacancy;
 import edu.vinu.request.CreateVacancyRequest;
 import edu.vinu.request.UpdateVacancyRequest;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public interface TeacherVacancyService {
 
     TeacherVacancy getById(Long vacancyId);
 
-    List<TeacherVacancy> getAllByInstitute();
+    Page<TeacherVacancy> getAllByInstitute(int page, int size, String sortBy, String direction);
 
     List<TeacherVacancy> getAllByInstituteIdAndStatus(Long instituteId, String  status);
 }

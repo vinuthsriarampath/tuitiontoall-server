@@ -15,6 +15,8 @@ package edu.vinu.repository;
 
 import edu.vinu.entity.TeacherVacancyEntity;
 import edu.vinu.enums.TeacherVacancyStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +24,7 @@ import java.util.List;
 
 @Repository
 public interface TeacherVacancyRepository extends JpaRepository<TeacherVacancyEntity, Long> {
-    List<TeacherVacancyEntity> findByInstituteId(Long instituteId);
+    Page<TeacherVacancyEntity> findByInstituteId(Long instituteId, Pageable pageable);
 
     List<TeacherVacancyEntity> findByStatusAndInstituteId(TeacherVacancyStatus status, Long instituteId);
 }

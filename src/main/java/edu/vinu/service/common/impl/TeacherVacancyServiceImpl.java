@@ -25,6 +25,10 @@ import edu.vinu.request.CreateVacancyRequest;
 import edu.vinu.request.UpdateVacancyRequest;
 import edu.vinu.service.common.TeacherVacancyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -86,11 +90,13 @@ public class TeacherVacancyServiceImpl implements TeacherVacancyService {
     }
 
     @Override
-    public List<TeacherVacancy> getAllByInstitute() {
+    public Page<TeacherVacancy> getAllByInstitute(int page, int size, String sortBy, String direction) {
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+
         InstituteEntity institute = instituteRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
                 .orElseThrow(() -> new NotFoundException("Institute not found"));
-        return vacancyRepository.findByInstituteId(institute.getId())
-                .stream().map(this::mapToDTO).toList();
+        return vacancyRepository.findByInstituteId(institute.getId(), pageable).map(this::mapToDTO);
     }
 
     @Override
