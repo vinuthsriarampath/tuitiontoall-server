@@ -29,7 +29,7 @@ public class InstituteController {
     private final TeacherVacancyService vacancyService;
 
     @GetMapping("/{instituteId}/vacancies")
-    public ResponseEntity<ApiResponse> getByStatus(@PathVariable(name = "instituteId") Long instituteId, @RequestParam() String status) {
+    public ResponseEntity<ApiResponse> getVacanciesByStatusAndInstituteId(@PathVariable(name = "instituteId") Long instituteId, @RequestParam(defaultValue = "OPEN") String status) {
         return ResponseEntity.status(200).body(new ApiResponse("All Vacancies By provided status",vacancyService.getAllByInstituteIdAndStatus(instituteId,status)));
     }
 }
