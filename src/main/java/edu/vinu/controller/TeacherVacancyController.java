@@ -71,7 +71,6 @@ public class TeacherVacancyController {
         return ResponseEntity.status(200).body(response);
     }
 
-    @PreAuthorize("hasAuthority('institute')")
     @GetMapping("/{vacancyId}")
     public ResponseEntity<ApiResponse> getById(@PathVariable Long vacancyId) {
         return ResponseEntity.status(200).body(new ApiResponse("Found Vacancy By Id",vacancyService.getById(vacancyId)));
