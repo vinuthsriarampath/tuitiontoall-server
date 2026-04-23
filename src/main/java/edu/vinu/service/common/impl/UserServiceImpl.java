@@ -55,10 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByEmail(String email) {
-        UserEntity userEntity=userRepository.findByEmail(email);
-        if (userEntity == null){
-            throw new NotFoundException("A user from "+email+" not found!!");
-        }
+        UserEntity userEntity=this.getUserEntityByEmail(email);
         User user = mapper.map(userEntity, User.class);
         switch (user.getRole().getRole()){
             case "student":
@@ -72,6 +69,15 @@ public class UserServiceImpl implements UserService {
                 break;
         }
         return user;
+    }
+
+    @Override
+    public UserEntity getUserEntityByEmail(String email) {
+        UserEntity userEntity=userRepository.findByEmail(email);
+        if (userEntity == null){
+            throw new NotFoundException("A user from "+email+" not found!!");
+        }
+        return userEntity;
     }
 
     @Override

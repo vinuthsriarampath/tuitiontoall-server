@@ -28,6 +28,8 @@ import java.util.List;
 public interface UserService {
     User getUserByEmail(String email);
 
+    UserEntity getUserEntityByEmail(String email);
+
     boolean isUserExist(String email);
 
     List<Object> getAllUsersByFirstNameLike(String firstname);
