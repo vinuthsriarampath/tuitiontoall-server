@@ -129,4 +129,10 @@ public class GlobalExceptionHandler {
         ApiResponse error = new ApiResponse(ex.getMessage(), null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ApiResponse> handleBadRequestException(BadRequestException ex) {
+        ApiResponse error = new ApiResponse(ex.getMessage(), null);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 }
