@@ -83,10 +83,7 @@ public class TeacherVacancyServiceImpl implements TeacherVacancyService {
 
     @Override
     public TeacherVacancy getById(Long vacancyId) {
-        return mapToDTO(
-                vacancyRepository.findById(vacancyId)
-                        .orElseThrow(() -> new NotFoundException("Vacancy not found"))
-        );
+        return mapToDTO(this.getEntityById(vacancyId));
     }
 
     @Override
@@ -103,6 +100,21 @@ public class TeacherVacancyServiceImpl implements TeacherVacancyService {
     public List<TeacherVacancy> getAllByInstituteIdAndStatus(Long instituteId, String status) {
         return vacancyRepository.findByStatusAndInstituteId(TeacherVacancyStatus.valueOf(status),instituteId)
                 .stream().map(this::mapToDTO).toList();
+    }
+
+    @Override
+    public TeacherVacancyEntity getEntityById(Long id) {
+        return vacancyRepository.findById(id).orElseThrow(() -> new NotFoundException("Vacancy not found"));
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return vacancyRepository.existsById(id);
+    }
+
+    @Override
+    public boolean isVacancyOpened(Long id) {
+        return getEntityById(id).getStatus().equals(TeacherVacancyStatus.OPEN);
     }
 
     private TeacherVacancy mapToDTO(TeacherVacancyEntity v) {

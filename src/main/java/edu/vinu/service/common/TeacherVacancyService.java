@@ -13,6 +13,7 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.entity.TeacherVacancyEntity;
 import edu.vinu.enums.TeacherVacancyStatus;
 import edu.vinu.model.TeacherVacancy;
 import edu.vinu.request.CreateVacancyRequest;
@@ -33,4 +34,10 @@ public interface TeacherVacancyService {
     Page<TeacherVacancy> getAllByInstitute(int page, int size, String sortBy, String direction);
 
     List<TeacherVacancy> getAllByInstituteIdAndStatus(Long instituteId, String  status);
+
+    TeacherVacancyEntity getEntityById(Long id);
+
+    boolean existsById(Long id);
+
+    boolean isVacancyOpened(Long id);
 }
