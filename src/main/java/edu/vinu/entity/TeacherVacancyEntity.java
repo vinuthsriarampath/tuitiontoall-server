@@ -24,6 +24,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -63,4 +65,7 @@ public class TeacherVacancyEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instituteId",nullable = false)
     private InstituteEntity institute;
+
+    @OneToMany(mappedBy = "teacherVacancy")
+    private List<ApplicationEntity> applications = new ArrayList<>();
 }

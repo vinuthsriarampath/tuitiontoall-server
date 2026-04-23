@@ -14,6 +14,7 @@
 package edu.vinu.entity.user_entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import edu.vinu.entity.ApplicationEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,6 +22,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -42,4 +45,7 @@ public class TeacherEntity{
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dob;
+
+    @OneToMany(mappedBy = "teacher")
+    private List<ApplicationEntity> applications = new ArrayList<>();
 }
