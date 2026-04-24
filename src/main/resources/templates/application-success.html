@@ -1,0 +1,157 @@
+<!--
+  ~ Copyright (c) 2026 vinuth sri arampath
+  ~
+  ~ This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
+  ~ Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
+  ~ without prior written permission is strictly prohibited.
+  ~
+  ~ Portions of this code may be generated with AI and modified by vinuth sri arampath
+  ~ All rights reserved.
+  ~
+  ~
+  -->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Application Submitted - TuitionToAll</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f9fafb;
+            font-family: Arial, sans-serif;
+            color: #111827;
+        }
+
+        .header {
+            background-color: #1e3a8a;
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 28px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        h2 {
+            color: #1e3a8a;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 15px;
+            color: #4b5563;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .info-box {
+            background-color: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .info-box ul {
+            padding-left: 18px;
+            margin: 10px 0;
+        }
+
+        .info-box li {
+            margin-bottom: 8px;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #2563eb;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: bold;
+            margin: 25px 0;
+        }
+
+        .footer {
+            background-color: #1e3a8a;
+            text-align: center;
+            padding: 20px 0;
+            color: #ffffff;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Application Submitted</h1>
+</div>
+
+<div class="container">
+
+    <h2>Hi <span th:text="${name}">Name</span>,</h2>
+
+    <p>
+        Your application for the teaching vacancy has been successfully submitted.
+    </p>
+
+    <p>
+        The institute will review your application and may contact you via
+        <strong>email</strong>, <strong>phone call</strong>, or <strong>direct messaging</strong>
+        regarding the next steps in the selection process.
+    </p>
+
+    <div class="info-box">
+        <p><strong>Important Information:</strong></p>
+        <ul>
+            <li>All interviews and evaluations are conducted directly by the institute.</li>
+            <li>TuitionToAll does not participate in the selection process.</li>
+            <li>TuitionToAll is not responsible for any issues during or after the hiring process.</li>
+            <li>If selected, you will receive an official email via TuitionToAll on behalf of the institute.</li>
+            <li>The institute may also contact you separately based on their internal procedures.</li>
+            <li>After selection, all responsibilities and workload are managed by the institute.</li>
+        </ul>
+    </div>
+
+    <div style="text-align:center; cursor: pointer">
+        <a th:href="${link}" class="button">View My Applications</a>
+    </div>
+
+    <p>
+        You can track your application status anytime from your dashboard.
+    </p>
+
+    <p>
+        If you have any questions or face any issues, feel free to contact us at
+        <a href="mailto:vinuthsriarampath@gmail.com">Customer Care</a>.
+    </p>
+
+    <p>Thank you for using TuitionToAll.</p>
+
+    <p><strong>TuitionToAll Team</strong></p>
+
+</div>
+
+<div class="footer">
+    &copy; 2026 TuitionToAll. All rights reserved.
+</div>
+
+</body>
+</html>
