@@ -23,4 +23,6 @@ public interface EmailService {
     void SendRegistrationSuccessEmail(String email, String name, String role);
 
     void SendPasswordResetEmail(String email, String name, String Link);
+
+    void SendApplicationSuccessEmail(String email, String name, String link);
 }

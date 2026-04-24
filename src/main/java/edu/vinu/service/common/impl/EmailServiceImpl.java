@@ -94,4 +94,18 @@ public class EmailServiceImpl implements EmailService {
             throw new RuntimeException("Failed to send password reset email", ex);
         }
     }
+
+    @Override
+    public void SendApplicationSuccessEmail(String email, String name, String link) {
+        try{
+            Map<String,Object> templateVariables = new HashMap<>();
+            templateVariables.put("name", name);
+            templateVariables.put("link", link);
+
+            sendEmail(email, "Application Submitted",  "application-success", templateVariables);
+        }catch (Exception ex){
+            log.error("Error sending application success email to {}: {}", email, ex.getMessage());
+            throw new RuntimeException("Failed to send application success email", ex);
+        }
+    }
 }
