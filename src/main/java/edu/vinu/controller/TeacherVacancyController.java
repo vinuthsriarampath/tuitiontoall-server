@@ -13,6 +13,7 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.enums.TeacherVacancyStatus;
 import edu.vinu.model.TeacherVacancy;
 import edu.vinu.request.CreateVacancyRequest;
 import edu.vinu.request.UpdateVacancyRequest;
@@ -72,7 +73,10 @@ public class TeacherVacancyController {
     }
 
     @GetMapping("/{vacancyId}")
-    public ResponseEntity<ApiResponse> getById(@PathVariable Long vacancyId) {
+    public ResponseEntity<ApiResponse> getById(@PathVariable Long vacancyId,@RequestParam(value = "status",required = false) TeacherVacancyStatus status) {
+        if(status != null){
+            return ResponseEntity.status(200).body(new ApiResponse("Found Vacancy By Id and Status",vacancyService.getByVacancyIdAndStatus(vacancyId,status)));
+        }
         return ResponseEntity.status(200).body(new ApiResponse("Found Vacancy By Id",vacancyService.getById(vacancyId)));
     }
 }
