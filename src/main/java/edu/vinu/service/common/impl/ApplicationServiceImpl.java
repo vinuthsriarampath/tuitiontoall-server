@@ -73,7 +73,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public boolean isUserAlreadyApplied(Long teacherId,Long vacancyId) {
-        if(teacherVacancyService.existsById(vacancyId)){
+        if(!teacherVacancyService.existsById(vacancyId)){
             throw new NotFoundException("Vacancy not found!");
         }
         return applicationRepository.isUserAlreadyApplied(teacherId,vacancyId) == 1;
