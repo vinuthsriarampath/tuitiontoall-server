@@ -76,6 +76,9 @@ public class ApplicationServiceImpl implements ApplicationService {
         if(!teacherVacancyService.existsById(vacancyId)){
             throw new NotFoundException("Vacancy not found!");
         }
+        if (!userService.isTeacherExistByTeacherId(teacherId)) {
+            throw new NotFoundException("Teacher not found!");
+        }
         return applicationRepository.isUserAlreadyApplied(teacherId,vacancyId) == 1;
     }
 
