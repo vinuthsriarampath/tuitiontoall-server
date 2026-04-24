@@ -32,6 +32,8 @@ public interface UserService {
 
     boolean isUserExist(String email);
 
+    boolean isTeacherExistByTeacherId(Long teacherId);
+
     List<Object> getAllUsersByFirstNameLike(String firstname);
 
     List<User> getAllStudentsByFirstNameLike(String firstName);

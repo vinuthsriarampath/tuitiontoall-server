@@ -86,6 +86,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean isTeacherExistByTeacherId(Long teacherId) {
+        return teacherRepository.existsById(teacherId);
+    }
+
+    @Override
     public List<Object> getAllUsersByFirstNameLike(String firstname) {
         List<Object> userList =new ArrayList<>();
         userList.addAll(getAllStudentsByFirstNameLike(firstname));
