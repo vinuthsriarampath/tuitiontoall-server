@@ -21,10 +21,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TeacherVacancyRepository extends JpaRepository<TeacherVacancyEntity, Long> {
     Page<TeacherVacancyEntity> findByInstituteId(Long instituteId, Pageable pageable);
 
     List<TeacherVacancyEntity> findByStatusAndInstituteId(TeacherVacancyStatus status, Long instituteId);
+
+    Optional<TeacherVacancyEntity> findByIdAndStatus(Long vacancyId, TeacherVacancyStatus status);
 }
