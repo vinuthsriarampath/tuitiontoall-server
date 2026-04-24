@@ -24,6 +24,7 @@ import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.model.Application;
 import edu.vinu.repository.ApplicationRepository;
 import edu.vinu.service.common.ApplicationService;
+import edu.vinu.service.common.EmailService;
 import edu.vinu.service.common.TeacherVacancyService;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final UserService userService;
     private final ApplicationRepository applicationRepository;
     private final TeacherVacancyService teacherVacancyService;
+    private final EmailService emailService;
 
     @Override
     public Application createApplication(Long vacancyId) {
@@ -61,6 +63,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                         .build();
                 ApplicationEntity save = applicationRepository.save(applicationEntity);
 
+                emailService.SendApplicationSuccessEmail(userEntity.getEmail(), userEntity.getTeacher().getFirstName()+" "+userEntity.getTeacher().getLastName(),"#");
                 return this.mapToDto(save);
             }else{
                 throw new BadRequestException("Vacancy is not open for applications");
