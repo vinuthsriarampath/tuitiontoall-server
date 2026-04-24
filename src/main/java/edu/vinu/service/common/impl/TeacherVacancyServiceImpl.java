@@ -117,6 +117,12 @@ public class TeacherVacancyServiceImpl implements TeacherVacancyService {
         return getEntityById(id).getStatus().equals(TeacherVacancyStatus.OPEN);
     }
 
+    @Override
+    public TeacherVacancy getByVacancyIdAndStatus(Long vacancyId, TeacherVacancyStatus status) {
+        this.vacancyRepository.findByIdAndStatus(vacancyId,status).orElseThrow(() -> new NotFoundException("Vacancy not found with the given Id/Status"));
+        return mapToDTO(this.getEntityById(vacancyId));
+    }
+
     private TeacherVacancy mapToDTO(TeacherVacancyEntity v) {
         return TeacherVacancy.builder()
                 .id(v.getId())

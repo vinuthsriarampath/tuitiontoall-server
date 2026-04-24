@@ -40,4 +40,6 @@ public interface TeacherVacancyService {
     boolean existsById(Long id);
 
     boolean isVacancyOpened(Long id);
+
+    TeacherVacancy getByVacancyIdAndStatus(Long vacancyId, TeacherVacancyStatus status);
 }
