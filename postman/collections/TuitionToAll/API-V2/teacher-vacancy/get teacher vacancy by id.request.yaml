@@ -1,7 +1,9 @@
 $kind: http-request
 name: get teacher vacancy by id
-url: http://localhost:8080/api/v2/vacancies/1
+url: http://localhost:8080/api/v2/vacancies/6?status=CLOSED
 method: GET
+queryParams:
+  status: CLOSED
 body:
   type: json
   content: "{\r
@@ -10,8 +12,7 @@ body:
 
     \  \"requiredExperienceYears\": 2,\r
 
-    \  \"jobDescription\": \"Responsible for developing and maintaining
-    applications.\",\r
+    \  \"jobDescription\": \"Responsible for developing and maintaining applications.\",\r
 
     \  \"vacancyClosingDate\": \"2026-04-30T23:59:59\"\r
 
