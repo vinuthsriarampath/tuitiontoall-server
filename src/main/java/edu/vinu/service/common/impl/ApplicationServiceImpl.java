@@ -15,6 +15,7 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.ApplicationEntity;
 import edu.vinu.entity.TeacherVacancyEntity;
+import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.enums.ApplicationStatus;
 import edu.vinu.enums.TeacherVacancyStatus;
@@ -23,11 +24,18 @@ import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.model.Application;
 import edu.vinu.repository.ApplicationRepository;
+import edu.vinu.response.ApplicationDetailsResponse;
+import edu.vinu.response.TeacherUserResponse;
 import edu.vinu.service.common.ApplicationService;
 import edu.vinu.service.common.EmailService;
 import edu.vinu.service.common.TeacherVacancyService;
 import edu.vinu.service.common.UserService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -85,6 +93,36 @@ public class ApplicationServiceImpl implements ApplicationService {
         return applicationRepository.isUserAlreadyApplied(teacherId,vacancyId) == 1;
     }
 
+    @Override
+    public Page<ApplicationDetailsResponse> getApplicationsByVacancy(Long vacancyId, int page, int size, String direction, String sortBy) {
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+
+        if (teacherVacancyService.existsById(vacancyId)){
+            return applicationRepository.findAllByTeacherVacancy_Id(vacancyId, pageable).map(ap -> ApplicationDetailsResponse.builder()
+                    .id(ap.getId())
+                    .teacherVacancyId(ap.getTeacherVacancyId())
+                    .status(ApplicationStatus.valueOf(ap.getStatus()))
+                    .appliedDate(ap.getAppliedDate())
+                    .lastModifiedDate(ap.getLastModifiedDate())
+                    .teacher(
+                            TeacherUserResponse.builder()
+                                    .userId(ap.getUserId())
+                                    .email(ap.getEmail())
+                                    .contact(ap.getContact())
+                                    .dp(ap.getDp())
+                                    .address(ap.getAddress())
+                                    .firstName(ap.getFirstName())
+                                    .lastName(ap.getLastName())
+                                    .dob(ap.getDob())
+                                    .build()
+                    )
+                    .build());
+        }else {
+            throw new NotFoundException("Vacancy not found!");
+        }
+    }
+
     private Application mapToDto(ApplicationEntity a){
         return  Application.builder()
                 .id(a.getId())
@@ -95,4 +133,9 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .last_modified_date(a.getLastModifiedDate())
                 .build();
     }
+
+//    private ApplicationDetailsResponse mapToApplicationDetailsResponse(ApplicationEntity a){
+//
+//
+//    }
 }
