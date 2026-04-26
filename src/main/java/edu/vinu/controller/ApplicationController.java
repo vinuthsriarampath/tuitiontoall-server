@@ -15,8 +15,11 @@ package edu.vinu.controller;
 
 import edu.vinu.model.Application;
 import edu.vinu.response.ApiResponse;
+import edu.vinu.response.ApplicationDetailsResponse;
+import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.service.common.ApplicationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -40,5 +43,28 @@ public class ApplicationController {
     public ResponseEntity<ApiResponse> checkIfUserAlreadyApplied(@RequestParam("teacherId") Long userId,@RequestParam("vacancyId") Long vacancyId){
         boolean userAlreadyApplied = applicationService.isUserAlreadyApplied(userId, vacancyId);
         return ResponseEntity.status(200).body(new ApiResponse("Success", userAlreadyApplied));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("vacancies/{vacancyId}")
+    public ResponseEntity<PaginatedApiResponse<ApplicationDetailsResponse>> getAllApplicationsByVacancy(
+            @PathVariable("vacancyId") Long vacancyId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(defaultValue = "appliedDate") String sortBy){
+        Page<ApplicationDetailsResponse> pageData = applicationService.getApplicationsByVacancy(vacancyId,page,size,direction,sortBy);
+
+        PaginatedApiResponse<ApplicationDetailsResponse> response =  PaginatedApiResponse.<ApplicationDetailsResponse>builder()
+                .message("Applications By Vacancy!")
+                .data(pageData.getContent())
+                .page(pageData.getNumber())
+                .size(pageData.getSize())
+                .totalElements(pageData.getTotalElements())
+                .totalPages(pageData.getTotalPages())
+                .last(pageData.isLast())
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 }
