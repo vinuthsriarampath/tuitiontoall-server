@@ -15,7 +15,6 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.ApplicationEntity;
 import edu.vinu.entity.TeacherVacancyEntity;
-import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.enums.ApplicationStatus;
 import edu.vinu.enums.TeacherVacancyStatus;
@@ -30,7 +29,6 @@ import edu.vinu.service.common.ApplicationService;
 import edu.vinu.service.common.EmailService;
 import edu.vinu.service.common.TeacherVacancyService;
 import edu.vinu.service.common.UserService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

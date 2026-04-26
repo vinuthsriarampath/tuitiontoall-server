@@ -26,7 +26,7 @@ import java.util.Map;
 @Profile("!prod")
 public class NoOpEmailServiceImpl implements EmailService {
     @Override
-    public void sendEmail(String to, String subject, String templateName, Map<String, Object> templateVariables) throws MessagingException {
+    public void sendEmail(String to, String subject, String templateName, Map<String, Object> templateVariables) {
         log.info("Email disabled (non-prod)");
     }
 
