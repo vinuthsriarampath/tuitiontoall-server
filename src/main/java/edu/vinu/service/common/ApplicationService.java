@@ -14,9 +14,13 @@
 package edu.vinu.service.common;
 
 import edu.vinu.model.Application;
+import edu.vinu.response.ApplicationDetailsResponse;
+import org.springframework.data.domain.Page;
 
 public interface ApplicationService {
     Application createApplication(Long vacancyId);
 
     boolean isUserAlreadyApplied(Long userId,Long vacancyId);
+
+    Page<ApplicationDetailsResponse> getApplicationsByVacancy(Long vacancyId, int page, int size, String direction, String sortBy);
 }
