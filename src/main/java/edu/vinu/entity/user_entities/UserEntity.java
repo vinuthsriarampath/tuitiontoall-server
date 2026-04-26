@@ -61,13 +61,13 @@ public class UserEntity{
     @JoinColumn(name = "role_id",nullable = false,updatable = false)
     private RoleEntity role;
 
-    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user")
     private StudentEntity student;
 
-    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user")
     private TeacherEntity teacher;
 
-    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user")
     private InstituteEntity institute;
 
     @CreationTimestamp
