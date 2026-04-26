@@ -17,7 +17,6 @@ import edu.vinu.entity.CourseEntity;
 import edu.vinu.model.Batch;
 import edu.vinu.request.BatchCreateRequest;
 import edu.vinu.request.BatchUpdateRequest;
-import jakarta.validation.Valid;
 
 import java.util.List;
 

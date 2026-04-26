@@ -14,7 +14,6 @@
 package edu.vinu.controller;
 
 
-import edu.vinu.enums.TeacherVacancyStatus;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.common.TeacherVacancyService;
 import lombok.RequiredArgsConstructor;

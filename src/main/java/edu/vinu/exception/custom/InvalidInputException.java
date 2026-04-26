@@ -14,7 +14,6 @@
 package edu.vinu.exception.custom;
 
 import edu.vinu.response.FieldError;
-import lombok.Data;
 import lombok.Getter;
 
 import java.util.ArrayList;
