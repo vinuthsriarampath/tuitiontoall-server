@@ -131,9 +131,4 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .last_modified_date(a.getLastModifiedDate())
                 .build();
     }
-
-//    private ApplicationDetailsResponse mapToApplicationDetailsResponse(ApplicationEntity a){
-//
-//
-//    }
 }
