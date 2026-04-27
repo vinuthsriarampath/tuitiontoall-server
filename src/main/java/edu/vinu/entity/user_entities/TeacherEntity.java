@@ -15,6 +15,7 @@ package edu.vinu.entity.user_entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import edu.vinu.entity.ApplicationEntity;
+import edu.vinu.entity.InstituteTeacherEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,4 +49,7 @@ public class TeacherEntity{
 
     @OneToMany(mappedBy = "teacher")
     private List<ApplicationEntity> applications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "teacher")
+    private List<InstituteTeacherEntity> institutes = new ArrayList<>();
 }

@@ -14,6 +14,7 @@
 package edu.vinu.entity.user_entities;
 
 import edu.vinu.entity.CourseEntity;
+import edu.vinu.entity.InstituteTeacherEntity;
 import edu.vinu.entity.TeacherVacancyEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,4 +47,7 @@ public class InstituteEntity{
 
     @OneToMany(mappedBy = "institute")
     private List<TeacherVacancyEntity> teacherVacancies = new ArrayList<>();
+
+    @OneToMany(mappedBy = "institute")
+    private List<InstituteTeacherEntity> teachers = new ArrayList<>();
 }
