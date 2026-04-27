@@ -128,6 +128,11 @@ public class ApplicationServiceImpl implements ApplicationService {
         return applicationRepository.findAllById(applicationIds);
     }
 
+    @Override
+    public void setApplicationStatusSelected(ApplicationEntity applicationEntity) {
+        applicationEntity.setStatus(ApplicationStatus.SELECTED);
+        applicationRepository.save(applicationEntity);
+    }
 
     private Application mapToDto(ApplicationEntity a){
         return  Application.builder()

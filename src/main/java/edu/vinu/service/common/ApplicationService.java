@@ -28,4 +28,6 @@ public interface ApplicationService {
     Page<ApplicationDetailsResponse> getApplicationsByVacancy(Long vacancyId, int page, int size, String direction, String sortBy);
 
     List<ApplicationEntity> getAllApplicationEntitiesByIds(List<Long> applicationIds);
+
+    void setApplicationStatusSelected(ApplicationEntity applicationEntity);
 }
