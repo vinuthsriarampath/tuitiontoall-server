@@ -1,0 +1,105 @@
+/*
+ * Copyright (c) 2026 vinuth sri arampath
+ *
+ * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
+ * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
+ * without prior written permission is strictly prohibited.
+ *
+ * Portions of this code may be generated with AI and modified by vinuth sri arampath
+ * All rights reserved.
+ *
+ *
+ */
+
+package edu.vinu.service.common.impl;
+
+import edu.vinu.entity.ApplicationEntity;
+import edu.vinu.entity.InstituteTeacherEntity;
+import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.enums.ApplicationStatus;
+import edu.vinu.enums.InstituteTeacherStatus;
+import edu.vinu.repository.InstituteTeacherRepository;
+import edu.vinu.request.ApplicationSelectionRequest;
+import edu.vinu.response.ApplicationSelectionResponse;
+import edu.vinu.service.common.ApplicationService;
+import edu.vinu.service.common.InstituteTeacherService;
+import edu.vinu.service.common.UserService;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class InstituteTeacherServiceImpl implements InstituteTeacherService {
+
+    private final UserService userService;
+    private final ApplicationService applicationService;
+    private final InstituteTeacherRepository instituteTeacherRepository;
+
+    @Override
+    @Transactional
+    public ApplicationSelectionResponse onBoardTeachers(ApplicationSelectionRequest request) {
+
+        List<Long> successIds = new ArrayList<>();
+        List<Long> failedIds = new ArrayList<>();
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity userEntity = userService.getUserEntityByEmail(email);
+
+        Long instituteId = userEntity.getInstitute().getId();
+
+        List<ApplicationEntity> applicationEntities = applicationService.getAllApplicationEntitiesByIds(request.getApplicationIds());
+        Map<Long, ApplicationEntity> applicationEntityMap = applicationEntities
+                .stream()
+                .collect(
+                        Collectors.toMap(ApplicationEntity::getId, applicationEntity -> applicationEntity)
+                );
+
+        for (Long applicationId : request.getApplicationIds()){
+            ApplicationEntity applicationEntity = applicationEntityMap.get(applicationId);
+
+            if (applicationEntity == null){
+                failedIds.add(applicationId);
+                continue;
+            }
+
+            try{
+                Long teacherId = applicationEntity.getTeacher().getId();
+                boolean exists = instituteTeacherRepository.existsByTeacherIdAndInstituteId(teacherId,instituteId);
+
+                if (exists) {
+                    failedIds.add(applicationId);
+                    continue;
+                }
+
+                InstituteTeacherEntity entity = InstituteTeacherEntity.builder()
+                        .teacher(applicationEntity.getTeacher())
+                        .institute(userEntity.getInstitute())
+                        .status(InstituteTeacherStatus.ACTIVE)
+                        .build();
+
+                instituteTeacherRepository.save(entity);
+
+                applicationEntity.setStatus(ApplicationStatus.SELECTED);
+
+                applicationService.setApplicationStatusSelected(applicationEntity);
+
+                successIds.add(applicationId);
+
+            }catch (Exception ex){
+                failedIds.add(applicationId);
+            }
+        }
+
+        return ApplicationSelectionResponse.builder()
+                .successApplicationIds(successIds)
+                .failedApplicationIds(failedIds)
+                .build();
+    }
+}
