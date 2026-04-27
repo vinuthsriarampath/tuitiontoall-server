@@ -37,6 +37,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ApplicationServiceImpl implements ApplicationService {
@@ -120,6 +122,12 @@ public class ApplicationServiceImpl implements ApplicationService {
             throw new NotFoundException("Vacancy not found!");
         }
     }
+
+    @Override
+    public List<ApplicationEntity> getAllApplicationEntitiesByIds(List<Long> applicationIds) {
+        return applicationRepository.findAllById(applicationIds);
+    }
+
 
     private Application mapToDto(ApplicationEntity a){
         return  Application.builder()
