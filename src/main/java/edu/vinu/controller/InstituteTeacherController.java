@@ -15,18 +15,14 @@ package edu.vinu.controller;
 
 import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
-import edu.vinu.response.ApiResponse;
-import edu.vinu.response.ApplicationRejectionResponse;
-import edu.vinu.response.ApplicationSelectionResponse;
+import edu.vinu.response.*;
 import edu.vinu.service.common.InstituteTeacherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v2/institutes/teachers")
@@ -47,6 +43,29 @@ public class InstituteTeacherController {
     public ResponseEntity<ApiResponse> rejectApplications(@Valid @RequestBody ApplicationRejectionRequest request){
         ApplicationRejectionResponse applicationRejectionResponse = instituteTeacherService.rejectApplications(request);
         return ResponseEntity.status(200).body(new ApiResponse("Applications Rejected Successfully!", applicationRejectionResponse));
+    }
+
+    @PreAuthorize(("hasAuthority('institute')"))
+    @GetMapping
+    public ResponseEntity<PaginatedApiResponse<InstituteTeacherResponse>> getAllTeacherByInstitute(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(defaultValue = "joinedDate") String sortBy
+    ){
+
+        Page<InstituteTeacherResponse> instituteTeacherResponse = instituteTeacherService.getAllTeachersByInstitute(page, size, direction, sortBy);
+        return ResponseEntity.status(200).body(
+                PaginatedApiResponse.<InstituteTeacherResponse>builder()
+                        .message("Teachers related to the institute fetched successfully!")
+                        .data(instituteTeacherResponse.getContent())
+                        .page(instituteTeacherResponse.getNumber())
+                        .size(instituteTeacherResponse.getSize())
+                        .totalPages(instituteTeacherResponse.getTotalPages())
+                        .totalElements(instituteTeacherResponse.getTotalElements())
+                        .last(instituteTeacherResponse.isLast())
+                        .build()
+        );
     }
 
 }
