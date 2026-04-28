@@ -15,20 +15,28 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.ApplicationEntity;
 import edu.vinu.entity.InstituteTeacherEntity;
+import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.enums.ApplicationStatus;
 import edu.vinu.enums.InstituteTeacherStatus;
+import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.repository.InstituteTeacherRepository;
 import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
 import edu.vinu.response.ApplicationRejectionResponse;
 import edu.vinu.response.ApplicationSelectionResponse;
+import edu.vinu.response.InstituteTeacherResponse;
+import edu.vinu.response.TeacherUserResponse;
 import edu.vinu.service.common.ApplicationService;
 import edu.vinu.service.common.InstituteTeacherService;
 import edu.vinu.service.common.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -150,6 +158,35 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
                 .successApplicationIds(successIds)
                 .failedApplicationIds(failedIds)
                 .build();
+    }
+
+    @Override
+    public Page<InstituteTeacherResponse> getAllTeachersByInstitute(int page, int size, String direction, String sortBy) {
+        UserEntity user = userService.getUserEntityByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        Long instituteId = user.getInstitute().getId();
+
+        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Pageable pageable = PageRequest.of(page,size, Sort.by(sortDirection,sortBy));
+
+        return instituteTeacherRepository.getAllByInstituteId(instituteId,pageable).map(itp -> InstituteTeacherResponse.builder()
+                .id(itp.getId())
+                .status(itp.getStatus())
+                .instituteId(itp.getInstituteId())
+                .joinedDate(itp.getJoinedDate())
+                .lastModifiedDate(itp.getLastModifiedDate())
+                .teacher(
+                        TeacherUserResponse.builder()
+                                .userId(itp.getUserId())
+                                .email(itp.getEmail())
+                                .contact(itp.getContact())
+                                .dp(itp.getDp())
+                                .address(itp.getAddress())
+                                .firstName(itp.getFirstName())
+                                .lastName(itp.getLastName())
+                                .dob(itp.getDob())
+                                .build()
+                )
+                .build());
     }
 
 

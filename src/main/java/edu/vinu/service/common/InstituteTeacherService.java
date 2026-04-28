@@ -17,10 +17,13 @@ import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
 import edu.vinu.response.ApplicationRejectionResponse;
 import edu.vinu.response.ApplicationSelectionResponse;
-import jakarta.validation.Valid;
+import edu.vinu.response.InstituteTeacherResponse;
+import org.springframework.data.domain.Page;
 
 public interface InstituteTeacherService {
     ApplicationSelectionResponse onBoardTeachers(ApplicationSelectionRequest request);
 
-    ApplicationRejectionResponse rejectApplications(@Valid ApplicationRejectionRequest request);
+    ApplicationRejectionResponse rejectApplications(ApplicationRejectionRequest request);
+
+    Page<InstituteTeacherResponse> getAllTeachersByInstitute(int page,int size, String direction, String sortBy);
 }
