@@ -19,12 +19,15 @@ import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.enums.ApplicationStatus;
 import edu.vinu.enums.InstituteTeacherStatus;
 import edu.vinu.repository.InstituteTeacherRepository;
+import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
+import edu.vinu.response.ApplicationRejectionResponse;
 import edu.vinu.response.ApplicationSelectionResponse;
 import edu.vinu.service.common.ApplicationService;
 import edu.vinu.service.common.InstituteTeacherService;
 import edu.vinu.service.common.UserService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -102,4 +105,52 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
                 .failedApplicationIds(failedIds)
                 .build();
     }
+
+    @Override
+    public ApplicationRejectionResponse rejectApplications(ApplicationRejectionRequest request) {
+        ArrayList<Long> successIds = new ArrayList<>();
+        ArrayList<Long> failedIds = new ArrayList<>();
+
+        UserEntity userEntity = userService.getUserEntityByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        Long instituteId = userEntity.getInstitute().getId();
+
+        List<ApplicationEntity> applicationEntities = applicationService.getAllApplicationEntitiesByIds(request.getApplicationIds());
+
+        Map<Long, ApplicationEntity> applicationEntityMap =  applicationEntities
+                .stream()
+                .collect(
+                        Collectors.toMap(ApplicationEntity::getId, applicationEntity -> applicationEntity)
+                );
+
+        for (Long applicationId : request.getApplicationIds()){
+            ApplicationEntity applicationEntity = applicationEntityMap.get(applicationId);
+
+            if (applicationEntity == null){
+                failedIds.add(applicationId);
+                continue;
+            }
+
+            try{
+                Long teacherId = applicationEntity.getTeacher().getId();
+                boolean exists = instituteTeacherRepository.existsByTeacherIdAndInstituteId(teacherId,instituteId);
+
+                if (exists) {
+                    failedIds.add(applicationId);
+                    continue;
+                }
+
+                applicationService.setApplicationStatusRejected(applicationEntity);
+                successIds.add(applicationId);
+
+            }catch (Exception ex){
+                failedIds.add(applicationId);
+            }
+        }
+        return ApplicationRejectionResponse.builder()
+                .successApplicationIds(successIds)
+                .failedApplicationIds(failedIds)
+                .build();
+    }
+
+
 }

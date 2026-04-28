@@ -13,9 +13,14 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
+import edu.vinu.response.ApplicationRejectionResponse;
 import edu.vinu.response.ApplicationSelectionResponse;
+import jakarta.validation.Valid;
 
 public interface InstituteTeacherService {
     ApplicationSelectionResponse onBoardTeachers(ApplicationSelectionRequest request);
+
+    ApplicationRejectionResponse rejectApplications(@Valid ApplicationRejectionRequest request);
 }
