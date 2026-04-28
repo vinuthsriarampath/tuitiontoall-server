@@ -1,6 +1,6 @@
 $kind: http-request
-name: onboard teachers
-url: http://localhost:8080/api/v2/institutes/teachers/onboard
+name: reject applications
+url: http://localhost:8080/api/v2/institutes/teachers/reject
 method: POST
 body:
   type: json
@@ -9,4 +9,4 @@ body:
     \  \"applicationIds\": [1, 2, 3]\r
 
     }"
-order: 2000
+order: 1308
