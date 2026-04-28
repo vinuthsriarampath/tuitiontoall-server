@@ -13,8 +13,10 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
 import edu.vinu.response.ApiResponse;
+import edu.vinu.response.ApplicationRejectionResponse;
 import edu.vinu.response.ApplicationSelectionResponse;
 import edu.vinu.service.common.InstituteTeacherService;
 import jakarta.validation.Valid;
@@ -39,4 +41,12 @@ public class InstituteTeacherController {
         ApplicationSelectionResponse applicationSelectionResponse = instituteTeacherService.onBoardTeachers(request);
         return ResponseEntity.status(201).body(new ApiResponse("Teachers Onboarded Successfully!", applicationSelectionResponse));
     }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PostMapping("/reject")
+    public ResponseEntity<ApiResponse> rejectApplications(@Valid @RequestBody ApplicationRejectionRequest request){
+        ApplicationRejectionResponse applicationRejectionResponse = instituteTeacherService.rejectApplications(request);
+        return ResponseEntity.status(200).body(new ApiResponse("Applications Rejected Successfully!", applicationRejectionResponse));
+    }
+
 }
