@@ -134,6 +134,12 @@ public class ApplicationServiceImpl implements ApplicationService {
         applicationRepository.save(applicationEntity);
     }
 
+    @Override
+    public void setApplicationStatusRejected(ApplicationEntity applicationEntity) {
+        applicationEntity.setStatus(ApplicationStatus.REJECTED);
+        applicationRepository.save(applicationEntity);
+    }
+
     private Application mapToDto(ApplicationEntity a){
         return  Application.builder()
                 .id(a.getId())

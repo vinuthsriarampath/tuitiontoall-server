@@ -30,4 +30,6 @@ public interface ApplicationService {
     List<ApplicationEntity> getAllApplicationEntitiesByIds(List<Long> applicationIds);
 
     void setApplicationStatusSelected(ApplicationEntity applicationEntity);
+
+    void setApplicationStatusRejected(ApplicationEntity applicationEntity);
 }
