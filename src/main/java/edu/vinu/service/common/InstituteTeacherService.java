@@ -18,6 +18,7 @@ import edu.vinu.request.ApplicationSelectionRequest;
 import edu.vinu.response.ApplicationRejectionResponse;
 import edu.vinu.response.ApplicationSelectionResponse;
 import edu.vinu.response.InstituteTeacherResponse;
+import edu.vinu.response.InstituteTeacherStatsResponse;
 import org.springframework.data.domain.Page;
 
 public interface InstituteTeacherService {
@@ -26,4 +27,6 @@ public interface InstituteTeacherService {
     ApplicationRejectionResponse rejectApplications(ApplicationRejectionRequest request);
 
     Page<InstituteTeacherResponse> getAllTeachersByInstitute(int page,int size, String direction, String sortBy);
+
+    InstituteTeacherStatsResponse getInstituteTeacherStats();
 }

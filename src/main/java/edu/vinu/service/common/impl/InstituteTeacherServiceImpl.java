@@ -21,12 +21,10 @@ import edu.vinu.enums.ApplicationStatus;
 import edu.vinu.enums.InstituteTeacherStatus;
 import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.repository.InstituteTeacherRepository;
+import edu.vinu.repository.projection.InstituteTeacherStatsProjection;
 import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
-import edu.vinu.response.ApplicationRejectionResponse;
-import edu.vinu.response.ApplicationSelectionResponse;
-import edu.vinu.response.InstituteTeacherResponse;
-import edu.vinu.response.TeacherUserResponse;
+import edu.vinu.response.*;
 import edu.vinu.service.common.ApplicationService;
 import edu.vinu.service.common.InstituteTeacherService;
 import edu.vinu.service.common.UserService;
@@ -187,6 +185,21 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
                                 .build()
                 )
                 .build());
+    }
+
+    @Override
+    public InstituteTeacherStatsResponse getInstituteTeacherStats() {
+        UserEntity user = userService.getUserEntityByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        Long instituteId = user.getInstitute().getId();
+
+        InstituteTeacherStatsProjection projection = instituteTeacherRepository.getInstituteTeacherStatsByInstituteId(instituteId);
+
+        return InstituteTeacherStatsResponse.builder()
+                .totalTeachers(projection.getTotalTeachers())
+                .activeTeachers(projection.getActiveTeachers())
+                .inactiveTeachers(projection.getInactiveTeachers())
+                .suspendedTeachers(projection.getSuspendedTeachers())
+                .build();
     }
 
 
