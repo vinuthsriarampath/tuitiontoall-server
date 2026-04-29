@@ -15,6 +15,7 @@ package edu.vinu.repository;
 
 import edu.vinu.entity.InstituteTeacherEntity;
 import edu.vinu.repository.projection.InstituteTeacherProjection;
+import edu.vinu.repository.projection.InstituteTeacherStatsProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -57,4 +58,15 @@ public interface InstituteTeacherRepository extends JpaRepository<InstituteTeach
                     """,
             nativeQuery = true)
     Page<InstituteTeacherProjection> getAllByInstituteId(@Param("instituteId") Long instituteId, Pageable pageable);
+
+    @Query(value = """
+    SELECT
+        COUNT(*) AS totalTeachers,
+        SUM(CASE WHEN status = 'ACTIVE' THEN 1 ELSE 0 END) AS activeTeachers,
+        SUM(CASE WHEN status = 'INACTIVE' THEN 1 ELSE 0 END) AS inactiveTeachers,
+        SUM(CASE WHEN status = 'SUSPENDED' THEN 1 ELSE 0 END) AS suspendedTeachers
+     FROM institute_teacher it
+     where it.institute_id = :instituteId
+""",nativeQuery = true)
+    InstituteTeacherStatsProjection getInstituteTeacherStatsByInstituteId(@Param("instituteId") Long instituteId);
 }
