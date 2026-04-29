@@ -68,4 +68,11 @@ public class InstituteTeacherController {
         );
     }
 
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("/stats")
+    public ResponseEntity<ApiResponse> getInstituteTeacherStats(){
+        InstituteTeacherStatsResponse response = instituteTeacherService.getInstituteTeacherStats();
+        return ResponseEntity.status(200).body(new ApiResponse("Institute teacher stats fetched successfully!",response));
+    }
+
 }
