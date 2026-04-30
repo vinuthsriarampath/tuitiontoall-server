@@ -90,4 +90,6 @@ public interface CourseService {
      * @return list of courses
      */
     List<Course> getAllCoursesByInstituteId(Long instituteId, CourseFilterRequest filters);
+
+    Boolean isCourseOwner(CourseEntity courseEntity);
 }

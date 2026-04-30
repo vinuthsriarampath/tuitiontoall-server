@@ -176,7 +176,8 @@ public class CourseServiceImpl implements CourseService {
                 .toList();
     }
 
-    private Boolean isCourseOwner(CourseEntity courseEntity){
+    @Override
+    public Boolean isCourseOwner(CourseEntity courseEntity){
         return courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
