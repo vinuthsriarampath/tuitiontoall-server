@@ -25,6 +25,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -74,4 +76,7 @@ public class BatchEntity {
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime last_modified_date;
+
+    @OneToMany(mappedBy = "batch")
+    private List<AnnouncementEntity> announcements =  new ArrayList<>();
 }

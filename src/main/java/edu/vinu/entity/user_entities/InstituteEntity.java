@@ -13,6 +13,7 @@
 
 package edu.vinu.entity.user_entities;
 
+import edu.vinu.entity.AnnouncementEntity;
 import edu.vinu.entity.CourseEntity;
 import edu.vinu.entity.InstituteTeacherEntity;
 import edu.vinu.entity.TeacherVacancyEntity;
@@ -50,4 +51,7 @@ public class InstituteEntity{
 
     @OneToMany(mappedBy = "institute")
     private List<InstituteTeacherEntity> teachers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "institute")
+    private List<AnnouncementEntity> announcements = new ArrayList<>();
 }

@@ -89,6 +89,9 @@ public class CourseEntity{
     @OneToMany(mappedBy = "course")
     private List<BatchEntity> batchEntities = new ArrayList<>();
 
+    @OneToMany(mappedBy = "course")
+    private List<AnnouncementEntity> announcements = new ArrayList<>();
+
     @CreationTimestamp
     @Column(name = "created_date",nullable = false,updatable = false)
     private LocalDateTime creationTimeStamp;
