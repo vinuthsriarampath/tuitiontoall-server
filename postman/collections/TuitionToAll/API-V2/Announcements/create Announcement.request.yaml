@@ -1,0 +1,24 @@
+$kind: http-request
+name: create Announcement
+url: http://localhost:8080/api/v2/announcements
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"title\": \"Batch Update 2\",\r
+
+    \  \"description\": \"Class rescheduled 2\",\r
+
+    \  \"visibility\": \"BATCH\",\r
+
+    \  \"status\": \"PUBLISHED\",\r
+
+    \  \"expireAt\": \"2026-12-31T10:00:00\",\r
+
+    \  \"courseId\": 3,\r
+
+    \  \"batchId\": 2\r
+
+    }"
+order: 1777521140772
