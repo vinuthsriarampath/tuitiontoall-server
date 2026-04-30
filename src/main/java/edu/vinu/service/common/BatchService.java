@@ -13,6 +13,7 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.entity.BatchEntity;
 import edu.vinu.entity.CourseEntity;
 import edu.vinu.model.Batch;
 import edu.vinu.request.BatchCreateRequest;
@@ -29,4 +30,10 @@ public interface BatchService {
     Batch getBatchById(Long batchId);
 
     Batch updateBatchById(Long batchId, BatchUpdateRequest request);
+
+    BatchEntity getBatchEntityById(Long batchId);
+
+    Boolean isBatchOwner(BatchEntity batchEntity);
+
+    Boolean isBatchBelongToCourse(BatchEntity batchEntity, Long courseId);
 }

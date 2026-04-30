@@ -19,6 +19,7 @@ import edu.vinu.enums.BatchEnrollmentStatus;
 import edu.vinu.enums.BatchStatus;
 import edu.vinu.events.CourseCreatedEvent;
 import edu.vinu.exception.custom.InvalidInputException;
+import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.model.Batch;
 import edu.vinu.repository.BatchRepository;
 import edu.vinu.request.BatchCreateRequest;
@@ -30,6 +31,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -70,7 +72,7 @@ public class BatchServiceImpl implements BatchService {
     @Override
     public Batch getBatchById(Long batchId) {
         BatchEntity batchEntity = batchRepository.findById(batchId)
-                .orElseThrow(() -> new InvalidInputException("Batch with the given id does not exist"));
+                .orElseThrow(() -> new NotFoundException("Batch with the given id does not exist"));
         Batch batch =  mapper.map(batchEntity, Batch.class);
         batch.setCourseId(batchEntity.getCourse().getId());
         return batch;
@@ -117,6 +119,22 @@ public class BatchServiceImpl implements BatchService {
         Batch savedBatch =  mapper.map(savedBatchEntity, Batch.class);
         savedBatch.setCourseId(savedBatchEntity.getCourse().getId());
         return savedBatch;
+    }
+
+    @Override
+    public BatchEntity getBatchEntityById(Long batchId) {
+        return batchRepository.findById(batchId)
+                .orElseThrow(() -> new NotFoundException("Batch with the given id does not exist"));
+    }
+
+    @Override
+    public Boolean isBatchOwner(BatchEntity batchEntity) {
+        return batchEntity.getCourse().getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
+    @Override
+    public Boolean isBatchBelongToCourse(BatchEntity batchEntity, Long courseId) {
+        return batchEntity.getCourse().getId().equals(courseId);
     }
 
 
