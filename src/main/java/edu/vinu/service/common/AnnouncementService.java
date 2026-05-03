@@ -14,8 +14,12 @@
 package edu.vinu.service.common;
 
 import edu.vinu.request.announcements.AnnouncementCreateRequest;
+import edu.vinu.request.announcements.AnnouncementVisibilityUpdateRequest;
 import edu.vinu.response.AnnouncementResponse;
 
 public interface AnnouncementService {
+
     AnnouncementResponse createAnnouncement(AnnouncementCreateRequest request);
+
+    AnnouncementResponse updateAnnouncementVisibility(Long announcementId, AnnouncementVisibilityUpdateRequest request);
 }
