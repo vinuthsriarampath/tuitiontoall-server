@@ -14,6 +14,7 @@
 package edu.vinu.controller;
 
 import edu.vinu.request.announcements.AnnouncementCreateRequest;
+import edu.vinu.request.announcements.AnnouncementVisibilityUpdateRequest;
 import edu.vinu.response.AnnouncementResponse;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.service.common.AnnouncementService;
@@ -21,10 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v2/announcements")
@@ -37,5 +35,12 @@ public class AnnouncementController {
     public ResponseEntity<ApiResponse> createAnnouncement(@Valid @RequestBody AnnouncementCreateRequest request){
         AnnouncementResponse response = announcementService.createAnnouncement(request);
         return ResponseEntity.status(201).body(new ApiResponse("Announcement created successfully!", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PatchMapping("/{announcementId}/visibility")
+    public ResponseEntity<ApiResponse> updateAnnouncementVisibility(@PathVariable Long announcementId, @Valid @RequestBody AnnouncementVisibilityUpdateRequest request){
+        AnnouncementResponse response = announcementService.updateAnnouncementVisibility(announcementId, request);
+        return ResponseEntity.status(200).body(new ApiResponse("Announcement visibility updated successfully!", response));
     }
 }
