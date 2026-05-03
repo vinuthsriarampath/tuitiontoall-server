@@ -6,17 +6,21 @@ body:
   type: json
   content: "{\r
 
-    \  \"courseId\": 3,\r
+    \  \"courseId\": 21,\r
 
-    \  \"name\": \"Batch 2026 - August\",\r
+    \  \"name\": \"Batch 2026 - MAY\",\r
 
     \  \"is_seat_limited\": false,\r
 
     \  \"max_seat_limit\":0,\r
 
-    \  \"start_date\": \"2026-04-15\",\r
+    \  \"start_date\": \"2026-05-15\",\r
 
-    \  \"start_time\": \"09:00:00\"\r
+    \  \"start_time\": \"09:00:00\",\r
+
+    \  \"batch_status\": \"PREPARATION\",\r
+
+    \  \"enrollment_status\": \"OPEN\"\r
 
     }"
 auth:
