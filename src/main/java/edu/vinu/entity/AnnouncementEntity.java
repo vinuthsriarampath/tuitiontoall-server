@@ -52,7 +52,7 @@ public class AnnouncementEntity {
     private AnnouncementStatus status;
 
     @Column(name = "is_pinned",nullable = false)
-    private Boolean isPinned;
+    private boolean isPinned;
 
     @Column(name = "published_date")
     private LocalDateTime publishedDate;

@@ -32,7 +32,7 @@ public class AnnouncementResponse {
     private String description;
     private AnnouncementVisibility visibility;
     private AnnouncementStatus status;
-    private Boolean isPinned;
+    private boolean isPinned;
     private LocalDateTime publishedDate;
     private LocalDateTime expireAt;
     private LocalDateTime createdDate;
