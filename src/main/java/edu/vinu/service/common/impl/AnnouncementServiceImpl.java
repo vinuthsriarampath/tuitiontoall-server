@@ -152,6 +152,66 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         return mapToAnnouncementResponse(announcementRepository.save(announcementEntity));
     }
 
+    @Override
+    @Transactional
+    public AnnouncementResponse pinAnnouncementById(Long id) {
+        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
+        if (!isOwner(announcementEntity)) {
+            throw new UnauthorizedException("You are not authorized to archive this announcement.");
+        }
+        isAnnouncementPinnable(announcementEntity);
+        announcementEntity.setPinned(true);
+        return mapToAnnouncementResponse(announcementRepository.save(announcementEntity));
+    }
+
+    @Override
+    @Transactional
+    public AnnouncementResponse unpinAnnouncementById(Long id) {
+        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
+        if (!isOwner(announcementEntity)) {
+            throw new UnauthorizedException("You are not authorized to archive this announcement.");
+        }
+        announcementEntity.setPinned(false);
+        return mapToAnnouncementResponse(announcementRepository.save(announcementEntity));
+    }
+
+    private void isAnnouncementPinnable(AnnouncementEntity announcementEntity) {
+        final int MAX_PINNED_ANNOUNCEMENTS = 3;
+        final String BASE_MAX_PINNED_ERROR = "Have Reached Max Pinned Announcements";
+
+        if (announcementEntity.getStatus().equals(AnnouncementStatus.ARCHIVED) || announcementEntity.getStatus().equals(AnnouncementStatus.DRAFT) || announcementEntity.getStatus().equals(AnnouncementStatus.DELETED) ) {
+            throw new InvalidInputException("Announcements with status ARCHIVED, DRAFT or DELETED cannot be pinned");
+        }
+
+        switch (announcementEntity.getVisibility()){
+            case PRIVATE -> {
+                throw new InvalidInputException("Announcements with visibility PRIVATE cannot be pinned");
+            }
+            case All_TEACHERS -> {
+                int i = announcementRepository.countAnnouncementsByInstitute(announcementEntity.getInstitute().getId(), AnnouncementStatus.PUBLISHED.name(), AnnouncementVisibility.All_TEACHERS.name(), true, null, null);
+
+                if(i >= MAX_PINNED_ANNOUNCEMENTS){
+                    throw new InvalidInputException(BASE_MAX_PINNED_ERROR+" for all teachers!.");
+                }
+            }
+            case COURSE -> {
+                int i = announcementRepository.countAnnouncementsByInstitute(announcementEntity.getInstitute().getId(), AnnouncementStatus.PUBLISHED.name(), AnnouncementVisibility.COURSE.name(), true, announcementEntity.getCourse().getId(), null);
+
+                if(i >= MAX_PINNED_ANNOUNCEMENTS){
+                    throw new InvalidInputException(BASE_MAX_PINNED_ERROR+" for course id: "+announcementEntity.getCourse().getId());
+                }
+            }
+            case BATCH -> {
+                int i = announcementRepository.countAnnouncementsByInstitute(announcementEntity.getInstitute().getId(),AnnouncementStatus.PUBLISHED.name(),AnnouncementVisibility.BATCH.name(),true,announcementEntity.getCourse().getId(),announcementEntity.getBatch().getId());
+
+                if(i >= MAX_PINNED_ANNOUNCEMENTS){
+                    throw new InvalidInputException(BASE_MAX_PINNED_ERROR+" for batch id: "+announcementEntity.getBatch().getId());
+                }
+            }
+        }
+
+    }
+
     private AnnouncementEntity getAnnouncementEntityById(Long announcementId) {
         return announcementRepository.findById(announcementId).orElseThrow(() -> new NotFoundException("Announcement not found with id: " + announcementId));
     }

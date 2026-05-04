@@ -33,4 +33,8 @@ public interface AnnouncementService {
     AnnouncementResponse updateAnnouncementTitleAndDescription(Long announcementId, AnnouncementUpdateRequest request);
 
     AnnouncementResponse archiveAnnouncementById(Long id);
+
+    AnnouncementResponse pinAnnouncementById(Long id);
+
+    AnnouncementResponse unpinAnnouncementById(Long id);
 }
