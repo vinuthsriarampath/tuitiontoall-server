@@ -57,6 +57,12 @@ public class AnnouncementController {
         return ResponseEntity.status(200).body(new ApiResponse("Announcement updated successfully!", response));
     }
 
+    @PatchMapping("/{id}/archive")
+    public ResponseEntity<ApiResponse> archiveAnnouncement(@PathVariable Long id){
+        AnnouncementResponse response = announcementService.archiveAnnouncementById(id);
+        return ResponseEntity.status(200).body(new ApiResponse("Announcement Archived successfully!", response));
+    }
+
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping
     public ResponseEntity<PaginatedApiResponse<AnnouncementResponse>> getAllAnnouncements(
