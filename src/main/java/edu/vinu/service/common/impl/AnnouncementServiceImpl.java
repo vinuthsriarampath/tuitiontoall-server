@@ -187,8 +187,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             case PRIVATE -> {
                 throw new InvalidInputException("Announcements with visibility PRIVATE cannot be pinned");
             }
-            case All_TEACHERS -> {
-                int i = announcementRepository.countAnnouncementsByInstitute(announcementEntity.getInstitute().getId(), AnnouncementStatus.PUBLISHED.name(), AnnouncementVisibility.All_TEACHERS.name(), true, null, null);
+            case ALL_TEACHERS -> {
+                int i = announcementRepository.countAnnouncementsByInstitute(announcementEntity.getInstitute().getId(), AnnouncementStatus.PUBLISHED.name(), AnnouncementVisibility.ALL_TEACHERS.name(), true, null, null);
 
                 if(i >= MAX_PINNED_ANNOUNCEMENTS){
                     throw new InvalidInputException(BASE_MAX_PINNED_ERROR+" for all teachers!.");
@@ -228,8 +228,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 announcement.setBatch(null);
             }
 
-            case All_TEACHERS -> {
-                announcement.setVisibility(AnnouncementVisibility.All_TEACHERS);
+            case ALL_TEACHERS -> {
+                announcement.setVisibility(AnnouncementVisibility.ALL_TEACHERS);
                 announcement.setCourse(null);
                 announcement.setBatch(null);
             }
@@ -324,7 +324,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
             if (batchId != null) errors.add(new FieldError("batchId", "Must not be provided for PRIVATE"));
         }
 
-        if (visibility == AnnouncementVisibility.All_TEACHERS) {
+        if (visibility == AnnouncementVisibility.ALL_TEACHERS) {
             if (courseId != null) errors.add(new FieldError("courseId", "Must not be provided for All_TEACHERS"));
             if (batchId != null) errors.add(new FieldError("batchId", "Must not be provided for All_TEACHERS"));
         }
@@ -349,7 +349,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
         switch (requestVisibility) {
 
-            case PRIVATE, All_TEACHERS -> throw new InvalidInputException(
+            case PRIVATE, ALL_TEACHERS -> throw new InvalidInputException(
                     "visibility",
                     "Announcement already has the specified visibility"
             );

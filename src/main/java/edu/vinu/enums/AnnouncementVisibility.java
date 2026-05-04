@@ -15,7 +15,7 @@ package edu.vinu.enums;
 
 public enum AnnouncementVisibility {
     PRIVATE,
-    All_TEACHERS,
+    ALL_TEACHERS,
     COURSE,
     BATCH
 }
