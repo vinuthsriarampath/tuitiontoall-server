@@ -138,6 +138,20 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         return mapToAnnouncementResponse(announcementRepository.save(announcementEntity));
     }
 
+    @Override
+    @Transactional
+    public AnnouncementResponse archiveAnnouncementById(Long id) {
+        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
+        if (!isOwner(announcementEntity)) {
+            throw new UnauthorizedException("You are not authorized to archive this announcement.");
+        }
+
+        announcementEntity.setStatus(AnnouncementStatus.ARCHIVED);
+        announcementEntity.setPinned(false);
+
+        return mapToAnnouncementResponse(announcementRepository.save(announcementEntity));
+    }
+
     private AnnouncementEntity getAnnouncementEntityById(Long announcementId) {
         return announcementRepository.findById(announcementId).orElseThrow(() -> new NotFoundException("Announcement not found with id: " + announcementId));
     }

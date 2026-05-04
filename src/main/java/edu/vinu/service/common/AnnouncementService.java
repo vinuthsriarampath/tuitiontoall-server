@@ -31,4 +31,6 @@ public interface AnnouncementService {
     Page<AnnouncementResponse> getAllAnnouncements(int page, int size, String direction, List<String> sortBy, AnnouncementFilterRequest filters);
 
     AnnouncementResponse updateAnnouncementTitleAndDescription(Long announcementId, AnnouncementUpdateRequest request);
+
+    AnnouncementResponse archiveAnnouncementById(Long id);
 }
