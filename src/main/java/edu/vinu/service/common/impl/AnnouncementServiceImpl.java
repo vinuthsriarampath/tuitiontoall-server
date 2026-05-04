@@ -17,7 +17,6 @@ import edu.vinu.entity.AnnouncementEntity;
 import edu.vinu.entity.BatchEntity;
 import edu.vinu.entity.CourseEntity;
 import edu.vinu.entity.user_entities.InstituteEntity;
-import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.enums.AnnouncementStatus;
 import edu.vinu.enums.AnnouncementVisibility;
 import edu.vinu.exception.custom.BadRequestException;
@@ -26,17 +25,19 @@ import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.repository.AnnouncementRepository;
 import edu.vinu.request.announcements.AnnouncementCreateRequest;
+import edu.vinu.request.announcements.AnnouncementFilterRequest;
 import edu.vinu.request.announcements.AnnouncementVisibilityUpdateRequest;
 import edu.vinu.request.announcements.enums.AnnouncementCreateStatus;
 import edu.vinu.response.AnnouncementResponse;
 import edu.vinu.response.FieldError;
 import edu.vinu.service.auth.UserAuthenticationService;
-import edu.vinu.service.common.AnnouncementService;
-import edu.vinu.service.common.BatchService;
-import edu.vinu.service.common.CourseService;
-import edu.vinu.service.common.UserService;
+import edu.vinu.service.common.*;
+import edu.vinu.util.SortUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -52,6 +53,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     private final CourseService courseService;
     private final BatchService batchService;
     private final UserAuthenticationService userAuthenticationService;
+    private final InstituteService instituteService;
 
     @Override
     public AnnouncementResponse createAnnouncement(AnnouncementCreateRequest request) {
@@ -59,12 +61,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         validateExpireAt(request.getExpireAt());
         validateVisibilityRules(request.getVisibility(), request.getCourseId(), request.getBatchId());
 
-        UserEntity userEntity = userService.getUserEntityByEmail(userAuthenticationService.getCurrentUserEmail());
-        InstituteEntity instituteEntity = userEntity.getInstitute();
-
-        if (instituteEntity == null) {
-            throw new UnauthorizedException("You are not associated with any institute.");
-        }
+        InstituteEntity instituteEntity = instituteService.getCurrentInstitute();
 
         AnnouncementStatus status = mapStatus(request.getStatus());
 
@@ -99,6 +96,16 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
         applyVisibility(announcementEntity, request.getVisibility(), request.getCourseId(), request.getBatchId(), announcementEntity.getInstitute());
         return mapToAnnouncementResponse(announcementRepository.save(announcementEntity));
+    }
+
+    @Override
+    public Page<AnnouncementResponse> getAllAnnouncements(int page, int size,String direction, List<String> sortBy, AnnouncementFilterRequest filters) {
+
+        Pageable pageable = PageRequest.of(page,size, SortUtil.buildSort(direction,sortBy,List.of("published_date")));
+
+        InstituteEntity instituteEntity = instituteService.getCurrentInstitute();
+
+        return announcementRepository.findAllByInstituteWithFilters(instituteEntity.getId(),filters.visibility(), filters.status(), filters.courseId(), filters.batchId(),pageable).map(this::mapToAnnouncementResponse);
     }
 
     private void applyVisibility(AnnouncementEntity announcement, AnnouncementVisibility visibility, Long courseId, Long batchId, InstituteEntity institute) {

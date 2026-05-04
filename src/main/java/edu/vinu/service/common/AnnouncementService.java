@@ -14,12 +14,18 @@
 package edu.vinu.service.common;
 
 import edu.vinu.request.announcements.AnnouncementCreateRequest;
+import edu.vinu.request.announcements.AnnouncementFilterRequest;
 import edu.vinu.request.announcements.AnnouncementVisibilityUpdateRequest;
 import edu.vinu.response.AnnouncementResponse;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface AnnouncementService {
 
     AnnouncementResponse createAnnouncement(AnnouncementCreateRequest request);
 
     AnnouncementResponse updateAnnouncementVisibility(Long announcementId, AnnouncementVisibilityUpdateRequest request);
+
+    Page<AnnouncementResponse> getAllAnnouncements(int page, int size, String direction, List<String> sortBy, AnnouncementFilterRequest filters);
 }
