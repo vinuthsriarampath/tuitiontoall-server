@@ -64,12 +64,14 @@ public class AnnouncementController {
         return ResponseEntity.status(200).body(new ApiResponse("Announcement Archived successfully!", response));
     }
 
+    @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/{id}/pin")
     public ResponseEntity<ApiResponse> pinAnnouncement(@PathVariable Long id){
         AnnouncementResponse response =  announcementService.pinAnnouncementById(id);
         return ResponseEntity.status(200).body(new ApiResponse("Announcement Pin successfully!", response));
     }
 
+    @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/{id}/unpin")
     public ResponseEntity<ApiResponse> unpinAnnouncement(@PathVariable Long id){
         AnnouncementResponse response =  announcementService.unpinAnnouncementById(id);
