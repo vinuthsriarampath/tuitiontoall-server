@@ -13,6 +13,7 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.entity.AnnouncementEntity;
 import edu.vinu.request.announcements.AnnouncementCreateRequest;
 import edu.vinu.request.announcements.AnnouncementFilterRequest;
 import edu.vinu.request.announcements.AnnouncementUpdateRequest;
@@ -61,6 +62,18 @@ public class AnnouncementController {
     public ResponseEntity<ApiResponse> archiveAnnouncement(@PathVariable Long id){
         AnnouncementResponse response = announcementService.archiveAnnouncementById(id);
         return ResponseEntity.status(200).body(new ApiResponse("Announcement Archived successfully!", response));
+    }
+
+    @PatchMapping("/{id}/pin")
+    public ResponseEntity<ApiResponse> pinAnnouncement(@PathVariable Long id){
+        AnnouncementResponse response =  announcementService.pinAnnouncementById(id);
+        return ResponseEntity.status(200).body(new ApiResponse("Announcement Pin successfully!", response));
+    }
+
+    @PatchMapping("/{id}/unpin")
+    public ResponseEntity<ApiResponse> unpinAnnouncement(@PathVariable Long id){
+        AnnouncementResponse response =  announcementService.unpinAnnouncementById(id);
+        return ResponseEntity.status(200).body(new ApiResponse("Announcement Unpin successfully!", response));
     }
 
     @PreAuthorize("hasAuthority('institute')")

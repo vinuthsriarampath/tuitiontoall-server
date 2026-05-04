@@ -1,0 +1,5 @@
+$kind: http-request
+name: pin announcements
+url: http://localhost:8080/api/v2/announcements/20/pin
+method: PATCH
+order: 1592057848138912
