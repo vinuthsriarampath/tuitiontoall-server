@@ -14,15 +14,20 @@
 package edu.vinu.controller;
 
 import edu.vinu.request.announcements.AnnouncementCreateRequest;
+import edu.vinu.request.announcements.AnnouncementFilterRequest;
 import edu.vinu.request.announcements.AnnouncementVisibilityUpdateRequest;
 import edu.vinu.response.AnnouncementResponse;
 import edu.vinu.response.ApiResponse;
+import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.service.common.AnnouncementService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v2/announcements")
@@ -42,5 +47,27 @@ public class AnnouncementController {
     public ResponseEntity<ApiResponse> updateAnnouncementVisibility(@PathVariable Long announcementId, @Valid @RequestBody AnnouncementVisibilityUpdateRequest request){
         AnnouncementResponse response = announcementService.updateAnnouncementVisibility(announcementId, request);
         return ResponseEntity.status(200).body(new ApiResponse("Announcement visibility updated successfully!", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping
+    public ResponseEntity<PaginatedApiResponse<AnnouncementResponse>> getAllAnnouncements(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(defaultValue = "published_date") List<String> sortBy,
+            AnnouncementFilterRequest filters
+            ){
+        Page<AnnouncementResponse> pageData = announcementService.getAllAnnouncements(page,size,direction,sortBy,filters);
+        PaginatedApiResponse<AnnouncementResponse> response = PaginatedApiResponse.<AnnouncementResponse>builder()
+                .message("Announcements fetched successfully!")
+                .data(pageData.getContent())
+                .page(pageData.getNumber())
+                .size(pageData.getSize())
+                .totalElements(pageData.getTotalElements())
+                .totalPages(pageData.getTotalPages())
+                .last(pageData.isLast())
+                .build();
+        return ResponseEntity.status(200).body(response);
     }
 }
