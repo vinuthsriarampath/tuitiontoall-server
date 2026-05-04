@@ -26,6 +26,7 @@ import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.repository.AnnouncementRepository;
 import edu.vinu.request.announcements.AnnouncementCreateRequest;
 import edu.vinu.request.announcements.AnnouncementFilterRequest;
+import edu.vinu.request.announcements.AnnouncementUpdateRequest;
 import edu.vinu.request.announcements.AnnouncementVisibilityUpdateRequest;
 import edu.vinu.request.announcements.enums.AnnouncementCreateStatus;
 import edu.vinu.response.AnnouncementResponse;
@@ -84,8 +85,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     @Transactional
     public AnnouncementResponse updateAnnouncementVisibility(Long announcementId, AnnouncementVisibilityUpdateRequest request) {
-        AnnouncementEntity announcementEntity = announcementRepository.findById(announcementId).orElseThrow(() -> new NotFoundException("Announcement not found with id: " + announcementId));
-
+        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(announcementId);
         if (!isOwner(announcementEntity)) {
             throw new UnauthorizedException("You are not authorized to update this announcement.");
         }
@@ -106,6 +106,40 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         InstituteEntity instituteEntity = instituteService.getCurrentInstitute();
 
         return announcementRepository.findAllByInstituteWithFilters(instituteEntity.getId(),filters.visibility(), filters.status(), filters.courseId(), filters.batchId(),pageable).map(this::mapToAnnouncementResponse);
+    }
+
+    @Override
+    @Transactional
+    public AnnouncementResponse updateAnnouncementTitleAndDescription(Long announcementId, AnnouncementUpdateRequest request) {
+        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(announcementId);
+
+        if (!isOwner(announcementEntity)) {
+            throw new UnauthorizedException("You are not authorized to update this announcement.");
+        }
+
+        List<FieldError> errors = new ArrayList<>();
+
+        if(!request.title().isBlank()){
+            announcementEntity.setTitle(request.title());
+        }else {
+            errors.add(new FieldError("title","title is required!"));
+        }
+
+        if(!request.description().isBlank()){
+            announcementEntity.setDescription(request.description());
+        }else {
+            errors.add(new FieldError("title", "Title must not be blank"));
+        }
+
+        if(!errors.isEmpty()){
+            throw new InvalidInputException(errors);
+        }
+
+        return mapToAnnouncementResponse(announcementRepository.save(announcementEntity));
+    }
+
+    private AnnouncementEntity getAnnouncementEntityById(Long announcementId) {
+        return announcementRepository.findById(announcementId).orElseThrow(() -> new NotFoundException("Announcement not found with id: " + announcementId));
     }
 
     private void applyVisibility(AnnouncementEntity announcement, AnnouncementVisibility visibility, Long courseId, Long batchId, InstituteEntity institute) {
