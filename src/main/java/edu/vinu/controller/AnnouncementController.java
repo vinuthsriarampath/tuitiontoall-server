@@ -15,6 +15,7 @@ package edu.vinu.controller;
 
 import edu.vinu.request.announcements.AnnouncementCreateRequest;
 import edu.vinu.request.announcements.AnnouncementFilterRequest;
+import edu.vinu.request.announcements.AnnouncementUpdateRequest;
 import edu.vinu.request.announcements.AnnouncementVisibilityUpdateRequest;
 import edu.vinu.response.AnnouncementResponse;
 import edu.vinu.response.ApiResponse;
@@ -47,6 +48,13 @@ public class AnnouncementController {
     public ResponseEntity<ApiResponse> updateAnnouncementVisibility(@PathVariable Long announcementId, @Valid @RequestBody AnnouncementVisibilityUpdateRequest request){
         AnnouncementResponse response = announcementService.updateAnnouncementVisibility(announcementId, request);
         return ResponseEntity.status(200).body(new ApiResponse("Announcement visibility updated successfully!", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PatchMapping("/{announcementId}")
+    public ResponseEntity<ApiResponse> updateAnnouncementTitleAndDescription(@PathVariable Long announcementId, @RequestBody AnnouncementUpdateRequest request){
+        AnnouncementResponse response = announcementService.updateAnnouncementTitleAndDescription(announcementId, request);
+        return ResponseEntity.status(200).body(new ApiResponse("Announcement updated successfully!", response));
     }
 
     @PreAuthorize("hasAuthority('institute')")
