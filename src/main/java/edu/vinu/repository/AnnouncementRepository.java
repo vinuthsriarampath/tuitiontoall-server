@@ -55,4 +55,37 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
             @Param("batchId") Long batchId,
             Pageable pageable
     );
+
+    @Query(value =
+            """
+                        SELECT
+                        	COUNT(*)
+                        FROM
+                        	announcements a
+                        WHERE
+                        	a.institute_id = :instituteId
+                        	AND (:status IS NULL
+                        		OR a.status = :status)
+                        	AND (:pinned IS NULL
+                        		OR a.is_pinned = :pinned)
+                        	AND (:visibility IS NULL
+                        		OR a.visibility = :visibility)
+                        	AND (
+                                :visibility IS NULL
+                        		OR (:visibility = 'COURSE'
+                        			AND a.course_id = :courseId)
+                        		OR (:visibility = 'BATCH'
+                        			AND a.course_id = :courseId
+                        			AND a.batch_id = :batchId)
+                        		OR (:visibility IN ('PRIVATE', 'ALL_TEACHERS'))
+                          );
+                    """, nativeQuery = true)
+    int countAnnouncementsByInstitute(
+            @Param("instituteId") Long instituteId,
+            @Param("status") String status,
+            @Param("visibility") String visibility,
+            @Param("pinned") Boolean pinned,
+            @Param("courseId") Long courseId,
+            @Param("batchId") Long batchId
+    );
 }
