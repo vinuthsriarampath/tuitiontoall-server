@@ -30,16 +30,10 @@ public class SortUtil {
 
         List<Sort.Order> orders = new ArrayList<>();
 
-        System.out.println("Received sort parameters: " + sortBy);
-        System.out.println("Default sort parameters: " + defaultSortBy);
-        System.out.println("Effective sort parameters: " + effectedSortBy);
-
         for (String param : effectedSortBy){
-
 
             if (param == null || param.isBlank()) continue;
 
-            System.out.println("Processing sort parameter: " + param);
             orders.add(new Sort.Order(sortDirection, param));
 
         }
