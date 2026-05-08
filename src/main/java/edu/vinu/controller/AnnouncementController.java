@@ -13,7 +13,6 @@
 
 package edu.vinu.controller;
 
-import edu.vinu.entity.AnnouncementEntity;
 import edu.vinu.request.announcements.AnnouncementCreateRequest;
 import edu.vinu.request.announcements.AnnouncementFilterRequest;
 import edu.vinu.request.announcements.AnnouncementUpdateRequest;
@@ -54,7 +53,7 @@ public class AnnouncementController {
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/{announcementId}")
     public ResponseEntity<ApiResponse> updateAnnouncementTitleAndDescription(@PathVariable Long announcementId, @RequestBody AnnouncementUpdateRequest request){
-        AnnouncementResponse response = announcementService.updateAnnouncementTitleAndDescription(announcementId, request);
+        AnnouncementResponse response = announcementService.updateAnnouncement(announcementId, request);
         return ResponseEntity.status(200).body(new ApiResponse("Announcement updated successfully!", response));
     }
 
@@ -76,6 +75,20 @@ public class AnnouncementController {
     public ResponseEntity<ApiResponse> unpinAnnouncement(@PathVariable Long id){
         AnnouncementResponse response =  announcementService.unpinAnnouncementById(id);
         return ResponseEntity.status(200).body(new ApiResponse("Announcement Unpin successfully!", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PatchMapping("/{id}/publish")
+    public ResponseEntity<ApiResponse> publishAnnouncement(@PathVariable Long id){
+        AnnouncementResponse response =  announcementService.publishAnnouncementById(id);
+        return ResponseEntity.status(200).body(new ApiResponse("Announcement published successfully!", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<ApiResponse> deleteAnnouncement(@PathVariable Long id){
+        AnnouncementResponse response =  announcementService.deleteAnnouncementById(id);
+        return ResponseEntity.status(200).body(new ApiResponse("Announcement published successfully!", response));
     }
 
     @PreAuthorize("hasAuthority('institute')")

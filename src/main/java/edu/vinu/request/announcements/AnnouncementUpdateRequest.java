@@ -13,8 +13,11 @@
 
 package edu.vinu.request.announcements;
 
+import java.time.LocalDateTime;
+
 public record AnnouncementUpdateRequest(
         String title,
-        String description
+        String description,
+        LocalDateTime expireAt
 ) {
 }
