@@ -22,7 +22,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -64,7 +64,7 @@ public class AnnouncementEntity {
     @Column(name = "created_date",nullable = false)
     private LocalDateTime createdDate;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
 

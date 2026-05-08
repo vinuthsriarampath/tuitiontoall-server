@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -73,7 +73,7 @@ public class BatchEntity {
     @Column(nullable = false,updatable = false)
     private LocalDateTime created_date;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(insertable = false)
     private LocalDateTime last_modified_date;
 

@@ -23,7 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -96,7 +96,7 @@ public class CourseEntity{
     @Column(name = "created_date",nullable = false,updatable = false)
     private LocalDateTime creationTimeStamp;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "last_modified_date",insertable = false)
     private LocalDateTime updatedAt;
 }

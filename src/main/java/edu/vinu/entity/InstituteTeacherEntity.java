@@ -22,7 +22,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -53,6 +53,6 @@ public class InstituteTeacherEntity {
     @JoinColumn(name = "joined_date",nullable = false)
     private LocalDateTime joinedDate;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
 }
