@@ -181,6 +181,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
+    @Transactional
     public AnnouncementResponse publishAnnouncementById(Long id) {
         AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
         if (!isOwner(announcementEntity)) {
@@ -192,6 +193,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
+    @Transactional
     public AnnouncementResponse deleteAnnouncementById(Long id) {
         AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
         if (!isOwner(announcementEntity)) {
@@ -202,6 +204,16 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         announcementEntity.setPublishedDate(null);
         announcementEntity.setExpireAt(LocalDateTime.now());
         return mapToAnnouncementResponse(announcementRepository.save(announcementEntity));
+    }
+
+    @Override
+    @Transactional
+    public AnnouncementResponse getAnnouncementById(Long id) {
+        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
+        if (!isOwner(announcementEntity)) {
+            throw new UnauthorizedException("You are not authorized to archive this announcement.");
+        }
+        return  mapToAnnouncementResponse(announcementEntity);
     }
 
     private void isAnnouncementPinnable(AnnouncementEntity announcementEntity) {

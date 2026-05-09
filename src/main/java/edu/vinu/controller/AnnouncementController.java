@@ -85,10 +85,17 @@ public class AnnouncementController {
     }
 
     @PreAuthorize("hasAuthority('institute')")
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteAnnouncement(@PathVariable Long id){
         AnnouncementResponse response =  announcementService.deleteAnnouncementById(id);
         return ResponseEntity.status(200).body(new ApiResponse("Announcement published successfully!", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse> getAnnouncementById(@PathVariable Long id){
+        AnnouncementResponse response =  announcementService.getAnnouncementById(id);
+        return ResponseEntity.status(200).body(new ApiResponse("Announcement Found!", response));
     }
 
     @PreAuthorize("hasAuthority('institute')")

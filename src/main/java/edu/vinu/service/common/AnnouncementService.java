@@ -41,4 +41,6 @@ public interface AnnouncementService {
     AnnouncementResponse publishAnnouncementById(Long id);
 
     AnnouncementResponse deleteAnnouncementById(Long id);
+
+    AnnouncementResponse getAnnouncementById(Long id);
 }
