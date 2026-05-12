@@ -79,4 +79,7 @@ public class BatchEntity {
 
     @OneToMany(mappedBy = "batch")
     private List<AnnouncementEntity> announcements =  new ArrayList<>();
+
+    @OneToMany(mappedBy = "batch")
+    private List<ModuleEntity> modules = new ArrayList<>();
 }
