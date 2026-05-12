@@ -14,15 +14,20 @@
 package edu.vinu.controller;
 
 import edu.vinu.request.modules.ModuleCreateRequest;
+import edu.vinu.request.modules.ModuleFilterRequest;
 import edu.vinu.request.modules.ModuleNameUpdateRequest;
 import edu.vinu.response.ApiResponse;
+import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.response.module.ModuleResponse;
 import edu.vinu.service.common.ModuleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v2/modules")
@@ -64,5 +69,29 @@ public class ModuleController {
     public ResponseEntity<ApiResponse> archiveModule(@PathVariable("id") Long id){
         ModuleResponse response = moduleService.archiveModule(id);
         return ResponseEntity.ok(new ApiResponse("Module archived successfully", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping
+    public ResponseEntity<PaginatedApiResponse<ModuleResponse>> getAllModules(
+            @RequestParam("page")int page,
+            @RequestParam("size") int size,
+            @RequestParam("direction") String direction,
+            @RequestParam("sortBy")List<String> sortBy,
+            ModuleFilterRequest filter
+            ){
+
+        Page<ModuleResponse> pageData = moduleService.getAllFilteredModules(page, size, direction, sortBy, filter);
+        PaginatedApiResponse<ModuleResponse> response = PaginatedApiResponse.<ModuleResponse>builder()
+                .message("Modules retrieved successfully")
+                .data(pageData.getContent())
+                .page(pageData.getNumber())
+                .size(pageData.getSize())
+                .totalPages(pageData.getTotalPages())
+                .totalElements(pageData.getTotalElements())
+                .last(pageData.isLast())
+                .build();
+
+        return ResponseEntity.status(200).body(response);
     }
 }
