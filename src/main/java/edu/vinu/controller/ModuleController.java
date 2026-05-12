@@ -14,6 +14,7 @@
 package edu.vinu.controller;
 
 import edu.vinu.request.modules.ModuleCreateRequest;
+import edu.vinu.request.modules.ModuleNameUpdateRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.module.ModuleResponse;
 import edu.vinu.service.common.ModuleService;
@@ -21,10 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v2/modules")
@@ -38,5 +36,12 @@ public class ModuleController {
     public ResponseEntity<ApiResponse> createModule(@Valid @RequestBody ModuleCreateRequest request){
         ModuleResponse response = moduleService.createModule(request);
         return ResponseEntity.ok(new ApiResponse("Module created successfully", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PatchMapping("{id}")
+    public ResponseEntity<ApiResponse> updateModuleName(@PathVariable("id") Long id, @Valid @RequestBody ModuleNameUpdateRequest request){
+        ModuleResponse response = moduleService.updateModuleName(id,request);
+        return ResponseEntity.ok(new ApiResponse("Module updated successfully", response));
     }
 }
