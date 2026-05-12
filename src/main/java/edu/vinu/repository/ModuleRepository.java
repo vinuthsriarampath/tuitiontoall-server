@@ -19,4 +19,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ModuleRepository extends JpaRepository<ModuleEntity, Long> {
+    boolean existsByNameAndBatchId(String name, Long batchId);
 }
