@@ -19,13 +19,18 @@ import edu.vinu.enums.ModuleStatus;
 import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.repository.ModuleRepository;
 import edu.vinu.request.modules.ModuleCreateRequest;
+import edu.vinu.request.modules.ModuleFilterRequest;
 import edu.vinu.request.modules.ModuleNameUpdateRequest;
 import edu.vinu.request.modules.enums.ModuleCreateStatus;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.module.ModuleResponse;
 import edu.vinu.service.common.BatchService;
 import edu.vinu.service.common.ModuleService;
+import edu.vinu.util.SortUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -100,6 +105,14 @@ public class ModuleServiceImpl implements ModuleService {
         ModuleEntity moduleEntity = getModuleEntityById(id);
 
         return mapToAnnouncementResponse(updateStatus(moduleEntity, ModuleStatus.ARCHIVED));
+    }
+
+    @Override
+    public Page<ModuleResponse> getAllFilteredModules(int page, int size, String direction, List<String> sortBy, ModuleFilterRequest filter) {
+
+        Pageable pageable = PageRequest.of(page, size, SortUtil.buildSort(direction, sortBy, List.of("created_date")));
+        return moduleRepository.getAllModules(pageable,filter.status(), filter.batchId())
+                .map(this::mapToAnnouncementResponse);
     }
 
     private ModuleEntity updateStatus(ModuleEntity moduleEntity, ModuleStatus status) {
