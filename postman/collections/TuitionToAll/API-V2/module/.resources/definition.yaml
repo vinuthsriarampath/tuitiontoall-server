@@ -1,0 +1,7 @@
+$kind: collection
+name: module
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 797997803765759
