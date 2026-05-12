@@ -40,7 +40,7 @@ public class AnnouncementEntity {
     @Column(name = "title",nullable = false)
     private String title;
 
-    @Column(name = "description",nullable = false)
+    @Column(name = "description",nullable = false, columnDefinition = "LONGTEXT")
     private String description;
 
     @Enumerated(EnumType.STRING)
