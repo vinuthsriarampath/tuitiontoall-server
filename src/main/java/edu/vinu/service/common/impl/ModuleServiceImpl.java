@@ -81,6 +81,36 @@ public class ModuleServiceImpl implements ModuleService {
         return mapToAnnouncementResponse(moduleRepository.save(moduleEntity));
     }
 
+    @Override
+    public ModuleResponse publishModule(Long id) {
+        ModuleEntity moduleEntity = getModuleEntityById(id);
+
+        return mapToAnnouncementResponse(updateStatus(moduleEntity, ModuleStatus.PUBLISHED));
+    }
+
+    @Override
+    public ModuleResponse lockModule(Long id) {
+        ModuleEntity moduleEntity = getModuleEntityById(id);
+
+        return mapToAnnouncementResponse(updateStatus(moduleEntity, ModuleStatus.LOCKED));
+    }
+
+    @Override
+    public ModuleResponse archiveModule(Long id) {
+        ModuleEntity moduleEntity = getModuleEntityById(id);
+
+        return mapToAnnouncementResponse(updateStatus(moduleEntity, ModuleStatus.ARCHIVED));
+    }
+
+    private ModuleEntity updateStatus(ModuleEntity moduleEntity, ModuleStatus status) {
+
+        if (!isModuleOwner(moduleEntity)) {
+            throw new InvalidInputException("You are not authorized to update this module");
+        }
+        moduleEntity.setStatus(status);
+        return moduleRepository.save(moduleEntity);
+    }
+
     private ModuleEntity getModuleEntityById(Long id){
         return moduleRepository.findById(id)
                 .orElseThrow(() -> new InvalidInputException("Module with id " + id + " not found"));

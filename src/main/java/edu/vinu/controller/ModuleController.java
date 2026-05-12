@@ -44,4 +44,25 @@ public class ModuleController {
         ModuleResponse response = moduleService.updateModuleName(id,request);
         return ResponseEntity.ok(new ApiResponse("Module updated successfully", response));
     }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PatchMapping("{id}/publish")
+    public ResponseEntity<ApiResponse> publishModule(@PathVariable("id") Long id){
+        ModuleResponse response = moduleService.publishModule(id);
+        return ResponseEntity.ok(new ApiResponse("Module published successfully", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PatchMapping("{id}/lock")
+    public ResponseEntity<ApiResponse> lockModule(@PathVariable("id") Long id){
+        ModuleResponse response = moduleService.lockModule(id);
+        return ResponseEntity.ok(new ApiResponse("Module locked successfully", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PatchMapping("{id}/archive")
+    public ResponseEntity<ApiResponse> archiveModule(@PathVariable("id") Long id){
+        ModuleResponse response = moduleService.archiveModule(id);
+        return ResponseEntity.ok(new ApiResponse("Module archived successfully", response));
+    }
 }

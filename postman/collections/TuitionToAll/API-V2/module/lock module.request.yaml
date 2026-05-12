@@ -1,0 +1,5 @@
+$kind: http-request
+name: lock module
+url: http://localhost:8080/api/v2/modules/1/lock
+method: PATCH
+order: 3807604746340735
