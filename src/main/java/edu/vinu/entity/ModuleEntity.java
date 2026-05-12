@@ -25,7 +25,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "module")
+@Table(name = "module",
+uniqueConstraints = {
+        @UniqueConstraint(name = "uk_batch_module_name",columnNames = {"name","batch_id"})
+})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
