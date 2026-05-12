@@ -19,12 +19,14 @@ import edu.vinu.enums.ModuleStatus;
 import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.repository.ModuleRepository;
 import edu.vinu.request.modules.ModuleCreateRequest;
+import edu.vinu.request.modules.ModuleNameUpdateRequest;
 import edu.vinu.request.modules.enums.ModuleCreateStatus;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.module.ModuleResponse;
 import edu.vinu.service.common.BatchService;
 import edu.vinu.service.common.ModuleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -60,6 +62,32 @@ public class ModuleServiceImpl implements ModuleService {
                 .build();
 
         return mapToAnnouncementResponse(moduleRepository.save(moduleEntity));
+    }
+
+    @Override
+    public ModuleResponse updateModuleName(Long id, ModuleNameUpdateRequest request) {
+        ModuleEntity moduleEntity = getModuleEntityById(id);
+
+        if (!isModuleOwner(moduleEntity)) {
+            throw new InvalidInputException("You are not authorized to update this module");
+        }
+
+        if (isModuleExists(request.getName(), moduleEntity.getBatch().getId())) {
+            throw new InvalidInputException("name", "same module name already exists in the batch");
+        }
+
+        moduleEntity.setName(request.getName());
+
+        return mapToAnnouncementResponse(moduleRepository.save(moduleEntity));
+    }
+
+    private ModuleEntity getModuleEntityById(Long id){
+        return moduleRepository.findById(id)
+                .orElseThrow(() -> new InvalidInputException("Module with id " + id + " not found"));
+    }
+
+    private boolean isModuleOwner(ModuleEntity entity){
+       return entity.getBatch().getCourse().getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
     private boolean isModuleExists(String name, Long batchId){

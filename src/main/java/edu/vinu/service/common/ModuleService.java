@@ -14,8 +14,12 @@
 package edu.vinu.service.common;
 
 import edu.vinu.request.modules.ModuleCreateRequest;
+import edu.vinu.request.modules.ModuleNameUpdateRequest;
 import edu.vinu.response.module.ModuleResponse;
+import jakarta.validation.Valid;
 
 public interface ModuleService {
     ModuleResponse createModule(ModuleCreateRequest request);
+
+    ModuleResponse updateModuleName(Long id, @Valid ModuleNameUpdateRequest request);
 }
