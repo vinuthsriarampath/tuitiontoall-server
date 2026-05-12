@@ -14,6 +14,8 @@
 package edu.vinu.request.modules;
 
 import edu.vinu.request.modules.enums.ModuleCreateStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +26,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ModuleCreateRequest {
+    @NotBlank(message = "Module name is mandatory!")
     private String name;
+    @NotNull(message = "Module status is mandatory!")
     private ModuleCreateStatus status;
+    @NotNull(message = "Batch ID is mandatory!")
     private Long batchId;
 }
