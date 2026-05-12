@@ -8,7 +8,7 @@ body:
 
     \    \"name\":\"Test module 1\",\r
 
-    \    \"statu\":\"PUBLISHED\",\r
+    \    \"status\":\"PUBLISHED\",\r
 
     \    \"batchId\":1\r
 
