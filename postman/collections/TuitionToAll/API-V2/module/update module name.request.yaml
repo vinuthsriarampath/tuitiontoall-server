@@ -1,6 +1,6 @@
 $kind: http-request
 name: update module name
-url: http
+url: http://localhost:8080/api/v2/modules/1
 method: PATCH
 body:
   type: json
