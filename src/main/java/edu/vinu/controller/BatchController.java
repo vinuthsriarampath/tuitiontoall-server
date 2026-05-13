@@ -17,9 +17,13 @@ import edu.vinu.model.Batch;
 import edu.vinu.request.BatchCreateRequest;
 import edu.vinu.request.BatchUpdateRequest;
 import edu.vinu.response.ApiResponse;
+import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.response.module.ModuleResponse;
+import edu.vinu.service.common.BatchModuleService;
 import edu.vinu.service.common.BatchService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +35,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BatchController {
     private final BatchService batchService;
+    private final BatchModuleService batchModuleService;
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping("/create")
@@ -58,5 +63,27 @@ public class BatchController {
     public ResponseEntity<ApiResponse> updateBatchById(@PathVariable Long batchId, @Valid @RequestBody BatchUpdateRequest request){
         Batch  batch = batchService.updateBatchById(batchId,request);
         return ResponseEntity.status(200).body(new ApiResponse("Batch Updated Successfully",batch));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("/{id}/modules")
+    public ResponseEntity<PaginatedApiResponse<ModuleResponse>> getBatchFullDetailsById(
+            @PathVariable Long id,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("direction") String direction,
+            @RequestParam("sortBy") List<String> sortBy
+    ){
+        Page<ModuleResponse> pageData = batchModuleService.getAllModulesByBatch(id,page,size,direction,sortBy);
+        PaginatedApiResponse<ModuleResponse> response = PaginatedApiResponse.<ModuleResponse>builder()
+                .message("Modules related to batch fetched successfully!")
+                .data(pageData.getContent())
+                .page(pageData.getNumber())
+                .size(pageData.getSize())
+                .totalElements(pageData.getTotalElements())
+                .totalPages(pageData.getTotalPages())
+                .last(pageData.isLast())
+                .build();
+        return ResponseEntity.status(200).body(response);
     }
 }
