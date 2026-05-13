@@ -1,2 +1,7 @@
 $kind: collection
+name: Batch
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
 order: 7000
