@@ -74,10 +74,10 @@ public class ModuleController {
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping
     public ResponseEntity<PaginatedApiResponse<ModuleResponse>> getAllModules(
-            @RequestParam("page")int page,
-            @RequestParam("size") int size,
-            @RequestParam("direction") String direction,
-            @RequestParam("sortBy")List<String> sortBy,
+            @RequestParam(value = "page",defaultValue = "0")int page,
+            @RequestParam(value = "size",defaultValue = "10") int size,
+            @RequestParam(value = "direction",defaultValue = "desc") String direction,
+            @RequestParam(value = "sortBy",defaultValue = "created_date")List<String> sortBy,
             ModuleFilterRequest filter
             ){
 

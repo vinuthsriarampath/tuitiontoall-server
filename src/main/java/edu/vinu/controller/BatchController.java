@@ -69,10 +69,10 @@ public class BatchController {
     @GetMapping("/{id}/modules")
     public ResponseEntity<PaginatedApiResponse<ModuleResponse>> getBatchFullDetailsById(
             @PathVariable Long id,
-            @RequestParam("page") int page,
-            @RequestParam("size") int size,
-            @RequestParam("direction") String direction,
-            @RequestParam("sortBy") List<String> sortBy
+            @RequestParam(value = "page",defaultValue = "0") int page,
+            @RequestParam(value = "size",defaultValue = "10") int size,
+            @RequestParam(value = "direction",defaultValue = "desc") String direction,
+            @RequestParam(value = "sortBy",defaultValue = "created_date") List<String> sortBy
     ){
         Page<ModuleResponse> pageData = batchModuleService.getAllModulesByBatch(id,page,size,direction,sortBy);
         PaginatedApiResponse<ModuleResponse> response = PaginatedApiResponse.<ModuleResponse>builder()
