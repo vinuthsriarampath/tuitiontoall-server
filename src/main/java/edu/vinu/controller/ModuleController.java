@@ -16,6 +16,7 @@ package edu.vinu.controller;
 import edu.vinu.request.modules.ModuleCreateRequest;
 import edu.vinu.request.modules.ModuleFilterRequest;
 import edu.vinu.request.modules.ModuleNameUpdateRequest;
+import edu.vinu.request.modules.ModuleTeacherUpdateRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.response.module.ModuleResponse;
@@ -69,6 +70,13 @@ public class ModuleController {
     public ResponseEntity<ApiResponse> archiveModule(@PathVariable("id") Long id){
         ModuleResponse response = moduleService.archiveModule(id);
         return ResponseEntity.ok(new ApiResponse("Module archived successfully", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PatchMapping("{id}/teacher")
+    public ResponseEntity<ApiResponse> updateModuleTeacher(@PathVariable("id") Long id,@Valid @RequestBody ModuleTeacherUpdateRequest request){
+        ModuleResponse response = moduleService.updateModuleTeacher(id, request);
+        return ResponseEntity.ok(new ApiResponse("Module teacher updated successfully", response));
     }
 
     @PreAuthorize("hasAuthority('institute')")
