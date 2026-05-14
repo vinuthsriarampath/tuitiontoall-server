@@ -15,8 +15,10 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.BatchEntity;
 import edu.vinu.entity.ModuleEntity;
+import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.enums.ModuleStatus;
 import edu.vinu.exception.custom.InvalidInputException;
+import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.repository.ModuleRepository;
 import edu.vinu.request.modules.ModuleCreateRequest;
 import edu.vinu.request.modules.ModuleFilterRequest;
@@ -25,6 +27,7 @@ import edu.vinu.request.modules.enums.ModuleCreateStatus;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.module.ModuleResponse;
 import edu.vinu.service.common.BatchService;
+import edu.vinu.service.common.InstituteTeacherService;
 import edu.vinu.service.common.ModuleService;
 import edu.vinu.util.SortUtil;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +45,7 @@ import java.util.List;
 public class ModuleServiceImpl implements ModuleService {
     private final ModuleRepository moduleRepository;
     private final BatchService batchService;
+    private final InstituteTeacherService instituteTeacherService;
     @Override
     public ModuleResponse createModule(ModuleCreateRequest request) {
         BatchEntity batchEntity = batchService.getBatchEntityById(request.getBatchId());
@@ -56,6 +60,13 @@ public class ModuleServiceImpl implements ModuleService {
             errors.add(new FieldError("name","same module name already exists in the batch"));
         }
 
+        TeacherEntity teacherEntity = null;
+        try {
+            teacherEntity = instituteTeacherService.getCurrentInstituteRelatedTeacherEntityById(request.getTeacherId());
+        } catch (NotFoundException e) {
+            errors.add(new FieldError("teacherId",e.getMessage()));
+        }
+
         if (!errors.isEmpty()) {
             throw new InvalidInputException(errors);
         }
@@ -63,6 +74,7 @@ public class ModuleServiceImpl implements ModuleService {
         ModuleEntity moduleEntity = ModuleEntity.builder()
                 .name(request.getName())
                 .batch(batchEntity)
+                .teacher(teacherEntity)
                 .status(mapToModuleStatus(request.getStatus()))
                 .build();
 
@@ -158,6 +170,7 @@ public class ModuleServiceImpl implements ModuleService {
                 .name(entity.getName())
                 .status(entity.getStatus())
                 .batchId(entity.getBatch().getId())
+                .teacherId(entity.getTeacher().getId())
                 .createdDate(entity.getCreatedAt())
                 .lastModifiedDate(entity.getLastModifiedDate())
                 .build();
