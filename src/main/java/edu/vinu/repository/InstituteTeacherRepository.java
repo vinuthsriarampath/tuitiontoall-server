@@ -25,6 +25,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface InstituteTeacherRepository extends JpaRepository<InstituteTeacherEntity, Long> {
@@ -86,4 +87,6 @@ public interface InstituteTeacherRepository extends JpaRepository<InstituteTeach
             """,nativeQuery = true
     )
     List<TeacherProjection> findAllTeachersByInstituteId(@Param("instituteId") Long instituteId);
+
+    Optional<InstituteTeacherEntity> findByTeacherIdAndInstituteId(Long id, Long instituteId);
 }
