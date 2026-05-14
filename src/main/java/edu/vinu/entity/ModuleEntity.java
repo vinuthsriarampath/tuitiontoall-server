@@ -13,6 +13,7 @@
 
 package edu.vinu.entity;
 
+import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.enums.ModuleStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -52,4 +53,8 @@ public class ModuleEntity {
     @ManyToOne
     @JoinColumn(name = "batch_id",nullable = false)
     private BatchEntity batch;
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id",nullable = false)
+    private TeacherEntity teacher;
 }
