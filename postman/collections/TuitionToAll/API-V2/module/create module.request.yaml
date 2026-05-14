@@ -6,11 +6,13 @@ body:
   type: json
   content: "{\r
 
-    \    \"name\":\"Test module 1\",\r
+    \    \"name\":\"Test module 2\",\r
 
     \    \"status\":\"PUBLISHED\",\r
 
-    \    \"batchId\":1\r
+    \    \"batchId\":1,\r
+
+    \    \"teacherId\":47\r
 
     }"
 order: 1778579878356
