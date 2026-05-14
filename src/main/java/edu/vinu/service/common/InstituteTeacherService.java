@@ -13,7 +13,7 @@
 
 package edu.vinu.service.common;
 
-import edu.vinu.model.user_models.Teacher;
+import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
 import edu.vinu.response.*;
@@ -31,4 +31,6 @@ public interface InstituteTeacherService {
     InstituteTeacherStatsResponse getInstituteTeacherStats();
 
     List<TeacherBasicResponse> getAllTeachersByCurrentInstitute();
+
+    TeacherEntity getCurrentInstituteRelatedTeacherEntityById(Long id);
 }

@@ -15,12 +15,11 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.ApplicationEntity;
 import edu.vinu.entity.InstituteTeacherEntity;
-import edu.vinu.entity.user_entities.InstituteEntity;
+import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.enums.ApplicationStatus;
 import edu.vinu.enums.InstituteTeacherStatus;
 import edu.vinu.exception.custom.NotFoundException;
-import edu.vinu.model.user_models.Teacher;
 import edu.vinu.repository.InstituteTeacherRepository;
 import edu.vinu.repository.projection.InstituteTeacherStatsProjection;
 import edu.vinu.request.ApplicationRejectionRequest;
@@ -31,7 +30,6 @@ import edu.vinu.service.common.InstituteService;
 import edu.vinu.service.common.InstituteTeacherService;
 import edu.vinu.service.common.UserService;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -217,6 +215,13 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
                 .dob(tp.getDob())
                 .build()
         ).toList();
+    }
+
+    @Override
+    public TeacherEntity getCurrentInstituteRelatedTeacherEntityById(Long id) {
+        Long instituteId = instituteService.getCurrentInstitute().getId();
+        InstituteTeacherEntity entity =instituteTeacherRepository.findByTeacherIdAndInstituteId(id, instituteId).orElseThrow(() -> new NotFoundException("Teacher with id " + id + " not found in the current institute"));
+        return entity.getTeacher();
     }
 
 
