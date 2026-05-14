@@ -13,6 +13,7 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.model.user_models.Teacher;
 import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
 import edu.vinu.response.*;
@@ -23,6 +24,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v2/institutes/teachers")
@@ -66,6 +69,13 @@ public class InstituteTeacherController {
                         .last(instituteTeacherResponse.isLast())
                         .build()
         );
+    }
+
+    @PreAuthorize(("hasAuthority('institute')"))
+    @GetMapping("/basic")
+    public ResponseEntity<ApiResponse> getAllTeacherByCurrentInstitute(){
+        List<TeacherBasicResponse> allTeachersByCurrentInstitute = instituteTeacherService.getAllTeachersByCurrentInstitute();
+        return ResponseEntity.ok(new ApiResponse("Teachers related to the institute fetched successfully!", allTeachersByCurrentInstitute));
     }
 
     @PreAuthorize("hasAuthority('institute')")
