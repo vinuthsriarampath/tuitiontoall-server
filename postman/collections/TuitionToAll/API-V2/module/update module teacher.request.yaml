@@ -1,0 +1,8 @@
+$kind: http-request
+name: update module teacher
+url: http://localhost:8080/api/v2/modules/1/teacher
+method: PATCH
+body:
+  type: json
+  content: "{\r\n    \"teacherId\":1\r\n}"
+order: 4344318630774135
