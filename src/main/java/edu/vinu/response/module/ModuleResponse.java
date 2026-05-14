@@ -30,6 +30,7 @@ public class ModuleResponse {
     private String name;
     private ModuleStatus status;
     private Long batchId;
+    private Long teacherId;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 }

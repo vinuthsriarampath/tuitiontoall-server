@@ -32,4 +32,6 @@ public class ModuleCreateRequest {
     private ModuleCreateStatus status;
     @NotNull(message = "Batch ID is mandatory!")
     private Long batchId;
+    @NotNull(message = "Teacher ID is mandatory!")
+    private Long teacherId;
 }
