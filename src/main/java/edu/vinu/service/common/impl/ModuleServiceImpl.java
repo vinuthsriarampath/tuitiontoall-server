@@ -23,6 +23,7 @@ import edu.vinu.repository.ModuleRepository;
 import edu.vinu.request.modules.ModuleCreateRequest;
 import edu.vinu.request.modules.ModuleFilterRequest;
 import edu.vinu.request.modules.ModuleNameUpdateRequest;
+import edu.vinu.request.modules.ModuleTeacherUpdateRequest;
 import edu.vinu.request.modules.enums.ModuleCreateStatus;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.module.ModuleResponse;
@@ -125,6 +126,23 @@ public class ModuleServiceImpl implements ModuleService {
         Pageable pageable = PageRequest.of(page, size, SortUtil.buildSort(direction, sortBy, List.of("created_date")));
         return moduleRepository.getAllModules(pageable,filter.status(), filter.batchId())
                 .map(this::mapToAnnouncementResponse);
+    }
+
+    @Override
+    public ModuleResponse updateModuleTeacher(Long id, ModuleTeacherUpdateRequest request) {
+        ModuleEntity moduleEntity = getModuleEntityById(id);
+
+        if (!isModuleOwner(moduleEntity)) {
+            throw new InvalidInputException("You are not authorized to update this module");
+        }
+
+        try {
+            TeacherEntity teacherEntity = instituteTeacherService.getCurrentInstituteRelatedTeacherEntityById(request.teacherId());
+            moduleEntity.setTeacher(teacherEntity);
+            return mapToAnnouncementResponse(moduleRepository.save(moduleEntity));
+        } catch (Exception e) {
+            throw new InvalidInputException("teacherId", e.getMessage());
+        }
     }
 
     private ModuleEntity updateStatus(ModuleEntity moduleEntity, ModuleStatus status) {
