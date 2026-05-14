@@ -19,11 +19,9 @@ import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.enums.ModuleStatus;
 import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.NotFoundException;
+import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.repository.ModuleRepository;
-import edu.vinu.request.modules.ModuleCreateRequest;
-import edu.vinu.request.modules.ModuleFilterRequest;
-import edu.vinu.request.modules.ModuleNameUpdateRequest;
-import edu.vinu.request.modules.ModuleTeacherUpdateRequest;
+import edu.vinu.request.modules.*;
 import edu.vinu.request.modules.enums.ModuleCreateStatus;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.module.ModuleResponse;
@@ -143,6 +141,29 @@ public class ModuleServiceImpl implements ModuleService {
         } catch (Exception e) {
             throw new InvalidInputException("teacherId", e.getMessage());
         }
+    }
+
+    @Override
+    public ModuleResponse updateModuleBatch(Long id, ModuleBatchUpdateRequest request) {
+        ModuleEntity moduleEntity = getModuleEntityById(id);
+
+        if (!isModuleOwner(moduleEntity)) {
+            throw new InvalidInputException("You are not authorized to update this module");
+        }
+
+        BatchEntity batchEntity = null;
+        try {
+            batchEntity = batchService.getBatchEntityById(request.batchId());
+        } catch (Exception e) {
+            throw new NotFoundException("Batch with id " + request.batchId() + " not found");
+        }
+        if(!batchService.isBatchOwner(batchEntity)){
+            throw new UnauthorizedException("You are not authorized to move module to this batch");
+        }
+
+        moduleEntity.setBatch(batchEntity);
+        return mapToAnnouncementResponse(moduleRepository.save(moduleEntity));
+
     }
 
     private ModuleEntity updateStatus(ModuleEntity moduleEntity, ModuleStatus status) {

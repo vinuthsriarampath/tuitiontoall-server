@@ -14,10 +14,7 @@
 package edu.vinu.service.common;
 
 import edu.vinu.enums.ModuleStatus;
-import edu.vinu.request.modules.ModuleCreateRequest;
-import edu.vinu.request.modules.ModuleFilterRequest;
-import edu.vinu.request.modules.ModuleNameUpdateRequest;
-import edu.vinu.request.modules.ModuleTeacherUpdateRequest;
+import edu.vinu.request.modules.*;
 import edu.vinu.response.module.ModuleResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -27,7 +24,7 @@ import java.util.List;
 public interface ModuleService {
     ModuleResponse createModule(ModuleCreateRequest request);
 
-    ModuleResponse updateModuleName(Long id, @Valid ModuleNameUpdateRequest request);
+    ModuleResponse updateModuleName(Long id,ModuleNameUpdateRequest request);
 
     ModuleResponse publishModule(Long id);
 
@@ -38,4 +35,6 @@ public interface ModuleService {
     Page<ModuleResponse> getAllFilteredModules(int page, int size, String direction, List<String> sortBy, ModuleFilterRequest filter);
 
     ModuleResponse updateModuleTeacher(Long id, ModuleTeacherUpdateRequest request);
+
+    ModuleResponse updateModuleBatch(Long id, ModuleBatchUpdateRequest request);
 }
