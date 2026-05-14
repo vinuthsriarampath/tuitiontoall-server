@@ -20,12 +20,14 @@ import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.enums.ApplicationStatus;
 import edu.vinu.enums.InstituteTeacherStatus;
 import edu.vinu.exception.custom.NotFoundException;
+import edu.vinu.model.user_models.Teacher;
 import edu.vinu.repository.InstituteTeacherRepository;
 import edu.vinu.repository.projection.InstituteTeacherStatsProjection;
 import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
 import edu.vinu.response.*;
 import edu.vinu.service.common.ApplicationService;
+import edu.vinu.service.common.InstituteService;
 import edu.vinu.service.common.InstituteTeacherService;
 import edu.vinu.service.common.UserService;
 import jakarta.transaction.Transactional;
@@ -50,6 +52,7 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
     private final UserService userService;
     private final ApplicationService applicationService;
     private final InstituteTeacherRepository instituteTeacherRepository;
+    private final InstituteService instituteService;
 
     @Override
     @Transactional
@@ -200,6 +203,20 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
                 .inactiveTeachers(projection.getInactiveTeachers())
                 .suspendedTeachers(projection.getSuspendedTeachers())
                 .build();
+    }
+
+    @Override
+    public List<TeacherBasicResponse> getAllTeachersByCurrentInstitute() {
+
+        Long instituteId = instituteService.getCurrentInstitute().getId();
+
+        return instituteTeacherRepository.findAllTeachersByInstituteId(instituteId).stream().map(tp -> TeacherBasicResponse.builder()
+                .id(tp.getTeacherId())
+                .firstName(tp.getFirstName())
+                .lastName(tp.getLastName())
+                .dob(tp.getDob())
+                .build()
+        ).toList();
     }
 
 

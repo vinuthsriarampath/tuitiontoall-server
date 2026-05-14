@@ -13,13 +13,13 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.model.user_models.Teacher;
 import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
-import edu.vinu.response.ApplicationRejectionResponse;
-import edu.vinu.response.ApplicationSelectionResponse;
-import edu.vinu.response.InstituteTeacherResponse;
-import edu.vinu.response.InstituteTeacherStatsResponse;
+import edu.vinu.response.*;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public interface InstituteTeacherService {
     ApplicationSelectionResponse onBoardTeachers(ApplicationSelectionRequest request);
@@ -29,4 +29,6 @@ public interface InstituteTeacherService {
     Page<InstituteTeacherResponse> getAllTeachersByInstitute(int page,int size, String direction, String sortBy);
 
     InstituteTeacherStatsResponse getInstituteTeacherStats();
+
+    List<TeacherBasicResponse> getAllTeachersByCurrentInstitute();
 }
