@@ -15,6 +15,7 @@ package edu.vinu.service.common;
 
 import edu.vinu.enums.ModuleStatus;
 import edu.vinu.request.modules.*;
+import edu.vinu.response.module.ModuleDetailedResponse;
 import edu.vinu.response.module.ModuleResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -37,4 +38,6 @@ public interface ModuleService {
     ModuleResponse updateModuleTeacher(Long id, ModuleTeacherUpdateRequest request);
 
     ModuleResponse updateModuleBatch(Long id, ModuleBatchUpdateRequest request);
+
+    ModuleDetailedResponse getDetailedModuleById(Long id);
 }

@@ -23,7 +23,10 @@ import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.repository.ModuleRepository;
 import edu.vinu.request.modules.*;
 import edu.vinu.request.modules.enums.ModuleCreateStatus;
+import edu.vinu.response.BatchBasicResponse;
 import edu.vinu.response.FieldError;
+import edu.vinu.response.TeacherBasicResponse;
+import edu.vinu.response.module.ModuleDetailedResponse;
 import edu.vinu.response.module.ModuleResponse;
 import edu.vinu.service.common.BatchService;
 import edu.vinu.service.common.InstituteTeacherService;
@@ -164,6 +167,42 @@ public class ModuleServiceImpl implements ModuleService {
         moduleEntity.setBatch(batchEntity);
         return mapToAnnouncementResponse(moduleRepository.save(moduleEntity));
 
+    }
+
+    @Override
+    public ModuleDetailedResponse getDetailedModuleById(Long id) {
+        return moduleRepository.getDetailedModuleById(id)
+                .map(dmp -> ModuleDetailedResponse.builder()
+                        .id(dmp.getId())
+                        .name(dmp.getName())
+                        .moduleStatus(dmp.getStatus())
+                        .createdDate(dmp.getCreatedDate())
+                        .lastModifiedDate(dmp.getLastModifiedDate())
+                        .batch(
+                                BatchBasicResponse.builder()
+                                        .id(dmp.getBatchId())
+                                        .courseId(dmp.getCourseId())
+                                        .name(dmp.getBatchName())
+                                        .status(dmp.getBatchStatus())
+                                        .enrollmentStatus(dmp.getBatchEnrollmentStatus())
+                                        .createdDate(dmp.getBatchCreatedDate())
+                                        .lastModifiedDate(dmp.getBatchLastModifiedDate())
+                                        .build()
+                        )
+                        .teacher(
+                                TeacherBasicResponse.builder()
+                                        .id(dmp.getTeacherId())
+                                        .firstName(dmp.getTeacherFirstName())
+                                        .lastName(dmp.getTeacherLastName())
+                                        .email(dmp.getUserEmail())
+                                        .contact(dmp.getUserContact())
+                                        .dp(dmp.getUserDp())
+                                        .userslug(dmp.getUserSlug())
+                                        .build()
+                        )
+                        .build()
+                )
+                .orElseThrow(() -> new NotFoundException("Module with id " + id + " not found"));
     }
 
     private ModuleEntity updateStatus(ModuleEntity moduleEntity, ModuleStatus status) {
