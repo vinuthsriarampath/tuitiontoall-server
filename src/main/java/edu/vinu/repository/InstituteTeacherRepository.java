@@ -79,7 +79,7 @@ public interface InstituteTeacherRepository extends JpaRepository<InstituteTeach
                 SELECT
                     t.id AS teacherId,
                     t.first_name AS firstName,
-                    t.last_name AS lastName,
+                    t.last_name AS lastName
                 FROM institute_teacher it
                 JOIN teacher t ON it.teacher_id = t.id
                 WHERE it.institute_id = :instituteId
