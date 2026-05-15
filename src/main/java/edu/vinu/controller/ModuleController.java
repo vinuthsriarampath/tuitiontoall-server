@@ -85,6 +85,13 @@ public class ModuleController {
     }
 
     @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("{id}")
+    public ResponseEntity<ApiResponse> getModuleById(@PathVariable("id") Long id){
+        ModuleResponse response = moduleService.getModuleById(id);
+        return ResponseEntity.ok(new ApiResponse("Module fetched successfully", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
     @GetMapping("/{id}/detailed")
     public ResponseEntity<ApiResponse> getDetailedModuleById(@PathVariable("id") Long id){
         ModuleDetailedResponse response = moduleService.getDetailedModuleById(id);
