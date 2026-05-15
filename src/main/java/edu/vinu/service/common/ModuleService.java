@@ -40,4 +40,6 @@ public interface ModuleService {
     ModuleResponse updateModuleBatch(Long id, ModuleBatchUpdateRequest request);
 
     ModuleDetailedResponse getDetailedModuleById(Long id);
+
+    ModuleResponse getModuleById(Long id);
 }

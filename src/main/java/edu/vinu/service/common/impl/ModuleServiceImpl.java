@@ -205,6 +205,13 @@ public class ModuleServiceImpl implements ModuleService {
                 .orElseThrow(() -> new NotFoundException("Module with id " + id + " not found"));
     }
 
+    @Override
+    public ModuleResponse getModuleById(Long id) {
+        return moduleRepository.findById(id)
+                .map(this::mapToAnnouncementResponse)
+                .orElseThrow(() -> new NotFoundException("Module with id " + id + " not found"));
+    }
+
     private ModuleEntity updateStatus(ModuleEntity moduleEntity, ModuleStatus status) {
 
         if (!isModuleOwner(moduleEntity)) {
