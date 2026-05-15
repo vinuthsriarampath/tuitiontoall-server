@@ -30,5 +30,5 @@ public class TeacherBasicResponse {
     private String email;
     private String contact;
     private String dp;
-    private String slug;
+    private String userslug;
 }
