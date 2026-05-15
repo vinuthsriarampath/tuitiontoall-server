@@ -212,7 +212,6 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
                 .id(tp.getTeacherId())
                 .firstName(tp.getFirstName())
                 .lastName(tp.getLastName())
-                .dob(tp.getDob())
                 .build()
         ).toList();
     }

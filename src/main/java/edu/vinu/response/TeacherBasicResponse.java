@@ -18,7 +18,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -28,5 +27,8 @@ public class TeacherBasicResponse {
     private Long id;
     private String firstName;
     private String lastName;
-    private LocalDate dob;
+    private String email;
+    private String contact;
+    private String dp;
+    private String slug;
 }
