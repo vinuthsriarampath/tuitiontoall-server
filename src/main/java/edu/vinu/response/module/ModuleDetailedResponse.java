@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 public record ModuleDetailedResponse(
         Long id,
         String name,
-        ModuleStatus moduleStatus,
+        ModuleStatus status,
         BatchBasicResponse batch,
         TeacherBasicResponse teacher,
         LocalDateTime createdDate,

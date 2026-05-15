@@ -175,7 +175,7 @@ public class ModuleServiceImpl implements ModuleService {
                 .map(dmp -> ModuleDetailedResponse.builder()
                         .id(dmp.getId())
                         .name(dmp.getName())
-                        .moduleStatus(dmp.getStatus())
+                        .status(dmp.getStatus())
                         .createdDate(dmp.getCreatedDate())
                         .lastModifiedDate(dmp.getLastModifiedDate())
                         .batch(
