@@ -154,7 +154,7 @@ public class ModuleServiceImpl implements ModuleService {
             throw new InvalidInputException("You are not authorized to update this module");
         }
 
-        BatchEntity batchEntity = null;
+        BatchEntity batchEntity;
         try {
             batchEntity = batchService.getBatchEntityById(request.batchId());
         } catch (Exception e) {
