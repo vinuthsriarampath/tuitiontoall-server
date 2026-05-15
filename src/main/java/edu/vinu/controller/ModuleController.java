@@ -16,6 +16,7 @@ package edu.vinu.controller;
 import edu.vinu.request.modules.*;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.response.module.ModuleDetailedResponse;
 import edu.vinu.response.module.ModuleResponse;
 import edu.vinu.service.common.ModuleService;
 import jakarta.validation.Valid;
@@ -81,6 +82,13 @@ public class ModuleController {
     public ResponseEntity<ApiResponse> updateModuleBatch(@PathVariable("id") Long id,@Valid @RequestBody ModuleBatchUpdateRequest request){
         ModuleResponse response = moduleService.updateModuleBatch(id, request);
         return ResponseEntity.ok(new ApiResponse("Module batch updated successfully", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("/{id}/detailed")
+    public ResponseEntity<ApiResponse> getDetailedModuleById(@PathVariable("id") Long id){
+        ModuleDetailedResponse response = moduleService.getDetailedModuleById(id);
+        return ResponseEntity.ok(new ApiResponse("Module fetched successfully", response));
     }
 
     @PreAuthorize("hasAuthority('institute')")
