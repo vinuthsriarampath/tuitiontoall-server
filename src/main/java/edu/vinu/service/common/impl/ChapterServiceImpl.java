@@ -16,8 +16,10 @@ package edu.vinu.service.common.impl;
 import edu.vinu.entity.ChapterEntity;
 import edu.vinu.entity.ModuleEntity;
 import edu.vinu.exception.custom.InvalidInputException;
+import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.repository.ChapterRepository;
 import edu.vinu.request.chapter.ChapterCreateRequest;
+import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.service.common.ChapterService;
@@ -64,11 +66,41 @@ public class ChapterServiceImpl implements ChapterService {
         return mapEntityToChapterResponse(chapterRepository.save(chapterEntity));
     }
 
+    @Override
+    public ChapterResponse updateChapterDetailsById(Long id, ChapterDetailsUpdateRequest request) {
+        ChapterEntity chapterEntity = this.getChapterEntityById(id);
+        List<FieldError> errors = new ArrayList<>();
+
+        if(!request.moduleId().equals(chapterEntity.getModule().getId())){
+            chapterEntity.setModule(moduleService.getModuleEntityById(request.moduleId()));
+            chapterEntity.setChapterOrder(findNextChapterOrderNumber(request.moduleId()));
+        }
+
+        if(!request.title().equals(chapterEntity.getTitle()) || !request.moduleId().equals(chapterEntity.getModule().getId()) ){
+            if(isChapterExistsInModule(request.moduleId(), request.title())){
+                errors.add(new FieldError("name", "Chapter with the same name already exists in the module"));
+            }else{
+                chapterEntity.setTitle(request.title());
+            }
+        }
+
+        chapterEntity.setStatus(request.status());
+
+        if(!errors.isEmpty()) {
+            throw new InvalidInputException(errors);
+        }
+        return mapEntityToChapterResponse(chapterRepository.save(chapterEntity));
+    }
+
+    private ChapterEntity getChapterEntityById(Long id){
+        return chapterRepository.findById(id).orElseThrow(() -> new NotFoundException("Chapter with the given id does not exist"));
+    }
+
     private boolean isChapterExistsInModule(Long moduleId,String chapterName){
         return chapterRepository.existsByModuleIdAndTitle(moduleId, chapterName);
     }
 
-    private boolean isChapterOrderExistsInModule(Long moduleId,Long chapterOrder){
+    private boolean isChapterOrderExistsInModule(Long moduleId,int chapterOrder){
         return chapterRepository.existsByModuleIdAndChapterOrder(moduleId, chapterOrder);
 
     }
