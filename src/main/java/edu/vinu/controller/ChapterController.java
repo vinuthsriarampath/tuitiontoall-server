@@ -15,6 +15,7 @@ package edu.vinu.controller;
 
 import edu.vinu.request.chapter.ChapterCreateRequest;
 import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
+import edu.vinu.request.chapter.ChapterReorderRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.service.common.ChapterService;
@@ -42,5 +43,18 @@ public class ChapterController {
     public ResponseEntity<ApiResponse> updateChapterDetails(@PathVariable("id")Long id,@Valid @RequestBody ChapterDetailsUpdateRequest request){
         ChapterResponse response = chapterService.updateChapterDetailsById(id,request);
         return ResponseEntity.ok(new ApiResponse("Chapter details updated successfully", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PatchMapping("reorder")
+    public ResponseEntity<ApiResponse> reorderChapters(@Valid @RequestBody ChapterReorderRequest request) {
+        chapterService.reorderChapters(request);
+
+        return ResponseEntity.ok(
+                new ApiResponse(
+                        "Chapters reordered successfully!",
+                        null
+                )
+        );
     }
 }
