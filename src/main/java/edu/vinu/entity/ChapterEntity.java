@@ -25,7 +25,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "chapter")
+@Table(name = "chapter",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "un_moduleid_chapterorder", columnNames = {"module_id", "chapter_order"}),
+        @UniqueConstraint(name = "un_moduleid_title", columnNames = {"module_id", "title"})
+    }
+)
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
