@@ -23,6 +23,7 @@ public record ChapterResponse(
         Long id,
         Long moduleId,
         String title,
+        int chapterOrder,
         ChapterStatus status,
         LocalDateTime createdDate,
         LocalDateTime lastModifiedDate
