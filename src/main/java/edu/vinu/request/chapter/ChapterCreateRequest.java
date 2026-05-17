@@ -13,7 +13,7 @@
 
 package edu.vinu.request.chapter;
 
-import edu.vinu.enums.ModuleStatus;
+import edu.vinu.enums.ChapterStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -25,6 +25,6 @@ public record ChapterCreateRequest(
         @NotBlank(message = "Chapter title is mandatory!")
         String title,
         @NotNull(message = "Chapter status is mandatory!")
-        ModuleStatus status
+        ChapterStatus status
 ) {
 }
