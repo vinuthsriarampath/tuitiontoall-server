@@ -19,4 +19,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChapterRepository extends JpaRepository<ChapterEntity,Long> {
+    boolean existsByModuleIdAndTitle(Long moduleId, String chapterName);
+
+    int countByModuleId(Long moduleId);
+
+    boolean existsByModuleIdAndChapterOrder(Long moduleId, Long chapterOrder);
 }
