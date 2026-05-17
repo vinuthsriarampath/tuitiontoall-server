@@ -23,5 +23,5 @@ public interface ChapterRepository extends JpaRepository<ChapterEntity,Long> {
 
     int countByModuleId(Long moduleId);
 
-    boolean existsByModuleIdAndChapterOrder(Long moduleId, Long chapterOrder);
+    boolean existsByModuleIdAndChapterOrder(Long moduleId, int chapterOrder);
 }
