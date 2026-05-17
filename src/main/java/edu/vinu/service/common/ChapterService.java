@@ -13,5 +13,9 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.request.chapter.ChapterCreateRequest;
+import edu.vinu.response.chapter.ChapterResponse;
+
 public interface ChapterService {
+    ChapterResponse createChapter(ChapterCreateRequest request);
 }
