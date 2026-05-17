@@ -20,15 +20,20 @@ import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.repository.ChapterRepository;
 import edu.vinu.request.chapter.ChapterCreateRequest;
 import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
+import edu.vinu.request.chapter.ChapterOrderRequest;
+import edu.vinu.request.chapter.ChapterReorderRequest;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.service.common.ChapterService;
 import edu.vinu.service.common.ModuleService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -90,6 +95,38 @@ public class ChapterServiceImpl implements ChapterService {
             throw new InvalidInputException(errors);
         }
         return mapEntityToChapterResponse(chapterRepository.save(chapterEntity));
+    }
+
+    @Transactional
+    @Override
+    public void reorderChapters(ChapterReorderRequest request) {
+        List<Long> ids = request.chapters()
+                .stream()
+                .map(ChapterOrderRequest::chapterId)
+                .toList();
+
+        List<ChapterEntity> chapters = chapterRepository.findAllById(ids);
+
+        // STEP 1: break constraint temporarily
+        for (ChapterEntity chapter : chapters) {
+            chapter.setChapterOrder(-chapter.getChapterOrder());
+        }
+        chapterRepository.saveAll(chapters);
+        chapterRepository.flush();
+
+        // STEP 2: apply final ordering
+        Map<Long, Integer> orderMap = request.chapters()
+                .stream()
+                .collect(Collectors.toMap(
+                        ChapterOrderRequest::chapterId,
+                        ChapterOrderRequest::chapterOrder
+                ));
+
+        for (ChapterEntity chapter : chapters) {
+            chapter.setChapterOrder(orderMap.get(chapter.getId()));
+        }
+
+        chapterRepository.saveAll(chapters);
     }
 
     private ChapterEntity getChapterEntityById(Long id){
