@@ -13,6 +13,7 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.entity.ModuleEntity;
 import edu.vinu.request.modules.*;
 import edu.vinu.response.module.ModuleDetailedResponse;
 import edu.vinu.response.module.ModuleResponse;
@@ -40,4 +41,6 @@ public interface ModuleService {
     ModuleDetailedResponse getDetailedModuleById(Long id);
 
     ModuleResponse getModuleById(Long id);
+
+    ModuleEntity getModuleEntityById(Long id);
 }

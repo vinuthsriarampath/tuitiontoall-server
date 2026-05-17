@@ -221,7 +221,8 @@ public class ModuleServiceImpl implements ModuleService {
         return moduleRepository.save(moduleEntity);
     }
 
-    private ModuleEntity getModuleEntityById(Long id){
+    @Override
+    public ModuleEntity getModuleEntityById(Long id){
         return moduleRepository.findById(id)
                 .orElseThrow(() -> new InvalidInputException("Module with id " + id + " not found"));
     }
