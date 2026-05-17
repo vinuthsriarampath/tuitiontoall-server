@@ -13,8 +13,7 @@
 
 package edu.vinu.entity;
 
-import edu.vinu.entity.user_entities.TeacherEntity;
-import edu.vinu.enums.ModuleStatus;
+import edu.vinu.enums.ChapterStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,42 +23,31 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "module",
-uniqueConstraints = {
-        @UniqueConstraint(name = "uk_batch_module_name",columnNames = {"name","batch_id"})
-})
-@Data
+@Table(name = "chapter")
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Builder
-public class ModuleEntity {
+public class ChapterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name",nullable = false)
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "module_id", nullable = false)
+    private ModuleEntity module;
+    @Column(name = "title", nullable = false)
+    private String title;
+    @Column(name = "chapter_order", nullable = false)
+    private int chapterOrder;
     @Enumerated(EnumType.STRING)
-    @Column(name = "status",nullable = false)
-    private ModuleStatus status = ModuleStatus.DRAFT;
+    @Column(name = "status", nullable = false)
+    private ChapterStatus status;
+    @Column(name = "created_date", nullable = false)
     @CreationTimestamp
-    @Column(name = "created_date",nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdDate;
+    @Column(name = "last_modified_date", insertable = false)
     @UpdateTimestamp
-    @Column(name = "last_modified_date",insertable = false)
     private LocalDateTime lastModifiedDate;
-
-    @ManyToOne
-    @JoinColumn(name = "batch_id",nullable = false)
-    private BatchEntity batch;
-
-    @ManyToOne
-    @JoinColumn(name = "teacher_id",nullable = false)
-    private TeacherEntity teacher;
-
-    @OneToMany(mappedBy = "module")
-    private List<ChapterEntity> chapters = new ArrayList<>();
 }
