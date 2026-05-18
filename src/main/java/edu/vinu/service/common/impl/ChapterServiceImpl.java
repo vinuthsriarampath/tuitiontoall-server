@@ -56,7 +56,7 @@ public class ChapterServiceImpl implements ChapterService {
         }
 
         if(isChapterExistsInModule(request.moduleId(), request.title())){
-            errors.add(new FieldError("name", "Chapter with the same name already exists in the module"));
+            errors.add(new FieldError("title", "Chapter with the same title already exists in the module"));
         }
 
         if(!errors.isEmpty()) {
@@ -85,7 +85,7 @@ public class ChapterServiceImpl implements ChapterService {
 
         if(!request.title().equals(chapterEntity.getTitle()) || !request.moduleId().equals(chapterEntity.getModule().getId()) ){
             if(isChapterExistsInModule(request.moduleId(), request.title())){
-                errors.add(new FieldError("name", "Chapter with the same name already exists in the module"));
+                errors.add(new FieldError("title", "Chapter with the same title already exists in the module"));
             }else{
                 chapterEntity.setTitle(request.title());
             }
