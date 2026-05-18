@@ -18,10 +18,12 @@ import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
 import edu.vinu.request.chapter.ChapterReorderRequest;
 import edu.vinu.response.chapter.ChapterResponse;
 
+import java.util.List;
+
 public interface ChapterService {
     ChapterResponse createChapter(ChapterCreateRequest request);
 
     ChapterResponse updateChapterDetailsById(Long id,ChapterDetailsUpdateRequest request);
 
-    void reorderChapters(ChapterReorderRequest request);
+    List<ChapterResponse> reorderChapters(ChapterReorderRequest request);
 }

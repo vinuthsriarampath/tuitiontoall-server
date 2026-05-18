@@ -17,6 +17,7 @@ import edu.vinu.entity.ChapterEntity;
 import edu.vinu.entity.ModuleEntity;
 import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.NotFoundException;
+import edu.vinu.mapper.ChapterMapper;
 import edu.vinu.repository.ChapterRepository;
 import edu.vinu.request.chapter.ChapterCreateRequest;
 import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
@@ -31,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -99,7 +101,7 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Transactional
     @Override
-    public void reorderChapters(ChapterReorderRequest request) {
+    public List<ChapterResponse> reorderChapters(ChapterReorderRequest request) {
         List<Long> ids = request.chapters()
                 .stream()
                 .map(ChapterOrderRequest::chapterId)
@@ -126,7 +128,11 @@ public class ChapterServiceImpl implements ChapterService {
             chapter.setChapterOrder(orderMap.get(chapter.getId()));
         }
 
-        chapterRepository.saveAll(chapters);
+        return chapterRepository.saveAll(chapters)
+                .stream()
+                .sorted(Comparator.comparingInt(ChapterEntity::getChapterOrder))
+                .map(ChapterMapper::toChapterResponse)
+                .toList();
     }
 
     private ChapterEntity getChapterEntityById(Long id){
