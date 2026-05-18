@@ -17,6 +17,8 @@ import edu.vinu.entity.ChapterEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ChapterRepository extends JpaRepository<ChapterEntity,Long> {
     boolean existsByModuleIdAndTitle(Long moduleId, String chapterName);
@@ -24,4 +26,7 @@ public interface ChapterRepository extends JpaRepository<ChapterEntity,Long> {
     int countByModuleId(Long moduleId);
 
     boolean existsByModuleIdAndChapterOrder(Long moduleId, int chapterOrder);
+
+    List<ChapterEntity> findAllByModuleIdOrderByChapterOrderAsc(Long moduleId);
+
 }
