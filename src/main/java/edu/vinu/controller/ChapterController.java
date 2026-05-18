@@ -25,6 +25,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v2/chapters")
 @RequiredArgsConstructor
@@ -48,12 +50,12 @@ public class ChapterController {
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("reorder")
     public ResponseEntity<ApiResponse> reorderChapters(@Valid @RequestBody ChapterReorderRequest request) {
-        chapterService.reorderChapters(request);
+        List<ChapterResponse> responses = chapterService.reorderChapters(request);
 
         return ResponseEntity.ok(
                 new ApiResponse(
                         "Chapters reordered successfully!",
-                        null
+                        responses
                 )
         );
     }

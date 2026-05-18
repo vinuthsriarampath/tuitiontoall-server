@@ -12,7 +12,7 @@ body:
 
     \            \"chapterId\":3,\r
 
-    \            \"chapterOrder\":1\r
+    \            \"chapterOrder\":2\r
 
     \        },\r
 
@@ -36,7 +36,7 @@ body:
 
     \            \"chapterId\":6,\r
 
-    \            \"chapterOrder\":2\r
+    \            \"chapterOrder\":1\r
 
     \        }\r
 
