@@ -16,8 +16,10 @@ package edu.vinu.controller;
 import edu.vinu.request.modules.*;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.response.module.ModuleDetailedResponse;
 import edu.vinu.response.module.ModuleResponse;
+import edu.vinu.service.common.ChapterQueryService;
 import edu.vinu.service.common.ModuleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,7 @@ import java.util.List;
 public class ModuleController {
 
     private final ModuleService moduleService;
+    private final ChapterQueryService chapterQueryService;
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping
@@ -120,5 +123,12 @@ public class ModuleController {
                 .build();
 
         return ResponseEntity.status(200).body(response);
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("/{id}/chapters/all")
+    public ResponseEntity<ApiResponse> getChaptersByModuleId(@PathVariable("id") Long id){
+        List<ChapterResponse> responses = chapterQueryService.getAllChaptersByModuleId(id);
+        return ResponseEntity.ok(new ApiResponse("Chapters fetched successfully", responses));
     }
 }
