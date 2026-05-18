@@ -1,0 +1,5 @@
+$kind: http-request
+name: chapters by module id
+url: http://localhost:8080/api/v2/modules/2/chapters/all
+method: GET
+order: 4503077492923447
