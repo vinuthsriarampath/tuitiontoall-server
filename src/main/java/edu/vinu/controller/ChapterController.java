@@ -17,6 +17,7 @@ import edu.vinu.request.chapter.ChapterCreateRequest;
 import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
 import edu.vinu.request.chapter.ChapterReorderRequest;
 import edu.vinu.response.ApiResponse;
+import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.service.common.ChapterService;
 import jakarta.validation.Valid;
@@ -58,5 +59,12 @@ public class ChapterController {
                         responses
                 )
         );
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("{id}/detailed")
+    public ResponseEntity<ApiResponse> getDetailedChapterById(@PathVariable("id")Long id){
+        ChapterDetailedResponse response = chapterService.getDetailedChapterById(id);
+        return ResponseEntity.ok(new ApiResponse("Chapter details fetched successfully", response));
     }
 }
