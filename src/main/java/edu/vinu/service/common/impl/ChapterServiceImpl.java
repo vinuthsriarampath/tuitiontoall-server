@@ -24,6 +24,7 @@ import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
 import edu.vinu.request.chapter.ChapterOrderRequest;
 import edu.vinu.request.chapter.ChapterReorderRequest;
 import edu.vinu.response.FieldError;
+import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.service.common.ChapterService;
 import edu.vinu.service.common.ModuleService;
@@ -133,6 +134,11 @@ public class ChapterServiceImpl implements ChapterService {
                 .sorted(Comparator.comparingInt(ChapterEntity::getChapterOrder))
                 .map(ChapterMapper::toChapterResponse)
                 .toList();
+    }
+
+    @Override
+    public ChapterDetailedResponse getDetailedChapterById(Long id) {
+        return chapterRepository.findDetailedById(id).map(ChapterMapper::toChapterDetailedResponse).orElseThrow(() -> new NotFoundException("Chapter with the given id does not exist"));
     }
 
     private ChapterEntity getChapterEntityById(Long id){

@@ -16,6 +16,7 @@ package edu.vinu.service.common;
 import edu.vinu.request.chapter.ChapterCreateRequest;
 import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
 import edu.vinu.request.chapter.ChapterReorderRequest;
+import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;
 
 import java.util.List;
@@ -26,4 +27,6 @@ public interface ChapterService {
     ChapterResponse updateChapterDetailsById(Long id,ChapterDetailsUpdateRequest request);
 
     List<ChapterResponse> reorderChapters(ChapterReorderRequest request);
+
+    ChapterDetailedResponse getDetailedChapterById(Long id);
 }
