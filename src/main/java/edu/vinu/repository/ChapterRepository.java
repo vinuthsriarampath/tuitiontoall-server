@@ -14,10 +14,13 @@
 package edu.vinu.repository;
 
 import edu.vinu.entity.ChapterEntity;
+import edu.vinu.repository.projection.ChapterDetailedProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ChapterRepository extends JpaRepository<ChapterEntity,Long> {
@@ -29,4 +32,25 @@ public interface ChapterRepository extends JpaRepository<ChapterEntity,Long> {
 
     List<ChapterEntity> findAllByModuleIdOrderByChapterOrderAsc(Long moduleId);
 
+    @Query(value = """
+    SELECT
+    ch.id AS id,
+    ch.title AS title,
+    ch.status AS status,
+    ch.chapter_order AS chapterOrder,
+    ch.created_date AS createdDate,
+    ch.last_modified_date AS lastModifiedDate,
+    
+    m.id AS ModuleId,
+    m.name AS moduleName,
+    m.status AS moduleStatus,
+    m.teacher_id AS moduleTeacherId,
+    m.batch_id AS moduleBatchId,
+    m.created_date AS moduleCreatedDate,
+    m.last_modified_date AS moduleLastModifiedDate
+    FROM chapter ch
+    JOIN module m ON ch.module_id = m.id
+    WHERE ch.id = :id
+""",nativeQuery = true)
+    Optional<ChapterDetailedProjection> findDetailedById(Long id);
 }
