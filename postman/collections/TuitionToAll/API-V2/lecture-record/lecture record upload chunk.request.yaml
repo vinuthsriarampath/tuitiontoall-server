@@ -1,0 +1,24 @@
+$kind: http-request
+name: lecture record upload chunk
+url: http://localhost:8080/api/v2/lecture-records/upload/chunk
+method: POST
+body:
+  type: formdata
+  content:
+    - type: text
+      key: uploadId
+      value: 0bc1bf37-252d-4533-a266-067483cc1c37
+      description: ""
+      disabled: false
+    - type: text
+      key: chunkIndex
+      value: "0"
+      description: ""
+      disabled: false
+    - type: file
+      key: chunk
+      src:
+        - "/C:/Users/vinut/Videos/Shorts/Alamakkkk! #nreiynaa #beats #best #video.mp4"
+      description: ""
+      disabled: false
+order: 2855316924768976
