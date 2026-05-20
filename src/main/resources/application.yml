@@ -44,6 +44,9 @@ file:
     banner-path: uploads/profiles/banner
   course:
     thumbnail-path: uploads/courses/thumbnails
+  lecture-record:
+    temp-path: uploads/lecture-records/temp
+    video-path: uploads/lecture-records/videos
 
 app:
   reset:
