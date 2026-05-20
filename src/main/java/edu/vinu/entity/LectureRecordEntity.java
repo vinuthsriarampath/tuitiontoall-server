@@ -13,7 +13,6 @@
 
 package edu.vinu.entity;
 
-import edu.vinu.enums.ChapterStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,42 +21,38 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "chapter",
+@Table(name = "lecture_recording",
     uniqueConstraints = {
-        @UniqueConstraint(name = "un_moduleid_chapterorder", columnNames = {"module_id", "chapter_order"}),
-        @UniqueConstraint(name = "un_moduleid_title", columnNames = {"module_id", "title"})
+        @UniqueConstraint(name = "uk_chapter_title",columnNames = {"title","chapter_id"})
     }
 )
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Builder
-public class ChapterEntity {
+public class LectureRecordEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "module_id", nullable = false)
-    private ModuleEntity module;
-    @Column(name = "title", nullable = false)
+    @Column(name = "title",nullable = false)
     private String title;
-    @Column(name = "chapter_order", nullable = false)
-    private int chapterOrder;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private ChapterStatus status;
-    @Column(name = "created_date", nullable = false)
+    @Column(name = "url",nullable = false)
+    private String url;
+    @Column(name = "recorded_date",nullable = false)
+    private LocalDate recordedDate;
+    @Column(name = "created_date")
     @CreationTimestamp
     private LocalDateTime createdDate;
-    @Column(name = "last_modified_date", insertable = false)
+    @Column(name = "last_modified_date")
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
 
-    @OneToMany(mappedBy = "chapter")
-    private List<LectureRecordEntity> lectureRecords = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "chapter_id",nullable = false)
+    private ChapterEntity chapter;
+
 }
