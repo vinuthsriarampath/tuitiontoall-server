@@ -15,11 +15,13 @@ package edu.vinu.controller;
 
 import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
 import edu.vinu.response.ApiResponse;
+import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
 import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
 import edu.vinu.service.common.LectureRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,4 +35,15 @@ public class LectureRecordController {
 
         return ResponseEntity.ok(new ApiResponse("Upload initialized successfully", response));
     }
+
+    @PostMapping("/upload/chunk")
+    public ResponseEntity<ApiResponse> uploadChunk(
+            @RequestParam String uploadId,
+            @RequestParam Integer chunkIndex,
+            @RequestParam MultipartFile chunk
+    ){
+        LectureRecordChunkUploadResponse response = lectureRecordService.uploadChunk(uploadId, chunkIndex, chunk);
+        return ResponseEntity.ok(new ApiResponse("Upload chunk successfully", response));
+    }
+
 }
