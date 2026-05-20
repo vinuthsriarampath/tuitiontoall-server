@@ -13,5 +13,9 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
+import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
+
 public interface LectureRecordService {
+    LectureRecordUploadInitResponse initializeUpload(LectureRecordUploadInitRequest request);
 }

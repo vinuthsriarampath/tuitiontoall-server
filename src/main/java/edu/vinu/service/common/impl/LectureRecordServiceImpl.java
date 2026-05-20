@@ -13,11 +13,52 @@
 
 package edu.vinu.service.common.impl;
 
+import edu.vinu.entity.LectureRecordUploadEntity;
+import edu.vinu.repository.LectureRecordUploadRepository;
+import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
+import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
+import edu.vinu.service.common.FileService;
 import edu.vinu.service.common.LectureRecordService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class LectureRecordServiceImpl implements LectureRecordService {
+
+    private final LectureRecordUploadRepository lectureRecordUploadRepository;
+    private final FileService fileService;
+    private final Environment env;
+
+    @Override
+    public LectureRecordUploadInitResponse initializeUpload(LectureRecordUploadInitRequest request) {
+        String uploadId = UUID.randomUUID().toString();
+
+        LectureRecordUploadEntity uploadEntity =
+                LectureRecordUploadEntity.builder()
+                        .uploadId(uploadId)
+                        .title(request.title())
+                        .recordedDate(request.recordedDate())
+                        .chapterId(request.chapterId())
+                        .originalFileName(request.originalFileName())
+                        .totalSize(request.totalSize())
+                        .totalChunks(request.totalChunks())
+                        .uploadedChunks(0)
+                        .completed(false)
+                        .build();
+
+        lectureRecordUploadRepository.save(uploadEntity);
+
+        String tempUploadPath =
+                env.getProperty("file.lecture-record.temp-path") + "/" + uploadId;
+
+        fileService.createDirectoryIfNotExists(tempUploadPath);
+
+        return LectureRecordUploadInitResponse.builder()
+                .uploadId(uploadId)
+                .build();
+    }
 }
