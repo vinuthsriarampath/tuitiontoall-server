@@ -13,12 +13,24 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
+import edu.vinu.response.ApiResponse;
+import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
+import edu.vinu.service.common.LectureRecordService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/lecture-records")
 public class LectureRecordController {
+    private final LectureRecordService lectureRecordService;
+
+    @PostMapping("/upload/init")
+    public ResponseEntity<ApiResponse> initializeUpload(@RequestBody LectureRecordUploadInitRequest request){
+        LectureRecordUploadInitResponse response = lectureRecordService.initializeUpload(request);
+
+        return ResponseEntity.ok(new ApiResponse("Upload initialized successfully", response));
+    }
 }
