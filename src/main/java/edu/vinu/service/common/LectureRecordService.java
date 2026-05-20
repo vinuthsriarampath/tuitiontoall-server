@@ -14,8 +14,12 @@
 package edu.vinu.service.common;
 
 import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
+import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
 import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface LectureRecordService {
     LectureRecordUploadInitResponse initializeUpload(LectureRecordUploadInitRequest request);
+
+    LectureRecordChunkUploadResponse uploadChunk(String uploadId, Integer chunkIndex, MultipartFile chunk);
 }

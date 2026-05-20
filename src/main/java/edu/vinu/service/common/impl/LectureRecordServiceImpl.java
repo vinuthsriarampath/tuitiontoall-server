@@ -14,15 +14,22 @@
 package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.LectureRecordUploadEntity;
+import edu.vinu.exception.custom.InvalidInputException;
+import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.repository.LectureRecordUploadRepository;
 import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
+import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
+import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
 import edu.vinu.service.common.FileService;
 import edu.vinu.service.common.LectureRecordService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @Service
@@ -32,6 +39,12 @@ public class LectureRecordServiceImpl implements LectureRecordService {
     private final LectureRecordUploadRepository lectureRecordUploadRepository;
     private final FileService fileService;
     private final Environment env;
+
+    @Value("${file.lecture-record.temp-path}")
+    private String tempLectureRecordPath;
+
+    @Value("${file.lecture-record.video-path}")
+    private String lectureRecordVideoPath;
 
     @Override
     public LectureRecordUploadInitResponse initializeUpload(LectureRecordUploadInitRequest request) {
@@ -59,6 +72,44 @@ public class LectureRecordServiceImpl implements LectureRecordService {
 
         return LectureRecordUploadInitResponse.builder()
                 .uploadId(uploadId)
+                .build();
+    }
+
+    @Override
+    public LectureRecordChunkUploadResponse uploadChunk(String uploadId, Integer chunkIndex, MultipartFile chunk) {
+        LectureRecordUploadEntity uploadEntity =
+                lectureRecordUploadRepository.findById(uploadId)
+                        .orElseThrow(() ->
+                                new NotFoundException("Upload session not found")
+                        );
+
+        if (uploadEntity.getCompleted()) {
+            throw new InvalidInputException(
+                    "Upload already completed"
+            );
+        }
+
+        String uploadDirectory =
+                tempLectureRecordPath + "/" + uploadId;
+
+        String chunkFileName =
+                "chunk_" + chunkIndex + ".part";
+
+        fileService.saveFile(
+                chunk,
+                chunkFileName,
+                uploadDirectory,
+                StandardCopyOption.REPLACE_EXISTING
+        );
+
+        uploadEntity.setUploadedChunks(
+                uploadEntity.getUploadedChunks() + 1
+        );
+
+        lectureRecordUploadRepository.save(uploadEntity);
+
+        return LectureRecordChunkUploadResponse.builder()
+                .uploadedChunkIndex(chunkIndex)
                 .build();
     }
 }
