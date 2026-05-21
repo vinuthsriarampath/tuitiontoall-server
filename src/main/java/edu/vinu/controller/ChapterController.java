@@ -19,6 +19,7 @@ import edu.vinu.request.chapter.ChapterReorderRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;
+import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.service.common.ChapterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -66,5 +67,12 @@ public class ChapterController {
     public ResponseEntity<ApiResponse> getDetailedChapterById(@PathVariable("id")Long id){
         ChapterDetailedResponse response = chapterService.getDetailedChapterById(id);
         return ResponseEntity.ok(new ApiResponse("Chapter details fetched successfully", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("{id}/lecture-records")
+    public ResponseEntity<ApiResponse> getAllLectureRecordsById(@PathVariable("id")Long id){
+        List<LectureRecordResponse> responses = chapterService.getAllLectureRecordsByChapterId(id);
+        return ResponseEntity.ok(new ApiResponse("All lecture records related to chapter fetched successfully!", responses));
     }
 }
