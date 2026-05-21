@@ -16,6 +16,7 @@ package edu.vinu.controller;
 import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
+import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
 import edu.vinu.service.common.LectureRecordService;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,13 @@ public class LectureRecordController {
     ){
         LectureRecordChunkUploadResponse response = lectureRecordService.uploadChunk(uploadId, chunkIndex, chunk);
         return ResponseEntity.ok(new ApiResponse("Upload chunk successfully", response));
+    }
+
+    @PostMapping("/upload/complete/{uploadId}")
+    public ResponseEntity<ApiResponse> completeUpload(@PathVariable String uploadId) {
+
+        LectureRecordResponse response = lectureRecordService.completeUpload(uploadId);
+        return ResponseEntity.ok(new ApiResponse("Upload completed successfully", response));
     }
 
 }
