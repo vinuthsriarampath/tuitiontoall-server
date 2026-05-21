@@ -30,11 +30,16 @@ import edu.vinu.service.common.LectureRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -233,5 +238,84 @@ public class LectureRecordServiceImpl implements LectureRecordService {
                 .createdDate(savedLectureRecord.getCreatedDate())
                 .lastModifiedDate(savedLectureRecord.getLastModifiedDate())
                 .build();
+    }
+
+    @Override
+    public ResponseEntity<Resource> streamVideo(String fileName, String rangeHeader) throws IOException {
+        Path videoPath =
+                Path.of(
+                        lectureRecordVideoPath,
+                        fileName
+                );
+
+        if (!Files.exists(videoPath)) {
+            throw new NotFoundException("Video not found");
+        }
+
+        Resource resource =
+                new UrlResource(videoPath.toUri());
+
+        long fileLength = Files.size(videoPath);
+
+        if (rangeHeader == null) {
+
+            return ResponseEntity.ok()
+                    .contentType(MediaTypeFactory
+                            .getMediaType(resource)
+                            .orElse(MediaType.APPLICATION_OCTET_STREAM))
+                    .contentLength(fileLength)
+                    .body(resource);
+        }
+
+        String[] ranges =
+                rangeHeader.replace("bytes=", "")
+                        .split("-");
+
+        long start = Long.parseLong(ranges[0]);
+
+        long end;
+
+        if (ranges.length > 1 && !ranges[1].isEmpty()) {
+            end = Long.parseLong(ranges[1]);
+        } else {
+            end = fileLength - 1;
+        }
+
+        if (end >= fileLength) {
+            end = fileLength - 1;
+        }
+
+        long contentLength = end - start + 1;
+
+        InputStream inputStream =
+                Files.newInputStream(videoPath);
+
+        inputStream.skip(start);
+
+        InputStreamResource inputStreamResource =
+                new InputStreamResource(inputStream);
+
+        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+                .contentType(MediaTypeFactory
+                        .getMediaType(resource)
+                        .orElse(MediaType.APPLICATION_OCTET_STREAM))
+                .header(
+                        HttpHeaders.ACCEPT_RANGES,
+                        "bytes"
+                )
+                .header(
+                        HttpHeaders.CONTENT_LENGTH,
+                        String.valueOf(contentLength)
+                )
+                .header(
+                        HttpHeaders.CONTENT_RANGE,
+                        "bytes "
+                                + start
+                                + "-"
+                                + end
+                                + "/"
+                                + fileLength
+                )
+                .body(inputStreamResource);
     }
 }

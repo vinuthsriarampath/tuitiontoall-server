@@ -17,7 +17,11 @@ import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
 import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public interface LectureRecordService {
     LectureRecordUploadInitResponse initializeUpload(LectureRecordUploadInitRequest request);
@@ -25,4 +29,6 @@ public interface LectureRecordService {
     LectureRecordChunkUploadResponse uploadChunk(String uploadId, Integer chunkIndex, MultipartFile chunk);
 
     LectureRecordResponse completeUpload(String uploadId);
+
+    ResponseEntity<Resource> streamVideo(String fileName, String rangeHeader) throws IOException;
 }
