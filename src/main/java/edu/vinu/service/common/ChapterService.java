@@ -19,6 +19,7 @@ import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
 import edu.vinu.request.chapter.ChapterReorderRequest;
 import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;
+import edu.vinu.response.lecture_record.LectureRecordResponse;
 
 import java.util.List;
 
@@ -32,4 +33,6 @@ public interface ChapterService {
     ChapterDetailedResponse getDetailedChapterById(Long id);
 
     ChapterEntity getChapterEntityById(Long id);
+
+    List<LectureRecordResponse> getAllLectureRecordsByChapterId(Long id);
 }

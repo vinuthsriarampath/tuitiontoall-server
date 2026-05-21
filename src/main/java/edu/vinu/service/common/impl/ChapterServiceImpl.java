@@ -26,7 +26,9 @@ import edu.vinu.request.chapter.ChapterReorderRequest;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;
+import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.service.common.ChapterService;
+import edu.vinu.service.common.LectureRecordQueryService;
 import edu.vinu.service.common.ModuleService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +46,7 @@ public class ChapterServiceImpl implements ChapterService {
 
     private final ChapterRepository chapterRepository;
     private final ModuleService moduleService;
+    private final LectureRecordQueryService lectureRecordQueryService;
 
     @Override
     public ChapterResponse createChapter(ChapterCreateRequest request) {
@@ -144,6 +147,11 @@ public class ChapterServiceImpl implements ChapterService {
     @Override
     public ChapterEntity getChapterEntityById(Long id){
         return chapterRepository.findById(id).orElseThrow(() -> new NotFoundException("Chapter with the given id does not exist"));
+    }
+
+    @Override
+    public List<LectureRecordResponse> getAllLectureRecordsByChapterId(Long id) {
+        return lectureRecordQueryService.getAllLectureRecordsByChapterId(id);
     }
 
     private boolean isChapterExistsInModule(Long moduleId,String chapterName){
