@@ -13,14 +13,18 @@
 
 package edu.vinu.service.common.impl;
 
+import edu.vinu.entity.ChapterEntity;
+import edu.vinu.entity.LectureRecordEntity;
 import edu.vinu.entity.LectureRecordUploadEntity;
 import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.NotFoundException;
+import edu.vinu.repository.LectureRecordRepository;
 import edu.vinu.repository.LectureRecordUploadRepository;
 import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
 import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
+import edu.vinu.service.common.ChapterService;
 import edu.vinu.service.common.FileService;
 import edu.vinu.service.common.LectureRecordService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +33,14 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.util.Comparator;
 import java.util.UUID;
 
 @Service
@@ -37,6 +48,8 @@ import java.util.UUID;
 public class LectureRecordServiceImpl implements LectureRecordService {
 
     private final LectureRecordUploadRepository lectureRecordUploadRepository;
+    private final LectureRecordRepository lectureRecordRepository;
+    private final ChapterService chapterService;
     private final FileService fileService;
     private final Environment env;
 
@@ -110,6 +123,115 @@ public class LectureRecordServiceImpl implements LectureRecordService {
 
         return LectureRecordChunkUploadResponse.builder()
                 .uploadedChunkIndex(chunkIndex)
+                .build();
+    }
+
+    @Override
+    public LectureRecordResponse completeUpload(String uploadId) {
+        LectureRecordUploadEntity uploadEntity =
+                lectureRecordUploadRepository.findById(uploadId)
+                        .orElseThrow(() ->
+                                new NotFoundException("Upload session not found")
+                        );
+
+        if (uploadEntity.getCompleted()) {
+            throw new InvalidInputException(
+                    "Upload already completed"
+            );
+        }
+
+        if (!uploadEntity.getUploadedChunks()
+                .equals(uploadEntity.getTotalChunks())) {
+
+            throw new InvalidInputException(
+                    "All chunks are not uploaded yet"
+            );
+        }
+
+        String extension = fileService.extractFileExtension(
+                uploadEntity.getOriginalFileName()
+        );
+
+        String finalVideoName =
+                UUID.randomUUID() + extension;
+
+        Path finalVideoPath =
+                fileService.createDirectoryIfNotExists(
+                        lectureRecordVideoPath
+                ).resolve(finalVideoName);
+
+        Path uploadDirectory =
+                Path.of(
+                        tempLectureRecordPath,
+                        uploadId
+                );
+
+        try (OutputStream outputStream =
+                     Files.newOutputStream(
+                             finalVideoPath,
+                             StandardOpenOption.CREATE,
+                             StandardOpenOption.APPEND
+                     )) {
+
+            for (int i = 0; i < uploadEntity.getTotalChunks(); i++) {
+
+                Path chunkPath =
+                        uploadDirectory.resolve(
+                                "chunk_" + i + ".part"
+                        );
+
+                if (!Files.exists(chunkPath)) {
+                    throw new RuntimeException(
+                            "Missing chunk: " + i
+                    );
+                }
+
+                Files.copy(chunkPath, outputStream);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Error merging chunks",
+                    e
+            );
+        }
+
+        ChapterEntity chapter = chapterService.getChapterEntityById(uploadEntity.getChapterId());
+
+        LectureRecordEntity lectureRecord =
+                LectureRecordEntity.builder()
+                        .title(uploadEntity.getTitle())
+                        .recordedDate(uploadEntity.getRecordedDate())
+                        .url(finalVideoName)
+                        .chapter(chapter)
+                        .build();
+
+        LectureRecordEntity savedLectureRecord = lectureRecordRepository.save(lectureRecord);
+
+        uploadEntity.setCompleted(true);
+
+        lectureRecordUploadRepository.save(uploadEntity);
+
+        try {
+            Files.walk(uploadDirectory)
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        } catch (IOException e) {
+            throw new RuntimeException(
+                    "Error deleting temp chunks",
+                    e
+            );
+        }
+
+        return LectureRecordResponse.builder()
+                .id(savedLectureRecord.getId())
+                .title(savedLectureRecord.getTitle())
+                .url(savedLectureRecord.getUrl())
+                .chapterId(savedLectureRecord.getChapter().getId())
+                .recordedDate(savedLectureRecord.getRecordedDate())
+                .createdDate(savedLectureRecord.getCreatedDate())
+                .lastModifiedDate(savedLectureRecord.getLastModifiedDate())
                 .build();
     }
 }
