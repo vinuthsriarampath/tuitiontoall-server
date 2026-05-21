@@ -20,9 +20,12 @@ import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
 import edu.vinu.service.common.LectureRecordService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -54,4 +57,8 @@ public class LectureRecordController {
         return ResponseEntity.ok(new ApiResponse("Upload completed successfully", response));
     }
 
+    @GetMapping("/stream/{fileName:.+}")
+    public ResponseEntity<Resource> streamVideo(@PathVariable String fileName, @RequestHeader(value = "Range", required = false) String rangeHeader) throws IOException {
+        return lectureRecordService.streamVideo( fileName, rangeHeader );
+    }
 }
