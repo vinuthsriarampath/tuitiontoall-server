@@ -17,6 +17,9 @@ import edu.vinu.entity.LectureRecordEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface LectureRecordRepository extends JpaRepository<LectureRecordEntity,Long> {
+    List<LectureRecordEntity> findAllByChapterId(Long id);
 }
