@@ -141,7 +141,8 @@ public class ChapterServiceImpl implements ChapterService {
         return chapterRepository.findDetailedById(id).map(ChapterMapper::toChapterDetailedResponse).orElseThrow(() -> new NotFoundException("Chapter with the given id does not exist"));
     }
 
-    private ChapterEntity getChapterEntityById(Long id){
+    @Override
+    public ChapterEntity getChapterEntityById(Long id){
         return chapterRepository.findById(id).orElseThrow(() -> new NotFoundException("Chapter with the given id does not exist"));
     }
 
