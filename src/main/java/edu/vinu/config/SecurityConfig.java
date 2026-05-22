@@ -57,7 +57,8 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/api/v2/profile-files/load/**",
-                                "api/v2/courses/thumbnail/**"
+                                "api/v2/courses/thumbnail/**",
+                                "api/v2/lecture-records/stream/**"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
