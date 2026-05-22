@@ -19,6 +19,7 @@ import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
 import edu.vinu.service.common.LectureRecordService;
+import edu.vinu.service.common.VideoStreamTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ import java.io.IOException;
 @RequestMapping("/api/v2/lecture-records")
 public class LectureRecordController {
     private final LectureRecordService lectureRecordService;
+    private final VideoStreamTokenService videoStreamTokenService;
 
     @PostMapping("/upload/init")
     public ResponseEntity<ApiResponse> initializeUpload(@RequestBody LectureRecordUploadInitRequest request){
@@ -58,7 +60,14 @@ public class LectureRecordController {
     }
 
     @GetMapping("/stream/{fileName:.+}")
-    public ResponseEntity<Resource> streamVideo(@PathVariable String fileName, @RequestHeader(value = "Range", required = false) String rangeHeader) throws IOException {
+    public ResponseEntity<Resource> streamVideo(@PathVariable String fileName,@RequestParam String token, @RequestHeader(value = "Range", required = false) String rangeHeader) throws IOException {
+        videoStreamTokenService.validateToken(token);
         return lectureRecordService.streamVideo( fileName, rangeHeader );
+    }
+
+    @GetMapping("/stream-token/{fileName:.+}")
+    public ResponseEntity<ApiResponse> generateStreamToken(@PathVariable String fileName){
+        String token = videoStreamTokenService.generateToken(fileName);
+        return ResponseEntity.ok(new ApiResponse("Stream token generated for file name: "+fileName, token));
     }
 }
