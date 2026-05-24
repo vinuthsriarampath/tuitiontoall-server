@@ -18,8 +18,10 @@ import edu.vinu.entity.LectureRecordEntity;
 import edu.vinu.entity.LectureRecordUploadEntity;
 import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.NotFoundException;
+import edu.vinu.mapper.LectureRecordMapper;
 import edu.vinu.repository.LectureRecordRepository;
 import edu.vinu.repository.LectureRecordUploadRepository;
+import edu.vinu.request.lecture_record.LectureRecordDetailsUpdateRequest;
 import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
@@ -245,6 +247,39 @@ public class LectureRecordServiceImpl implements LectureRecordService {
                 .header(HttpHeaders.CONTENT_LENGTH, String.valueOf(contentLength))
                 .header(HttpHeaders.CONTENT_RANGE, "bytes " + start + "-" + end + "/" + fileLength)
                 .body(inputStreamResource);
+    }
+
+    @Override
+    public LectureRecordResponse updateLectureRecordDetails(Long id, LectureRecordDetailsUpdateRequest request) {
+        LectureRecordEntity lectureRecordEntity = this.getLectureRecordEntity(id);
+
+
+        List<FieldError> errors = new ArrayList<>();
+        if (!request.title().equals(lectureRecordEntity.getTitle())) {
+            if (isLectureRecordExistsByTitleAndChapterId(request.title(), lectureRecordEntity.getChapter().getId())) {
+                errors.add(new FieldError("title", "Lecture record with the same title already exists in the chapter"));
+            } else {
+                lectureRecordEntity.setTitle(request.title());
+            }
+        }
+
+        if (!request.recordedDate().equals(lectureRecordEntity.getRecordedDate())) {
+            if (isRecordedDateInValid(request.recordedDate())){
+                errors.add(new FieldError("recordedDate", "Recorded date cannot be in the future"));
+            }else {
+                lectureRecordEntity.setRecordedDate(request.recordedDate());
+            }
+        }
+
+        if (!errors.isEmpty()) {
+            throw new InvalidInputException(errors);
+        }
+
+        return LectureRecordMapper.toLectureRecordResponse(lectureRecordRepository.save(lectureRecordEntity));
+    }
+
+    private LectureRecordEntity getLectureRecordEntity(Long id){
+        return lectureRecordRepository.findById(id).orElseThrow(() -> new NotFoundException("Lecture record with the given id does not exist"));
     }
 
     private LectureRecordUploadEntity getLectureRecordUploadEntityById(String id) {

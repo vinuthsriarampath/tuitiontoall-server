@@ -13,6 +13,7 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.request.lecture_record.LectureRecordDetailsUpdateRequest;
 import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
 import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
@@ -31,4 +32,6 @@ public interface LectureRecordService {
     LectureRecordResponse completeUpload(String uploadId);
 
     ResponseEntity<Resource> streamVideo(String fileName, String rangeHeader) throws IOException;
+
+    LectureRecordResponse updateLectureRecordDetails(Long id,LectureRecordDetailsUpdateRequest request);
 }
