@@ -13,6 +13,7 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.request.lecture_record.LectureRecordDetailsUpdateRequest;
 import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
@@ -20,6 +21,7 @@ import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
 import edu.vinu.service.common.LectureRecordService;
 import edu.vinu.service.common.VideoStreamTokenService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -69,5 +71,11 @@ public class LectureRecordController {
     public ResponseEntity<ApiResponse> generateStreamToken(@PathVariable String fileName){
         String token = videoStreamTokenService.generateToken(fileName);
         return ResponseEntity.ok(new ApiResponse("Stream token generated for file name: "+fileName, token));
+    }
+
+    @PutMapping("{id}/details")
+    public ResponseEntity<ApiResponse> updateLectureRecordDetails(@PathVariable Long id, @Valid @RequestBody LectureRecordDetailsUpdateRequest request){
+        LectureRecordResponse response = lectureRecordService.updateLectureRecordDetails(id,request);
+        return ResponseEntity.ok(new ApiResponse("Lecture record details updated successfully", response));
     }
 }
