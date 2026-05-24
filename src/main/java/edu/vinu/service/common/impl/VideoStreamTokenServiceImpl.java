@@ -37,7 +37,7 @@ public class VideoStreamTokenServiceImpl implements VideoStreamTokenService {
                         .fileName(fileName)
                         .expiresAt(
                                 LocalDateTime.now()
-                                        .plusMinutes(10)
+                                        .plusHours(24)
                         )
                         .build();
 
