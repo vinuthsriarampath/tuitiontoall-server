@@ -22,4 +22,6 @@ import java.util.List;
 @Repository
 public interface LectureRecordRepository extends JpaRepository<LectureRecordEntity,Long> {
     List<LectureRecordEntity> findAllByChapterId(Long id);
+
+    boolean existsByTitleAndChapterId(String title, Long chapterId);
 }
