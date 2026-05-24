@@ -1,0 +1,14 @@
+$kind: http-request
+name: lecture record details update
+url: http://localhost:8080/api/v2/lecture-records/1/details
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \    \"title\":\"test update title\",\r
+
+    \    \"recordedDate\":\"2026-05-24\"\r
+
+    }"
+order: 4496476164356943
