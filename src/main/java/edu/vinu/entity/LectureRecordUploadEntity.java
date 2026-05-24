@@ -13,21 +13,23 @@
 
 package edu.vinu.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "lecture_record_upload")
+@Table(name = "lecture_record_upload",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_chapter_title_upload", columnNames = {"title", "chapter_id"})
+        }
+)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,8 +44,9 @@ public class LectureRecordUploadEntity {
     @Column(nullable = false)
     private LocalDate recordedDate;
 
-    @Column(nullable = false)
-    private Long chapterId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chapter_id", nullable = false)
+    private ChapterEntity chapter;
 
     @Column(nullable = false)
     private String originalFileName;
@@ -60,6 +63,13 @@ public class LectureRecordUploadEntity {
     @Column(nullable = false)
     private Boolean completed;
 
+    @OneToOne
+    @JoinColumn(name = "lecture_record_id")
+    private LectureRecordEntity lectureRecord;
+
     @CreationTimestamp
     private LocalDateTime createdDate;
+
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
 }
