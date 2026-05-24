@@ -36,31 +36,32 @@ import java.time.LocalDateTime;
 @Builder
 public class LectureRecordUploadEntity {
     @Id
+    @Column(name = "upload_id")
     private String uploadId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "title")
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "recorded_date")
     private LocalDate recordedDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chapter_id", nullable = false)
     private ChapterEntity chapter;
 
-    @Column(nullable = false)
+    @Column(nullable = false,name = "original_file_name")
     private String originalFileName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "total_size")
     private Long totalSize;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "total_chunks")
     private Integer totalChunks;
 
-    @Column(nullable = false)
+    @Column(nullable = false,name = "uploaded_chunks")
     private Integer uploadedChunks;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "completed")
     private Boolean completed;
 
     @OneToOne
@@ -68,8 +69,10 @@ public class LectureRecordUploadEntity {
     private LectureRecordEntity lectureRecord;
 
     @CreationTimestamp
+    @Column(name = "created_date", updatable = false, nullable = false)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
+    @Column(name = "last_modified_date",insertable = false)
     private LocalDateTime lastModifiedDate;
 }

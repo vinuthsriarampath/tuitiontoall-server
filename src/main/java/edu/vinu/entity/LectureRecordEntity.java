@@ -44,10 +44,10 @@ public class LectureRecordEntity {
     private String url;
     @Column(name = "recorded_date",nullable = false)
     private LocalDate recordedDate;
-    @Column(name = "created_date")
+    @Column(name = "created_date",updatable = false,nullable = false)
     @CreationTimestamp
     private LocalDateTime createdDate;
-    @Column(name = "last_modified_date")
+    @Column(name = "last_modified_date", insertable = false)
     @UpdateTimestamp
     private LocalDateTime lastModifiedDate;
 
