@@ -174,6 +174,7 @@ public class LectureRecordServiceImpl implements LectureRecordService {
         LectureRecordEntity savedLectureRecord = lectureRecordRepository.save(lectureRecord);
 
         uploadEntity.setCompleted(true);
+        uploadEntity.setLectureRecord(savedLectureRecord);
 
         lectureRecordUploadRepository.save(uploadEntity);
 
