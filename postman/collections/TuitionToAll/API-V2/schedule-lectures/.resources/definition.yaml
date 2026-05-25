@@ -1,0 +1,7 @@
+$kind: collection
+name: schedule-lectures
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 683369340862463

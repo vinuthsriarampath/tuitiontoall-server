@@ -1,0 +1,26 @@
+$kind: http-request
+name: schedule lectures
+url: http://localhost:8080/api/v2/schedule-lectures
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \      \"chapterId\": 1,\r
+
+    \      \"topic\": \"Introduction to Algebra part 2\",\r
+
+    \      \"startDate\": \"2026-05-25\",\r
+
+    \      \"startTime\": \"19:30:00\",\r
+
+    \      \"endTime\": \"20:30:00\",\r
+
+    \      \"lateAttendance\": false,\r
+
+    \      \"meetingUrl\": \"https://meet.example.com/abc123\",\r
+
+    \      \"status\": \"SCHEDULED\"\r
+
+    \    }"
+order: 1779692634838
