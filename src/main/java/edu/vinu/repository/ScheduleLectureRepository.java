@@ -29,10 +29,11 @@ public interface ScheduleLectureRepository extends JpaRepository<ScheduleLecture
         FROM schedule_lecture sl
         WHERE sl.chapter_id = :chapterId
         AND sl.start_date = :startDate
+        AND (:excludedId IS NULL OR sl.id != :excludedId)
         AND (
             (:startTime < sl.end_time AND :endTime > sl.start_time)
         )
     )
 """,nativeQuery = true)
-    Integer existsInSameTimePeriodInChapter(Long chapterId, LocalDate startDate, LocalTime startTime, LocalTime endTime);
+    Integer existsInSameTimePeriodInChapter(Long chapterId, LocalDate startDate, LocalTime startTime, LocalTime endTime, Long excludedId);
 }
