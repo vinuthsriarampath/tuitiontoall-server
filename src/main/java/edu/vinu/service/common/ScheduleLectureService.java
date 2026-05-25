@@ -14,8 +14,11 @@
 package edu.vinu.service.common;
 
 import edu.vinu.request.schedule_lecture.ScheduleLectureCreateRequest;
+import edu.vinu.request.schedule_lecture.ScheduleLectureUpdateRequest;
 import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
 
 public interface ScheduleLectureService {
     ScheduleLectureResponse scheduleLecture(ScheduleLectureCreateRequest request);
+
+    ScheduleLectureResponse updateScheduleLecture(Long id, ScheduleLectureUpdateRequest request);
 }

@@ -20,6 +20,7 @@ import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.mapper.ScheduleLectureMapper;
 import edu.vinu.repository.ScheduleLectureRepository;
 import edu.vinu.request.schedule_lecture.ScheduleLectureCreateRequest;
+import edu.vinu.request.schedule_lecture.ScheduleLectureUpdateRequest;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
 import edu.vinu.service.common.ChapterService;
@@ -40,7 +41,7 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
 
     @Override
     public ScheduleLectureResponse scheduleLecture(ScheduleLectureCreateRequest request) {
-        validateSchedule(request.chapterId(), request.startDate(),request.startTime(),request.endTime());
+        validateSchedule(request.chapterId(), request.startDate(),request.startTime(),request.endTime(),null);
 
         ChapterEntity chapterEntity = chapterService.getChapterEntityById(request.chapterId());
 
@@ -58,7 +59,31 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
         return ScheduleLectureMapper.toScheduleLectureResponse(scheduleLectureRepository.save(scheduleLectureEntity));
     }
 
-    private void validateSchedule(Long chapterId,LocalDate startDate,LocalTime startTime, LocalTime endTime){
+    @Override
+    public ScheduleLectureResponse updateScheduleLecture(Long id, ScheduleLectureUpdateRequest request) {
+        ScheduleLectureEntity entity = getScheduleLectureEntity(id);
+
+        if(!entity.getStartDate().isEqual(request.startDate()) || !entity.getStartTime().equals(request.startTime()) || !entity.getEndTime().equals(request.endTime())){
+            validateSchedule(entity.getChapter().getId(), request.startDate(),request.startTime(),request.endTime(), entity.getId());
+            entity.setStartDate(request.startDate());
+            entity.setStartTime(request.startTime());
+            entity.setEndTime(request.endTime());
+        }
+
+        entity.setTopic(request.topic());
+        entity.setLateAttendance(request.lateAttendance());
+        entity.setMeetingUrl(request.meetingUrl());
+        entity.setStatus(ScheduleLectureStatus.valueOf(request.status().name()));
+
+        return ScheduleLectureMapper.toScheduleLectureResponse(scheduleLectureRepository.save(entity));
+    }
+
+    private ScheduleLectureEntity getScheduleLectureEntity(Long id){
+        return scheduleLectureRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Schedule lecture with id " + id + " not found!"));
+    }
+
+    private void validateSchedule(Long chapterId,LocalDate startDate,LocalTime startTime, LocalTime endTime, Long excludedId){
         List<FieldError>  errors = new ArrayList<>();
 
         if(!isValidStartTime(startTime,endTime)){
@@ -68,7 +93,7 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
             errors.add(new FieldError("endTime","End time must be a time after start time!"));
         }
 
-        if(isAlreadyExistsInSameTimePeriodInChapter(chapterId, startDate, startTime, endTime)){
+        if(isAlreadyExistsInSameTimePeriodInChapter(chapterId, startDate, startTime, endTime, excludedId)){
             errors.add(new FieldError("startDate","You cannot schedule lectures with overlapping time periods on the same day!"));
         }
 
@@ -85,7 +110,7 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
         return endTime.isAfter(LocalTime.now()) && endTime.isAfter(startTime);
     }
 
-    private boolean isAlreadyExistsInSameTimePeriodInChapter(Long chapterId,LocalDate startDate,LocalTime startTime, LocalTime endTime){
-        return scheduleLectureRepository.existsInSameTimePeriodInChapter(chapterId, startDate, startTime, endTime) == 1;
+    private boolean isAlreadyExistsInSameTimePeriodInChapter(Long chapterId,LocalDate startDate,LocalTime startTime, LocalTime endTime,Long excludedId){
+        return scheduleLectureRepository.existsInSameTimePeriodInChapter(chapterId, startDate, startTime, endTime, excludedId) == 1;
     }
 }
