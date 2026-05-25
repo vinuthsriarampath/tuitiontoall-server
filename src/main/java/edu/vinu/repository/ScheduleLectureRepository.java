@@ -15,9 +15,24 @@ package edu.vinu.repository;
 
 import edu.vinu.entity.ScheduleLectureEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Repository
 public interface ScheduleLectureRepository extends JpaRepository<ScheduleLectureEntity,Long> {
-
+    @Query(value = """
+    SELECT EXISTS (
+        SELECT 1
+        FROM schedule_lecture sl
+        WHERE sl.chapter_id = :chapterId
+        AND sl.start_date = :startDate
+        AND (
+            (:startTime < sl.end_time AND :endTime > sl.start_time)
+        )
+    )
+""",nativeQuery = true)
+    Integer existsInSameTimePeriodInChapter(Long chapterId, LocalDate startDate, LocalTime startTime, LocalTime endTime);
 }
