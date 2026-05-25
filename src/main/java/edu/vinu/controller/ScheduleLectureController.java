@@ -14,6 +14,7 @@
 package edu.vinu.controller;
 
 import edu.vinu.request.schedule_lecture.ScheduleLectureCreateRequest;
+import edu.vinu.request.schedule_lecture.ScheduleLectureUpdateRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
 import edu.vinu.service.common.ScheduleLectureService;
@@ -21,10 +22,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v2/schedule-lectures")
@@ -37,5 +35,12 @@ public class ScheduleLectureController {
     public ResponseEntity<ApiResponse> scheduleLecture(@Valid @RequestBody ScheduleLectureCreateRequest request){
         ScheduleLectureResponse response = scheduleLectureService.scheduleLecture(request);
         return ResponseEntity.ok(new ApiResponse("Lecture Scheduled Successfully!",response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateScheduleLecture(@PathVariable Long id, @Valid @RequestBody ScheduleLectureUpdateRequest request) {
+        ScheduleLectureResponse response = scheduleLectureService.updateScheduleLecture(id , request);
+        return ResponseEntity.ok(new ApiResponse("Lecture Updated Successfully!", response));
     }
 }
