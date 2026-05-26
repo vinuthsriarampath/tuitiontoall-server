@@ -73,7 +73,7 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
         entity.setTopic(request.topic());
         entity.setLateAttendance(request.lateAttendance());
         entity.setMeetingUrl(request.meetingUrl());
-        entity.setStatus(ScheduleLectureStatus.valueOf(request.status().name()));
+        entity.setStatus(request.status());
 
         return ScheduleLectureMapper.toScheduleLectureResponse(scheduleLectureRepository.save(entity));
     }
