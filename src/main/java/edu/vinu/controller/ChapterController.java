@@ -16,10 +16,13 @@ package edu.vinu.controller;
 import edu.vinu.request.chapter.ChapterCreateRequest;
 import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
 import edu.vinu.request.chapter.ChapterReorderRequest;
+import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
 import edu.vinu.response.ApiResponse;
+import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
+import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
 import edu.vinu.service.common.ChapterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -74,5 +77,20 @@ public class ChapterController {
     public ResponseEntity<ApiResponse> getAllLectureRecordsById(@PathVariable("id")Long id){
         List<LectureRecordResponse> responses = chapterService.getAllLectureRecordsByChapterId(id);
         return ResponseEntity.ok(new ApiResponse("All lecture records related to chapter fetched successfully!", responses));
+    }
+
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("{id}/schedule-lectures")
+    public ResponseEntity<PaginatedApiResponse<ScheduleLectureResponse>> getAllScheduleLecturesWithFilters(
+            @PathVariable("id") Long chapterId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(defaultValue = "created_date")List<String> sortBy,
+            ScheduleLectureFilterRequest filters
+    ) {
+        PaginatedApiResponse<ScheduleLectureResponse> response = chapterService.getAllScheduleLecturesByChapter(chapterId, page, size, direction, sortBy, filters);
+        return ResponseEntity.ok(response);
     }
 }
