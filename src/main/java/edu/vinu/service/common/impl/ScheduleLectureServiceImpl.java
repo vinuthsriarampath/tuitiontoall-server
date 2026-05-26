@@ -17,6 +17,7 @@ import edu.vinu.entity.ChapterEntity;
 import edu.vinu.entity.ScheduleLectureEntity;
 import edu.vinu.enums.ScheduleLectureStatus;
 import edu.vinu.exception.custom.InvalidInputException;
+import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.mapper.ScheduleLectureMapper;
 import edu.vinu.repository.ScheduleLectureRepository;
 import edu.vinu.request.schedule_lecture.ScheduleLectureCreateRequest;
@@ -80,7 +81,7 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
 
     private ScheduleLectureEntity getScheduleLectureEntity(Long id){
         return scheduleLectureRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Schedule lecture with id " + id + " not found!"));
+                .orElseThrow(() -> new NotFoundException("Schedule lecture with id " + id + " not found!"));
     }
 
     private void validateSchedule(Long chapterId,LocalDate startDate,LocalTime startTime, LocalTime endTime, Long excludedId){
