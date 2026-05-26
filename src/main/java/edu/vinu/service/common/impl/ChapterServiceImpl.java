@@ -23,13 +23,17 @@ import edu.vinu.request.chapter.ChapterCreateRequest;
 import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
 import edu.vinu.request.chapter.ChapterOrderRequest;
 import edu.vinu.request.chapter.ChapterReorderRequest;
+import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
 import edu.vinu.response.FieldError;
+import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
+import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
 import edu.vinu.service.common.ChapterService;
 import edu.vinu.service.common.LectureRecordQueryService;
 import edu.vinu.service.common.ModuleService;
+import edu.vinu.service.common.ScheduleLectureQueryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,7 +51,7 @@ public class ChapterServiceImpl implements ChapterService {
     private final ChapterRepository chapterRepository;
     private final ModuleService moduleService;
     private final LectureRecordQueryService lectureRecordQueryService;
-
+    private final ScheduleLectureQueryService scheduleLectureQueryService;
     @Override
     public ChapterResponse createChapter(ChapterCreateRequest request) {
 
@@ -152,6 +156,11 @@ public class ChapterServiceImpl implements ChapterService {
     @Override
     public List<LectureRecordResponse> getAllLectureRecordsByChapterId(Long id) {
         return lectureRecordQueryService.getAllLectureRecordsByChapterId(id);
+    }
+
+    @Override
+    public PaginatedApiResponse<ScheduleLectureResponse> getAllScheduleLecturesByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ScheduleLectureFilterRequest filters) {
+        return scheduleLectureQueryService.getAllScheduleLecturesByChapter(chapterId, page, size, direction, sortBy, filters);
     }
 
     private boolean isChapterExistsInModule(Long moduleId,String chapterName){
