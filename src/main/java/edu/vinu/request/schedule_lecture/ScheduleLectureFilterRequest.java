@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public record ScheduleLectureFilterRequest(
-        Long id,
+        Long scheduleLectureId,
         String status,
         LocalDate startDate,
         LocalTime startTime,
