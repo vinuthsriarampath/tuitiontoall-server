@@ -14,6 +14,9 @@
 package edu.vinu.repository;
 
 import edu.vinu.entity.ScheduleLectureEntity;
+import edu.vinu.enums.ScheduleLectureStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -36,4 +39,38 @@ public interface ScheduleLectureRepository extends JpaRepository<ScheduleLecture
     )
 """,nativeQuery = true)
     Integer existsInSameTimePeriodInChapter(Long chapterId, LocalDate startDate, LocalTime startTime, LocalTime endTime, Long excludedId);
+
+    @Query(value = """
+    SELECT
+        sl.id,
+        sl.chapter_id,
+        sl.topic,
+        sl.start_date,
+        sl.start_time,
+        sl.end_time,
+        sl.late_attendance,
+        sl.meeting_url,
+        sl.status,
+        sl.created_date,
+        sl.last_modified_date
+    FROM schedule_lecture sl
+    WHERE (:chapterId IS NULL OR sl.chapter_id = :chapterId)
+        AND (:id IS NULL OR sl.id = :id)
+        AND (:start_date IS NULL OR sl.start_date = :start_date)
+        AND (:start_time IS NULL OR sl.start_time >= :start_time)
+        AND (:end_time IS NULL OR sl.end_time <= :end_time)
+        AND (:status IS NULL OR sl.status = :status)
+    """,
+    countQuery = """
+    SELECT COUNT(*)
+    FROM schedule_lecture sl
+    WHERE (:chapterId IS NULL OR chapter_id = :chapterId)
+        AND (:id IS NULL OR id = :id)
+        AND (:start_date IS NULL OR start_date = :start_date)
+        AND (:start_time IS NULL OR start_time >= :start_time)
+        AND (:end_time IS NULL OR end_time <= :end_time)
+        AND (:status IS NULL OR status = :status)
+    """,
+    nativeQuery = true)
+    Page<ScheduleLectureEntity> getAllModules(Long chapterId, Long id, LocalDate start_date, LocalTime start_time, LocalTime end_time, String status, Pageable pageable);
 }
