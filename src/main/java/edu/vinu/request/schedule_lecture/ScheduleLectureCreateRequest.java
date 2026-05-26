@@ -13,7 +13,7 @@
 
 package edu.vinu.request.schedule_lecture;
 
-import edu.vinu.request.schedule_lecture.enums.ScheduleLectureCreateEnum;
+import edu.vinu.request.schedule_lecture.enums.ScheduleLectureCreateStatus;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
@@ -38,6 +38,6 @@ public record ScheduleLectureCreateRequest(
         @NotNull(message = "Meeting url is mandatory!")
         String meetingUrl,
         @NotNull(message = "Status is mandatory!")
-        ScheduleLectureCreateEnum status
+        ScheduleLectureCreateStatus status
 ) {
 }

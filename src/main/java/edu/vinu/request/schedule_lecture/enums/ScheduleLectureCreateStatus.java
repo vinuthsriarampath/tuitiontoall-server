@@ -13,7 +13,7 @@
 
 package edu.vinu.request.schedule_lecture.enums;
 
-public enum ScheduleLectureCreateEnum {
+public enum ScheduleLectureCreateStatus {
     DRAFT,
     SCHEDULED,
 }
