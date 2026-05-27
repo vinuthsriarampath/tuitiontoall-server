@@ -15,16 +15,15 @@ package edu.vinu.controller;
 
 import edu.vinu.request.resource.ResourceInitRequest;
 import edu.vinu.response.ApiResponse;
+import edu.vinu.response.resource.ResourceChunkUploadResponse;
 import edu.vinu.response.resource.ResourceInitResponse;
 import edu.vinu.service.common.ResourceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("api/v2/resources")
@@ -37,5 +36,15 @@ public class ResourceController {
     public ResponseEntity<ApiResponse> initializeUpload(@Valid @RequestBody ResourceInitRequest request) {
         ResourceInitResponse response = resourceService.initializeUpload(request);
         return ResponseEntity.ok(new ApiResponse("Upload initialized successfully", response));
+    }
+    @PreAuthorize("hasAuthority('institute')")
+    @PostMapping("/upload/chunk")
+    public ResponseEntity<ApiResponse> uploadChunk(
+            @RequestParam String uploadId,
+            @RequestParam Integer chunkIndex,
+            @RequestParam MultipartFile file
+    ){
+        ResourceChunkUploadResponse response = resourceService.uploadChunk(uploadId,chunkIndex, file);
+        return ResponseEntity.ok(new ApiResponse("Chunk uploaded successfully", response));
     }
 }
