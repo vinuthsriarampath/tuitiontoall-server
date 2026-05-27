@@ -16,9 +16,11 @@ package edu.vinu.service.common.impl;
 import edu.vinu.entity.ChapterEntity;
 import edu.vinu.entity.ResourceUploadEntity;
 import edu.vinu.exception.custom.InvalidInputException;
+import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.repository.ResourceRepository;
 import edu.vinu.repository.ResourceUploadRepository;
 import edu.vinu.request.resource.ResourceInitRequest;
+import edu.vinu.response.resource.ResourceChunkUploadResponse;
 import edu.vinu.response.resource.ResourceInitResponse;
 import edu.vinu.service.common.ChapterService;
 import edu.vinu.service.common.FileService;
@@ -26,7 +28,9 @@ import edu.vinu.service.common.ResourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @Service
@@ -74,11 +78,38 @@ public class ResourceServiceImpl implements ResourceService {
                 .build();
     }
 
+    @Override
+    public ResourceChunkUploadResponse uploadChunk(String uploadId, Integer chunkIndex, MultipartFile file) {
+        ResourceUploadEntity uploadEntity = getResourceUploadEntity(uploadId);
+
+        if(uploadEntity.isCompleted()) throw new InvalidInputException("Upload has already been completed.");
+
+        String directoryPath = tempResourcePath + "/" + uploadEntity.getUploadId();
+
+        fileService.createDirectoryIfNotExists(directoryPath);
+
+        String chunkFileName = "chunk_"+chunkIndex+".part";
+
+        fileService.saveFile(file,chunkFileName,directoryPath, StandardCopyOption.REPLACE_EXISTING);
+
+        uploadEntity.setUploadedChunks(uploadEntity.getUploadedChunks() + 1);
+
+        resourceUploadRepository.save(uploadEntity);
+
+        return ResourceChunkUploadResponse.builder()
+                .uploadedChunkIndex(chunkIndex)
+                .build();
+    }
+
+    private ResourceUploadEntity getResourceUploadEntity(String uploadId) {
+        return resourceUploadRepository.findById(uploadId).orElseThrow(()-> new NotFoundException("Resource upload initialization not found."));
+    }
+
     private boolean alreadyExistsByNameAndChapterInResource(String name, Long chapterId){
         return resourceRepository.existsByNameAndChapterId(name, chapterId);
     }
 
     private boolean alreadyExistsByNameAndChapterInResourceUpload(String name, Long chapterId){
-        return resourceRepository.existsByNameAndChapterId(name, chapterId);
+        return resourceUploadRepository.existsByNameAndChapterId(name, chapterId);
     }
 }
