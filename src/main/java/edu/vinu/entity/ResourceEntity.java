@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "resource",
     uniqueConstraints = {
-        @UniqueConstraint(name = "uk_chapter_id_file_name", columnNames = {"chapter_id", "name"})
+        @UniqueConstraint(name = "uk_chapter_id_name", columnNames = {"chapter_id", "name"})
     }
 )
 @Data
