@@ -16,10 +16,13 @@ package edu.vinu.service.common;
 import edu.vinu.request.resource.ResourceInitRequest;
 import edu.vinu.response.resource.ResourceChunkUploadResponse;
 import edu.vinu.response.resource.ResourceInitResponse;
+import edu.vinu.response.resource.ResourceResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ResourceService {
     ResourceInitResponse initializeUpload(ResourceInitRequest request);
 
     ResourceChunkUploadResponse uploadChunk(String uploadId, Integer chunkIndex, MultipartFile file);
+
+    ResourceResponse completeUpload(String uploadId);
 }

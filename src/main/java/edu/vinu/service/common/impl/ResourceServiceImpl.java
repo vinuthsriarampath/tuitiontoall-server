@@ -14,14 +14,17 @@
 package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.ChapterEntity;
+import edu.vinu.entity.ResourceEntity;
 import edu.vinu.entity.ResourceUploadEntity;
 import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.NotFoundException;
+import edu.vinu.mapper.ResourceMapper;
 import edu.vinu.repository.ResourceRepository;
 import edu.vinu.repository.ResourceUploadRepository;
 import edu.vinu.request.resource.ResourceInitRequest;
 import edu.vinu.response.resource.ResourceChunkUploadResponse;
 import edu.vinu.response.resource.ResourceInitResponse;
+import edu.vinu.response.resource.ResourceResponse;
 import edu.vinu.service.common.ChapterService;
 import edu.vinu.service.common.FileService;
 import edu.vinu.service.common.ResourceService;
@@ -30,7 +33,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
+import java.util.Comparator;
 import java.util.UUID;
 
 @Service
@@ -45,7 +55,7 @@ public class ResourceServiceImpl implements ResourceService {
     private String tempResourcePath;
 
     @Value("${file.chapter-resource.resource-path}")
-    private String ResourcePath;
+    private String resourcePath;
 
     @Override
     public ResourceInitResponse initializeUpload(ResourceInitRequest request) {
@@ -99,6 +109,63 @@ public class ResourceServiceImpl implements ResourceService {
         return ResourceChunkUploadResponse.builder()
                 .uploadedChunkIndex(chunkIndex)
                 .build();
+    }
+
+    @Override
+    public ResourceResponse completeUpload(String uploadId) {
+        ResourceUploadEntity uploadEntity = getResourceUploadEntity(uploadId);
+
+        if(uploadEntity.isCompleted()) throw new InvalidInputException("Upload has already been completed.");
+
+        if(!uploadEntity.getUploadedChunks().equals(uploadEntity.getTotalChunks())) throw new InvalidInputException("All the chunks haven't uploaded!");
+
+        String extension = fileService.extractFileExtension(uploadEntity.getOriginalFileName());
+
+        String finalFileName = UUID.randomUUID() + "." + extension;
+
+        Path finalFilePath = fileService.createDirectoryIfNotExists(resourcePath).resolve(finalFileName);
+
+        Path uploadDirectory = Path.of(tempResourcePath, uploadId);
+
+        try (OutputStream outputStream = Files.newOutputStream(finalFilePath, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
+
+            for (int i = 0; i < uploadEntity.getTotalChunks(); i++) {
+
+                Path chunkPath = uploadDirectory.resolve("chunk_" + i + ".part");
+
+                if (!Files.exists(chunkPath)) throw new RuntimeException("Missing chunk: " + i);
+
+                Files.copy(chunkPath, outputStream);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error merging chunks", e);
+        }
+
+        ChapterEntity chapterEntity = chapterService.getChapterEntityById(uploadEntity.getChapter().getId());
+
+        ResourceEntity resourceEntity = ResourceEntity.builder()
+                .name(uploadEntity.getName())
+                .fileName(finalFileName)
+                .chapter(chapterEntity)
+                .build();
+        ResourceEntity savedResourcesEntity = resourceRepository.save(resourceEntity);
+
+        uploadEntity.setCompleted(true);
+        uploadEntity.setResource(savedResourcesEntity);
+
+        resourceUploadRepository.save(uploadEntity);
+
+        try {
+            Files.walk(uploadDirectory)
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        } catch (IOException e) {
+            throw new RuntimeException("Error deleting temp chunks", e);
+        }
+
+        return ResourceMapper.toResourceResponse(savedResourcesEntity);
     }
 
     private ResourceUploadEntity getResourceUploadEntity(String uploadId) {
