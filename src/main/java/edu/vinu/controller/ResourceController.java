@@ -13,14 +13,29 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.request.resource.ResourceInitRequest;
+import edu.vinu.response.ApiResponse;
+import edu.vinu.response.resource.ResourceInitResponse;
 import edu.vinu.service.common.ResourceService;
-import lombok.AllArgsConstructor;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v2/resources")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ResourceController {
     private final ResourceService resourceService;
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PostMapping("/upload/init")
+    public ResponseEntity<ApiResponse> initializeUpload(@Valid @RequestBody ResourceInitRequest request) {
+        ResourceInitResponse response = resourceService.initializeUpload(request);
+        return ResponseEntity.ok(new ApiResponse("Upload initialized successfully", response));
+    }
 }
