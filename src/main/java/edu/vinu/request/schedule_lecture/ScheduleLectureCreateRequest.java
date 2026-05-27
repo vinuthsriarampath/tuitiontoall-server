@@ -14,7 +14,6 @@
 package edu.vinu.request.schedule_lecture;
 
 import edu.vinu.request.schedule_lecture.enums.ScheduleLectureCreateStatus;
-import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,15 +26,15 @@ public record ScheduleLectureCreateRequest(
         Long chapterId,
         @NotBlank(message = "Topic is mandatory!")
         String topic,
+        @NotNull(message = "Meeting start Date is mandatory!")
         @FutureOrPresent(message = "Meeting start Date must be a present or future date!")
         LocalDate startDate,
-        @Future(message = "Meeting start time must be a future time!")
+        @NotNull(message = "Meeting start time is mandatory!")
         LocalTime startTime,
-        @Future(message = "Meeting end time must be a future time!")
+        @NotNull(message = "Meeting end time is mandatory!")
         LocalTime endTime,
-        @NotNull(message = "Late Attendance is mandatory!")
         boolean lateAttendance,
-        @NotNull(message = "Meeting url is mandatory!")
+        @NotBlank(message = "Meeting url is mandatory!")
         String meetingUrl,
         @NotNull(message = "Status is mandatory!")
         ScheduleLectureCreateStatus status
