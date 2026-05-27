@@ -17,6 +17,7 @@ import edu.vinu.request.resource.ResourceInitRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.resource.ResourceChunkUploadResponse;
 import edu.vinu.response.resource.ResourceInitResponse;
+import edu.vinu.response.resource.ResourceResponse;
 import edu.vinu.service.common.ResourceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +47,12 @@ public class ResourceController {
     ){
         ResourceChunkUploadResponse response = resourceService.uploadChunk(uploadId,chunkIndex, file);
         return ResponseEntity.ok(new ApiResponse("Chunk uploaded successfully", response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PostMapping("/upload/complete/{uploadId}")
+    public ResponseEntity<ApiResponse> completeUpload(@PathVariable("uploadId") String uploadId){
+        ResourceResponse response = resourceService.completeUpload(uploadId);
+        return ResponseEntity.ok(new ApiResponse("Upload completed successfully",response));
     }
 }
