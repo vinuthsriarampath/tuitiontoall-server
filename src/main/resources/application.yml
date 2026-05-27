@@ -16,8 +16,8 @@ spring:
       ddl-auto: update
     show-sql: false
     properties:
-        hibernate:
-            format_sql: true
+      hibernate:
+        format_sql: true
 
   servlet:
     multipart:
@@ -47,6 +47,9 @@ file:
   lecture-record:
     temp-path: uploads/lecture-records/temp
     video-path: uploads/lecture-records/videos
+  chapter-resource:
+    temp-path: uploads/chapter-resources/temp
+    resource-path: uploads/chapter-resources/resources
 
 app:
   reset:
