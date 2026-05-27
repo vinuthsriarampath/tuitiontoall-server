@@ -13,5 +13,9 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.request.resource.ResourceInitRequest;
+import edu.vinu.response.resource.ResourceInitResponse;
+
 public interface ResourceService {
+    ResourceInitResponse initializeUpload(ResourceInitRequest request);
 }
