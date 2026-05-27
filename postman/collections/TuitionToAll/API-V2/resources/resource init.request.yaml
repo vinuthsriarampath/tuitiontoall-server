@@ -1,0 +1,20 @@
+$kind: http-request
+name: resource init
+url: http://localhost:8080/api/v2/resources/upload/init
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"name\": \"Java Basics Notes\",\r
+
+    \  \"chapterId\": 1,\r
+
+    \  \"originalFileName\": \"java-basics.pdf\",\r
+
+    \  \"totalSize\": 5242880,\r
+
+    \  \"totalChunks\": 5\r
+
+    }"
+order: 1779886332926
