@@ -27,9 +27,11 @@ import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
 import edu.vinu.service.common.ChapterService;
 import edu.vinu.service.common.ScheduleLectureService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,13 +66,11 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
     public ScheduleLectureResponse updateScheduleLecture(Long id, ScheduleLectureUpdateRequest request) {
         ScheduleLectureEntity entity = getScheduleLectureEntity(id);
 
-        if(!entity.getStartDate().isEqual(request.startDate()) || !entity.getStartTime().equals(request.startTime()) || !entity.getEndTime().equals(request.endTime())){
-            validateSchedule(entity.getChapter().getId(), request.startDate(),request.startTime(),request.endTime(), entity.getId());
-            entity.setStartDate(request.startDate());
-            entity.setStartTime(request.startTime());
-            entity.setEndTime(request.endTime());
-        }
+        validateSchedule(entity.getChapter().getId(), request.startDate(),request.startTime(),request.endTime(), entity);
 
+        entity.setStartDate(request.startDate());
+        entity.setStartTime(request.startTime());
+        entity.setEndTime(request.endTime());
         entity.setTopic(request.topic());
         entity.setLateAttendance(request.lateAttendance());
         entity.setMeetingUrl(request.meetingUrl());
@@ -84,31 +84,43 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
                 .orElseThrow(() -> new NotFoundException("Schedule lecture with id " + id + " not found!"));
     }
 
-    private void validateSchedule(Long chapterId,LocalDate startDate,LocalTime startTime, LocalTime endTime, Long excludedId){
-        List<FieldError>  errors = new ArrayList<>();
+    private void validateSchedule(Long chapterId,LocalDate startDate,LocalTime startTime, LocalTime endTime, @Nullable ScheduleLectureEntity existingEntity){
 
-        if(!isValidStartTime(startTime,endTime)){
-            errors.add(new FieldError("startTime","Start time must be a time before end time!"));
+        boolean startDateChanged = true;
+        boolean startTimeChanged = true;
+        boolean endTimeChanged = true;
+
+        if (existingEntity != null){
+            startDateChanged = !existingEntity.getStartDate().isEqual(startDate);
+            startTimeChanged = !existingEntity.getStartTime().equals(startTime);
+            endTimeChanged = !existingEntity.getEndTime().equals(endTime);
         }
-        if (!isValidEndTime(startTime,endTime)) {
-            errors.add(new FieldError("endTime","End time must be a time after start time!"));
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
+        LocalDateTime endDateTime = LocalDateTime.of(startDate, endTime);
+
+        List<FieldError> errors = new ArrayList<>();
+
+        if(startDateChanged && startDate.isBefore(LocalDate.now())){
+                errors.add(new FieldError("startDate", "Meeting start date time must be in the future!"));
         }
 
-        if(isAlreadyExistsInSameTimePeriodInChapter(chapterId, startDate, startTime, endTime, excludedId)){
-            errors.add(new FieldError("startDate","You cannot schedule lectures with overlapping time periods on the same day!"));
+        if (startTimeChanged && startDateTime.isBefore(LocalDateTime.now())){
+                errors.add(new FieldError("startTime", "Meeting start date time must be in the future!"));
         }
 
-        if(!errors.isEmpty()){
+        if(endTimeChanged && !endDateTime.isAfter(startDateTime)){
+                errors.add(new FieldError("endTime", "Meeting end time must be after start time!"));
+        }
+
+        Long excludedId = existingEntity != null ? existingEntity.getId() : null;
+
+        if ((startDateChanged || startTimeChanged || endTimeChanged) && isAlreadyExistsInSameTimePeriodInChapter(chapterId, startDate, startTime, endTime, excludedId)){
+            errors.add(new FieldError("startDate", "You cannot schedule lectures with overlapping time periods and lectures with draft,scheduled,live and completed status on the same day!"));
+        }
+
+        if (!errors.isEmpty()) {
             throw new InvalidInputException(errors);
         }
-    }
-
-    private boolean isValidStartTime(LocalTime startTime, LocalTime endTime){
-        return startTime.isAfter(LocalTime.now()) && startTime.isBefore(endTime);
-    }
-
-    private boolean isValidEndTime(LocalTime startTime, LocalTime endTime){
-        return endTime.isAfter(LocalTime.now()) && endTime.isAfter(startTime);
     }
 
     private boolean isAlreadyExistsInSameTimePeriodInChapter(Long chapterId,LocalDate startDate,LocalTime startTime, LocalTime endTime,Long excludedId){
