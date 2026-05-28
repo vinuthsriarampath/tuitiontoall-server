@@ -23,17 +23,16 @@ import edu.vinu.request.chapter.ChapterCreateRequest;
 import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
 import edu.vinu.request.chapter.ChapterOrderRequest;
 import edu.vinu.request.chapter.ChapterReorderRequest;
+import edu.vinu.request.resource.ResourceFilterRequest;
 import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
+import edu.vinu.response.resource.ResourceResponse;
 import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
-import edu.vinu.service.common.ChapterService;
-import edu.vinu.service.common.LectureRecordQueryService;
-import edu.vinu.service.common.ModuleService;
-import edu.vinu.service.common.ScheduleLectureQueryService;
+import edu.vinu.service.common.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,6 +51,7 @@ public class ChapterServiceImpl implements ChapterService {
     private final ModuleService moduleService;
     private final LectureRecordQueryService lectureRecordQueryService;
     private final ScheduleLectureQueryService scheduleLectureQueryService;
+    private final ResourceQueryService resourceQueryService;
     @Override
     public ChapterResponse createChapter(ChapterCreateRequest request) {
 
@@ -161,6 +161,11 @@ public class ChapterServiceImpl implements ChapterService {
     @Override
     public PaginatedApiResponse<ScheduleLectureResponse> getAllScheduleLecturesByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ScheduleLectureFilterRequest filters) {
         return scheduleLectureQueryService.getAllScheduleLecturesByChapter(chapterId, page, size, direction, sortBy, filters);
+    }
+
+    @Override
+    public PaginatedApiResponse<ResourceResponse> getAllResourcesByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ResourceFilterRequest filters) {
+        return resourceQueryService.getAllResourcesByChapter(chapterId, page, size, direction, sortBy, filters);
     }
 
     private boolean isChapterExistsInModule(Long moduleId,String chapterName){

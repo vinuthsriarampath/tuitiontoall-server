@@ -17,11 +17,13 @@ import edu.vinu.entity.ChapterEntity;
 import edu.vinu.request.chapter.ChapterCreateRequest;
 import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
 import edu.vinu.request.chapter.ChapterReorderRequest;
+import edu.vinu.request.resource.ResourceFilterRequest;
 import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
 import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
+import edu.vinu.response.resource.ResourceResponse;
 import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
 
 import java.util.List;
@@ -40,4 +42,6 @@ public interface ChapterService {
     List<LectureRecordResponse> getAllLectureRecordsByChapterId(Long id);
 
     PaginatedApiResponse<ScheduleLectureResponse> getAllScheduleLecturesByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ScheduleLectureFilterRequest filters);
+
+    PaginatedApiResponse<ResourceResponse> getAllResourcesByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ResourceFilterRequest filters);
 }
