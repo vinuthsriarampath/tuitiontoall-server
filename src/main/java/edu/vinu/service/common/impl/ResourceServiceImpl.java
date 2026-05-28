@@ -178,9 +178,7 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public ResponseEntity<ResourceRegion> viewResource(String fileName, String range) {
-        Path path = Path.of(resourcePath,fileName);
-
-        if(!Files.exists(path)) throw new NotFoundException("Resource not found.");
+        Path path = getResourceFilePath(fileName);
 
         try {
             Resource resource = new UrlResource(path.toUri());
@@ -203,6 +201,33 @@ public class ResourceServiceImpl implements ResourceService {
         }
     }
 
+    @Override
+    public ResponseEntity<Resource> downloadFile(String fileName) {
+        Path path = getResourceFilePath(fileName);
+
+        try {
+            Resource resource = new UrlResource(path.toUri());
+
+            String contentType = Files.probeContentType(path);
+
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(
+                            HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + fileName + "\""
+                    )
+                    .contentLength(Files.size(path))
+                    .body(resource);
+
+        } catch (IOException e) {
+            throw new InternalServerErrorException("Error loading resource.");
+        }
+    }
+
     private ResourceRegion getResourceRegion(Resource resource, String rangeHeader, Long contentLength) {
         if(rangeHeader == null){
             long rangeLength = Math.min(CHUNK_SIZE,contentLength);
@@ -218,6 +243,12 @@ public class ResourceServiceImpl implements ResourceService {
 
         long rangeLength = Math.min(CHUNK_SIZE, end - start + 1);
         return new ResourceRegion(resource,start,rangeLength);
+    }
+
+    private Path getResourceFilePath(String fileName) {
+        Path path = Path.of(resourcePath,fileName);
+        if(!Files.exists(path)) throw new NotFoundException("Resource not found.");
+        return path;
     }
 
     private ResourceUploadEntity getResourceUploadEntity(String uploadId) {

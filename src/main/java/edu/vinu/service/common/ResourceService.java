@@ -17,6 +17,7 @@ import edu.vinu.request.resource.ResourceInitRequest;
 import edu.vinu.response.resource.ResourceChunkUploadResponse;
 import edu.vinu.response.resource.ResourceInitResponse;
 import edu.vinu.response.resource.ResourceResponse;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,4 +30,6 @@ public interface ResourceService {
     ResourceResponse completeUpload(String uploadId);
 
     ResponseEntity<ResourceRegion> viewResource(String fileName, String range);
+
+    ResponseEntity<Resource> downloadFile(String fileName);
 }
