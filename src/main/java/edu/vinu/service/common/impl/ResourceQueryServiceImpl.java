@@ -1,0 +1,52 @@
+/*
+ * Copyright (c) 2026 vinuth sri arampath
+ *
+ * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
+ * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
+ * without prior written permission is strictly prohibited.
+ *
+ * Portions of this code may be generated with AI and modified by vinuth sri arampath
+ * All rights reserved.
+ *
+ *
+ */
+
+package edu.vinu.service.common.impl;
+
+import edu.vinu.entity.ResourceEntity;
+import edu.vinu.mapper.ResourceMapper;
+import edu.vinu.repository.ResourceRepository;
+import edu.vinu.request.resource.ResourceFilterRequest;
+import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.response.resource.ResourceResponse;
+import edu.vinu.service.common.ResourceQueryService;
+import edu.vinu.util.SortUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class ResourceQueryServiceImpl implements ResourceQueryService {
+    private final ResourceRepository resourceRepository;
+    @Override
+    public PaginatedApiResponse<ResourceResponse> getAllResourcesByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ResourceFilterRequest filters) {
+        Pageable pageable = PageRequest.of(page, size, SortUtil.buildSort(direction, sortBy, List.of("created_date")));
+        Page<ResourceResponse> pageData = resourceRepository.getAllResourcesByChapter(chapterId, filters.resourceId() , filters.name(), pageable)
+                .map(ResourceMapper::toResourceResponse);
+
+        return PaginatedApiResponse.<ResourceResponse>builder()
+                .message("All resources by chapter fetched successfully!")
+                .data(pageData.getContent())
+                .page(pageData.getNumber())
+                .size(pageData.getSize())
+                .totalElements(pageData.getTotalElements())
+                .totalPages(pageData.getTotalPages())
+                .last(pageData.isLast())
+                .build();
+    }
+}
