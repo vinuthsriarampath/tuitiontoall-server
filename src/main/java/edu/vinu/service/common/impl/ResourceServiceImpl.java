@@ -16,6 +16,7 @@ package edu.vinu.service.common.impl;
 import edu.vinu.entity.ChapterEntity;
 import edu.vinu.entity.ResourceEntity;
 import edu.vinu.entity.ResourceUploadEntity;
+import edu.vinu.exception.custom.InternalServerErrorException;
 import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.mapper.ResourceMapper;
@@ -30,12 +31,17 @@ import edu.vinu.service.common.FileService;
 import edu.vinu.service.common.ResourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.support.ResourceRegion;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -56,6 +62,8 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Value("${file.chapter-resource.resource-path}")
     private String resourcePath;
+
+    private static final long CHUNK_SIZE = 1024 * 1024;
 
     @Override
     public ResourceInitResponse initializeUpload(ResourceInitRequest request) {
@@ -166,6 +174,50 @@ public class ResourceServiceImpl implements ResourceService {
         }
 
         return ResourceMapper.toResourceResponse(savedResourcesEntity);
+    }
+
+    @Override
+    public ResponseEntity<ResourceRegion> viewResource(String fileName, String range) {
+        Path path = Path.of(resourcePath,fileName);
+
+        if(!Files.exists(path)) throw new NotFoundException("Resource not found.");
+
+        try {
+            Resource resource = new UrlResource(path.toUri());
+
+            Long contentLength = resource.contentLength();
+
+            ResourceRegion region = getResourceRegion(resource,range,contentLength);
+
+            return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+                    .contentType(
+                            MediaTypeFactory
+                                    .getMediaType(resource)
+                                    .orElse(MediaType.APPLICATION_OCTET_STREAM)
+                    )
+                    .header(HttpHeaders.ACCEPT_RANGES, "bytes")
+                    .header(HttpHeaders.CONTENT_DISPOSITION,"inline; filename=\""+fileName+"\"")
+                    .body(region);
+        } catch (IOException e) {
+            throw new InternalServerErrorException("Error loading resource.");
+        }
+    }
+
+    private ResourceRegion getResourceRegion(Resource resource, String rangeHeader, Long contentLength) {
+        if(rangeHeader == null){
+            long rangeLength = Math.min(CHUNK_SIZE,contentLength);
+            return new ResourceRegion(resource,0,rangeLength);
+        }
+
+        HttpRange httpRange = HttpRange
+                .parseRanges(rangeHeader)
+                .get(0);
+
+        long start = httpRange.getRangeStart(contentLength);
+        long end = httpRange.getRangeEnd(contentLength);
+
+        long rangeLength = Math.min(CHUNK_SIZE, end - start + 1);
+        return new ResourceRegion(resource,start,rangeLength);
     }
 
     private ResourceUploadEntity getResourceUploadEntity(String uploadId) {
