@@ -21,6 +21,7 @@ import edu.vinu.response.resource.ResourceResponse;
 import edu.vinu.service.common.ResourceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -55,4 +56,10 @@ public class ResourceController {
         ResourceResponse response = resourceService.completeUpload(uploadId);
         return ResponseEntity.ok(new ApiResponse("Upload completed successfully",response));
     }
+
+    @GetMapping("/view/{fileName:.+}")
+    public ResponseEntity<ResourceRegion> viewResource(@PathVariable String fileName, @RequestHeader(value = "Range", required = false) String range){
+        return resourceService.viewResource(fileName,range);
+    }
+
 }
