@@ -98,7 +98,7 @@ public class ChapterController {
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("{id}/resources")
-    public ResponseEntity<ApiResponse> getAllResourcesWithFilters(
+    public ResponseEntity<PaginatedApiResponse<ResourceResponse>> getAllResourcesWithFilters(
             @PathVariable("id") Long chapterId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -107,6 +107,6 @@ public class ChapterController {
             ResourceFilterRequest filters
     ){
         PaginatedApiResponse<ResourceResponse> response = chapterService.getAllResourcesByChapter(chapterId,page,size,direction,sortBy,filters);
-        return ResponseEntity.ok(new ApiResponse("All resources related to chapter fetched successfully!", response));
+        return ResponseEntity.ok(response);
     }
 }
