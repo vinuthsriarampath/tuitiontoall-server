@@ -129,7 +129,7 @@ public class ResourceServiceImpl implements ResourceService {
 
         String extension = fileService.extractFileExtension(uploadEntity.getOriginalFileName());
 
-        String finalFileName = UUID.randomUUID() + "." + extension;
+        String finalFileName = UUID.randomUUID() + extension;
 
         Path finalFilePath = fileService.createDirectoryIfNotExists(resourcePath).resolve(finalFileName);
 
