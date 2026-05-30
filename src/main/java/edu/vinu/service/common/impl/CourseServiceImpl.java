@@ -30,6 +30,7 @@ import edu.vinu.service.common.FileService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,6 +38,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
@@ -51,6 +53,9 @@ public class CourseServiceImpl implements CourseService {
     private final Environment env;
     private final FileService fileService;
     private final ApplicationEventPublisher eventPublisher;
+
+    @Value("${file.course.thumbnail-path}")
+    private String courseThumbnailPath;
 
     @Transactional
     @Override
@@ -163,7 +168,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public File loadThumbnail(String filename) {
-        return fileService.loadFile(getCourseThumbnailPath(), filename);
+        return fileService.getFile(getCourseThumbnailPath(), filename);
     }
 
     @Override
@@ -183,7 +188,7 @@ public class CourseServiceImpl implements CourseService {
 
     private String saveThumbnail(MultipartFile thumbnail, CourseEntity courseEntity, InstituteEntity instituteEntity) {
         String filename = this.generateUniqueThumbnailFilename(courseEntity, instituteEntity, thumbnail.getOriginalFilename());
-        fileService.saveFile(thumbnail, filename, this.getCourseThumbnailPath(), StandardCopyOption.REPLACE_EXISTING);
+        fileService.saveFile(thumbnail, this.getCourseThumbnailPath(), filename, StandardCopyOption.REPLACE_EXISTING);
         return "/thumbnail/" + filename;
     }
 
@@ -191,15 +196,11 @@ public class CourseServiceImpl implements CourseService {
         String courseName = courseEntity.getTitle().trim().toLowerCase().replaceAll("[^a-z0-9]+", "-");
         String instituteName = instituteEntity.getInstituteName().trim().toLowerCase().replaceAll("[^a-z0-9]+", "-");
 
-        return String.format("%s@%s-@%s%s", courseName, instituteName, UUID.randomUUID(), fileService.extractFileExtension(originalFileName));
+        return String.format("%s@%s-@%s%s", courseName, instituteName, UUID.randomUUID(), fileService.extractExtension(originalFileName));
     }
 
-    private String getCourseThumbnailPath() {
-        String path = env.getProperty("file.course.thumbnail-path");
-        if (path == null) {
-            throw new RuntimeException("Thumbnail path not configured");
-        }
-        return path;
+    private Path getCourseThumbnailPath() {
+        return Path.of(courseThumbnailPath);
     }
 
     private Boolean isValidThumbnail(MultipartFile thumbnail) {
