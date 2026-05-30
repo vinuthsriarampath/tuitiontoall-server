@@ -86,9 +86,7 @@ public class ResourceServiceImpl implements ResourceService {
 
         ResourceUploadEntity save = resourceUploadRepository.save(resourceUploadEntity);
 
-        String tempUploadPath = tempResourcePath + "/" + save.getUploadId();
-
-        fileService.createDirectoryIfNotExists(tempUploadPath);
+        fileService.createDirectory(Path.of(tempResourcePath,uploadId));
 
         return ResourceInitResponse.builder()
                 .uploadId(save.getUploadId())
@@ -101,13 +99,11 @@ public class ResourceServiceImpl implements ResourceService {
 
         if(uploadEntity.isCompleted()) throw new InvalidInputException("Upload has already been completed.");
 
-        String directoryPath = tempResourcePath + "/" + uploadEntity.getUploadId();
-
-        fileService.createDirectoryIfNotExists(directoryPath);
+        Path directoryPath = Path.of(tempResourcePath,uploadEntity.getUploadId());
 
         String chunkFileName = "chunk_"+chunkIndex+".part";
 
-        fileService.saveFile(file,chunkFileName,directoryPath, StandardCopyOption.REPLACE_EXISTING);
+        fileService.saveFile(file, directoryPath, chunkFileName, StandardCopyOption.REPLACE_EXISTING);
 
         uploadEntity.setUploadedChunks(uploadEntity.getUploadedChunks() + 1);
 
@@ -126,11 +122,11 @@ public class ResourceServiceImpl implements ResourceService {
 
         if(!uploadEntity.getUploadedChunks().equals(uploadEntity.getTotalChunks())) throw new InvalidInputException("All the chunks haven't uploaded!");
 
-        String extension = fileService.extractFileExtension(uploadEntity.getOriginalFileName());
+        String extension = fileService.extractExtension(uploadEntity.getOriginalFileName());
 
         String finalFileName = UUID.randomUUID() + extension;
 
-        Path finalFilePath = fileService.createDirectoryIfNotExists(resourcePath).resolve(finalFileName);
+        Path finalFilePath = fileService.createDirectory(Path.of(resourcePath)).resolve(finalFileName);
 
         Path uploadDirectory = Path.of(tempResourcePath, uploadId);
 
@@ -163,85 +159,44 @@ public class ResourceServiceImpl implements ResourceService {
 
         resourceUploadRepository.save(uploadEntity);
 
-        try {
-            Files.walk(uploadDirectory)
-                    .sorted(Comparator.reverseOrder())
-                    .map(Path::toFile)
-                    .forEach(File::delete);
-        } catch (IOException e) {
-            throw new RuntimeException("Error deleting temp chunks", e);
-        }
+        fileService.deleteDirectory(uploadDirectory);
 
         return ResourceMapper.toResourceResponse(savedResourcesEntity);
     }
 
     @Override
     public ResponseEntity<ResourceRegion> viewResource(String fileName, String range) {
-        Path path = getResourceFilePath(fileName);
 
-        try {
-            Resource resource = new UrlResource(path.toUri());
+        Path path = fileService.resolve(Path.of(resourcePath), fileName);
 
-            Long contentLength = resource.contentLength();
+        Resource resource = fileService.getResource(Path.of(resourcePath), fileName);
 
-            ResourceRegion region = getResourceRegion(resource,range,contentLength);
+        long fileSize = fileService.size(path);
 
-            return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
-                    .contentType(
-                            MediaTypeFactory
-                                    .getMediaType(resource)
-                                    .orElse(MediaType.APPLICATION_OCTET_STREAM)
-                    )
-                    .header(HttpHeaders.ACCEPT_RANGES, "bytes")
-                    .header(HttpHeaders.CONTENT_DISPOSITION,"inline; filename=\""+fileName+"\"")
-                    .body(region);
-        } catch (IOException e) {
-            throw new InternalServerErrorException("Error loading resource.");
-        }
+        MediaType mediaType = MediaType.parseMediaType(fileService.detectContentType(path));
+
+        ResourceRegion region = fileService.getRegion(resource, range, fileSize, CHUNK_SIZE);
+
+        return fileService.buildPartialResponse(resource, region, mediaType, fileName, fileSize);
     }
 
     @Override
     public ResponseEntity<Resource> downloadFile(String fileName) {
+
         Path path = getResourceFilePath(fileName);
 
-        try {
-            Resource resource = new UrlResource(path.toUri());
+        Resource resource = fileService.getResource(Path.of(resourcePath), fileName);
 
-            String contentType = Files.probeContentType(path);
+        MediaType mediaType = MediaType.parseMediaType(fileService.detectContentType(path));
 
-            if (contentType == null) {
-                contentType = "application/octet-stream";
-            }
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(contentType))
-                    .header(
-                            HttpHeaders.CONTENT_DISPOSITION,
-                            "attachment; filename=\"" + fileName + "\""
-                    )
-                    .contentLength(Files.size(path))
-                    .body(resource);
-
-        } catch (IOException e) {
-            throw new InternalServerErrorException("Error loading resource.");
-        }
-    }
-
-    private ResourceRegion getResourceRegion(Resource resource, String rangeHeader, Long contentLength) {
-        if(rangeHeader == null){
-            long rangeLength = Math.min(CHUNK_SIZE,contentLength);
-            return new ResourceRegion(resource,0,rangeLength);
-        }
-
-        HttpRange httpRange = HttpRange
-                .parseRanges(rangeHeader)
-                .get(0);
-
-        long start = httpRange.getRangeStart(contentLength);
-        long end = httpRange.getRangeEnd(contentLength);
-
-        long rangeLength = Math.min(CHUNK_SIZE, end - start + 1);
-        return new ResourceRegion(resource,start,rangeLength);
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + fileName + "\""
+                )
+                .contentLength(fileService.size(path))
+                .body(resource);
     }
 
     private Path getResourceFilePath(String fileName) {
