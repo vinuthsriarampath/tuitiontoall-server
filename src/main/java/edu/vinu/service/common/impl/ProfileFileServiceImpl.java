@@ -22,6 +22,7 @@ import edu.vinu.service.common.ProfileFileService;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,11 @@ public class ProfileFileServiceImpl implements ProfileFileService {
     private final UserRepository userRepository;
     private final FileService fileService;
 
+    @Value("${file.profile.pic-path}")
+    private String profilePicturePath;
+    @Value("${file.profile.banner-path}")
+    private String profileBannerPath;
+
     @Override
     public String uploadFile(MultipartFile file, String type) {
 
@@ -54,48 +60,46 @@ public class ProfileFileServiceImpl implements ProfileFileService {
         if (!isValidFile(file)){
             throw new InvalidInputException("Invalid file type. Only JPEG, PNG, and GIF are allowed.");
         }
-        Path dir = fileService.createDirectoryIfNotExists(this.getProfileFilePath(type));
 
-        String originalFilename = file.getOriginalFilename();
+        Path directory = fileService.createDirectory(getProfileFilePath(type));
 
-        fileService.deleteFilesMatchingPattern(dir, userEntity.getUserSlug() + "-*");
+        fileService.deleteMatching(directory, userEntity.getUserSlug() + "-*");
 
         String fileName = generateUniqueProfileFilename(userEntity.getUserSlug(), file.getOriginalFilename());
-        fileService.saveFile(file, fileName, this.getProfileFilePath(type), StandardCopyOption.REPLACE_EXISTING);
+
+        fileService.saveFile(file, directory, fileName, StandardCopyOption.REPLACE_EXISTING);
 
         switch (type) {
             case "dp" -> userEntity.setDp("/load/dp/" + fileName);
             case "banner" -> userEntity.setBanner("/load/banner/" + fileName);
             default -> throw new IllegalArgumentException("Invalid type: " + type);
         }
+
         UserEntity savedEntity = userRepository.save(userEntity);
-        switch (type) {
-            case "dp" -> {
-                return savedEntity.getDp();
-            }
-            case "banner" -> {
-                return savedEntity.getBanner();
-            }
+
+        return switch (type) {
+            case "dp" -> savedEntity.getDp();
+            case "banner" -> savedEntity.getBanner();
             default -> throw new IllegalArgumentException("Invalid type: " + type);
-        }
+        };
 
     }
 
     @Override
     public File loadFile(String type, String fileName) {
-        return fileService.loadFile(getProfileFilePath(type), fileName);
+        return fileService.getFile(getProfileFilePath(type), fileName);
     }
 
-    private String getProfileFilePath(String type) {
+    private Path getProfileFilePath(String type) {
         return switch (type) {
-            case "dp" -> env.getProperty("file.profile.pic-path");
-            case "banner" -> env.getProperty("file.profile.banner-path");
+            case "dp" -> Path.of(profilePicturePath);
+            case "banner" -> Path.of(profileBannerPath);
             default -> throw new IllegalArgumentException("Profile file type must be either 'dp' or 'banner'. Provided: " + type);
         };
     }
 
     private String generateUniqueProfileFilename(String userSlug, String originalFileName) {
-        return String.format("%s-%s%s", userSlug, UUID.randomUUID(), fileService.extractFileExtension(originalFileName));
+        return String.format("%s-%s%s", userSlug, UUID.randomUUID(), fileService.extractExtension(originalFileName));
     }
 
     private Boolean isValidFile(MultipartFile file) {
