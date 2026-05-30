@@ -19,6 +19,7 @@ import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +32,7 @@ public interface LectureRecordService {
 
     LectureRecordResponse completeUpload(String uploadId);
 
-    ResponseEntity<Resource> streamVideo(String fileName, String rangeHeader) throws IOException;
+    ResponseEntity<ResourceRegion> streamVideo(String fileName, String rangeHeader);
 
     LectureRecordResponse updateLectureRecordDetails(Long id,LectureRecordDetailsUpdateRequest request);
 }

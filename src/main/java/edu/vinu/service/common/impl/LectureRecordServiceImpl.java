@@ -35,6 +35,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,6 +69,8 @@ public class LectureRecordServiceImpl implements LectureRecordService {
     @Value("${file.lecture-record.video-path}")
     private String lectureRecordVideoPath;
 
+    private static final long CHUNK_SIZE = 1024 * 1024;
+
     @Override
     public LectureRecordUploadInitResponse initializeUpload(LectureRecordUploadInitRequest request) {
         String uploadId = UUID.randomUUID().toString();
@@ -100,9 +103,7 @@ public class LectureRecordServiceImpl implements LectureRecordService {
 
         lectureRecordUploadRepository.save(uploadEntity);
 
-        String tempUploadPath = tempLectureRecordPath + "/" + uploadId;
-
-        fileService.createDirectoryIfNotExists(tempUploadPath);
+        fileService.createDirectory(Path.of(tempLectureRecordPath,uploadId));
 
         return LectureRecordUploadInitResponse.builder()
                 .uploadId(uploadId)
@@ -115,11 +116,9 @@ public class LectureRecordServiceImpl implements LectureRecordService {
 
         if (uploadEntity.getCompleted()) throw new InvalidInputException("Upload already completed");
 
-        String uploadDirectory = tempLectureRecordPath + "/" + uploadId;
-
         String chunkFileName = "chunk_" + chunkIndex + ".part";
 
-        fileService.saveFile(chunk, chunkFileName, uploadDirectory, StandardCopyOption.REPLACE_EXISTING);
+        fileService.saveFile(chunk, Path.of(tempLectureRecordPath, uploadId), chunkFileName, StandardCopyOption.REPLACE_EXISTING);
 
         uploadEntity.setUploadedChunks(uploadEntity.getUploadedChunks() + 1);
 
@@ -138,11 +137,11 @@ public class LectureRecordServiceImpl implements LectureRecordService {
 
         if (!uploadEntity.getUploadedChunks().equals(uploadEntity.getTotalChunks())) throw new InvalidInputException("All chunks are not uploaded yet");
 
-        String extension = fileService.extractFileExtension(uploadEntity.getOriginalFileName());
+        String extension = fileService.extractExtension(uploadEntity.getOriginalFileName());
 
         String finalVideoName = UUID.randomUUID() + extension;
 
-        Path finalVideoPath = fileService.createDirectoryIfNotExists(lectureRecordVideoPath).resolve(finalVideoName);
+        Path finalVideoPath = fileService.createDirectory(Path.of(lectureRecordVideoPath)).resolve(finalVideoName);
 
         Path uploadDirectory = Path.of(tempLectureRecordPath, uploadId);
 
@@ -178,14 +177,7 @@ public class LectureRecordServiceImpl implements LectureRecordService {
 
         lectureRecordUploadRepository.save(uploadEntity);
 
-        try {
-            Files.walk(uploadDirectory)
-                    .sorted(Comparator.reverseOrder())
-                    .map(Path::toFile)
-                    .forEach(File::delete);
-        } catch (IOException e) {
-            throw new RuntimeException("Error deleting temp chunks", e);
-        }
+        fileService.deleteDirectory(uploadDirectory);
 
         return LectureRecordResponse.builder()
                 .id(savedLectureRecord.getId())
@@ -199,55 +191,19 @@ public class LectureRecordServiceImpl implements LectureRecordService {
     }
 
     @Override
-    public ResponseEntity<Resource> streamVideo(String fileName, String rangeHeader) throws IOException {
-        Path videoPath = Path.of(lectureRecordVideoPath, fileName);
+    public ResponseEntity<ResourceRegion> streamVideo(String fileName, String rangeHeader) {
 
-        if (!Files.exists(videoPath)) throw new NotFoundException("Video not found");
+        Path videoPath = fileService.resolve(Path.of(lectureRecordVideoPath), fileName);
 
-        Resource resource = new UrlResource(videoPath.toUri());
+        Resource resource = fileService.getResource(Path.of(lectureRecordVideoPath), fileName);
 
-        long fileLength = Files.size(videoPath);
+        long fileSize = fileService.size(videoPath);
 
-        if (rangeHeader == null) {
+        MediaType mediaType = MediaType.parseMediaType(fileService.detectContentType(videoPath));
 
-            return ResponseEntity.ok()
-                    .contentType(MediaTypeFactory
-                            .getMediaType(resource)
-                            .orElse(MediaType.APPLICATION_OCTET_STREAM))
-                    .contentLength(fileLength)
-                    .body(resource);
-        }
+        ResourceRegion region = fileService.getRegion(resource, rangeHeader, fileSize, CHUNK_SIZE);
 
-        String[] ranges = rangeHeader.replace("bytes=", "").split("-");
-
-        long start = Long.parseLong(ranges[0]);
-
-        long end;
-
-        if (ranges.length > 1 && !ranges[1].isEmpty()) {
-            end = Long.parseLong(ranges[1]);
-        } else {
-            end = fileLength - 1;
-        }
-
-        if (end >= fileLength) end = fileLength - 1;
-
-        long contentLength = end - start + 1;
-
-        InputStream inputStream = Files.newInputStream(videoPath);
-
-        inputStream.skip(start);
-
-        InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
-
-        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
-                .contentType(MediaTypeFactory
-                        .getMediaType(resource)
-                        .orElse(MediaType.APPLICATION_OCTET_STREAM))
-                .header(HttpHeaders.ACCEPT_RANGES, "bytes")
-                .header(HttpHeaders.CONTENT_LENGTH, String.valueOf(contentLength))
-                .header(HttpHeaders.CONTENT_RANGE, "bytes " + start + "-" + end + "/" + fileLength)
-                .body(inputStreamResource);
+        return fileService.buildPartialResponse(resource, region, mediaType, fileName, fileSize);
     }
 
     @Override
