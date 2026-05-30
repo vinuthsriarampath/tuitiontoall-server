@@ -24,6 +24,7 @@ import edu.vinu.service.common.VideoStreamTokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +67,7 @@ public class LectureRecordController {
     }
 
     @GetMapping("/stream/{fileName:.+}")
-    public ResponseEntity<Resource> streamVideo(@PathVariable String fileName,@RequestParam String token, @RequestHeader(value = "Range", required = false) String rangeHeader) throws IOException {
+    public ResponseEntity<ResourceRegion> streamVideo(@PathVariable String fileName, @RequestParam String token, @RequestHeader(value = "Range", required = false) String rangeHeader) throws IOException {
         videoStreamTokenService.validateToken(token);
         return lectureRecordService.streamVideo( fileName, rangeHeader );
     }
