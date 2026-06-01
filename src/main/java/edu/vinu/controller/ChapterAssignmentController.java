@@ -14,15 +14,13 @@
 package edu.vinu.controller;
 
 import edu.vinu.service.common.ChapterAssignmentService;
-import edu.vinu.service.common.ModuleAssignmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v2/assignments")
+@RequestMapping("/api/v2/chapter-assignments")
 @RequiredArgsConstructor
-public class AssignmentController {
+public class ChapterAssignmentController {
     private final ChapterAssignmentService chapterAssignmentService;
-    private final ModuleAssignmentService moduleAssignmentService;
 }
