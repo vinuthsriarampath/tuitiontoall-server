@@ -19,4 +19,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ModuleAssignmentRepository extends JpaRepository<ModuleAssignmentEntity,Long> {
+    boolean existsByAssignmentId(Long assignmentId);
 }
