@@ -50,6 +50,7 @@ file:
   chapter-resource:
     temp-path: uploads/chapter-resources/temp
     resource-path: uploads/chapter-resources/resources
+  assignment-path: uploads/assignments
 
 app:
   reset:
