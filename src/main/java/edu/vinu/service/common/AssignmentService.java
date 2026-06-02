@@ -13,5 +13,12 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.entity.AssignmentEntity;
+import edu.vinu.request.assignments.AssignmentCreateRequest;
+import org.springframework.web.multipart.MultipartFile;
+
 public interface AssignmentService {
+    AssignmentEntity createAssignment(AssignmentCreateRequest request, MultipartFile file);
+
+    void deleteAssignmentFile(String fileName);
 }
