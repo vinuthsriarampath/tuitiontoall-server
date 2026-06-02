@@ -13,5 +13,11 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.entity.AssignmentEntity;
+import edu.vinu.request.grading_range.GradingRangeCreateRequest;
+
+import java.util.List;
+
 public interface GradingRangeService {
+    void saveGradingRangeList(List<GradingRangeCreateRequest> gradingRangeCreateRequests, AssignmentEntity savedAssignmentEntity);
 }

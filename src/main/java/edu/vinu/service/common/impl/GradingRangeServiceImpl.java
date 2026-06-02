@@ -13,13 +13,33 @@
 
 package edu.vinu.service.common.impl;
 
+import edu.vinu.entity.AssignmentEntity;
+import edu.vinu.entity.GradingRangeEntity;
+import edu.vinu.mapper.GradingRangeMapper;
 import edu.vinu.repository.GradingRangeRepository;
+import edu.vinu.request.grading_range.GradingRangeCreateRequest;
 import edu.vinu.service.common.GradingRangeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class GradingRangeServiceImpl implements GradingRangeService {
     private final GradingRangeRepository gradingRangeRepository;
+
+    @Override
+    @Transactional
+    public void saveGradingRangeList(List<GradingRangeCreateRequest> gradingRangeCreateRequests, AssignmentEntity savedAssignmentEntity) {
+
+        List<GradingRangeEntity> gradingRangeEntities = gradingRangeCreateRequests
+                .stream()
+                .map(request -> GradingRangeMapper.toGradingRangeEntity(request, savedAssignmentEntity))
+                .toList();
+
+        gradingRangeRepository.saveAll(gradingRangeEntities);
+
+    }
 }
