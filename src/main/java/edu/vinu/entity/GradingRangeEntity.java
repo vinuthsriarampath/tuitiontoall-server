@@ -25,7 +25,11 @@ import lombok.NoArgsConstructor;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "uk_assignment_grading_range",
-                        columnNames = {"assignment_id","min_marks","max_marks","desired_grade"}
+                        columnNames = {"assignment_id","min_marks","max_marks"}
+                ),
+                @UniqueConstraint(
+                        name = "uk_assignment_desired_grade",
+                        columnNames = {"assignment_id","desired_grade"}
                 )
         }
 )
@@ -52,5 +56,5 @@ public class GradingRangeEntity {
     private String desiredGrade;
 
     @Column(name = "description")
-    private String description = "-";
+    private String description;
 }
