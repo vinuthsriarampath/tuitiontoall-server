@@ -13,5 +13,10 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentCreateRequest;
+import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
+import org.springframework.web.multipart.MultipartFile;
+
 public interface ChapterAssignmentService {
+    ChapterAssignmentResponse createChapterAssignment(ChapterAssignmentCreateRequest request, MultipartFile file);
 }
