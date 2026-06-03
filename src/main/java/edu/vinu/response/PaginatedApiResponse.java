@@ -25,7 +25,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class PaginatedApiResponse<T> {
-    String message;
+    private String message;
     private List<T> data;
     private int page;
     private int size;
