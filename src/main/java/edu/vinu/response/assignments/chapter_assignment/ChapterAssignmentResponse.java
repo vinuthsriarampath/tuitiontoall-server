@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 @Builder
 public record ChapterAssignmentResponse (
     Long id,
+    Long assignmentId,
     Long chapterId,
     String topic,
     String description,
