@@ -18,6 +18,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "module_assignment")
@@ -38,4 +42,12 @@ public class ModuleAssignmentEntity {
     @OneToOne
     @JoinColumn(name = "assignment_id",unique = true, nullable = false)
     private AssignmentEntity assignment;
+
+    @CreationTimestamp
+    @Column(name = "created_date",nullable = false, updatable = false)
+    private LocalDateTime createdDate;
+
+    @UpdateTimestamp
+    @Column(name = "last_modified_date",insertable = false)
+    private LocalDateTime lastModifiedDate;
 }
