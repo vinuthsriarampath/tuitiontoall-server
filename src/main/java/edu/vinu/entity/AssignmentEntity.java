@@ -58,7 +58,7 @@ public class AssignmentEntity {
     @Column(name = "resubmission",nullable = false)
     private boolean resubmission;
 
-    @Column(name = "maxAttempts",nullable = false)
+    @Column(name = "max_attempts",nullable = false)
     private Integer maxAttempts;
 
     @CreationTimestamp
