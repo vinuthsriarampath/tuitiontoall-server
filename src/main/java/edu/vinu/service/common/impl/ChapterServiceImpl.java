@@ -19,6 +19,7 @@ import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.mapper.ChapterMapper;
 import edu.vinu.repository.ChapterRepository;
+import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentFilterRequest;
 import edu.vinu.request.chapter.ChapterCreateRequest;
 import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
 import edu.vinu.request.chapter.ChapterOrderRequest;
@@ -27,6 +28,7 @@ import edu.vinu.request.resource.ResourceFilterRequest;
 import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
 import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
@@ -52,6 +54,7 @@ public class ChapterServiceImpl implements ChapterService {
     private final LectureRecordQueryService lectureRecordQueryService;
     private final ScheduleLectureQueryService scheduleLectureQueryService;
     private final ResourceQueryService resourceQueryService;
+    private final ChapterAssignmentQueryService chapterAssignmentQueryService;
     @Override
     public ChapterResponse createChapter(ChapterCreateRequest request) {
 
@@ -166,6 +169,11 @@ public class ChapterServiceImpl implements ChapterService {
     @Override
     public PaginatedApiResponse<ResourceResponse> getAllResourcesByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ResourceFilterRequest filters) {
         return resourceQueryService.getAllResourcesByChapter(chapterId, page, size, direction, sortBy, filters);
+    }
+
+    @Override
+    public PaginatedApiResponse<ChapterAssignmentResponse> getAllChapterAssignmentsByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ChapterAssignmentFilterRequest filters) {
+        return chapterAssignmentQueryService.getAllChapterAssignmentByChapter(chapterId, page, size, direction, sortBy, filters);
     }
 
     private boolean isChapterExistsInModule(Long moduleId,String chapterName){
