@@ -16,6 +16,7 @@ package edu.vinu.mapper;
 import edu.vinu.entity.AssignmentEntity;
 import edu.vinu.entity.ChapterAssignmentEntity;
 import edu.vinu.entity.ChapterEntity;
+import edu.vinu.repository.projection.ChapterAssignmentProjection;
 import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,7 @@ public class ChapterAssignmentMapper {
     public static ChapterAssignmentResponse toChapterAssignmentResponse(ChapterAssignmentEntity entity) {
         return ChapterAssignmentResponse.builder()
                 .id(entity.getId())
+                .assignmentId(entity.getAssignment().getId())
                 .chapterId(entity.getChapter().getId())
                 .topic(entity.getAssignment().getTopic())
                 .description(entity.getAssignment().getDescription())
@@ -44,6 +46,25 @@ public class ChapterAssignmentMapper {
                 .maxAttempts(entity.getAssignment().getMaxAttempts())
                 .createdDate(entity.getAssignment().getCreatedDate())
                 .lastModifiedDate(entity.getAssignment().getLastModifiedDate())
+                .build();
+    }
+
+    public static ChapterAssignmentResponse toChapterAssignmentResponse(ChapterAssignmentProjection projection) {
+        return ChapterAssignmentResponse.builder()
+                .id(projection.getId())
+                .assignmentId(projection.getAssignmentId())
+                .chapterId(projection.getChapterId())
+                .topic(projection.getTopic())
+                .description(projection.getDescription())
+                .fileName(projection.getFileName())
+                .totalMarks(projection.getTotalMarks())
+                .availableOn(projection.getAvailableOn())
+                .dueDate(projection.getDueDate())
+                .lateSubmission(projection.getLateSubmission())
+                .reSubmission(projection.getResubmission())
+                .maxAttempts(projection.getMaxAttempts())
+                .createdDate(projection.getCreatedDate())
+                .lastModifiedDate(projection.getLastModifiedDate())
                 .build();
     }
 }
