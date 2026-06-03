@@ -13,6 +13,7 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentFilterRequest;
 import edu.vinu.request.chapter.ChapterCreateRequest;
 import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
 import edu.vinu.request.chapter.ChapterReorderRequest;
@@ -20,6 +21,7 @@ import edu.vinu.request.resource.ResourceFilterRequest;
 import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
 import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
@@ -107,6 +109,20 @@ public class ChapterController {
             ResourceFilterRequest filters
     ){
         PaginatedApiResponse<ResourceResponse> response = chapterService.getAllResourcesByChapter(chapterId,page,size,direction,sortBy,filters);
+        return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("{id}/assignments")
+    public ResponseEntity<PaginatedApiResponse<ChapterAssignmentResponse>> getAllChapterAssignmentsWithFilters(
+            @PathVariable("id") Long chapterId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(defaultValue = "created_date")List<String> sortBy,
+            ChapterAssignmentFilterRequest filters
+    ){
+        PaginatedApiResponse<ChapterAssignmentResponse> response = chapterService.getAllChapterAssignmentsByChapter(chapterId, page, size, direction, sortBy, filters);
         return ResponseEntity.ok(response);
     }
 }
