@@ -13,10 +13,10 @@
 
 package edu.vinu.response.grading_range;
 
-import edu.vinu.request.grading_range.GradingRangeCreateRequest;
+import edu.vinu.request.grading_range.GradingRangeRequest;
 
 public record IndexedGradingRange(
         int originalIndex,
-        GradingRangeCreateRequest range
+        GradingRangeRequest range
 ) {
 }
