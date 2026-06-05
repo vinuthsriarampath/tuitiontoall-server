@@ -16,12 +16,18 @@ package edu.vinu.service.common.impl;
 import edu.vinu.entity.AssignmentEntity;
 import edu.vinu.exception.custom.InternalServerErrorException;
 import edu.vinu.exception.custom.InvalidInputException;
+import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.mapper.AssignmentMapper;
 import edu.vinu.repository.AssignmentRepository;
 import edu.vinu.request.assignments.AssignmentCreateRequest;
+import edu.vinu.request.assignments.AssignmentUpdateRequest;
+import edu.vinu.response.assignments.AssignmentDetailedResponse;
+import edu.vinu.response.grading_range.GradingRageResponse;
 import edu.vinu.service.common.AssignmentService;
 import edu.vinu.service.common.FileService;
 import edu.vinu.service.common.GradingRangeService;
+import edu.vinu.validator.AssignmentValidator;
+import edu.vinu.validator.GradingRangeValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -72,6 +79,33 @@ public class AssignmentServiceImpl implements AssignmentService {
         fileService.delete(Path.of(assignmentPath, fileName));
     }
 
+    @Transactional
+    @Override
+    public AssignmentDetailedResponse updateAssignment(Long id, AssignmentUpdateRequest request) {
+        AssignmentEntity existing = getAssignmentEntity(id);
+
+        AssignmentValidator.validateUpdate(existing, request);
+        GradingRangeValidator.validate(request.gradingRanges(),request.totalMarks());
+
+        existing.setTopic(request.topic());
+        existing.setDescription(request.description());
+        existing.setTotalMarks(request.totalMarks());
+        existing.setAvailableOn(request.availableOn());
+        existing.setDueDate(request.dueDate());
+        existing.setLateSubmission(request.lateSubmission());
+        existing.setResubmission(request.resubmission());
+        existing.setMaxAttempts(request.maxAttempts());
+
+        AssignmentEntity savedAssignmentEntity = assignmentRepository.save(existing);
+
+        List<GradingRageResponse> gradingRageResponses = gradingRangeService.updateGradingRange(savedAssignmentEntity, request.gradingRanges());
+
+        return AssignmentMapper.toAssignmentDetailedResponse(savedAssignmentEntity, gradingRageResponses);
+    }
+
+    private AssignmentEntity getAssignmentEntity(Long id){
+        return assignmentRepository.findById(id).orElseThrow(()-> new NotFoundException("Assignment not found by id!"));
+    }
 
     private String saveAssignmentFile(MultipartFile file) {
         final String originalFilename = file.getOriginalFilename();
