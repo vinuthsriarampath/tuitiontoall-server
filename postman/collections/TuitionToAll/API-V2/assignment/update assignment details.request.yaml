@@ -1,0 +1,78 @@
+$kind: http-request
+name: update assignment details
+url: http://localhost:8080/api/v2/assignments/1
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \  \"topic\": \"Updated Java OOP Assignment\",\r
+
+    \  \"description\": \"Updated description\",\r
+
+    \  \"totalMarks\": 100,\r
+
+    \  \"availableOn\": \"2026-07-01T10:00:00\",\r
+
+    \  \"dueDate\": \"2026-07-10T23:59:59\",\r
+
+    \  \"lateSubmission\": true,\r
+
+    \  \"resubmission\": true,\r
+
+    \  \"maxAttempts\": 3,\r
+
+    \  \"gradingRanges\": [\r
+
+    \    {\r
+
+    \      \"id\": 10,\r
+
+    \      \"minMarks\": 0,\r
+
+    \      \"maxMarks\": 49,\r
+
+    \      \"desiredGrade\": \"F\"\r
+
+    \    },\r
+
+    \    {\r
+
+    \      \"id\": 11,\r
+
+    \      \"minMarks\": 50,\r
+
+    \      \"maxMarks\": 64,\r
+
+    \      \"desiredGrade\": \"C\"\r
+
+    \    },\r
+
+    \    {\r
+
+    \      \"id\": 12,\r
+
+    \      \"minMarks\": 65,\r
+
+    \      \"maxMarks\": 79,\r
+
+    \      \"desiredGrade\": \"B\"\r
+
+    \    },\r
+
+    \    {\r
+
+    \      \"id\": 13,\r
+
+    \      \"minMarks\": 80,\r
+
+    \      \"maxMarks\": 100,\r
+
+    \      \"desiredGrade\": \"A\"\r
+
+    \    }\r
+
+    \  ]\r
+
+    }"
+order: 562437525973946
