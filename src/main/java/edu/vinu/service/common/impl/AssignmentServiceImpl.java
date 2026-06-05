@@ -103,6 +103,26 @@ public class AssignmentServiceImpl implements AssignmentService {
         return AssignmentMapper.toAssignmentDetailedResponse(savedAssignmentEntity, gradingRageResponses);
     }
 
+    @Override
+    public String updateAssignmentFile(Long id, MultipartFile file) {
+        AssignmentEntity existing = getAssignmentEntity(id);
+
+        String oldFileName = existing.getFileName();
+
+        String newFileName = saveAssignmentFile(file);
+
+        existing.setFileName(newFileName);
+
+        try {
+            assignmentRepository.save(existing);
+            deleteAssignmentFile(oldFileName);
+            return newFileName;
+        } catch (Exception e) {
+            deleteAssignmentFile(newFileName);
+            throw new InternalServerErrorException("Failed to update assignment file!");
+        }
+    }
+
     private AssignmentEntity getAssignmentEntity(Long id){
         return assignmentRepository.findById(id).orElseThrow(()-> new NotFoundException("Assignment not found by id!"));
     }

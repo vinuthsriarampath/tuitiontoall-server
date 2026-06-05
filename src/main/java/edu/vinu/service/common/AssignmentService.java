@@ -25,4 +25,6 @@ public interface AssignmentService {
     void deleteAssignmentFile(String fileName);
 
     AssignmentDetailedResponse updateAssignment(Long id, AssignmentUpdateRequest request);
+
+    String updateAssignmentFile(Long id, MultipartFile file);
 }
