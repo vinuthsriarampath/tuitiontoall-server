@@ -14,10 +14,12 @@
 package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.AssignmentEntity;
+import edu.vinu.entity.GradingRangeEntity;
 import edu.vinu.exception.custom.InternalServerErrorException;
 import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.mapper.AssignmentMapper;
+import edu.vinu.mapper.GradingRangeMapper;
 import edu.vinu.repository.AssignmentRepository;
 import edu.vinu.request.assignments.AssignmentCreateRequest;
 import edu.vinu.request.assignments.AssignmentUpdateRequest;
@@ -121,6 +123,15 @@ public class AssignmentServiceImpl implements AssignmentService {
             deleteAssignmentFile(newFileName);
             throw new InternalServerErrorException("Failed to update assignment file!");
         }
+    }
+
+    @Override
+    public AssignmentDetailedResponse getDetailedAssignmentById(Long id) {
+        AssignmentEntity assignmentEntity = getAssignmentEntity(id);
+        List<GradingRageResponse> gradingRangers = gradingRangeService.getAllGradingRangersByAssignmentId(id).stream()
+                .map(GradingRangeMapper::toGradingRageResponse)
+                .toList();
+        return AssignmentMapper.toAssignmentDetailedResponse(assignmentEntity, gradingRangers);
     }
 
     private AssignmentEntity getAssignmentEntity(Long id){

@@ -27,4 +27,6 @@ public interface AssignmentService {
     AssignmentDetailedResponse updateAssignment(Long id, AssignmentUpdateRequest request);
 
     String updateAssignmentFile(Long id, MultipartFile file);
+
+    AssignmentDetailedResponse getDetailedAssignmentById(Long id);
 }
