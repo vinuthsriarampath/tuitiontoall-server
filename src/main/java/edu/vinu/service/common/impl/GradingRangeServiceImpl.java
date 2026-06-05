@@ -121,7 +121,8 @@ public class GradingRangeServiceImpl implements GradingRangeService {
         }
     }
 
-    private List<GradingRangeEntity> getAllGradingRangersByAssignmentId(Long assignmentId) {
+    @Override
+    public List<GradingRangeEntity> getAllGradingRangersByAssignmentId(Long assignmentId) {
         return gradingRangeRepository.findAllByAssignmentId(assignmentId);
     }
 }

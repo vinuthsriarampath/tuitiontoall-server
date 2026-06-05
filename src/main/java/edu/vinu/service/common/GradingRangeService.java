@@ -14,6 +14,7 @@
 package edu.vinu.service.common;
 
 import edu.vinu.entity.AssignmentEntity;
+import edu.vinu.entity.GradingRangeEntity;
 import edu.vinu.request.grading_range.GradingRangeCreateRequest;
 import edu.vinu.request.grading_range.GradingRangeUpdateRequest;
 import edu.vinu.response.grading_range.GradingRageResponse;
@@ -24,4 +25,6 @@ public interface GradingRangeService {
     void saveGradingRangeList(List<GradingRangeCreateRequest> gradingRangeCreateRequests, AssignmentEntity savedAssignmentEntity);
 
     List<GradingRageResponse> updateGradingRange(AssignmentEntity assignmentEntity, List<GradingRangeUpdateRequest> gradingRangeUpdateRequests);
+
+    List<GradingRangeEntity> getAllGradingRangersByAssignmentId(Long assignmentId);
 }
