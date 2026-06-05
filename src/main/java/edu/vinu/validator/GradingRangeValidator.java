@@ -14,7 +14,7 @@
 package edu.vinu.validator;
 
 import edu.vinu.exception.custom.InvalidInputException;
-import edu.vinu.request.grading_range.GradingRangeCreateRequest;
+import edu.vinu.request.grading_range.GradingRangeRequest;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.grading_range.IndexedGradingRange;
 
@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 public class GradingRangeValidator {
-    public static void validate(List<GradingRangeCreateRequest> ranges, Integer totalMarks){
+    public static void validate(List<? extends GradingRangeRequest> ranges, Integer totalMarks){
         ArrayList<FieldError> errors = new ArrayList<>();
         Set<String> grades = new HashSet<>();
 
@@ -58,7 +58,7 @@ public class GradingRangeValidator {
         for (int i = 0; i < sortedRanges.size(); i++) {
 
             IndexedGradingRange currentIndexedGradingRange = sortedRanges.get(i);
-            GradingRangeCreateRequest currentGradingRange = sortedRanges.get(i).range();
+            GradingRangeRequest currentGradingRange = sortedRanges.get(i).range();
 
             if (currentGradingRange.minMarks() < 0 || currentGradingRange.minMarks() >= currentGradingRange.maxMarks() || currentGradingRange.minMarks() > totalMarks) {
                 errors.add(new FieldError(
