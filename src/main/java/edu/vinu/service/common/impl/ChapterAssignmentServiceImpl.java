@@ -46,7 +46,7 @@ public class ChapterAssignmentServiceImpl implements ChapterAssignmentService {
         AssignmentEntity assignmentEntity = null;
 
         try {
-            AssignmentValidator.validate(request.totalMarks(), request.availableOn(), request.dueDate(), request.resubmission(), request.maxAttempts());
+            AssignmentValidator.validateCreate(request.totalMarks(), request.availableOn(), request.dueDate(), request.resubmission(), request.maxAttempts());
             GradingRangeValidator.validate(request.gradingRanges(), request.totalMarks());
 
             assignmentEntity = assignmentService.createAssignment(AssignmentMapper.toAssignmentCreateRequest(request),file);
