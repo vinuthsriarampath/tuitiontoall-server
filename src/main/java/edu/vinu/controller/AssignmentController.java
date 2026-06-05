@@ -20,7 +20,9 @@ import edu.vinu.service.common.AssignmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v2/assignments")
@@ -28,9 +30,17 @@ import org.springframework.web.bind.annotation.*;
 public class AssignmentController {
     private final AssignmentService assignmentService;
 
+    @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("{id}")
     public ResponseEntity<ApiResponse> updateAssignment(@PathVariable Long id, @Valid @RequestBody AssignmentUpdateRequest request){
         AssignmentDetailedResponse response = assignmentService.updateAssignment(id,request);
         return ResponseEntity.ok(new ApiResponse("Assignment updated successfully!",response));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PatchMapping(value = "{id}/files")
+    public ResponseEntity<ApiResponse> updateAssignmentFiles(@PathVariable("id") Long id, @RequestParam("file")MultipartFile file){
+        String fileName = assignmentService.updateAssignmentFile(id, file);
+        return ResponseEntity.ok(new ApiResponse("Assignment file updated successfully!",fileName));
     }
 }
