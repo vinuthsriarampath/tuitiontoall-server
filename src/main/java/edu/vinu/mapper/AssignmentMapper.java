@@ -16,7 +16,11 @@ package edu.vinu.mapper;
 import edu.vinu.entity.AssignmentEntity;
 import edu.vinu.request.assignments.AssignmentCreateRequest;
 import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentCreateRequest;
+import edu.vinu.response.assignments.AssignmentDetailedResponse;
+import edu.vinu.response.grading_range.GradingRageResponse;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class AssignmentMapper {
@@ -47,6 +51,24 @@ public class AssignmentMapper {
                 .resubmission(request.resubmission())
                 .maxAttempts(request.maxAttempts())
                 .gradingRanges(request.gradingRanges())
+                .build();
+    }
+
+    public static AssignmentDetailedResponse toAssignmentDetailedResponse(AssignmentEntity assignmentEntity, List<GradingRageResponse> gradingRangers) {
+        return AssignmentDetailedResponse.builder()
+                .id(assignmentEntity.getId())
+                .topic(assignmentEntity.getTopic())
+                .description(assignmentEntity.getDescription())
+                .fileName(assignmentEntity.getFileName())
+                .totalMarks(assignmentEntity.getTotalMarks())
+                .availableOn(assignmentEntity.getAvailableOn())
+                .dueDate(assignmentEntity.getDueDate())
+                .lateSubmission(assignmentEntity.isLateSubmission())
+                .reSubmission(assignmentEntity.isResubmission())
+                .maxAttempts(assignmentEntity.getMaxAttempts())
+                .createdDate(assignmentEntity.getCreatedDate())
+                .lastModifiedDate(assignmentEntity.getLastModifiedDate())
+                .gradingRangers(gradingRangers)
                 .build();
     }
 }
