@@ -18,7 +18,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record GradingRangeCreateRequest(
+public record GradingRangeUpdateRequest(
+
+        Long id,
 
         @NotNull(message = "Minimum mark is mandatory!")
         @Min(value = 0, message = "Minimum mark cannot be negative!")
@@ -33,4 +35,5 @@ public record GradingRangeCreateRequest(
         String desiredGrade,
 
         String description
-) implements GradingRangeRequest {}
+) implements GradingRangeRequest{
+}
