@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static edu.vinu.validator.UserValidator.USER_VALIDATION_FAILED_ERROR;
+import static edu.vinu.domain.user.validator.UserValidator.USER_VALIDATION_FAILED_ERROR;
 
 @CrossOrigin
 @RestController

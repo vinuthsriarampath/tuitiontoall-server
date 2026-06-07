@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static edu.vinu.validator.UserValidator.isValidDob;
+import static edu.vinu.domain.user.validator.UserValidator.isValidDob;
 
 @Service
 @RequiredArgsConstructor
