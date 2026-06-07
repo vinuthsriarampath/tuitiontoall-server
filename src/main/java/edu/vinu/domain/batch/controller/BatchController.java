@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.controller;
+package edu.vinu.domain.batch.controller;
 
 import edu.vinu.model.Batch;
 import edu.vinu.request.BatchCreateRequest;
