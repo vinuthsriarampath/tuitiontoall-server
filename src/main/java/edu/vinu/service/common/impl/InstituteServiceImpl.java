@@ -15,7 +15,7 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.entity.user_entities.UserEntity;
-import edu.vinu.exception.custom.UnauthorizedException;
+import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.service.auth.UserAuthenticationService;
 import edu.vinu.service.common.InstituteService;
 import lombok.RequiredArgsConstructor;

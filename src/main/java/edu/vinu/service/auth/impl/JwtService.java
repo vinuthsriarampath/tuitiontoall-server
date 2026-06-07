@@ -13,7 +13,7 @@
 
 package edu.vinu.service.auth.impl;
 
-import edu.vinu.exception.custom.InternalServerErrorException;
+import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.model.UserPrinciple;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

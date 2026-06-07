@@ -14,7 +14,7 @@
 package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.VideoStreamTokenEntity;
-import edu.vinu.exception.custom.UnauthorizedException;
+import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.service.common.VideoStreamTokenService;
 import org.springframework.stereotype.Service;
 

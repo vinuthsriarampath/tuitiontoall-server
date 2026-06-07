@@ -13,8 +13,8 @@
 
 package edu.vinu.service.common.impl;
 
-import edu.vinu.exception.custom.InvalidInputException;
-import edu.vinu.exception.custom.NotFoundException;
+import edu.vinu.common.exception.custom.InvalidInputException;
+import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.service.common.FileService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

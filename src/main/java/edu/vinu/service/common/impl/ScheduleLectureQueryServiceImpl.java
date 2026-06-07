@@ -19,7 +19,7 @@ import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
 import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
 import edu.vinu.service.common.ScheduleLectureQueryService;
-import edu.vinu.util.SortUtil;
+import edu.vinu.common.util.SortUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

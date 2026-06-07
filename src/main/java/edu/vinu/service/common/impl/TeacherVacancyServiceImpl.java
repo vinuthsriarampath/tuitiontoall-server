@@ -17,7 +17,7 @@ package edu.vinu.service.common.impl;
 import edu.vinu.entity.TeacherVacancyEntity;
 import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.enums.TeacherVacancyStatus;
-import edu.vinu.exception.custom.NotFoundException;
+import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.model.TeacherVacancy;
 import edu.vinu.repository.InstituteRepository;
 import edu.vinu.repository.TeacherVacancyRepository;

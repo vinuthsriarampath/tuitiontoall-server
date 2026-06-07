@@ -16,7 +16,7 @@ package edu.vinu.service.common.impl;
 import edu.vinu.entity.AssignmentEntity;
 import edu.vinu.entity.ChapterAssignmentEntity;
 import edu.vinu.entity.ChapterEntity;
-import edu.vinu.exception.custom.InvalidInputException;
+import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.mapper.AssignmentMapper;
 import edu.vinu.mapper.ChapterAssignmentMapper;
 import edu.vinu.repository.ChapterAssignmentRepository;

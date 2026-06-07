@@ -19,7 +19,7 @@ import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
 import edu.vinu.enums.ApplicationStatus;
 import edu.vinu.enums.InstituteTeacherStatus;
-import edu.vinu.exception.custom.NotFoundException;
+import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.repository.InstituteTeacherRepository;
 import edu.vinu.repository.projection.InstituteTeacherStatsProjection;
 import edu.vinu.request.ApplicationRejectionRequest;

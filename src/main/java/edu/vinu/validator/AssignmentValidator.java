@@ -14,7 +14,7 @@
 package edu.vinu.validator;
 
 import edu.vinu.entity.AssignmentEntity;
-import edu.vinu.exception.custom.InvalidInputException;
+import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.request.assignments.AssignmentUpdateRequest;
 import edu.vinu.response.FieldError;
 

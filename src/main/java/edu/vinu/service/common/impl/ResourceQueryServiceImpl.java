@@ -13,14 +13,13 @@
 
 package edu.vinu.service.common.impl;
 
-import edu.vinu.entity.ResourceEntity;
 import edu.vinu.mapper.ResourceMapper;
 import edu.vinu.repository.ResourceRepository;
 import edu.vinu.request.resource.ResourceFilterRequest;
 import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.response.resource.ResourceResponse;
 import edu.vinu.service.common.ResourceQueryService;
-import edu.vinu.util.SortUtil;
+import edu.vinu.common.util.SortUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

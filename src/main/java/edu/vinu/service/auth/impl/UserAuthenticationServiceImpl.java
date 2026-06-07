@@ -13,12 +13,12 @@
 
 package edu.vinu.service.auth.impl;
 
+import edu.vinu.common.exception.custom.*;
 import edu.vinu.entity.RoleEntity;
 import edu.vinu.entity.user_entities.InstituteEntity;
 import edu.vinu.entity.user_entities.StudentEntity;
 import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
-import edu.vinu.exception.custom.*;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;

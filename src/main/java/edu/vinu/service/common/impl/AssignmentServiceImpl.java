@@ -14,10 +14,9 @@
 package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.AssignmentEntity;
-import edu.vinu.entity.GradingRangeEntity;
-import edu.vinu.exception.custom.InternalServerErrorException;
-import edu.vinu.exception.custom.InvalidInputException;
-import edu.vinu.exception.custom.NotFoundException;
+import edu.vinu.common.exception.custom.InternalServerErrorException;
+import edu.vinu.common.exception.custom.InvalidInputException;
+import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.mapper.AssignmentMapper;
 import edu.vinu.mapper.GradingRangeMapper;
 import edu.vinu.repository.AssignmentRepository;

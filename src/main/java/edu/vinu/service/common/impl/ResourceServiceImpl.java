@@ -16,9 +16,8 @@ package edu.vinu.service.common.impl;
 import edu.vinu.entity.ChapterEntity;
 import edu.vinu.entity.ResourceEntity;
 import edu.vinu.entity.ResourceUploadEntity;
-import edu.vinu.exception.custom.InternalServerErrorException;
-import edu.vinu.exception.custom.InvalidInputException;
-import edu.vinu.exception.custom.NotFoundException;
+import edu.vinu.common.exception.custom.InvalidInputException;
+import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.mapper.ResourceMapper;
 import edu.vinu.repository.ResourceRepository;
 import edu.vinu.repository.ResourceUploadRepository;
@@ -32,20 +31,17 @@ import edu.vinu.service.common.ResourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
-import java.util.Comparator;
 import java.util.UUID;
 
 @Service

@@ -19,7 +19,7 @@ import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentFilterR
 import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
 import edu.vinu.service.common.ChapterAssignmentQueryService;
-import edu.vinu.util.SortUtil;
+import edu.vinu.common.util.SortUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

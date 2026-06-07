@@ -14,12 +14,10 @@
 package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.AssignmentEntity;
-import edu.vinu.entity.ChapterAssignmentEntity;
 import edu.vinu.entity.ModuleAssignmentEntity;
 import edu.vinu.entity.ModuleEntity;
-import edu.vinu.exception.custom.InvalidInputException;
+import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.mapper.AssignmentMapper;
-import edu.vinu.mapper.ChapterAssignmentMapper;
 import edu.vinu.mapper.ModuleAssignmentMapper;
 import edu.vinu.repository.ModuleAssignmentRepository;
 import edu.vinu.request.assignments.module_assignments.ModuleAssignmentCreateRequest;

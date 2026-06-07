@@ -13,17 +13,11 @@
 
 package edu.vinu.service.auth;
 
-import edu.vinu.entity.user_entities.InstituteEntity;
-import edu.vinu.entity.user_entities.StudentEntity;
-import edu.vinu.entity.user_entities.TeacherEntity;
 import edu.vinu.entity.user_entities.UserEntity;
-import edu.vinu.exception.custom.InternalServerErrorException;
-import edu.vinu.exception.custom.InvalidInputException;
-import edu.vinu.exception.custom.UnauthorizedException;
-import edu.vinu.exception.custom.UserAlreadyExistException;
-import edu.vinu.model.user_models.Institute;
-import edu.vinu.model.user_models.Student;
-import edu.vinu.model.user_models.Teacher;
+import edu.vinu.common.exception.custom.InternalServerErrorException;
+import edu.vinu.common.exception.custom.InvalidInputException;
+import edu.vinu.common.exception.custom.UnauthorizedException;
+import edu.vinu.common.exception.custom.UserAlreadyExistException;
 import edu.vinu.model.user_models.User;
 import edu.vinu.repository.UserRepository;
 import edu.vinu.request.UserLoginRequest;

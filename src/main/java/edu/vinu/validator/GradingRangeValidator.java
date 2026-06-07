@@ -13,7 +13,7 @@
 
 package edu.vinu.validator;
 
-import edu.vinu.exception.custom.InvalidInputException;
+import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.request.grading_range.GradingRangeRequest;
 import edu.vinu.response.FieldError;
 import edu.vinu.response.grading_range.IndexedGradingRange;
