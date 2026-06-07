@@ -20,7 +20,7 @@ import edu.vinu.request.UserLoginRequest;
 import edu.vinu.request.registration.InstituteRegistrationRequest;
 import edu.vinu.request.registration.StudentRegistrationRequest;
 import edu.vinu.request.registration.TeacherRegistrationRequest;
-import edu.vinu.response.ApiResponse;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.response.AuthResponse;
 import edu.vinu.service.auth.UserAuthenticationService;
 import jakarta.validation.Valid;

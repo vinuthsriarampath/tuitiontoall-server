@@ -14,7 +14,7 @@
 package edu.vinu.controller;
 
 import edu.vinu.request.resource.ResourceInitRequest;
-import edu.vinu.response.ApiResponse;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.response.resource.ResourceChunkUploadResponse;
 import edu.vinu.response.resource.ResourceInitResponse;
 import edu.vinu.response.resource.ResourceResponse;

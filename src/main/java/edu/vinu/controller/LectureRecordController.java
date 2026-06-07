@@ -15,7 +15,7 @@ package edu.vinu.controller;
 
 import edu.vinu.request.lecture_record.LectureRecordDetailsUpdateRequest;
 import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
-import edu.vinu.response.ApiResponse;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
@@ -23,7 +23,6 @@ import edu.vinu.service.common.LectureRecordService;
 import edu.vinu.service.common.VideoStreamTokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

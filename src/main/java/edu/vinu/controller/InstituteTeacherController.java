@@ -13,7 +13,7 @@
 
 package edu.vinu.controller;
 
-import edu.vinu.model.user_models.Teacher;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
 import edu.vinu.response.*;

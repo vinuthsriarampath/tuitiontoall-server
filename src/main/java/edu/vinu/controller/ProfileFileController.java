@@ -13,7 +13,7 @@
 
 package edu.vinu.controller;
 
-import edu.vinu.response.ApiResponse;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.service.common.ProfileFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

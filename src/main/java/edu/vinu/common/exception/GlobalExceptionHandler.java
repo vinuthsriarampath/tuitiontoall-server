@@ -14,7 +14,7 @@
 package edu.vinu.common.exception;
 
 import edu.vinu.common.exception.custom.*;
-import edu.vinu.response.ApiResponse;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.response.ErrorResponse;
 import edu.vinu.common.dto.FieldError;
 import io.jsonwebtoken.ExpiredJwtException;

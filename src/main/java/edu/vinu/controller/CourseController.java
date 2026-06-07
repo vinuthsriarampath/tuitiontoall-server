@@ -17,7 +17,7 @@ import edu.vinu.model.Course;
 import edu.vinu.request.CourseCreateRequest;
 import edu.vinu.request.CourseFilterRequest;
 import edu.vinu.request.CourseUpdateRequest;
-import edu.vinu.response.ApiResponse;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.service.common.CourseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

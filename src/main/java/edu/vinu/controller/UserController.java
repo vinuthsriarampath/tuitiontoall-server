@@ -20,7 +20,7 @@ import edu.vinu.model.user_models.User;
 import edu.vinu.request.update_user_details.InstituteDetailsUpdateRequest;
 import edu.vinu.request.update_user_details.StudentDetailsUpdateRequest;
 import edu.vinu.request.update_user_details.TeacherDetailsUpdateRequest;
-import edu.vinu.response.ApiResponse;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.service.common.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

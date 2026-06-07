@@ -17,7 +17,7 @@ import edu.vinu.enums.TeacherVacancyStatus;
 import edu.vinu.model.TeacherVacancy;
 import edu.vinu.request.CreateVacancyRequest;
 import edu.vinu.request.UpdateVacancyRequest;
-import edu.vinu.response.ApiResponse;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.service.common.TeacherVacancyService;
 import jakarta.validation.Valid;

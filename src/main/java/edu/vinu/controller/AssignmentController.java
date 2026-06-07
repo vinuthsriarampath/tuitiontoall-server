@@ -14,7 +14,7 @@
 package edu.vinu.controller;
 
 import edu.vinu.request.assignments.AssignmentUpdateRequest;
-import edu.vinu.response.ApiResponse;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.response.assignments.AssignmentDetailedResponse;
 import edu.vinu.service.common.AssignmentService;
 import jakarta.validation.Valid;

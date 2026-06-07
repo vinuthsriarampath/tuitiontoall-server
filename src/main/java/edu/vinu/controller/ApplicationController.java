@@ -14,7 +14,7 @@
 package edu.vinu.controller;
 
 import edu.vinu.model.Application;
-import edu.vinu.response.ApiResponse;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.response.ApplicationDetailsResponse;
 import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.service.common.ApplicationService;

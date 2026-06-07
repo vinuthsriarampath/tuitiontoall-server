@@ -18,7 +18,7 @@ import edu.vinu.request.announcements.AnnouncementFilterRequest;
 import edu.vinu.request.announcements.AnnouncementUpdateRequest;
 import edu.vinu.request.announcements.AnnouncementVisibilityUpdateRequest;
 import edu.vinu.response.AnnouncementResponse;
-import edu.vinu.response.ApiResponse;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.service.common.AnnouncementService;
 import jakarta.validation.Valid;

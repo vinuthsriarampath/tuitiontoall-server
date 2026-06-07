@@ -16,7 +16,7 @@ package edu.vinu.controller;
 import edu.vinu.model.Batch;
 import edu.vinu.request.BatchCreateRequest;
 import edu.vinu.request.BatchUpdateRequest;
-import edu.vinu.response.ApiResponse;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.response.module.ModuleResponse;
 import edu.vinu.service.common.BatchModuleService;
