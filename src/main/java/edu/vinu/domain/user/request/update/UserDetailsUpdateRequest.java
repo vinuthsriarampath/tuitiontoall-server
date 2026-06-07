@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -11,9 +11,10 @@
  *
  */
 
-package edu.vinu.request.update_user_details;
+package edu.vinu.domain.user.request.update;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,12 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InstituteDetailsUpdateRequest extends UserDetailsUpdateRequest{
-    @NotBlank(message = "Institute Name cannot be blank")
-    private String instituteName;
+public class UserDetailsUpdateRequest {
+    @NotBlank(message = "Address cannot be blank")
+    private String address;
+
+    @NotBlank(message = "Contact cannot be blank")
+    @Size(min = 10, max = 10, message = "Contact must be 10 digits long")
+    private String contact;
+
 }

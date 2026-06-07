@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.request.update_user_details;
+package edu.vinu.domain.user.request.update;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
@@ -28,7 +28,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentDetailsUpdateRequest extends UserDetailsUpdateRequest{
+public class TeacherDetailsUpdateRequest extends UserDetailsUpdateRequest{
     @NotBlank(message = "First Name cannot be blank")
     private String firstName;
 
