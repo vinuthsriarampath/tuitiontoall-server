@@ -31,7 +31,7 @@ import edu.vinu.request.announcements.AnnouncementVisibilityUpdateRequest;
 import edu.vinu.request.announcements.enums.AnnouncementCreateStatus;
 import edu.vinu.response.AnnouncementResponse;
 import edu.vinu.common.dto.FieldError;
-import edu.vinu.service.auth.UserAuthenticationService;
+import edu.vinu.domain.auth.service.UserAuthenticationService;
 import edu.vinu.service.common.*;
 import edu.vinu.common.util.SortUtil;
 import jakarta.transaction.Transactional;

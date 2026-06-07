@@ -27,7 +27,7 @@ import edu.vinu.repository.UserRepository;
 import edu.vinu.request.registration.InstituteRegistrationRequest;
 import edu.vinu.request.registration.StudentRegistrationRequest;
 import edu.vinu.request.registration.TeacherRegistrationRequest;
-import edu.vinu.service.auth.UserAuthenticationService;
+import edu.vinu.domain.auth.service.UserAuthenticationService;
 import edu.vinu.service.common.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

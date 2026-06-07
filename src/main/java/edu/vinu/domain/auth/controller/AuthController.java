@@ -22,7 +22,7 @@ import edu.vinu.request.registration.StudentRegistrationRequest;
 import edu.vinu.request.registration.TeacherRegistrationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.auth.response.AuthResponse;
-import edu.vinu.service.auth.UserAuthenticationService;
+import edu.vinu.domain.auth.service.UserAuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
