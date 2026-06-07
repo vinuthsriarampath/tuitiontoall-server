@@ -16,7 +16,7 @@ package edu.vinu.domain.course.entity;
 
 import edu.vinu.domain.course.enums.*;
 import edu.vinu.domain.institute.entity.InstituteEntity;
-import edu.vinu.entity.AnnouncementEntity;
+import edu.vinu.domain.announcement.entity.AnnouncementEntity;
 import edu.vinu.domain.batch.entity.BatchEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
