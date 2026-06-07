@@ -16,7 +16,7 @@ package edu.vinu.service.auth;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
-import edu.vinu.request.UserLoginRequest;
+import edu.vinu.domain.request.LoginRequest;
 import edu.vinu.request.registration.InstituteRegistrationRequest;
 import edu.vinu.request.registration.StudentRegistrationRequest;
 import edu.vinu.request.registration.TeacherRegistrationRequest;
@@ -30,7 +30,7 @@ public interface UserAuthenticationService {
 
     Teacher registerTeacher(TeacherRegistrationRequest request);
 
-    AuthResponse verify(UserLoginRequest request);
+    AuthResponse verify(LoginRequest request);
 
     ApiResponse startForgotPassword(String email);
 
