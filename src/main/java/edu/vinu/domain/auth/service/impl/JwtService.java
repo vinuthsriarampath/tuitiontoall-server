@@ -14,7 +14,7 @@
 package edu.vinu.domain.auth.service.impl;
 
 import edu.vinu.common.exception.custom.InternalServerErrorException;
-import edu.vinu.model.UserPrinciple;
+import edu.vinu.domain.auth.dto.UserPrinciple;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
