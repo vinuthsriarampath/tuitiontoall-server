@@ -13,6 +13,7 @@
 
 package edu.vinu.entity;
 
+import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.enums.ScheduleLectureStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

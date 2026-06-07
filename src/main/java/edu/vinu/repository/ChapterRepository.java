@@ -13,7 +13,7 @@
 
 package edu.vinu.repository;
 
-import edu.vinu.entity.ChapterEntity;
+import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.repository.projection.ChapterDetailedProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

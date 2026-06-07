@@ -13,7 +13,7 @@
 
 package edu.vinu.mapper;
 
-import edu.vinu.entity.ChapterEntity;
+import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.repository.projection.ChapterDetailedProjection;
 import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;

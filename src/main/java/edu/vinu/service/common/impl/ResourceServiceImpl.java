@@ -13,7 +13,7 @@
 
 package edu.vinu.service.common.impl;
 
-import edu.vinu.entity.ChapterEntity;
+import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.entity.ResourceEntity;
 import edu.vinu.entity.ResourceUploadEntity;
 import edu.vinu.common.exception.custom.InvalidInputException;

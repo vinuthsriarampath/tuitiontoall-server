@@ -15,7 +15,7 @@ package edu.vinu.mapper;
 
 import edu.vinu.entity.AssignmentEntity;
 import edu.vinu.entity.ChapterAssignmentEntity;
-import edu.vinu.entity.ChapterEntity;
+import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.repository.projection.ChapterAssignmentProjection;
 import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
 import org.springframework.stereotype.Component;

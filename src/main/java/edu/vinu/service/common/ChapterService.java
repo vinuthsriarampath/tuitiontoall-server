@@ -13,7 +13,7 @@
 
 package edu.vinu.service.common;
 
-import edu.vinu.entity.ChapterEntity;
+import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentFilterRequest;
 import edu.vinu.request.chapter.ChapterCreateRequest;
 import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;

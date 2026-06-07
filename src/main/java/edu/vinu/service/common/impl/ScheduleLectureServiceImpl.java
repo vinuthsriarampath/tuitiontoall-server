@@ -13,7 +13,7 @@
 
 package edu.vinu.service.common.impl;
 
-import edu.vinu.entity.ChapterEntity;
+import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.entity.ScheduleLectureEntity;
 import edu.vinu.enums.ScheduleLectureStatus;
 import edu.vinu.common.exception.custom.InvalidInputException;
