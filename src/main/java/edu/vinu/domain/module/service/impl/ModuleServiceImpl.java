@@ -11,13 +11,14 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.module.service.impl;
 
 import edu.vinu.domain.module.request.*;
 import edu.vinu.domain.module.request.create.ModuleCreateRequest;
 import edu.vinu.domain.module.request.update.ModuleBatchUpdateRequest;
 import edu.vinu.domain.module.request.update.ModuleNameUpdateRequest;
 import edu.vinu.domain.module.request.update.ModuleTeacherUpdateRequest;
+import edu.vinu.domain.module.service.ModuleService;
 import edu.vinu.entity.BatchEntity;
 import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.domain.user.entity.TeacherEntity;
@@ -38,7 +39,6 @@ import edu.vinu.domain.module.response.ModuleResponse;
 import edu.vinu.service.common.BatchService;
 import edu.vinu.domain.institute.service.InstituteTeacherService;
 import edu.vinu.service.common.ModuleAssignmentQueryService;
-import edu.vinu.service.common.ModuleService;
 import edu.vinu.common.util.SortUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.module.service;
 
 import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.domain.module.request.*;
