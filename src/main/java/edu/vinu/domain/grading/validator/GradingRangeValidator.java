@@ -13,9 +13,9 @@
 
 package edu.vinu.domain.grading.validator;
 
+import edu.vinu.common.dto.FieldError;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.domain.grading.request.GradingRangeRequest;
-import edu.vinu.common.dto.FieldError;
 import edu.vinu.domain.grading.response.IndexedGradingRange;
 
 import java.util.*;

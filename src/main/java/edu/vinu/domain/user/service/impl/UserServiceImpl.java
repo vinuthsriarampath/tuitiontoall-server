@@ -13,22 +13,22 @@
 
 package edu.vinu.domain.user.service.impl;
 
-import edu.vinu.domain.institute.entity.InstituteEntity;
-import edu.vinu.domain.user.entity.StudentEntity;
-import edu.vinu.domain.user.entity.TeacherEntity;
-import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.domain.institute.dto.Institute;
+import edu.vinu.domain.institute.entity.InstituteEntity;
+import edu.vinu.domain.institute.repository.InstituteRepository;
+import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.Teacher;
 import edu.vinu.domain.user.dto.User;
-import edu.vinu.domain.institute.repository.InstituteRepository;
+import edu.vinu.domain.user.entity.StudentEntity;
+import edu.vinu.domain.user.entity.TeacherEntity;
+import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.repository.StudentRepository;
 import edu.vinu.domain.user.repository.TeacherRepository;
 import edu.vinu.domain.user.repository.UserRepository;
-import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.StudentDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.TeacherDetailsUpdateRequest;
 import edu.vinu.domain.user.service.UserService;

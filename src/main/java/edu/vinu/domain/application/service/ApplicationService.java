@@ -13,8 +13,8 @@
 
 package edu.vinu.domain.application.service;
 
-import edu.vinu.domain.application.entity.ApplicationEntity;
 import edu.vinu.domain.application.dto.Application;
+import edu.vinu.domain.application.entity.ApplicationEntity;
 import edu.vinu.domain.application.response.ApplicationDetailsResponse;
 import org.springframework.data.domain.Page;
 

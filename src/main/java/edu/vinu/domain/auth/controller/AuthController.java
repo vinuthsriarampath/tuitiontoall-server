@@ -13,16 +13,16 @@
 
 package edu.vinu.domain.auth.controller;
 
+import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.auth.request.LoginRequest;
+import edu.vinu.domain.auth.response.AuthResponse;
+import edu.vinu.domain.auth.service.UserAuthenticationService;
 import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.Teacher;
-import edu.vinu.domain.auth.request.LoginRequest;
 import edu.vinu.domain.user.request.registration.InstituteRegistrationRequest;
 import edu.vinu.domain.user.request.registration.StudentRegistrationRequest;
 import edu.vinu.domain.user.request.registration.TeacherRegistrationRequest;
-import edu.vinu.common.response.ApiResponse;
-import edu.vinu.domain.auth.response.AuthResponse;
-import edu.vinu.domain.auth.service.UserAuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

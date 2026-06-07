@@ -13,19 +13,19 @@
 
 package edu.vinu.domain.module.controller;
 
-import edu.vinu.domain.module.request.*;
+import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.assignment.request.module_assignments.ModuleAssignmentFilterRequest;
+import edu.vinu.domain.assignment.response.module_assignment.ModuleAssignmentResponse;
+import edu.vinu.domain.chapter.response.ChapterResponse;
+import edu.vinu.domain.chapter.service.ChapterQueryService;
+import edu.vinu.domain.module.request.ModuleFilterRequest;
 import edu.vinu.domain.module.request.create.ModuleCreateRequest;
 import edu.vinu.domain.module.request.update.ModuleBatchUpdateRequest;
 import edu.vinu.domain.module.request.update.ModuleNameUpdateRequest;
 import edu.vinu.domain.module.request.update.ModuleTeacherUpdateRequest;
-import edu.vinu.domain.assignment.request.module_assignments.ModuleAssignmentFilterRequest;
-import edu.vinu.common.response.ApiResponse;
-import edu.vinu.common.response.PaginatedApiResponse;
-import edu.vinu.domain.assignment.response.module_assignment.ModuleAssignmentResponse;
-import edu.vinu.domain.chapter.response.ChapterResponse;
 import edu.vinu.domain.module.response.ModuleDetailedResponse;
 import edu.vinu.domain.module.response.ModuleResponse;
-import edu.vinu.domain.chapter.service.ChapterQueryService;
 import edu.vinu.domain.module.service.ModuleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

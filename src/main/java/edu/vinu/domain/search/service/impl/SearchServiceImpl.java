@@ -13,9 +13,9 @@
 
 package edu.vinu.domain.search.service.impl;
 
+import edu.vinu.domain.search.response.SearchResponse;
 import edu.vinu.domain.search.service.SearchService;
 import edu.vinu.domain.user.dto.User;
-import edu.vinu.domain.search.response.SearchResponse;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;

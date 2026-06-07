@@ -13,10 +13,10 @@
 
 package edu.vinu.domain.application.controller;
 
-import edu.vinu.domain.application.dto.Application;
 import edu.vinu.common.response.ApiResponse;
-import edu.vinu.domain.application.response.ApplicationDetailsResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.application.dto.Application;
+import edu.vinu.domain.application.response.ApplicationDetailsResponse;
 import edu.vinu.domain.application.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

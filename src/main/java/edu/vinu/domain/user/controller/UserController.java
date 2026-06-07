@@ -13,14 +13,14 @@
 
 package edu.vinu.domain.user.controller;
 
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.institute.dto.Institute;
+import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.Teacher;
 import edu.vinu.domain.user.dto.User;
-import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.StudentDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.TeacherDetailsUpdateRequest;
-import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

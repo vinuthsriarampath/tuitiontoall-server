@@ -13,10 +13,10 @@
 
 package edu.vinu.domain.assignment.service.impl;
 
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.assignment.mapper.ModuleAssignmentMapper;
 import edu.vinu.domain.assignment.repository.ModuleAssignmentRepository;
 import edu.vinu.domain.assignment.request.module_assignments.ModuleAssignmentFilterRequest;
-import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.assignment.response.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.domain.assignment.service.ModuleAssignmentQueryService;
 import lombok.RequiredArgsConstructor;

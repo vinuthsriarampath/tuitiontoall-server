@@ -13,10 +13,10 @@
 
 package edu.vinu.domain.course.service;
 
-import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.domain.course.dto.Course;
+import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.request.CourseCreateRequest;
 import edu.vinu.domain.course.request.CourseFilterRequest;
 import edu.vinu.domain.course.request.CourseUpdateRequest;

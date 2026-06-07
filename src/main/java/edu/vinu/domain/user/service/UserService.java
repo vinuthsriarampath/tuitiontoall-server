@@ -13,12 +13,12 @@
 
 package edu.vinu.domain.user.service;
 
-import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.institute.dto.Institute;
+import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.Teacher;
 import edu.vinu.domain.user.dto.User;
-import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
+import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.request.update.StudentDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.TeacherDetailsUpdateRequest;
 import jakarta.validation.Valid;

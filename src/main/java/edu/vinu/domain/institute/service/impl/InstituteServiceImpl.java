@@ -13,12 +13,12 @@
 
 package edu.vinu.domain.institute.service.impl;
 
-import edu.vinu.domain.institute.entity.InstituteEntity;
-import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.domain.auth.service.UserAuthenticationService;
-import edu.vinu.domain.user.service.impl.UserServiceImpl;
+import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.institute.service.InstituteService;
+import edu.vinu.domain.user.entity.UserEntity;
+import edu.vinu.domain.user.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -13,22 +13,22 @@
 
 package edu.vinu.domain.application.service.impl;
 
-import edu.vinu.domain.application.entity.ApplicationEntity;
-import edu.vinu.domain.application.service.ApplicationService;
-import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
-import edu.vinu.domain.user.entity.UserEntity;
-import edu.vinu.domain.application.enums.ApplicationStatus;
-import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import edu.vinu.common.exception.custom.BadRequestException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.domain.application.dto.Application;
+import edu.vinu.domain.application.entity.ApplicationEntity;
+import edu.vinu.domain.application.enums.ApplicationStatus;
 import edu.vinu.domain.application.repository.ApplicationRepository;
 import edu.vinu.domain.application.response.ApplicationDetailsResponse;
-import edu.vinu.domain.user.response.TeacherUserResponse;
-import edu.vinu.infastructure.service.email.EmailService;
+import edu.vinu.domain.application.service.ApplicationService;
+import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
+import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
+import edu.vinu.domain.user.entity.UserEntity;
+import edu.vinu.domain.user.response.TeacherUserResponse;
 import edu.vinu.domain.user.service.UserService;
+import edu.vinu.infastructure.service.email.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

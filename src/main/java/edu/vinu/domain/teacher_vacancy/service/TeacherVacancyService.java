@@ -13,9 +13,9 @@
 
 package edu.vinu.domain.teacher_vacancy.service;
 
+import edu.vinu.domain.teacher_vacancy.dto.TeacherVacancy;
 import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
 import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
-import edu.vinu.domain.teacher_vacancy.dto.TeacherVacancy;
 import edu.vinu.domain.teacher_vacancy.request.CreateVacancyRequest;
 import edu.vinu.domain.teacher_vacancy.request.UpdateVacancyRequest;
 import org.springframework.data.domain.Page;

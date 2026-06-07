@@ -13,12 +13,12 @@
 
 package edu.vinu.domain.teacher_vacancy.controller;
 
-import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
-import edu.vinu.domain.teacher_vacancy.dto.TeacherVacancy;
-import edu.vinu.domain.teacher_vacancy.request.CreateVacancyRequest;
-import edu.vinu.domain.teacher_vacancy.request.UpdateVacancyRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.teacher_vacancy.dto.TeacherVacancy;
+import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
+import edu.vinu.domain.teacher_vacancy.request.CreateVacancyRequest;
+import edu.vinu.domain.teacher_vacancy.request.UpdateVacancyRequest;
 import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

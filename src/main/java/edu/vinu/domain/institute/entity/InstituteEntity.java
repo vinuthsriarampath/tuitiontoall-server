@@ -13,10 +13,10 @@
 
 package edu.vinu.domain.institute.entity;
 
-import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.announcement.entity.AnnouncementEntity;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
+import edu.vinu.domain.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

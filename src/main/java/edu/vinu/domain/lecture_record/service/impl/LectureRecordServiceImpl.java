@@ -13,28 +13,29 @@
 
 package edu.vinu.domain.lecture_record.service.impl;
 
-import edu.vinu.domain.chapter.entity.ChapterEntity;
-import edu.vinu.domain.lecture_record.entity.LectureRecordEntity;
-import edu.vinu.domain.lecture_record.entity.LectureRecordUploadEntity;
+import edu.vinu.common.dto.FieldError;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
+import edu.vinu.domain.chapter.entity.ChapterEntity;
+import edu.vinu.domain.chapter.service.ChapterService;
+import edu.vinu.domain.lecture_record.entity.LectureRecordEntity;
+import edu.vinu.domain.lecture_record.entity.LectureRecordUploadEntity;
 import edu.vinu.domain.lecture_record.mapper.LectureRecordMapper;
 import edu.vinu.domain.lecture_record.repository.LectureRecordRepository;
 import edu.vinu.domain.lecture_record.repository.LectureRecordUploadRepository;
 import edu.vinu.domain.lecture_record.request.LectureRecordDetailsUpdateRequest;
 import edu.vinu.domain.lecture_record.request.LectureRecordUploadInitRequest;
-import edu.vinu.common.dto.FieldError;
 import edu.vinu.domain.lecture_record.response.LectureRecordChunkUploadResponse;
 import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
 import edu.vinu.domain.lecture_record.response.LectureRecordUploadInitResponse;
-import edu.vinu.domain.chapter.service.ChapterService;
 import edu.vinu.domain.lecture_record.service.LectureRecordService;
 import edu.vinu.infastructure.service.file_storage.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourceRegion;
-import org.springframework.http.*;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

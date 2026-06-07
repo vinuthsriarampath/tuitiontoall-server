@@ -13,8 +13,8 @@
 
 package edu.vinu.domain.lecture_record.service.impl;
 
-import edu.vinu.domain.lecture_record.entity.VideoStreamTokenEntity;
 import edu.vinu.common.exception.custom.UnauthorizedException;
+import edu.vinu.domain.lecture_record.entity.VideoStreamTokenEntity;
 import edu.vinu.domain.lecture_record.service.VideoStreamTokenService;
 import org.springframework.stereotype.Service;
 

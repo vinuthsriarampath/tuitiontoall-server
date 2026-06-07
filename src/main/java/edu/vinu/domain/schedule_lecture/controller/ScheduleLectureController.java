@@ -13,9 +13,9 @@
 
 package edu.vinu.domain.schedule_lecture.controller;
 
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.schedule_lecture.request.create.ScheduleLectureCreateRequest;
 import edu.vinu.domain.schedule_lecture.request.update.ScheduleLectureUpdateRequest;
-import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.schedule_lecture.response.ScheduleLectureResponse;
 import edu.vinu.domain.schedule_lecture.service.ScheduleLectureService;
 import jakarta.validation.Valid;

@@ -15,9 +15,9 @@ package edu.vinu.domain.assignment.mapper;
 
 import edu.vinu.domain.assignment.entity.AssignmentEntity;
 import edu.vinu.domain.assignment.entity.ModuleAssignmentEntity;
-import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.domain.assignment.repository.projection.ModuleAssignmentProjection;
 import edu.vinu.domain.assignment.response.module_assignment.ModuleAssignmentResponse;
+import edu.vinu.domain.module.entity.ModuleEntity;
 
 public class ModuleAssignmentMapper {
     public static ModuleAssignmentEntity toModuleAssignmentEntity(AssignmentEntity assignmentEntity, ModuleEntity moduleEntity) {

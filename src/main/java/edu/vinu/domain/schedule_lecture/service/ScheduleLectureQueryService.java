@@ -13,8 +13,8 @@
 
 package edu.vinu.domain.schedule_lecture.service;
 
-import edu.vinu.domain.schedule_lecture.request.ScheduleLectureFilterRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.schedule_lecture.request.ScheduleLectureFilterRequest;
 import edu.vinu.domain.schedule_lecture.response.ScheduleLectureResponse;
 
 import java.util.List;

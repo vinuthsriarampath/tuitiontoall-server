@@ -13,9 +13,9 @@
 
 package edu.vinu.domain.lecture_record.controller;
 
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.lecture_record.request.LectureRecordDetailsUpdateRequest;
 import edu.vinu.domain.lecture_record.request.LectureRecordUploadInitRequest;
-import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.lecture_record.response.LectureRecordChunkUploadResponse;
 import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
 import edu.vinu.domain.lecture_record.response.LectureRecordUploadInitResponse;

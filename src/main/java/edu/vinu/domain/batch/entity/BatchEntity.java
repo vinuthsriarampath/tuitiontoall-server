@@ -13,11 +13,11 @@
 
 package edu.vinu.domain.batch.entity;
 
-import edu.vinu.domain.course.entity.CourseEntity;
-import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.domain.announcement.entity.AnnouncementEntity;
 import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
 import edu.vinu.domain.batch.enums.BatchStatus;
+import edu.vinu.domain.course.entity.CourseEntity;
+import edu.vinu.domain.module.entity.ModuleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
