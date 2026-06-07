@@ -11,15 +11,15 @@
  *
  */
 
-package edu.vinu.request.chapter;
+package edu.vinu.domain.chapter.request;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
-import java.util.List;
-
 @Builder
-public record ChapterReorderRequest(
-        @NotEmpty(message = "Chapters reorder list cannot be empty!")
-        List<ChapterOrderRequest> chapters
-) { }
+public record ChapterOrderRequest(
+        @NotNull(message = "Chapter ID is mandatory!")
+        Long chapterId,
+        @NotNull(message = "Chapter order is mandatory!")
+        int chapterOrder
+) {}

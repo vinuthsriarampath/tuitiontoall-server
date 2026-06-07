@@ -11,20 +11,19 @@
  *
  */
 
-package edu.vinu.request.chapter;
+package edu.vinu.domain.chapter.request;
 
 import edu.vinu.domain.chapter.enums.ChapterStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 
-@Builder
-public record ChapterCreateRequest(
-        @NotNull(message = "Module ID is mandatory!")
-        Long moduleId,
-        @NotBlank(message = "Chapter title is mandatory!")
+
+public record ChapterDetailsUpdateRequest(
+        @NotBlank(message = "Title is mandatory!")
         String title,
         @NotNull(message = "Chapter status is mandatory!")
-        ChapterStatus status
+        ChapterStatus status,
+        @NotNull(message = "Module id is mandatory!")
+        Long moduleId
 ) {
 }
