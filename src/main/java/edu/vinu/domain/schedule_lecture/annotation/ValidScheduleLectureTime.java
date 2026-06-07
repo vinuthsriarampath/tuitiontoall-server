@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.annotation;
+package edu.vinu.domain.schedule_lecture.annotation;
 
 import edu.vinu.domain.schedule_lecture.validator.ScheduleLectureTimeValidator;
 import jakarta.validation.Constraint;
