@@ -13,7 +13,7 @@
 
 package edu.vinu.domain.batch.controller;
 
-import edu.vinu.model.Batch;
+import edu.vinu.domain.batch.dto.Batch;
 import edu.vinu.request.BatchCreateRequest;
 import edu.vinu.request.BatchUpdateRequest;
 import edu.vinu.common.response.ApiResponse;

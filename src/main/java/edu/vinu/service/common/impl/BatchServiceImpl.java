@@ -20,7 +20,7 @@ import edu.vinu.enums.BatchStatus;
 import edu.vinu.domain.course.events.CourseCreatedEvent;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
-import edu.vinu.model.Batch;
+import edu.vinu.domain.batch.dto.Batch;
 import edu.vinu.repository.BatchRepository;
 import edu.vinu.request.BatchCreateRequest;
 import edu.vinu.request.BatchUpdateRequest;

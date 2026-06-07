@@ -15,7 +15,7 @@ package edu.vinu.service.common;
 
 import edu.vinu.entity.BatchEntity;
 import edu.vinu.domain.course.entity.CourseEntity;
-import edu.vinu.model.Batch;
+import edu.vinu.domain.batch.dto.Batch;
 import edu.vinu.request.BatchCreateRequest;
 import edu.vinu.request.BatchUpdateRequest;
 
