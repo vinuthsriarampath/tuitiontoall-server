@@ -29,7 +29,7 @@ import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.domain.module.repository.ModuleRepository;
 import edu.vinu.request.assignments.module_assignments.ModuleAssignmentFilterRequest;
 import edu.vinu.domain.module.request.create.enums.ModuleCreateStatus;
-import edu.vinu.response.BatchBasicResponse;
+import edu.vinu.domain.batch.response.BatchBasicResponse;
 import edu.vinu.common.dto.FieldError;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.user.response.TeacherBasicResponse;

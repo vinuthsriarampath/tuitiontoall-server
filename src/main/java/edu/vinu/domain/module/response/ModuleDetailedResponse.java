@@ -14,7 +14,7 @@
 package edu.vinu.domain.module.response;
 
 import edu.vinu.domain.module.enums.ModuleStatus;
-import edu.vinu.response.BatchBasicResponse;
+import edu.vinu.domain.batch.response.BatchBasicResponse;
 import edu.vinu.domain.user.response.TeacherBasicResponse;
 import lombok.Builder;
 
