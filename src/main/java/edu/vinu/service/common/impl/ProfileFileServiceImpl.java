@@ -13,7 +13,7 @@
 
 package edu.vinu.service.common.impl;
 
-import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.repository.UserRepository;

@@ -13,7 +13,7 @@
 
 package edu.vinu.repository;
 
-import edu.vinu.entity.RoleEntity;
+import edu.vinu.domain.user.entity.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

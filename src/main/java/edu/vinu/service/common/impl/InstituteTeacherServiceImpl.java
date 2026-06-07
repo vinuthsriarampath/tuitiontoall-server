@@ -15,8 +15,8 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.ApplicationEntity;
 import edu.vinu.entity.InstituteTeacherEntity;
-import edu.vinu.entity.user_entities.TeacherEntity;
-import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.domain.user.entity.TeacherEntity;
+import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.enums.ApplicationStatus;
 import edu.vinu.enums.InstituteTeacherStatus;
 import edu.vinu.common.exception.custom.NotFoundException;

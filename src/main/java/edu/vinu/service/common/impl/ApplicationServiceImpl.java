@@ -15,7 +15,7 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.ApplicationEntity;
 import edu.vinu.entity.TeacherVacancyEntity;
-import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.enums.ApplicationStatus;
 import edu.vinu.enums.TeacherVacancyStatus;
 import edu.vinu.common.exception.custom.BadRequestException;

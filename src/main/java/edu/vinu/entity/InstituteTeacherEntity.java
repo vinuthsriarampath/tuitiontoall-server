@@ -13,8 +13,8 @@
 
 package edu.vinu.entity;
 
-import edu.vinu.entity.user_entities.InstituteEntity;
-import edu.vinu.entity.user_entities.TeacherEntity;
+import edu.vinu.domain.user.entity.InstituteEntity;
+import edu.vinu.domain.user.entity.TeacherEntity;
 import edu.vinu.enums.InstituteTeacherStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

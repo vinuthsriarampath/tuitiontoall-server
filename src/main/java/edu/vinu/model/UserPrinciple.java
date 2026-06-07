@@ -13,7 +13,7 @@
 
 package edu.vinu.model;
 
-import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.domain.user.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

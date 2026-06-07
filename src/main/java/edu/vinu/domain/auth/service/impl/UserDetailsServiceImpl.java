@@ -13,7 +13,7 @@
 
 package edu.vinu.domain.auth.service.impl;
 
-import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.model.UserPrinciple;
 import edu.vinu.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

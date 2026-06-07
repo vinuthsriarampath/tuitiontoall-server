@@ -14,11 +14,11 @@
 package edu.vinu.domain.auth.service.impl;
 
 import edu.vinu.common.exception.custom.*;
-import edu.vinu.entity.RoleEntity;
-import edu.vinu.entity.user_entities.InstituteEntity;
-import edu.vinu.entity.user_entities.StudentEntity;
-import edu.vinu.entity.user_entities.TeacherEntity;
-import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.domain.user.entity.RoleEntity;
+import edu.vinu.domain.user.entity.InstituteEntity;
+import edu.vinu.domain.user.entity.StudentEntity;
+import edu.vinu.domain.user.entity.TeacherEntity;
+import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;

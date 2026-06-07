@@ -13,7 +13,7 @@
 
 package edu.vinu.service.common;
 
-import edu.vinu.entity.user_entities.TeacherEntity;
+import edu.vinu.domain.user.entity.TeacherEntity;
 import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
 import edu.vinu.response.*;

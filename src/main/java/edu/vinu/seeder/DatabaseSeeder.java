@@ -15,8 +15,8 @@ package edu.vinu.seeder;
 
 import com.github.javafaker.Faker;
 import edu.vinu.entity.CourseEntity;
-import edu.vinu.entity.RoleEntity;
-import edu.vinu.entity.user_entities.InstituteEntity;
+import edu.vinu.domain.user.entity.RoleEntity;
+import edu.vinu.domain.user.entity.InstituteEntity;
 import edu.vinu.enums.*;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.UserAlreadyExistException;

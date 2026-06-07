@@ -13,10 +13,10 @@
 
 package edu.vinu.service.common.impl;
 
-import edu.vinu.entity.user_entities.InstituteEntity;
-import edu.vinu.entity.user_entities.StudentEntity;
-import edu.vinu.entity.user_entities.TeacherEntity;
-import edu.vinu.entity.user_entities.UserEntity;
+import edu.vinu.domain.user.entity.InstituteEntity;
+import edu.vinu.domain.user.entity.StudentEntity;
+import edu.vinu.domain.user.entity.TeacherEntity;
+import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;

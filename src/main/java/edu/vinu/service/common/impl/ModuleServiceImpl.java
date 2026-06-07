@@ -15,7 +15,7 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.BatchEntity;
 import edu.vinu.entity.ModuleEntity;
-import edu.vinu.entity.user_entities.TeacherEntity;
+import edu.vinu.domain.user.entity.TeacherEntity;
 import edu.vinu.enums.ModuleStatus;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
