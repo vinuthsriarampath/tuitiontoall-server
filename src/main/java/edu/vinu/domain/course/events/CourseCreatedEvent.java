@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.events;
+package edu.vinu.domain.course.events;
 
 import edu.vinu.entity.CourseEntity;
 
