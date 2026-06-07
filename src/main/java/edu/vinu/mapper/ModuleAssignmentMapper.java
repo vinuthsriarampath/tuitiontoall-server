@@ -14,6 +14,9 @@
 package edu.vinu.mapper;
 
 import edu.vinu.entity.*;
+import edu.vinu.repository.projection.ChapterAssignmentProjection;
+import edu.vinu.repository.projection.ModuleAssignmentProjection;
+import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
 import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
 
 public class ModuleAssignmentMapper {
@@ -40,6 +43,25 @@ public class ModuleAssignmentMapper {
                 .maxAttempts(entity.getAssignment().getMaxAttempts())
                 .createdDate(entity.getAssignment().getCreatedDate())
                 .lastModifiedDate(entity.getAssignment().getLastModifiedDate())
+                .build();
+    }
+
+    public static ModuleAssignmentResponse toModuleAssignmentResponse(ModuleAssignmentProjection projection) {
+        return ModuleAssignmentResponse.builder()
+                .id(projection.getId())
+                .assignmentId(projection.getAssignmentId())
+                .moduleId(projection.getModuleId())
+                .topic(projection.getTopic())
+                .description(projection.getDescription())
+                .fileName(projection.getFileName())
+                .totalMarks(projection.getTotalMarks())
+                .availableOn(projection.getAvailableOn())
+                .dueDate(projection.getDueDate())
+                .lateSubmission(projection.getLateSubmission())
+                .reSubmission(projection.getResubmission())
+                .maxAttempts(projection.getMaxAttempts())
+                .createdDate(projection.getCreatedDate())
+                .lastModifiedDate(projection.getLastModifiedDate())
                 .build();
     }
 
