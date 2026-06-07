@@ -13,7 +13,7 @@
 
 package edu.vinu.config;
 
-import edu.vinu.filter.JwtFilter;
+import edu.vinu.config.filter.JwtFilter;
 import edu.vinu.service.auth.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
