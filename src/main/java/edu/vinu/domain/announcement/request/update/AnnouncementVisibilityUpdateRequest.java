@@ -11,12 +11,9 @@
  *
  */
 
-package edu.vinu.request.announcements;
+package edu.vinu.domain.announcement.request.update;
 
-import edu.vinu.enums.AnnouncementVisibility;
-import edu.vinu.request.announcements.enums.AnnouncementCreateStatus;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotBlank;
+import edu.vinu.domain.announcement.enums.AnnouncementVisibility;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -24,24 +21,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AnnouncementCreateRequest {
-    @NotBlank(message = "Title is Mandatory")
-    private String title;
-    @NotBlank(message = "Description is Mandatory")
-    private String description;
-    @NotNull(message = "Visibility is Mandatory")
+public class AnnouncementVisibilityUpdateRequest {
+    @NotNull(message = "Announcement visibility must not be null")
     private AnnouncementVisibility visibility;
-    @NotNull(message = "Visibility is Mandatory")
-    private AnnouncementCreateStatus status;
-    @Future(message = "ExpireAt must be a future date/time")
-    @NotNull(message = "ExpireAt is Mandatory")
-    private LocalDateTime expireAt;
     @Positive(message = "courseId must be a positive number")
     private Long courseId;
     @Positive(message = "batchId must be a positive number")

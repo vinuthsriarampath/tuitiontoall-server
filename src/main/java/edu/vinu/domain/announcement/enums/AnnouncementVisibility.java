@@ -11,12 +11,11 @@
  *
  */
 
-package edu.vinu.enums;
+package edu.vinu.domain.announcement.enums;
 
-public enum AnnouncementStatus {
-    DRAFT,
-    PUBLISHED,
-    EXPIRED,
-    ARCHIVED,
-    DELETED
+public enum AnnouncementVisibility {
+    PRIVATE,
+    ALL_TEACHERS,
+    COURSE,
+    BATCH
 }

@@ -11,9 +11,13 @@
  *
  */
 
-package edu.vinu.request.announcements.enums;
+package edu.vinu.domain.announcement.request.update;
 
-public enum AnnouncementCreateStatus {
-    DRAFT,
-    PUBLISHED,
+import java.time.LocalDateTime;
+
+public record AnnouncementUpdateRequest(
+        String title,
+        String description,
+        LocalDateTime expireAt
+) {
 }

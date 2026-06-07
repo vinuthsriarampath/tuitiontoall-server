@@ -11,11 +11,12 @@
  *
  */
 
-package edu.vinu.enums;
+package edu.vinu.domain.announcement.request;
 
-public enum AnnouncementVisibility {
-    PRIVATE,
-    ALL_TEACHERS,
-    COURSE,
-    BATCH
+public record AnnouncementFilterRequest(
+        String visibility,
+        String status,
+        Long courseId,
+        Long batchId
+) {
 }

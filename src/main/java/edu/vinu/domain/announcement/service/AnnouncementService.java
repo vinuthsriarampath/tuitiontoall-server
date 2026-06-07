@@ -11,13 +11,13 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.announcement.service;
 
-import edu.vinu.request.announcements.AnnouncementCreateRequest;
-import edu.vinu.request.announcements.AnnouncementFilterRequest;
-import edu.vinu.request.announcements.AnnouncementUpdateRequest;
-import edu.vinu.request.announcements.AnnouncementVisibilityUpdateRequest;
-import edu.vinu.response.AnnouncementResponse;
+import edu.vinu.domain.announcement.request.create.AnnouncementCreateRequest;
+import edu.vinu.domain.announcement.request.AnnouncementFilterRequest;
+import edu.vinu.domain.announcement.request.update.AnnouncementUpdateRequest;
+import edu.vinu.domain.announcement.request.update.AnnouncementVisibilityUpdateRequest;
+import edu.vinu.domain.announcement.response.AnnouncementResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

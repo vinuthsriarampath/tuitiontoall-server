@@ -11,12 +11,9 @@
  *
  */
 
-package edu.vinu.request.announcements;
+package edu.vinu.domain.announcement.request.create.enums;
 
-public record AnnouncementFilterRequest(
-        String visibility,
-        String status,
-        Long courseId,
-        Long batchId
-) {
+public enum AnnouncementCreateStatus {
+    DRAFT,
+    PUBLISHED,
 }

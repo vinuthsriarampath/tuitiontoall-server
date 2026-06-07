@@ -11,9 +11,9 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.domain.announcement.repository;
 
-import edu.vinu.entity.AnnouncementEntity;
+import edu.vinu.domain.announcement.entity.AnnouncementEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
