@@ -21,15 +21,19 @@ import edu.vinu.exception.custom.InvalidInputException;
 import edu.vinu.exception.custom.NotFoundException;
 import edu.vinu.exception.custom.UnauthorizedException;
 import edu.vinu.repository.ModuleRepository;
+import edu.vinu.request.assignments.module_assignments.ModuleAssignmentFilterRequest;
 import edu.vinu.request.modules.*;
 import edu.vinu.request.modules.enums.ModuleCreateStatus;
 import edu.vinu.response.BatchBasicResponse;
 import edu.vinu.response.FieldError;
+import edu.vinu.response.PaginatedApiResponse;
 import edu.vinu.response.TeacherBasicResponse;
+import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.response.module.ModuleDetailedResponse;
 import edu.vinu.response.module.ModuleResponse;
 import edu.vinu.service.common.BatchService;
 import edu.vinu.service.common.InstituteTeacherService;
+import edu.vinu.service.common.ModuleAssignmentQueryService;
 import edu.vinu.service.common.ModuleService;
 import edu.vinu.util.SortUtil;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +52,7 @@ public class ModuleServiceImpl implements ModuleService {
     private final ModuleRepository moduleRepository;
     private final BatchService batchService;
     private final InstituteTeacherService instituteTeacherService;
+    private final ModuleAssignmentQueryService moduleAssignmentQueryService;
     @Override
     public ModuleResponse createModule(ModuleCreateRequest request) {
         BatchEntity batchEntity = batchService.getBatchEntityById(request.getBatchId());
@@ -225,6 +230,12 @@ public class ModuleServiceImpl implements ModuleService {
     public ModuleEntity getModuleEntityById(Long id){
         return moduleRepository.findById(id)
                 .orElseThrow(() -> new InvalidInputException("Module with id " + id + " not found"));
+    }
+
+    @Override
+    public PaginatedApiResponse<ModuleAssignmentResponse> getAssignmentsByModule(Long id, int page, int size, String direction, List<String> sortBy, ModuleAssignmentFilterRequest filters) {
+        Pageable pageable = PageRequest.of(page, size, SortUtil.buildSort(direction, sortBy, List.of("created_date")));
+        return moduleAssignmentQueryService.getAssignmentsByModule(id, filters, pageable);
     }
 
     private boolean isModuleOwner(ModuleEntity entity){
