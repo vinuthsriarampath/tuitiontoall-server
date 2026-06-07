@@ -13,7 +13,7 @@
 
 package edu.vinu.service.common;
 
-import edu.vinu.response.chapter.ChapterResponse;
+import edu.vinu.domain.chapter.response.ChapterResponse;
 
 import java.util.List;
 

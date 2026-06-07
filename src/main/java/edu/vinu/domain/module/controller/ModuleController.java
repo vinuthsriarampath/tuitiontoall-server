@@ -22,7 +22,7 @@ import edu.vinu.request.assignments.module_assignments.ModuleAssignmentFilterReq
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
-import edu.vinu.response.chapter.ChapterResponse;
+import edu.vinu.domain.chapter.response.ChapterResponse;
 import edu.vinu.domain.module.response.ModuleDetailedResponse;
 import edu.vinu.domain.module.response.ModuleResponse;
 import edu.vinu.service.common.ChapterQueryService;

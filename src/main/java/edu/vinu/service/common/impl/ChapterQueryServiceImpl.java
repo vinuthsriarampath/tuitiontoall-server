@@ -15,7 +15,7 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.domain.chapter.mapper.ChapterMapper;
 import edu.vinu.domain.chapter.repository.ChapterRepository;
-import edu.vinu.response.chapter.ChapterResponse;
+import edu.vinu.domain.chapter.response.ChapterResponse;
 import edu.vinu.service.common.ChapterQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
