@@ -74,4 +74,6 @@ public interface ChapterAssignmentRepository extends JpaRepository<ChapterAssign
     """,
     nativeQuery = true)
     Page<ChapterAssignmentProjection> getAllChapterAssignmentByChapter(Long chapterId, Long assignmentId, String topic, Boolean resubmission, Boolean lateSubmission, Integer totalMarks, Integer maxAttempts, LocalDateTime availableOn, LocalDateTime dueDate, LocalDateTime createdDate, LocalDateTime lastModifiedDate, Pageable pageable);
+
+    boolean existsByAssignmentId(Long assignmentId);
 }
