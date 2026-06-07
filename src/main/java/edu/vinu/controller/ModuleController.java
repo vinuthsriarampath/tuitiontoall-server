@@ -13,9 +13,11 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.request.assignments.module_assignments.ModuleAssignmentFilterRequest;
 import edu.vinu.request.modules.*;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.response.module.ModuleDetailedResponse;
 import edu.vinu.response.module.ModuleResponse;
@@ -130,5 +132,19 @@ public class ModuleController {
     public ResponseEntity<ApiResponse> getChaptersByModuleId(@PathVariable("id") Long id){
         List<ChapterResponse> responses = chapterQueryService.getAllChaptersByModuleId(id);
         return ResponseEntity.ok(new ApiResponse("Chapters fetched successfully", responses));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("{id}/assignments")
+    public ResponseEntity<PaginatedApiResponse<ModuleAssignmentResponse>> getAssignmentsByModule(
+            @PathVariable("id") Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(defaultValue = "created_date")List<String> sortBy,
+            ModuleAssignmentFilterRequest filters
+    ){
+        PaginatedApiResponse<ModuleAssignmentResponse> responses = moduleService.getAssignmentsByModule(id,page,size,direction,sortBy,filters);
+        return ResponseEntity.ok(responses);
     }
 }
