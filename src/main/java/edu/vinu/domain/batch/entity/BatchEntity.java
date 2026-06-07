@@ -11,10 +11,11 @@
  *
  */
 
-package edu.vinu.entity;
+package edu.vinu.domain.batch.entity;
 
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.module.entity.ModuleEntity;
+import edu.vinu.entity.AnnouncementEntity;
 import edu.vinu.enums.BatchEnrollmentStatus;
 import edu.vinu.enums.BatchStatus;
 import jakarta.persistence.*;
