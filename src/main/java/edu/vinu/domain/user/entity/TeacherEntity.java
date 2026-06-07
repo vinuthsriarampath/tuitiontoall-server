@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -11,18 +11,19 @@
  *
  */
 
-package edu.vinu.entity.user_entities;
+package edu.vinu.domain.user.entity;
 
-import edu.vinu.entity.AnnouncementEntity;
-import edu.vinu.entity.CourseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import edu.vinu.entity.ApplicationEntity;
 import edu.vinu.entity.InstituteTeacherEntity;
-import edu.vinu.entity.TeacherVacancyEntity;
+import edu.vinu.entity.ModuleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,27 +32,28 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "institute")
-public class InstituteEntity{
+@Table(name = "teacher")
+public class TeacherEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String instituteName;
+    private String firstName;
+    private String lastName;
 
     @OneToOne
     @JoinColumn(name = "user_id",nullable = false,unique = true)
     private UserEntity user;
 
-    @OneToMany(mappedBy = "institute")
-    private List<CourseEntity> courses = new ArrayList<>();
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dob;
 
-    @OneToMany(mappedBy = "institute")
-    private List<TeacherVacancyEntity> teacherVacancies = new ArrayList<>();
+    @OneToMany(mappedBy = "teacher")
+    private List<ApplicationEntity> applications = new ArrayList<>();
 
-    @OneToMany(mappedBy = "institute")
-    private List<InstituteTeacherEntity> teachers = new ArrayList<>();
+    @OneToMany(mappedBy = "teacher")
+    private List<InstituteTeacherEntity> institutes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "institute")
-    private List<AnnouncementEntity> announcements = new ArrayList<>();
+    @OneToMany(mappedBy = "teacher")
+    private List<ModuleEntity> modules = new ArrayList<>();
 }
