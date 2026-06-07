@@ -11,15 +11,15 @@
  *
  */
 
-package edu.vinu.controller;
+package edu.vinu.domain.teacher_vacancy.controller;
 
-import edu.vinu.enums.TeacherVacancyStatus;
-import edu.vinu.model.TeacherVacancy;
-import edu.vinu.request.CreateVacancyRequest;
-import edu.vinu.request.UpdateVacancyRequest;
+import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
+import edu.vinu.domain.teacher_vacancy.dto.TeacherVacancy;
+import edu.vinu.domain.teacher_vacancy.request.CreateVacancyRequest;
+import edu.vinu.domain.teacher_vacancy.request.UpdateVacancyRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
-import edu.vinu.service.common.TeacherVacancyService;
+import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.enums;
+package edu.vinu.domain.teacher_vacancy.enums;
 
 public enum TeacherVacancyStatus {
     OPEN,

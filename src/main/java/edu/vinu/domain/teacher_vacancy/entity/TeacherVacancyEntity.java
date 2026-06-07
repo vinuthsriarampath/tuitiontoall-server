@@ -11,10 +11,11 @@
  *
  */
 
-package edu.vinu.entity;
+package edu.vinu.domain.teacher_vacancy.entity;
 
 import edu.vinu.domain.institute.entity.InstituteEntity;
-import edu.vinu.enums.TeacherVacancyStatus;
+import edu.vinu.entity.ApplicationEntity;
+import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

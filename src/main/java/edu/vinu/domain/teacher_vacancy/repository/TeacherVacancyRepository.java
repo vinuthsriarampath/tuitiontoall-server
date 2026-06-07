@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.domain.teacher_vacancy.repository;
 
-import edu.vinu.entity.TeacherVacancyEntity;
-import edu.vinu.enums.TeacherVacancyStatus;
+import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
+import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

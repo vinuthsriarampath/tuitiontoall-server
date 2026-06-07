@@ -11,11 +11,9 @@
  *
  */
 
-package edu.vinu.request;
+package edu.vinu.domain.teacher_vacancy.request;
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,17 +23,10 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateVacancyRequest {
-    @NotBlank(message = "Title is required!")
+public class UpdateVacancyRequest {
     private String title;
-
-    @NotNull(message = "required Years of Experience is mandatory!")
     private Integer requiredExperienceYears;
-
-    @NotBlank(message = "Job description is mandatory!")
     private String jobDescription;
-
-    @NotNull(message = "Vacancy closing date is mandatory!")
-    @Future(message = "Vacancy closing date must be in the future!")
+    private TeacherVacancyStatus status;
     private LocalDateTime vacancyClosingDate;
 }

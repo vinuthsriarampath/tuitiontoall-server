@@ -11,13 +11,13 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.teacher_vacancy.service;
 
-import edu.vinu.entity.TeacherVacancyEntity;
-import edu.vinu.enums.TeacherVacancyStatus;
-import edu.vinu.model.TeacherVacancy;
-import edu.vinu.request.CreateVacancyRequest;
-import edu.vinu.request.UpdateVacancyRequest;
+import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
+import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
+import edu.vinu.domain.teacher_vacancy.dto.TeacherVacancy;
+import edu.vinu.domain.teacher_vacancy.request.CreateVacancyRequest;
+import edu.vinu.domain.teacher_vacancy.request.UpdateVacancyRequest;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

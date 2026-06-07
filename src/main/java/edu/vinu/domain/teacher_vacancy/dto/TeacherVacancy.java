@@ -11,9 +11,9 @@
  *
  */
 
-package edu.vinu.model;
+package edu.vinu.domain.teacher_vacancy.dto;
 
-import edu.vinu.enums.TeacherVacancyStatus;
+import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
