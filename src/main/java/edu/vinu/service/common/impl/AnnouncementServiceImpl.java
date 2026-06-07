@@ -13,6 +13,7 @@
 
 package edu.vinu.service.common.impl;
 
+import edu.vinu.domain.user.service.UserService;
 import edu.vinu.entity.AnnouncementEntity;
 import edu.vinu.entity.BatchEntity;
 import edu.vinu.entity.CourseEntity;

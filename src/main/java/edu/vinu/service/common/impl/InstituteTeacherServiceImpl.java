@@ -30,7 +30,7 @@ import edu.vinu.response.*;
 import edu.vinu.service.common.ApplicationService;
 import edu.vinu.service.common.InstituteService;
 import edu.vinu.service.common.InstituteTeacherService;
-import edu.vinu.service.common.UserService;
+import edu.vinu.domain.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -19,7 +19,7 @@ import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.domain.user.repository.UserRepository;
 import edu.vinu.service.common.FileService;
 import edu.vinu.service.common.ProfileFileService;
-import edu.vinu.service.common.UserService;
+import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;

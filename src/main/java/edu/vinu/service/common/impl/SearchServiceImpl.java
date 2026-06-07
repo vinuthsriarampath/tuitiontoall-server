@@ -16,7 +16,7 @@ package edu.vinu.service.common.impl;
 import edu.vinu.model.user_models.User;
 import edu.vinu.response.SearchResponse;
 import edu.vinu.service.common.SearchService;
-import edu.vinu.service.common.UserService;
+import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

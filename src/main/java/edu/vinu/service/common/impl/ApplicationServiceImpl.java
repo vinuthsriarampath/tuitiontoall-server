@@ -28,7 +28,7 @@ import edu.vinu.domain.user.response.TeacherUserResponse;
 import edu.vinu.service.common.ApplicationService;
 import edu.vinu.service.common.EmailService;
 import edu.vinu.service.common.TeacherVacancyService;
-import edu.vinu.service.common.UserService;
+import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

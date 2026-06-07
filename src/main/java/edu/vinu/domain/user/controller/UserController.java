@@ -21,7 +21,7 @@ import edu.vinu.domain.user.request.update.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.StudentDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.TeacherDetailsUpdateRequest;
 import edu.vinu.common.response.ApiResponse;
-import edu.vinu.service.common.UserService;
+import edu.vinu.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
