@@ -13,23 +13,24 @@
 
 package edu.vinu.domain.institute.service.impl;
 
+import edu.vinu.domain.application.response.ApplicationRejectionResponse;
+import edu.vinu.domain.application.response.ApplicationSelectionResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherStatsResponse;
 import edu.vinu.domain.user.response.TeacherBasicResponse;
 import edu.vinu.domain.user.response.TeacherUserResponse;
-import edu.vinu.entity.ApplicationEntity;
+import edu.vinu.domain.application.entity.ApplicationEntity;
 import edu.vinu.domain.institute.entity.InstituteTeacherEntity;
 import edu.vinu.domain.user.entity.TeacherEntity;
 import edu.vinu.domain.user.entity.UserEntity;
-import edu.vinu.enums.ApplicationStatus;
+import edu.vinu.domain.application.enums.ApplicationStatus;
 import edu.vinu.domain.institute.enums.InstituteTeacherStatus;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.domain.institute.repository.InstituteTeacherRepository;
 import edu.vinu.domain.institute.repository.projection.InstituteTeacherStatsProjection;
-import edu.vinu.request.ApplicationRejectionRequest;
-import edu.vinu.request.ApplicationSelectionRequest;
-import edu.vinu.response.*;
-import edu.vinu.service.common.ApplicationService;
+import edu.vinu.domain.application.request.ApplicationRejectionRequest;
+import edu.vinu.domain.application.request.ApplicationSelectionRequest;
+import edu.vinu.domain.application.service.ApplicationService;
 import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.institute.service.InstituteTeacherService;
 import edu.vinu.domain.user.service.UserService;

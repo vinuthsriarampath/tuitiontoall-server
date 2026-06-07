@@ -14,7 +14,7 @@
 package edu.vinu.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import edu.vinu.entity.ApplicationEntity;
+import edu.vinu.domain.application.entity.ApplicationEntity;
 import edu.vinu.domain.institute.entity.InstituteTeacherEntity;
 import edu.vinu.domain.module.entity.ModuleEntity;
 import jakarta.persistence.*;

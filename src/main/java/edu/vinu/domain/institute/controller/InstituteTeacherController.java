@@ -15,12 +15,13 @@ package edu.vinu.domain.institute.controller;
 
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.application.response.ApplicationRejectionResponse;
+import edu.vinu.domain.application.response.ApplicationSelectionResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherStatsResponse;
 import edu.vinu.domain.user.response.TeacherBasicResponse;
-import edu.vinu.request.ApplicationRejectionRequest;
-import edu.vinu.request.ApplicationSelectionRequest;
-import edu.vinu.response.*;
+import edu.vinu.domain.application.request.ApplicationRejectionRequest;
+import edu.vinu.domain.application.request.ApplicationSelectionRequest;
 import edu.vinu.domain.institute.service.InstituteTeacherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

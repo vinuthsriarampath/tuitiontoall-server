@@ -13,13 +13,14 @@
 
 package edu.vinu.domain.institute.service;
 
+import edu.vinu.domain.application.response.ApplicationRejectionResponse;
+import edu.vinu.domain.application.response.ApplicationSelectionResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherStatsResponse;
 import edu.vinu.domain.user.entity.TeacherEntity;
 import edu.vinu.domain.user.response.TeacherBasicResponse;
-import edu.vinu.request.ApplicationRejectionRequest;
-import edu.vinu.request.ApplicationSelectionRequest;
-import edu.vinu.response.*;
+import edu.vinu.domain.application.request.ApplicationRejectionRequest;
+import edu.vinu.domain.application.request.ApplicationSelectionRequest;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
