@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.response.module;
+package edu.vinu.domain.module.response;
 
 import edu.vinu.domain.module.enums.ModuleStatus;
 import edu.vinu.response.BatchBasicResponse;
