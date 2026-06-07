@@ -14,7 +14,7 @@
 package edu.vinu.response.chapter;
 
 import edu.vinu.enums.ChapterStatus;
-import edu.vinu.response.module.ModuleResponse;
+import edu.vinu.domain.module.response.ModuleResponse;
 import lombok.Builder;
 
 import java.time.LocalDateTime;

@@ -18,7 +18,7 @@ import edu.vinu.request.BatchCreateRequest;
 import edu.vinu.request.BatchUpdateRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
-import edu.vinu.response.module.ModuleResponse;
+import edu.vinu.domain.module.response.ModuleResponse;
 import edu.vinu.service.common.BatchModuleService;
 import edu.vinu.service.common.BatchService;
 import jakarta.validation.Valid;

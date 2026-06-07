@@ -17,7 +17,7 @@ import edu.vinu.entity.ChapterEntity;
 import edu.vinu.repository.projection.ChapterDetailedProjection;
 import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;
-import edu.vinu.response.module.ModuleResponse;
+import edu.vinu.domain.module.response.ModuleResponse;
 import org.springframework.stereotype.Component;
 
 @Component

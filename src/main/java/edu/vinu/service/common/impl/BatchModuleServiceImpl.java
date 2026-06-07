@@ -14,7 +14,7 @@
 package edu.vinu.service.common.impl;
 
 import edu.vinu.domain.module.request.ModuleFilterRequest;
-import edu.vinu.response.module.ModuleResponse;
+import edu.vinu.domain.module.response.ModuleResponse;
 import edu.vinu.service.common.BatchModuleService;
 import edu.vinu.service.common.ModuleService;
 import lombok.RequiredArgsConstructor;

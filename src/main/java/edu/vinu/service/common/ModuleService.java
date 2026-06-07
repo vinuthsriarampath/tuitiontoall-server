@@ -22,8 +22,8 @@ import edu.vinu.domain.module.request.update.ModuleTeacherUpdateRequest;
 import edu.vinu.request.assignments.module_assignments.ModuleAssignmentFilterRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
-import edu.vinu.response.module.ModuleDetailedResponse;
-import edu.vinu.response.module.ModuleResponse;
+import edu.vinu.domain.module.response.ModuleDetailedResponse;
+import edu.vinu.domain.module.response.ModuleResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

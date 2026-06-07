@@ -13,7 +13,7 @@
 
 package edu.vinu.service.common;
 
-import edu.vinu.response.module.ModuleResponse;
+import edu.vinu.domain.module.response.ModuleResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
