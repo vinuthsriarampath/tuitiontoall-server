@@ -13,7 +13,7 @@
 
 package edu.vinu.request.assignments;
 
-import edu.vinu.request.grading_range.GradingRangeUpdateRequest;
+import edu.vinu.domain.grading.request.GradingRangeUpdateRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 

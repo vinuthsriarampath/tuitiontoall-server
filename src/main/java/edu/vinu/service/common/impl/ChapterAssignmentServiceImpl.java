@@ -25,7 +25,7 @@ import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentCreateR
 import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
 import edu.vinu.service.common.*;
 import edu.vinu.validator.AssignmentValidator;
-import edu.vinu.validator.GradingRangeValidator;
+import edu.vinu.domain.grading.validator.GradingRangeValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

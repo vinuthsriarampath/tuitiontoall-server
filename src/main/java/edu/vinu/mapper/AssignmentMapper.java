@@ -18,7 +18,7 @@ import edu.vinu.request.assignments.AssignmentCreateRequest;
 import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentCreateRequest;
 import edu.vinu.request.assignments.module_assignments.ModuleAssignmentCreateRequest;
 import edu.vinu.response.assignments.AssignmentDetailedResponse;
-import edu.vinu.response.grading_range.GradingRageResponse;
+import edu.vinu.domain.grading.response.GradingRageResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

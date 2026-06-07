@@ -13,7 +13,7 @@
 
 package edu.vinu.response.assignments;
 
-import edu.vinu.response.grading_range.GradingRageResponse;
+import edu.vinu.domain.grading.response.GradingRageResponse;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
