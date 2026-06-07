@@ -11,12 +11,10 @@
  *
  */
 
-package edu.vinu.response.grading_range;
+package edu.vinu.domain.grading.request;
 
-import edu.vinu.request.grading_range.GradingRangeRequest;
-
-public record IndexedGradingRange(
-        int originalIndex,
-        GradingRangeRequest range
-) {
+public interface GradingRangeRequest {
+    Integer minMarks();
+    Integer maxMarks();
+    String desiredGrade();
 }

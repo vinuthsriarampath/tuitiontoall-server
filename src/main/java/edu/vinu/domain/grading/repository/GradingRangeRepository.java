@@ -11,16 +11,15 @@
  *
  */
 
-package edu.vinu.response.grading_range;
+package edu.vinu.domain.grading.repository;
 
-import lombok.Builder;
+import edu.vinu.domain.grading.entity.GradingRangeEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@Builder
-public record GradingRageResponse (
-        Long id,
-        Long assignmentId,
-        Integer minMarks,
-        Integer maxMarks,
-        String desiredGrade,
-        String description
-){ }
+import java.util.List;
+
+@Repository
+public interface GradingRangeRepository extends JpaRepository<GradingRangeEntity,Long> {
+    List<GradingRangeEntity> findAllByAssignmentId(Long id);
+}

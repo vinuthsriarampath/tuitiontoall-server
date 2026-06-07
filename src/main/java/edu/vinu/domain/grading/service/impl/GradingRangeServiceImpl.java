@@ -11,19 +11,19 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.grading.service.impl;
 
+import edu.vinu.domain.grading.service.GradingRangeService;
 import edu.vinu.entity.AssignmentEntity;
-import edu.vinu.entity.GradingRangeEntity;
+import edu.vinu.domain.grading.entity.GradingRangeEntity;
 import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
-import edu.vinu.mapper.GradingRangeMapper;
-import edu.vinu.repository.GradingRangeRepository;
-import edu.vinu.request.grading_range.GradingRangeCreateRequest;
-import edu.vinu.request.grading_range.GradingRangeUpdateRequest;
-import edu.vinu.response.grading_range.GradingRageResponse;
-import edu.vinu.service.common.GradingRangeService;
+import edu.vinu.domain.grading.mapper.GradingRangeMapper;
+import edu.vinu.domain.grading.repository.GradingRangeRepository;
+import edu.vinu.domain.grading.request.GradingRangeCreateRequest;
+import edu.vinu.domain.grading.request.GradingRangeUpdateRequest;
+import edu.vinu.domain.grading.response.GradingRageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;

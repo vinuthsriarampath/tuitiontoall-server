@@ -11,10 +11,16 @@
  *
  */
 
-package edu.vinu.request.grading_range;
+package edu.vinu.domain.grading.response;
 
-public interface GradingRangeRequest {
-    Integer minMarks();
-    Integer maxMarks();
-    String desiredGrade();
-}
+import lombok.Builder;
+
+@Builder
+public record GradingRageResponse (
+        Long id,
+        Long assignmentId,
+        Integer minMarks,
+        Integer maxMarks,
+        String desiredGrade,
+        String description
+){ }

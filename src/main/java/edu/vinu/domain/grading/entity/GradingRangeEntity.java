@@ -11,8 +11,9 @@
  *
  */
 
-package edu.vinu.entity;
+package edu.vinu.domain.grading.entity;
 
+import edu.vinu.entity.AssignmentEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

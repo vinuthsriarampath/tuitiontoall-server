@@ -11,12 +11,12 @@
  *
  */
 
-package edu.vinu.validator;
+package edu.vinu.domain.grading.validator;
 
 import edu.vinu.common.exception.custom.InvalidInputException;
-import edu.vinu.request.grading_range.GradingRangeRequest;
+import edu.vinu.domain.grading.request.GradingRangeRequest;
 import edu.vinu.common.dto.FieldError;
-import edu.vinu.response.grading_range.IndexedGradingRange;
+import edu.vinu.domain.grading.response.IndexedGradingRange;
 
 import java.util.*;
 import java.util.stream.IntStream;

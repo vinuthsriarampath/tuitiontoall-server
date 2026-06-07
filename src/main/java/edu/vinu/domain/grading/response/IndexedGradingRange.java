@@ -11,15 +11,12 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.domain.grading.response;
 
-import edu.vinu.entity.GradingRangeEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import edu.vinu.domain.grading.request.GradingRangeRequest;
 
-import java.util.List;
-
-@Repository
-public interface GradingRangeRepository extends JpaRepository<GradingRangeEntity,Long> {
-    List<GradingRangeEntity> findAllByAssignmentId(Long id);
+public record IndexedGradingRange(
+        int originalIndex,
+        GradingRangeRequest range
+) {
 }

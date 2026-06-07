@@ -11,13 +11,13 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.grading.service;
 
 import edu.vinu.entity.AssignmentEntity;
-import edu.vinu.entity.GradingRangeEntity;
-import edu.vinu.request.grading_range.GradingRangeCreateRequest;
-import edu.vinu.request.grading_range.GradingRangeUpdateRequest;
-import edu.vinu.response.grading_range.GradingRageResponse;
+import edu.vinu.domain.grading.entity.GradingRangeEntity;
+import edu.vinu.domain.grading.request.GradingRangeCreateRequest;
+import edu.vinu.domain.grading.request.GradingRangeUpdateRequest;
+import edu.vinu.domain.grading.response.GradingRageResponse;
 
 import java.util.List;
 
