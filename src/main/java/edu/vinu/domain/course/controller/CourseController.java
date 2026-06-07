@@ -14,9 +14,9 @@
 package edu.vinu.domain.course.controller;
 
 import edu.vinu.domain.course.dto.Course;
-import edu.vinu.request.CourseCreateRequest;
-import edu.vinu.request.CourseFilterRequest;
-import edu.vinu.request.CourseUpdateRequest;
+import edu.vinu.domain.course.request.CourseCreateRequest;
+import edu.vinu.domain.course.request.CourseFilterRequest;
+import edu.vinu.domain.course.request.CourseUpdateRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.service.common.CourseService;
 import jakarta.validation.Valid;
