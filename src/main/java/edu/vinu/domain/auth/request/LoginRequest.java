@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.domain.request;
+package edu.vinu.domain.auth.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
