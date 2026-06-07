@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.enums;
+package edu.vinu.domain.institute.enums;
 
 public enum InstituteTeacherStatus {
     ACTIVE,
