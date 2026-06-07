@@ -13,8 +13,8 @@
 
 package edu.vinu.request;
 
-import edu.vinu.enums.BatchEnrollmentStatus;
-import edu.vinu.enums.BatchStatus;
+import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
+import edu.vinu.domain.batch.enums.BatchStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;

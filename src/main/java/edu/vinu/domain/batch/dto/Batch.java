@@ -13,8 +13,8 @@
 
 package edu.vinu.domain.batch.dto;
 
-import edu.vinu.enums.BatchEnrollmentStatus;
-import edu.vinu.enums.BatchStatus;
+import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
+import edu.vinu.domain.batch.enums.BatchStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

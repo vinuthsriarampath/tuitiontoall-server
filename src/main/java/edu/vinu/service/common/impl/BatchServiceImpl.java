@@ -15,8 +15,8 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.course.entity.CourseEntity;
-import edu.vinu.enums.BatchEnrollmentStatus;
-import edu.vinu.enums.BatchStatus;
+import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
+import edu.vinu.domain.batch.enums.BatchStatus;
 import edu.vinu.domain.course.events.CourseCreatedEvent;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;

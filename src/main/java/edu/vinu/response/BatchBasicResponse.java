@@ -13,8 +13,8 @@
 
 package edu.vinu.response;
 
-import edu.vinu.enums.BatchEnrollmentStatus;
-import edu.vinu.enums.BatchStatus;
+import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
+import edu.vinu.domain.batch.enums.BatchStatus;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
