@@ -26,7 +26,7 @@ import edu.vinu.request.BatchCreateRequest;
 import edu.vinu.request.BatchUpdateRequest;
 import edu.vinu.common.dto.FieldError;
 import edu.vinu.service.common.BatchService;
-import edu.vinu.service.common.CourseService;
+import edu.vinu.domain.course.service.CourseService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

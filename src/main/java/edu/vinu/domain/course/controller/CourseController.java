@@ -18,7 +18,7 @@ import edu.vinu.domain.course.request.CourseCreateRequest;
 import edu.vinu.domain.course.request.CourseFilterRequest;
 import edu.vinu.domain.course.request.CourseUpdateRequest;
 import edu.vinu.common.response.ApiResponse;
-import edu.vinu.service.common.CourseService;
+import edu.vinu.domain.course.service.CourseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
