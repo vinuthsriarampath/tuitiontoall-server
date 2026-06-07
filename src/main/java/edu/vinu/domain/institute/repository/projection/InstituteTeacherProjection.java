@@ -13,7 +13,7 @@
 
 package edu.vinu.domain.institute.repository.projection;
 
-import edu.vinu.enums.InstituteTeacherStatus;
+import edu.vinu.domain.institute.enums.InstituteTeacherStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -14,7 +14,7 @@
 package edu.vinu.domain.institute.entity;
 
 import edu.vinu.domain.user.entity.TeacherEntity;
-import edu.vinu.enums.InstituteTeacherStatus;
+import edu.vinu.domain.institute.enums.InstituteTeacherStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
