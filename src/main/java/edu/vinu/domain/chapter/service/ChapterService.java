@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.chapter.service;
 
 import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentFilterRequest;

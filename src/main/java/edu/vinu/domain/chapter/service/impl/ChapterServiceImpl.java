@@ -11,8 +11,9 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.chapter.service.impl;
 
+import edu.vinu.domain.chapter.service.ChapterService;
 import edu.vinu.domain.module.service.ModuleService;
 import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.domain.module.entity.ModuleEntity;

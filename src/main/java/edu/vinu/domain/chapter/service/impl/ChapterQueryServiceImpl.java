@@ -11,12 +11,12 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.chapter.service.impl;
 
 import edu.vinu.domain.chapter.mapper.ChapterMapper;
 import edu.vinu.domain.chapter.repository.ChapterRepository;
 import edu.vinu.domain.chapter.response.ChapterResponse;
-import edu.vinu.service.common.ChapterQueryService;
+import edu.vinu.domain.chapter.service.ChapterQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
