@@ -16,7 +16,7 @@ package edu.vinu.service.common;
 import edu.vinu.entity.CourseEntity;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
-import edu.vinu.model.Course;
+import edu.vinu.domain.course.dto.Course;
 import edu.vinu.request.CourseCreateRequest;
 import edu.vinu.request.CourseFilterRequest;
 import edu.vinu.request.CourseUpdateRequest;

@@ -13,7 +13,7 @@
 
 package edu.vinu.domain.course.controller;
 
-import edu.vinu.model.Course;
+import edu.vinu.domain.course.dto.Course;
 import edu.vinu.request.CourseCreateRequest;
 import edu.vinu.request.CourseFilterRequest;
 import edu.vinu.request.CourseUpdateRequest;
