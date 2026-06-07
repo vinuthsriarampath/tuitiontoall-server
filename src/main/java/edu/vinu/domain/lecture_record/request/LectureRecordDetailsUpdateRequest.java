@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.request.lecture_record;
+package edu.vinu.domain.lecture_record.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

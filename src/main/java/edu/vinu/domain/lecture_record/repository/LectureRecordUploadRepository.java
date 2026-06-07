@@ -11,21 +11,10 @@
  *
  */
 
-package edu.vinu.response.lecture_record;
+package edu.vinu.domain.lecture_record.repository;
 
-import lombok.Builder;
+import edu.vinu.domain.lecture_record.entity.LectureRecordUploadEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
-@Builder
-public record LectureRecordResponse(
-        Long id,
-        String title,
-        String url,
-        Long chapterId,
-        LocalDate recordedDate,
-        LocalDateTime createdDate,
-        LocalDateTime lastModifiedDate
-) {
+public interface LectureRecordUploadRepository extends JpaRepository<LectureRecordUploadEntity, String> {
 }

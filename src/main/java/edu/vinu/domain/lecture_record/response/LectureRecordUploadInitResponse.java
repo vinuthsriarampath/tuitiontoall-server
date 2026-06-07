@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.response.lecture_record;
+package edu.vinu.domain.lecture_record.response;
 
 import lombok.Builder;
 

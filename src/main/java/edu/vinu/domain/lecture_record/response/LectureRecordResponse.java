@@ -11,12 +11,21 @@
  *
  */
 
-package edu.vinu.response.lecture_record;
+package edu.vinu.domain.lecture_record.response;
 
 import lombok.Builder;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Builder
-public record LectureRecordChunkUploadResponse(
-        Integer uploadedChunkIndex
+public record LectureRecordResponse(
+        Long id,
+        String title,
+        String url,
+        Long chapterId,
+        LocalDate recordedDate,
+        LocalDateTime createdDate,
+        LocalDateTime lastModifiedDate
 ) {
 }

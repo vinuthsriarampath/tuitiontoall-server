@@ -11,15 +11,15 @@
  *
  */
 
-package edu.vinu.controller;
+package edu.vinu.domain.lecture_record.controller;
 
-import edu.vinu.request.lecture_record.LectureRecordDetailsUpdateRequest;
-import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
+import edu.vinu.domain.lecture_record.request.LectureRecordDetailsUpdateRequest;
+import edu.vinu.domain.lecture_record.request.LectureRecordUploadInitRequest;
 import edu.vinu.common.response.ApiResponse;
-import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
-import edu.vinu.response.lecture_record.LectureRecordResponse;
-import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
-import edu.vinu.service.common.LectureRecordService;
+import edu.vinu.domain.lecture_record.response.LectureRecordChunkUploadResponse;
+import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
+import edu.vinu.domain.lecture_record.response.LectureRecordUploadInitResponse;
+import edu.vinu.domain.lecture_record.service.LectureRecordService;
 import edu.vinu.service.common.VideoStreamTokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

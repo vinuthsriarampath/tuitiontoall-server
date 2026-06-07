@@ -11,25 +11,25 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.lecture_record.service.impl;
 
 import edu.vinu.domain.chapter.entity.ChapterEntity;
-import edu.vinu.entity.LectureRecordEntity;
-import edu.vinu.entity.LectureRecordUploadEntity;
+import edu.vinu.domain.lecture_record.entity.LectureRecordEntity;
+import edu.vinu.domain.lecture_record.entity.LectureRecordUploadEntity;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
-import edu.vinu.mapper.LectureRecordMapper;
-import edu.vinu.repository.LectureRecordRepository;
-import edu.vinu.repository.LectureRecordUploadRepository;
-import edu.vinu.request.lecture_record.LectureRecordDetailsUpdateRequest;
-import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
+import edu.vinu.domain.lecture_record.mapper.LectureRecordMapper;
+import edu.vinu.domain.lecture_record.repository.LectureRecordRepository;
+import edu.vinu.domain.lecture_record.repository.LectureRecordUploadRepository;
+import edu.vinu.domain.lecture_record.request.LectureRecordDetailsUpdateRequest;
+import edu.vinu.domain.lecture_record.request.LectureRecordUploadInitRequest;
 import edu.vinu.common.dto.FieldError;
-import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
-import edu.vinu.response.lecture_record.LectureRecordResponse;
-import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
+import edu.vinu.domain.lecture_record.response.LectureRecordChunkUploadResponse;
+import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
+import edu.vinu.domain.lecture_record.response.LectureRecordUploadInitResponse;
 import edu.vinu.domain.chapter.service.ChapterService;
+import edu.vinu.domain.lecture_record.service.LectureRecordService;
 import edu.vinu.service.common.FileService;
-import edu.vinu.service.common.LectureRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;

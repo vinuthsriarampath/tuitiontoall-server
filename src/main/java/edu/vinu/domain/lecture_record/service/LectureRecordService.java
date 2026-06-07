@@ -11,19 +11,16 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.lecture_record.service;
 
-import edu.vinu.request.lecture_record.LectureRecordDetailsUpdateRequest;
-import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
-import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
-import edu.vinu.response.lecture_record.LectureRecordResponse;
-import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
-import org.springframework.core.io.Resource;
+import edu.vinu.domain.lecture_record.request.LectureRecordDetailsUpdateRequest;
+import edu.vinu.domain.lecture_record.request.LectureRecordUploadInitRequest;
+import edu.vinu.domain.lecture_record.response.LectureRecordChunkUploadResponse;
+import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
+import edu.vinu.domain.lecture_record.response.LectureRecordUploadInitResponse;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 public interface LectureRecordService {
     LectureRecordUploadInitResponse initializeUpload(LectureRecordUploadInitRequest request);

@@ -11,10 +11,17 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.domain.lecture_record.repository;
 
-import edu.vinu.entity.LectureRecordUploadEntity;
+import edu.vinu.domain.lecture_record.entity.LectureRecordEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface LectureRecordUploadRepository extends JpaRepository<LectureRecordUploadEntity, String> {
+import java.util.List;
+
+@Repository
+public interface LectureRecordRepository extends JpaRepository<LectureRecordEntity,Long> {
+    List<LectureRecordEntity> findAllByChapterId(Long id);
+
+    boolean existsByTitleAndChapterId(String title, Long chapterId);
 }

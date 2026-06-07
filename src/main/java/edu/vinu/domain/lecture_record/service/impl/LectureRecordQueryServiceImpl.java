@@ -11,12 +11,12 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.lecture_record.service.impl;
 
-import edu.vinu.mapper.LectureRecordMapper;
-import edu.vinu.repository.LectureRecordRepository;
-import edu.vinu.response.lecture_record.LectureRecordResponse;
-import edu.vinu.service.common.LectureRecordQueryService;
+import edu.vinu.domain.lecture_record.mapper.LectureRecordMapper;
+import edu.vinu.domain.lecture_record.repository.LectureRecordRepository;
+import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
+import edu.vinu.domain.lecture_record.service.LectureRecordQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

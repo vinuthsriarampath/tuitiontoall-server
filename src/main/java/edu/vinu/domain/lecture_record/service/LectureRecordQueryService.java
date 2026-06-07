@@ -11,9 +11,9 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.lecture_record.service;
 
-import edu.vinu.response.lecture_record.LectureRecordResponse;
+import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
 
 import java.util.List;
 

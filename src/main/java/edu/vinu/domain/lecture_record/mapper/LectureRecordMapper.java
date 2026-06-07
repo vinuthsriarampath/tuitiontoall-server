@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.mapper;
+package edu.vinu.domain.lecture_record.mapper;
 
-import edu.vinu.entity.LectureRecordEntity;
-import edu.vinu.response.lecture_record.LectureRecordResponse;
+import edu.vinu.domain.lecture_record.entity.LectureRecordEntity;
+import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
 import org.springframework.stereotype.Component;
 
 @Component
