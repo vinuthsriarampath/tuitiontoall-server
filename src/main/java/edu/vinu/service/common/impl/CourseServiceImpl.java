@@ -20,7 +20,7 @@ import edu.vinu.domain.course.events.CourseCreatedEvent;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.domain.course.dto.Course;
-import edu.vinu.repository.CourseRepository;
+import edu.vinu.domain.course.repository.CourseRepository;
 import edu.vinu.domain.institute.repository.InstituteRepository;
 import edu.vinu.request.CourseCreateRequest;
 import edu.vinu.request.CourseFilterRequest;

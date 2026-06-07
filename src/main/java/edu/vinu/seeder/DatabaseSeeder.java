@@ -21,7 +21,7 @@ import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.UserAlreadyExistException;
 import edu.vinu.domain.institute.dto.Institute;
-import edu.vinu.repository.CourseRepository;
+import edu.vinu.domain.course.repository.CourseRepository;
 import edu.vinu.domain.user.repository.RoleRepository;
 import edu.vinu.domain.user.repository.UserRepository;
 import edu.vinu.domain.user.request.registration.InstituteRegistrationRequest;
