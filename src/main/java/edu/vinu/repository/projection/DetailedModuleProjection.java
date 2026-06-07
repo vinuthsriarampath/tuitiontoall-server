@@ -15,7 +15,7 @@ package edu.vinu.repository.projection;
 
 import edu.vinu.enums.BatchEnrollmentStatus;
 import edu.vinu.enums.BatchStatus;
-import edu.vinu.enums.ModuleStatus;
+import edu.vinu.domain.module.enums.ModuleStatus;
 
 import java.time.LocalDateTime;
 

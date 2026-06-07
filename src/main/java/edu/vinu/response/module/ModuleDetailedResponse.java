@@ -13,7 +13,7 @@
 
 package edu.vinu.response.module;
 
-import edu.vinu.enums.ModuleStatus;
+import edu.vinu.domain.module.enums.ModuleStatus;
 import edu.vinu.response.BatchBasicResponse;
 import edu.vinu.domain.user.response.TeacherBasicResponse;
 import lombok.Builder;
