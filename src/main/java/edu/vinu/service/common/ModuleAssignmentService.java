@@ -13,5 +13,11 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.request.assignments.module_assignments.ModuleAssignmentCreateRequest;
+import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
+import jakarta.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
+
 public interface ModuleAssignmentService {
+    ModuleAssignmentResponse createModuleAssignment(ModuleAssignmentCreateRequest request, MultipartFile file);
 }
