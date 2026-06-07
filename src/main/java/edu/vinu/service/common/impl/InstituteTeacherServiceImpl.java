@@ -13,6 +13,8 @@
 
 package edu.vinu.service.common.impl;
 
+import edu.vinu.domain.user.response.TeacherBasicResponse;
+import edu.vinu.domain.user.response.TeacherUserResponse;
 import edu.vinu.entity.ApplicationEntity;
 import edu.vinu.entity.InstituteTeacherEntity;
 import edu.vinu.domain.user.entity.TeacherEntity;

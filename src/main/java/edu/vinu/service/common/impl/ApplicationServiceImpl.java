@@ -24,7 +24,7 @@ import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.model.Application;
 import edu.vinu.repository.ApplicationRepository;
 import edu.vinu.response.ApplicationDetailsResponse;
-import edu.vinu.response.TeacherUserResponse;
+import edu.vinu.domain.user.response.TeacherUserResponse;
 import edu.vinu.service.common.ApplicationService;
 import edu.vinu.service.common.EmailService;
 import edu.vinu.service.common.TeacherVacancyService;

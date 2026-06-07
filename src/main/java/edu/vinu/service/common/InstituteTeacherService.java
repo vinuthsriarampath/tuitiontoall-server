@@ -14,6 +14,7 @@
 package edu.vinu.service.common;
 
 import edu.vinu.domain.user.entity.TeacherEntity;
+import edu.vinu.domain.user.response.TeacherBasicResponse;
 import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
 import edu.vinu.response.*;
