@@ -14,7 +14,7 @@
 package edu.vinu.domain.application.repository;
 
 import edu.vinu.domain.application.entity.ApplicationEntity;
-import edu.vinu.repository.projection.ApplicationProjection;
+import edu.vinu.domain.application.repository.projection.ApplicationProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
