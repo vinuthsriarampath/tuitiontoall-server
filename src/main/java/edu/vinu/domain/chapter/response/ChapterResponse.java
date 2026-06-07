@@ -11,23 +11,21 @@
  *
  */
 
-package edu.vinu.response.chapter;
+package edu.vinu.domain.chapter.response;
 
 import edu.vinu.domain.chapter.enums.ChapterStatus;
-import edu.vinu.domain.module.response.ModuleResponse;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
 
 @Builder
-public record ChapterDetailedResponse(
+public record ChapterResponse(
         Long id,
+        Long moduleId,
         String title,
-        ChapterStatus status,
         int chapterOrder,
-        ModuleResponse module,
+        ChapterStatus status,
         LocalDateTime createdDate,
         LocalDateTime lastModifiedDate
 ) {
-
 }
