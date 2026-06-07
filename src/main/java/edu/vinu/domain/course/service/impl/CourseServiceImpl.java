@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -11,9 +11,10 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.course.service.impl;
 
 import edu.vinu.domain.course.entity.CourseEntity;
+import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.course.enums.CourseStatus;
 import edu.vinu.domain.course.events.CourseCreatedEvent;
@@ -25,7 +26,6 @@ import edu.vinu.domain.institute.repository.InstituteRepository;
 import edu.vinu.domain.course.request.CourseCreateRequest;
 import edu.vinu.domain.course.request.CourseFilterRequest;
 import edu.vinu.domain.course.request.CourseUpdateRequest;
-import edu.vinu.service.common.CourseService;
 import edu.vinu.service.common.FileService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
