@@ -15,9 +15,9 @@ package edu.vinu.domain.user.service;
 
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.model.user_models.Institute;
-import edu.vinu.model.user_models.Student;
-import edu.vinu.model.user_models.Teacher;
-import edu.vinu.model.user_models.User;
+import edu.vinu.domain.user.dto.Student;
+import edu.vinu.domain.user.dto.Teacher;
+import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.user.request.update.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.StudentDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.TeacherDetailsUpdateRequest;

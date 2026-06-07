@@ -13,7 +13,7 @@
 
 package edu.vinu.domain.auth.response;
 
-import edu.vinu.model.user_models.User;
+import edu.vinu.domain.user.dto.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

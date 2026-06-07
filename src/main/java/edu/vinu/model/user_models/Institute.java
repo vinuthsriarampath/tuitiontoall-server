@@ -13,7 +13,7 @@
 
 package edu.vinu.model.user_models;
 
-import edu.vinu.model.RoleDetails;
+import edu.vinu.domain.user.dto.RoleDetails;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

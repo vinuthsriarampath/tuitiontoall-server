@@ -14,8 +14,8 @@
 package edu.vinu.domain.auth.controller;
 
 import edu.vinu.model.user_models.Institute;
-import edu.vinu.model.user_models.Student;
-import edu.vinu.model.user_models.Teacher;
+import edu.vinu.domain.user.dto.Student;
+import edu.vinu.domain.user.dto.Teacher;
 import edu.vinu.domain.auth.request.LoginRequest;
 import edu.vinu.domain.user.request.registration.InstituteRegistrationRequest;
 import edu.vinu.domain.user.request.registration.StudentRegistrationRequest;
