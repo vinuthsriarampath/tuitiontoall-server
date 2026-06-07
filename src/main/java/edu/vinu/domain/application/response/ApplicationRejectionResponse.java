@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.response;
+package edu.vinu.domain.application.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ApplicationSelectionResponse {
+public class ApplicationRejectionResponse {
     private List<Long> successApplicationIds;
     private List<Long> failedApplicationIds;
 }

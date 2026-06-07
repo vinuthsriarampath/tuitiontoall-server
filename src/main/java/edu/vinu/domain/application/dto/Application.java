@@ -11,21 +11,25 @@
  *
  */
 
-package edu.vinu.request;
+package edu.vinu.domain.application.dto;
 
-import jakarta.validation.constraints.NotEmpty;
+import edu.vinu.domain.application.enums.ApplicationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ApplicationRejectionRequest {
-    @NotEmpty(message = "At least one application should reject")
-    private List<Long> applicationIds;
+public class Application {
+    private Long id;
+    private Long teacherId;
+    private Long teacherVacancyId;
+    private ApplicationStatus status;
+    private LocalDateTime appliedDate;
+    private LocalDateTime last_modified_date;
 }

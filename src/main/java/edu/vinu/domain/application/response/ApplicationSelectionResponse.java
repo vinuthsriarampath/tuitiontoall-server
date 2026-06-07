@@ -11,25 +11,20 @@
  *
  */
 
-package edu.vinu.model;
+package edu.vinu.domain.application.response;
 
-import edu.vinu.enums.ApplicationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Application {
-    private Long id;
-    private Long teacherId;
-    private Long teacherVacancyId;
-    private ApplicationStatus status;
-    private LocalDateTime appliedDate;
-    private LocalDateTime last_modified_date;
+public class ApplicationSelectionResponse {
+    private List<Long> successApplicationIds;
+    private List<Long> failedApplicationIds;
 }

@@ -11,11 +11,11 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.application.service;
 
-import edu.vinu.entity.ApplicationEntity;
-import edu.vinu.model.Application;
-import edu.vinu.response.ApplicationDetailsResponse;
+import edu.vinu.domain.application.entity.ApplicationEntity;
+import edu.vinu.domain.application.dto.Application;
+import edu.vinu.domain.application.response.ApplicationDetailsResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

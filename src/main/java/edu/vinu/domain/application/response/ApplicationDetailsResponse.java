@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.response;
+package edu.vinu.domain.application.response;
 
 import edu.vinu.domain.user.response.TeacherUserResponse;
-import edu.vinu.enums.ApplicationStatus;
+import edu.vinu.domain.application.enums.ApplicationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

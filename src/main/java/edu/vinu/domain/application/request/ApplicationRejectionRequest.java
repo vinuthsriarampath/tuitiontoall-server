@@ -11,8 +11,9 @@
  *
  */
 
-package edu.vinu.response;
+package edu.vinu.domain.application.request;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +25,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ApplicationRejectionResponse {
-    private List<Long> successApplicationIds;
-    private List<Long> failedApplicationIds;
+public class ApplicationRejectionRequest {
+    @NotEmpty(message = "At least one application should reject")
+    private List<Long> applicationIds;
 }

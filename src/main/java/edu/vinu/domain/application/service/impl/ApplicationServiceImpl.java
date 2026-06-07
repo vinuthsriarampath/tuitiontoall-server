@@ -11,21 +11,21 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.application.service.impl;
 
-import edu.vinu.entity.ApplicationEntity;
+import edu.vinu.domain.application.entity.ApplicationEntity;
+import edu.vinu.domain.application.service.ApplicationService;
 import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
 import edu.vinu.domain.user.entity.UserEntity;
-import edu.vinu.enums.ApplicationStatus;
+import edu.vinu.domain.application.enums.ApplicationStatus;
 import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import edu.vinu.common.exception.custom.BadRequestException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
-import edu.vinu.model.Application;
-import edu.vinu.repository.ApplicationRepository;
-import edu.vinu.response.ApplicationDetailsResponse;
+import edu.vinu.domain.application.dto.Application;
+import edu.vinu.domain.application.repository.ApplicationRepository;
+import edu.vinu.domain.application.response.ApplicationDetailsResponse;
 import edu.vinu.domain.user.response.TeacherUserResponse;
-import edu.vinu.service.common.ApplicationService;
 import edu.vinu.service.common.EmailService;
 import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
 import edu.vinu.domain.user.service.UserService;
