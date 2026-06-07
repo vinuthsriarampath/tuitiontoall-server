@@ -11,8 +11,9 @@
  *
  */
 
-package edu.vinu.domain.user.request.update;
+package edu.vinu.domain.institute.request;
 
+import edu.vinu.domain.user.request.update.UserDetailsUpdateRequest;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +24,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class InstituteDetailsUpdateRequest extends UserDetailsUpdateRequest{
+public class InstituteDetailsUpdateRequest extends UserDetailsUpdateRequest {
     @NotBlank(message = "Institute Name cannot be blank")
     private String instituteName;
 }
