@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.controller;
+package edu.vinu.domain.profile_file.controller;
 
 import edu.vinu.common.response.ApiResponse;
-import edu.vinu.service.common.ProfileFileService;
+import edu.vinu.domain.profile_file.service.ProfileFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

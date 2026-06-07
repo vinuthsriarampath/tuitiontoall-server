@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -11,14 +11,14 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.profile_file.service.impl;
 
+import edu.vinu.domain.profile_file.service.ProfileFileService;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.domain.user.repository.UserRepository;
 import edu.vinu.service.common.FileService;
-import edu.vinu.service.common.ProfileFileService;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
