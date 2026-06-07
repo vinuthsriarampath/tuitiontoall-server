@@ -11,24 +11,27 @@
  *
  */
 
-package edu.vinu.response;
+package edu.vinu.domain.user.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TeacherBasicResponse {
-    private Long id;
-    private String firstName;
-    private String lastName;
+public class TeacherUserResponse {
+    private Long userId;
     private String email;
     private String contact;
     private String dp;
-    private String userslug;
+    private String address;
+
+    private String firstName;
+    private String lastName;
+    private LocalDate dob;
 }
