@@ -19,14 +19,14 @@ import edu.vinu.domain.chapter.request.ChapterCreateRequest;
 import edu.vinu.domain.chapter.request.ChapterDetailsUpdateRequest;
 import edu.vinu.domain.chapter.request.ChapterReorderRequest;
 import edu.vinu.request.resource.ResourceFilterRequest;
-import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
+import edu.vinu.domain.schedule_lecture.request.ScheduleLectureFilterRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
 import edu.vinu.domain.chapter.response.ChapterDetailedResponse;
 import edu.vinu.domain.chapter.response.ChapterResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.response.resource.ResourceResponse;
-import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
+import edu.vinu.domain.schedule_lecture.response.ScheduleLectureResponse;
 
 import java.util.List;
 
