@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.response;
+package edu.vinu.domain.batch.response;
 
 import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
 import edu.vinu.domain.batch.enums.BatchStatus;
