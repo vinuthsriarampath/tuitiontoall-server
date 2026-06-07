@@ -36,7 +36,7 @@ import edu.vinu.domain.user.response.TeacherBasicResponse;
 import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.domain.module.response.ModuleDetailedResponse;
 import edu.vinu.domain.module.response.ModuleResponse;
-import edu.vinu.service.common.BatchService;
+import edu.vinu.domain.batch.service.BatchService;
 import edu.vinu.domain.institute.service.InstituteTeacherService;
 import edu.vinu.service.common.ModuleAssignmentQueryService;
 import edu.vinu.common.util.SortUtil;

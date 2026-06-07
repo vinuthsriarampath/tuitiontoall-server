@@ -20,7 +20,7 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.module.response.ModuleResponse;
 import edu.vinu.domain.module.service.ModuleQueryService;
-import edu.vinu.service.common.BatchService;
+import edu.vinu.domain.batch.service.BatchService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
