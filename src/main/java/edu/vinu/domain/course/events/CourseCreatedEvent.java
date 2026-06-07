@@ -13,6 +13,6 @@
 
 package edu.vinu.domain.course.events;
 
-import edu.vinu.entity.CourseEntity;
+import edu.vinu.domain.course.entity.CourseEntity;
 
 public record CourseCreatedEvent(CourseEntity course) { }

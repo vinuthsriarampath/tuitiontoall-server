@@ -13,6 +13,7 @@
 
 package edu.vinu.entity;
 
+import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.enums.BatchEnrollmentStatus;
 import edu.vinu.enums.BatchStatus;
 import jakarta.persistence.*;

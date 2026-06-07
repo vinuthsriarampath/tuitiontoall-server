@@ -14,7 +14,7 @@
 package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.BatchEntity;
-import edu.vinu.entity.CourseEntity;
+import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.enums.BatchEnrollmentStatus;
 import edu.vinu.enums.BatchStatus;
 import edu.vinu.domain.course.events.CourseCreatedEvent;
