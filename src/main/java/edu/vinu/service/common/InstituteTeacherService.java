@@ -13,6 +13,8 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.domain.institute.response.InstituteTeacherResponse;
+import edu.vinu.domain.institute.response.InstituteTeacherStatsResponse;
 import edu.vinu.domain.user.entity.TeacherEntity;
 import edu.vinu.domain.user.response.TeacherBasicResponse;
 import edu.vinu.request.ApplicationRejectionRequest;
@@ -27,7 +29,7 @@ public interface InstituteTeacherService {
 
     ApplicationRejectionResponse rejectApplications(ApplicationRejectionRequest request);
 
-    Page<InstituteTeacherResponse> getAllTeachersByInstitute(int page,int size, String direction, String sortBy);
+    Page<InstituteTeacherResponse> getAllTeachersByInstitute(int page, int size, String direction, String sortBy);
 
     InstituteTeacherStatsResponse getInstituteTeacherStats();
 
