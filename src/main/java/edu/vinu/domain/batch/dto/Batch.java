@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.model;
+package edu.vinu.domain.batch.dto;
 
 import edu.vinu.enums.BatchEnrollmentStatus;
 import edu.vinu.enums.BatchStatus;
