@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.controller;
+package edu.vinu.domain.module.controller;
 
 import edu.vinu.request.assignments.module_assignments.ModuleAssignmentFilterRequest;
 import edu.vinu.request.modules.*;
