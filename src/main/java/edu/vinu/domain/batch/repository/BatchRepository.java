@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.domain.batch.repository;
 
 import edu.vinu.domain.batch.entity.BatchEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
