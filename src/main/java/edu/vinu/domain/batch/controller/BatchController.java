@@ -19,7 +19,7 @@ import edu.vinu.domain.batch.request.BatchUpdateRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.module.response.ModuleResponse;
-import edu.vinu.service.common.BatchModuleService;
+import edu.vinu.domain.module.service.ModuleQueryService;
 import edu.vinu.service.common.BatchService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BatchController {
     private final BatchService batchService;
-    private final BatchModuleService batchModuleService;
+    private final ModuleQueryService moduleQueryService;
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping("/create")
@@ -74,7 +74,7 @@ public class BatchController {
             @RequestParam(value = "direction",defaultValue = "desc") String direction,
             @RequestParam(value = "sortBy",defaultValue = "created_date") List<String> sortBy
     ){
-        Page<ModuleResponse> pageData = batchModuleService.getAllModulesByBatch(id,page,size,direction,sortBy);
+        Page<ModuleResponse> pageData = moduleQueryService.getAllModulesByBatch(id,page,size,direction,sortBy);
         PaginatedApiResponse<ModuleResponse> response = PaginatedApiResponse.<ModuleResponse>builder()
                 .message("Modules related to batch fetched successfully!")
                 .data(pageData.getContent())
