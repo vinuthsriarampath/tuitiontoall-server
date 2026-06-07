@@ -1,0 +1,59 @@
+/*
+ * Copyright (c) 2026 vinuth sri arampath
+ *
+ * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
+ * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
+ * without prior written permission is strictly prohibited.
+ *
+ * Portions of this code may be generated with AI and modified by vinuth sri arampath
+ * All rights reserved.
+ *
+ *
+ */
+
+package edu.vinu.domain.user.entity;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import edu.vinu.domain.application.entity.ApplicationEntity;
+import edu.vinu.domain.institute.entity.InstituteTeacherEntity;
+import edu.vinu.domain.module.entity.ModuleEntity;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "teacher")
+public class TeacherEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String firstName;
+    private String lastName;
+
+    @OneToOne
+    @JoinColumn(name = "user_id",nullable = false,unique = true)
+    private UserEntity user;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate dob;
+
+    @OneToMany(mappedBy = "teacher")
+    private List<ApplicationEntity> applications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "teacher")
+    private List<InstituteTeacherEntity> institutes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "teacher")
+    private List<ModuleEntity> modules = new ArrayList<>();
+}

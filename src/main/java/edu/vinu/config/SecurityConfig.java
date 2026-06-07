@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -13,8 +13,8 @@
 
 package edu.vinu.config;
 
-import edu.vinu.filter.JwtFilter;
-import edu.vinu.service.auth.impl.UserDetailsServiceImpl;
+import edu.vinu.config.filter.JwtFilter;
+import edu.vinu.domain.auth.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

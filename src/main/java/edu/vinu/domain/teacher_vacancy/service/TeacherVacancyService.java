@@ -1,0 +1,45 @@
+/*
+ * Copyright (c) 2026 vinuth sri arampath
+ *
+ * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
+ * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
+ * without prior written permission is strictly prohibited.
+ *
+ * Portions of this code may be generated with AI and modified by vinuth sri arampath
+ * All rights reserved.
+ *
+ *
+ */
+
+package edu.vinu.domain.teacher_vacancy.service;
+
+import edu.vinu.domain.teacher_vacancy.dto.TeacherVacancy;
+import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
+import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
+import edu.vinu.domain.teacher_vacancy.request.CreateVacancyRequest;
+import edu.vinu.domain.teacher_vacancy.request.UpdateVacancyRequest;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+
+public interface TeacherVacancyService {
+    TeacherVacancy createVacancy(CreateVacancyRequest request);
+
+    TeacherVacancy updateVacancy(Long vacancyId, UpdateVacancyRequest request);
+
+    void deleteVacancy(Long vacancyId);
+
+    TeacherVacancy getById(Long vacancyId);
+
+    Page<TeacherVacancy> getAllByInstitute(int page, int size, String sortBy, String direction);
+
+    List<TeacherVacancy> getAllByInstituteIdAndStatus(Long instituteId, String  status);
+
+    TeacherVacancyEntity getEntityById(Long id);
+
+    boolean existsById(Long id);
+
+    boolean isVacancyOpened(Long id);
+
+    TeacherVacancy getByVacancyIdAndStatus(Long vacancyId, TeacherVacancyStatus status);
+}
