@@ -13,7 +13,7 @@
 
 package edu.vinu.service.common;
 
-import edu.vinu.entity.ModuleEntity;
+import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.request.assignments.module_assignments.ModuleAssignmentFilterRequest;
 import edu.vinu.request.modules.*;
 import edu.vinu.common.response.PaginatedApiResponse;

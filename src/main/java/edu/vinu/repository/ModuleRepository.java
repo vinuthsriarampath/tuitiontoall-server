@@ -13,7 +13,7 @@
 
 package edu.vinu.repository;
 
-import edu.vinu.entity.ModuleEntity;
+import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.repository.projection.DetailedModuleProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

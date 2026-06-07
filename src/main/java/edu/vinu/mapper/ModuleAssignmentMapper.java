@@ -13,10 +13,9 @@
 
 package edu.vinu.mapper;
 
+import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.entity.*;
-import edu.vinu.repository.projection.ChapterAssignmentProjection;
 import edu.vinu.repository.projection.ModuleAssignmentProjection;
-import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
 import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
 
 public class ModuleAssignmentMapper {

@@ -13,6 +13,7 @@
 
 package edu.vinu.entity;
 
+import edu.vinu.domain.module.entity.ModuleEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

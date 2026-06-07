@@ -14,7 +14,7 @@
 package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.ChapterEntity;
-import edu.vinu.entity.ModuleEntity;
+import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.mapper.ChapterMapper;
