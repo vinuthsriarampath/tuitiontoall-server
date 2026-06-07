@@ -27,7 +27,7 @@ import edu.vinu.common.dto.FieldError;
 import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;
-import edu.vinu.service.common.ChapterService;
+import edu.vinu.domain.chapter.service.ChapterService;
 import edu.vinu.service.common.FileService;
 import edu.vinu.service.common.LectureRecordService;
 import lombok.RequiredArgsConstructor;

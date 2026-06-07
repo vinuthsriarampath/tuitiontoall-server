@@ -27,7 +27,7 @@ import edu.vinu.domain.chapter.response.ChapterResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.response.resource.ResourceResponse;
 import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
-import edu.vinu.service.common.ChapterService;
+import edu.vinu.domain.chapter.service.ChapterService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

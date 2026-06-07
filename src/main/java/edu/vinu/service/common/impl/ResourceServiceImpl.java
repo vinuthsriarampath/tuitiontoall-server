@@ -25,7 +25,7 @@ import edu.vinu.request.resource.ResourceInitRequest;
 import edu.vinu.response.resource.ResourceChunkUploadResponse;
 import edu.vinu.response.resource.ResourceInitResponse;
 import edu.vinu.response.resource.ResourceResponse;
-import edu.vinu.service.common.ChapterService;
+import edu.vinu.domain.chapter.service.ChapterService;
 import edu.vinu.service.common.FileService;
 import edu.vinu.service.common.ResourceService;
 import lombok.RequiredArgsConstructor;

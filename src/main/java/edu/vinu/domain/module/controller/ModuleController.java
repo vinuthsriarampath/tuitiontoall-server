@@ -25,7 +25,7 @@ import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.domain.chapter.response.ChapterResponse;
 import edu.vinu.domain.module.response.ModuleDetailedResponse;
 import edu.vinu.domain.module.response.ModuleResponse;
-import edu.vinu.service.common.ChapterQueryService;
+import edu.vinu.domain.chapter.service.ChapterQueryService;
 import edu.vinu.domain.module.service.ModuleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
