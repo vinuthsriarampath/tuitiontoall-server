@@ -13,14 +13,31 @@
 
 package edu.vinu.controller;
 
+import edu.vinu.request.assignments.module_assignments.ModuleAssignmentCreateRequest;
+import edu.vinu.response.ApiResponse;
+import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.service.common.ModuleAssignmentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v2/module-assignments")
 @RequiredArgsConstructor
 public class ModuleAssignmentController {
     private final ModuleAssignmentService moduleAssignmentService;
+
+    @PreAuthorize("hasAuthority('institute')")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse> createModuleAssignment(@RequestPart("file") MultipartFile file, @Valid @RequestPart("request") ModuleAssignmentCreateRequest request){
+        ModuleAssignmentResponse response = moduleAssignmentService.createModuleAssignment(request,file);
+        return ResponseEntity.ok(new ApiResponse("Module assignment created successfully", response));
+    }
 }
