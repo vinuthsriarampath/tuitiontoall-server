@@ -16,7 +16,7 @@ package edu.vinu.common.exception;
 import edu.vinu.common.exception.custom.*;
 import edu.vinu.response.ApiResponse;
 import edu.vinu.response.ErrorResponse;
-import edu.vinu.response.FieldError;
+import edu.vinu.common.dto.FieldError;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;

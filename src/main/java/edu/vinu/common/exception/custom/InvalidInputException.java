@@ -13,7 +13,7 @@
 
 package edu.vinu.common.exception.custom;
 
-import edu.vinu.response.FieldError;
+import edu.vinu.common.dto.FieldError;
 import lombok.Getter;
 
 import java.util.ArrayList;

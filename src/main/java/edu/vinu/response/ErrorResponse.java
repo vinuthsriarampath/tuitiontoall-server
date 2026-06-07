@@ -1,5 +1,6 @@
 package edu.vinu.response;
 
+import edu.vinu.common.dto.FieldError;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

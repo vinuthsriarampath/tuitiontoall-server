@@ -23,7 +23,7 @@ import edu.vinu.repository.LectureRecordRepository;
 import edu.vinu.repository.LectureRecordUploadRepository;
 import edu.vinu.request.lecture_record.LectureRecordDetailsUpdateRequest;
 import edu.vinu.request.lecture_record.LectureRecordUploadInitRequest;
-import edu.vinu.response.FieldError;
+import edu.vinu.common.dto.FieldError;
 import edu.vinu.response.lecture_record.LectureRecordChunkUploadResponse;
 import edu.vinu.response.lecture_record.LectureRecordResponse;
 import edu.vinu.response.lecture_record.LectureRecordUploadInitResponse;

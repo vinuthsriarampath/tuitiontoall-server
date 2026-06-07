@@ -22,7 +22,7 @@ import edu.vinu.mapper.ScheduleLectureMapper;
 import edu.vinu.repository.ScheduleLectureRepository;
 import edu.vinu.request.schedule_lecture.ScheduleLectureCreateRequest;
 import edu.vinu.request.schedule_lecture.ScheduleLectureUpdateRequest;
-import edu.vinu.response.FieldError;
+import edu.vinu.common.dto.FieldError;
 import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
 import edu.vinu.service.common.ChapterService;
 import edu.vinu.service.common.ScheduleLectureService;

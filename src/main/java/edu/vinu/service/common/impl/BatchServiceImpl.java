@@ -24,7 +24,7 @@ import edu.vinu.model.Batch;
 import edu.vinu.repository.BatchRepository;
 import edu.vinu.request.BatchCreateRequest;
 import edu.vinu.request.BatchUpdateRequest;
-import edu.vinu.response.FieldError;
+import edu.vinu.common.dto.FieldError;
 import edu.vinu.service.common.BatchService;
 import edu.vinu.service.common.CourseService;
 import jakarta.transaction.Transactional;
