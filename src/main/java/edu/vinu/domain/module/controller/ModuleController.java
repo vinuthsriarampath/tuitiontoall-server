@@ -13,8 +13,12 @@
 
 package edu.vinu.domain.module.controller;
 
+import edu.vinu.domain.module.request.*;
+import edu.vinu.domain.module.request.create.ModuleCreateRequest;
+import edu.vinu.domain.module.request.update.ModuleBatchUpdateRequest;
+import edu.vinu.domain.module.request.update.ModuleNameUpdateRequest;
+import edu.vinu.domain.module.request.update.ModuleTeacherUpdateRequest;
 import edu.vinu.request.assignments.module_assignments.ModuleAssignmentFilterRequest;
-import edu.vinu.request.modules.*;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;

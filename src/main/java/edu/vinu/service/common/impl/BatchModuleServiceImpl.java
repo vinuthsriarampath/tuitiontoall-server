@@ -13,7 +13,7 @@
 
 package edu.vinu.service.common.impl;
 
-import edu.vinu.request.modules.ModuleFilterRequest;
+import edu.vinu.domain.module.request.ModuleFilterRequest;
 import edu.vinu.response.module.ModuleResponse;
 import edu.vinu.service.common.BatchModuleService;
 import edu.vinu.service.common.ModuleService;

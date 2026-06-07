@@ -14,8 +14,12 @@
 package edu.vinu.service.common;
 
 import edu.vinu.domain.module.entity.ModuleEntity;
+import edu.vinu.domain.module.request.*;
+import edu.vinu.domain.module.request.create.ModuleCreateRequest;
+import edu.vinu.domain.module.request.update.ModuleBatchUpdateRequest;
+import edu.vinu.domain.module.request.update.ModuleNameUpdateRequest;
+import edu.vinu.domain.module.request.update.ModuleTeacherUpdateRequest;
 import edu.vinu.request.assignments.module_assignments.ModuleAssignmentFilterRequest;
-import edu.vinu.request.modules.*;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.response.module.ModuleDetailedResponse;
@@ -27,7 +31,7 @@ import java.util.List;
 public interface ModuleService {
     ModuleResponse createModule(ModuleCreateRequest request);
 
-    ModuleResponse updateModuleName(Long id,ModuleNameUpdateRequest request);
+    ModuleResponse updateModuleName(Long id, ModuleNameUpdateRequest request);
 
     ModuleResponse publishModule(Long id);
 
