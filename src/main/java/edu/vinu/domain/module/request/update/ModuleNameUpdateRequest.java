@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.request.modules;
+package edu.vinu.domain.module.request.update;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

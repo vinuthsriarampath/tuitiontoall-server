@@ -11,12 +11,13 @@
  *
  */
 
-package edu.vinu.request.modules;
+package edu.vinu.domain.module.request.update;
 
 import jakarta.validation.constraints.NotNull;
 
-public record ModuleBatchUpdateRequest(
-        @NotNull(message = "Batch ID is mandatory!")
-        Long batchId
+
+public record ModuleTeacherUpdateRequest(
+        @NotNull(message = "Teacher ID is mandatory!")
+        Long teacherId
 ) {
 }

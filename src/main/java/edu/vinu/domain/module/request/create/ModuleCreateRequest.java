@@ -11,9 +11,9 @@
  *
  */
 
-package edu.vinu.request.modules;
+package edu.vinu.domain.module.request.create;
 
-import edu.vinu.request.modules.enums.ModuleCreateStatus;
+import edu.vinu.domain.module.request.create.enums.ModuleCreateStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

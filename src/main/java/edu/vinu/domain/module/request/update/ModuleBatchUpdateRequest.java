@@ -11,10 +11,12 @@
  *
  */
 
-package edu.vinu.request.modules.enums;
+package edu.vinu.domain.module.request.update;
 
-public enum ModuleCreateStatus {
-    DRAFT,
-    PUBLISHED,
-    LOCKED
+import jakarta.validation.constraints.NotNull;
+
+public record ModuleBatchUpdateRequest(
+        @NotNull(message = "Batch ID is mandatory!")
+        Long batchId
+) {
 }

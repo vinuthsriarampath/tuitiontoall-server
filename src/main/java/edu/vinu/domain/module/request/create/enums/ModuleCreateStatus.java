@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.request.modules;
+package edu.vinu.domain.module.request.create.enums;
 
-public record ModuleFilterRequest(
-        String status,
-        Long batchId
-) {
+public enum ModuleCreateStatus {
+    DRAFT,
+    PUBLISHED,
+    LOCKED
 }
