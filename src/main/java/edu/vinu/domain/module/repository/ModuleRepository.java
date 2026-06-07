@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.domain.module.repository;
 
 import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.repository.projection.DetailedModuleProjection;
