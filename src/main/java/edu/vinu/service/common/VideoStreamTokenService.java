@@ -13,7 +13,7 @@
 
 package edu.vinu.service.common;
 
-import edu.vinu.entity.VideoStreamTokenEntity;
+import edu.vinu.domain.lecture_record.entity.VideoStreamTokenEntity;
 
 public interface VideoStreamTokenService {
     String generateToken(String fileName);

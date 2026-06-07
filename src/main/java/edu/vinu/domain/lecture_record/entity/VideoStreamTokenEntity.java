@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.entity;
+package edu.vinu.domain.lecture_record.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
