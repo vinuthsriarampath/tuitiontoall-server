@@ -11,9 +11,10 @@
  *
  */
 
-package edu.vinu.enums;
+package edu.vinu.domain.batch.enums;
 
-public enum BatchEnrollmentStatus {
-    OPEN,
-    CLOSED
+public enum BatchStatus {
+    PREPARATION,
+    ONGOING,
+    COMPLETED
 }
