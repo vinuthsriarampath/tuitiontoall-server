@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.enums;
+package edu.vinu.domain.chapter.enums;
 
 public enum ChapterStatus {
     DRAFT,
