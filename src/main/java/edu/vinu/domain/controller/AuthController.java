@@ -16,7 +16,7 @@ package edu.vinu.domain.controller;
 import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
-import edu.vinu.request.UserLoginRequest;
+import edu.vinu.domain.request.LoginRequest;
 import edu.vinu.request.registration.InstituteRegistrationRequest;
 import edu.vinu.request.registration.StudentRegistrationRequest;
 import edu.vinu.request.registration.TeacherRegistrationRequest;
@@ -83,8 +83,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody UserLoginRequest userLoginRequest){
-        AuthResponse authResponse = userAuthService.verify(userLoginRequest);
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest){
+        AuthResponse authResponse = userAuthService.verify(loginRequest);
         return ResponseEntity.ok(authResponse);
     }
 
