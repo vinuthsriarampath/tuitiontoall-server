@@ -20,7 +20,7 @@ import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
 import edu.vinu.request.chapter.ChapterReorderRequest;
 import edu.vinu.request.resource.ResourceFilterRequest;
 import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
-import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
 import edu.vinu.response.chapter.ChapterDetailedResponse;
 import edu.vinu.response.chapter.ChapterResponse;

@@ -14,7 +14,7 @@
 package edu.vinu.service.common;
 
 import edu.vinu.request.resource.ResourceFilterRequest;
-import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.resource.ResourceResponse;
 
 import java.util.List;

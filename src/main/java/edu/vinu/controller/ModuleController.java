@@ -16,7 +16,7 @@ package edu.vinu.controller;
 import edu.vinu.request.assignments.module_assignments.ModuleAssignmentFilterRequest;
 import edu.vinu.request.modules.*;
 import edu.vinu.common.response.ApiResponse;
-import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.response.module.ModuleDetailedResponse;

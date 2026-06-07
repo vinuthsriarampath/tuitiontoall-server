@@ -26,7 +26,7 @@ import edu.vinu.request.modules.*;
 import edu.vinu.request.modules.enums.ModuleCreateStatus;
 import edu.vinu.response.BatchBasicResponse;
 import edu.vinu.common.dto.FieldError;
-import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.TeacherBasicResponse;
 import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.response.module.ModuleDetailedResponse;

@@ -16,7 +16,7 @@ package edu.vinu.service.common;
 import edu.vinu.entity.ModuleEntity;
 import edu.vinu.request.assignments.module_assignments.ModuleAssignmentFilterRequest;
 import edu.vinu.request.modules.*;
-import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.response.module.ModuleDetailedResponse;
 import edu.vinu.response.module.ModuleResponse;

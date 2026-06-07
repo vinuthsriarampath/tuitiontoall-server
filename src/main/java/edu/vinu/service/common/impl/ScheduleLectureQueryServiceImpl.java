@@ -16,7 +16,7 @@ package edu.vinu.service.common.impl;
 import edu.vinu.mapper.ScheduleLectureMapper;
 import edu.vinu.repository.ScheduleLectureRepository;
 import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
-import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
 import edu.vinu.service.common.ScheduleLectureQueryService;
 import edu.vinu.common.util.SortUtil;

@@ -16,7 +16,7 @@ package edu.vinu.service.common.impl;
 import edu.vinu.mapper.ResourceMapper;
 import edu.vinu.repository.ResourceRepository;
 import edu.vinu.request.resource.ResourceFilterRequest;
-import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.resource.ResourceResponse;
 import edu.vinu.service.common.ResourceQueryService;
 import edu.vinu.common.util.SortUtil;

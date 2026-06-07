@@ -14,7 +14,7 @@
 package edu.vinu.service.common;
 
 import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentFilterRequest;
-import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
 
 import java.util.List;

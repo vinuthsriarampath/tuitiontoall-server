@@ -14,7 +14,7 @@
 package edu.vinu.service.common;
 
 import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
-import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
 
 import java.util.List;
