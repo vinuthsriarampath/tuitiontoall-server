@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.request;
+package edu.vinu.domain.batch.request;
 
 import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
 import edu.vinu.domain.batch.enums.BatchStatus;
@@ -28,7 +28,7 @@ import java.time.LocalTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BatchUpdateRequest {
+public class BatchCreateRequest {
     @NotNull(message = "Title is mandatory")
     @PositiveOrZero(message = "Course ID must be greater than or equal to zero")
     private Long courseId;
