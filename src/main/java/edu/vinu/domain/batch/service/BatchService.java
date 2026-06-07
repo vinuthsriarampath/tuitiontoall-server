@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.batch.service;
 
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.course.entity.CourseEntity;
