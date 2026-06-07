@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.service.auth.impl;
+package edu.vinu.domain.auth.service.impl;
 
 import edu.vinu.common.exception.custom.*;
 import edu.vinu.entity.RoleEntity;
@@ -30,7 +30,8 @@ import edu.vinu.request.registration.StudentRegistrationRequest;
 import edu.vinu.request.registration.TeacherRegistrationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.auth.response.AuthResponse;
-import edu.vinu.service.auth.UserAuthenticationService;
+import edu.vinu.domain.auth.service.UserAuthenticationService;
+import edu.vinu.service.auth.impl.JwtService;
 import edu.vinu.service.common.EmailService;
 import edu.vinu.service.common.UserService;
 import edu.vinu.validator.UserValidator;
