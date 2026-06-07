@@ -14,14 +14,14 @@
 package edu.vinu.domain.chapter.service;
 
 import edu.vinu.domain.chapter.entity.ChapterEntity;
-import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentFilterRequest;
+import edu.vinu.domain.assignment.request.chapter_assignments.ChapterAssignmentFilterRequest;
 import edu.vinu.domain.chapter.request.ChapterCreateRequest;
 import edu.vinu.domain.chapter.request.ChapterDetailsUpdateRequest;
 import edu.vinu.domain.chapter.request.ChapterReorderRequest;
 import edu.vinu.domain.resource.request.ResourceFilterRequest;
 import edu.vinu.domain.schedule_lecture.request.ScheduleLectureFilterRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
-import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
+import edu.vinu.domain.assignment.response.chapter_assignment.ChapterAssignmentResponse;
 import edu.vinu.domain.chapter.response.ChapterDetailedResponse;
 import edu.vinu.domain.chapter.response.ChapterResponse;
 import edu.vinu.domain.lecture_record.response.LectureRecordResponse;

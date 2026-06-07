@@ -14,7 +14,7 @@
 package edu.vinu.domain.grading.service.impl;
 
 import edu.vinu.domain.grading.service.GradingRangeService;
-import edu.vinu.entity.AssignmentEntity;
+import edu.vinu.domain.assignment.entity.AssignmentEntity;
 import edu.vinu.domain.grading.entity.GradingRangeEntity;
 import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.common.exception.custom.InvalidInputException;

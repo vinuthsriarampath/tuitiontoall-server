@@ -13,7 +13,7 @@
 
 package edu.vinu.domain.grading.mapper;
 
-import edu.vinu.entity.AssignmentEntity;
+import edu.vinu.domain.assignment.entity.AssignmentEntity;
 import edu.vinu.domain.grading.entity.GradingRangeEntity;
 import edu.vinu.domain.grading.request.GradingRangeCreateRequest;
 import edu.vinu.domain.grading.response.GradingRageResponse;
