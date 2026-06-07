@@ -29,7 +29,7 @@ import edu.vinu.request.registration.InstituteRegistrationRequest;
 import edu.vinu.request.registration.StudentRegistrationRequest;
 import edu.vinu.request.registration.TeacherRegistrationRequest;
 import edu.vinu.common.response.ApiResponse;
-import edu.vinu.response.AuthResponse;
+import edu.vinu.domain.auth.response.AuthResponse;
 import edu.vinu.service.auth.UserAuthenticationService;
 import edu.vinu.service.common.EmailService;
 import edu.vinu.service.common.UserService;

@@ -21,7 +21,7 @@ import edu.vinu.request.registration.InstituteRegistrationRequest;
 import edu.vinu.request.registration.StudentRegistrationRequest;
 import edu.vinu.request.registration.TeacherRegistrationRequest;
 import edu.vinu.common.response.ApiResponse;
-import edu.vinu.response.AuthResponse;
+import edu.vinu.domain.auth.response.AuthResponse;
 
 public interface UserAuthenticationService {
     Institute registerInstitute(InstituteRegistrationRequest user);
