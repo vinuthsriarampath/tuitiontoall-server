@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.enums;
+package edu.vinu.domain.module.enums;
 
 public enum ModuleStatus {
     DRAFT,
