@@ -14,6 +14,7 @@
 package edu.vinu.domain.chapter.service.impl;
 
 import edu.vinu.domain.chapter.service.ChapterService;
+import edu.vinu.domain.lecture_record.service.LectureRecordQueryService;
 import edu.vinu.domain.module.service.ModuleService;
 import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.domain.module.entity.ModuleEntity;
@@ -34,7 +35,7 @@ import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
 import edu.vinu.domain.chapter.response.ChapterDetailedResponse;
 import edu.vinu.domain.chapter.response.ChapterResponse;
-import edu.vinu.response.lecture_record.LectureRecordResponse;
+import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
 import edu.vinu.response.resource.ResourceResponse;
 import edu.vinu.domain.schedule_lecture.response.ScheduleLectureResponse;
 import edu.vinu.service.common.*;

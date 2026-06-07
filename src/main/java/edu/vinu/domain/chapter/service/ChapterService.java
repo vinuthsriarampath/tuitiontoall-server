@@ -24,7 +24,7 @@ import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.response.assignments.chapter_assignment.ChapterAssignmentResponse;
 import edu.vinu.domain.chapter.response.ChapterDetailedResponse;
 import edu.vinu.domain.chapter.response.ChapterResponse;
-import edu.vinu.response.lecture_record.LectureRecordResponse;
+import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
 import edu.vinu.response.resource.ResourceResponse;
 import edu.vinu.domain.schedule_lecture.response.ScheduleLectureResponse;
 
