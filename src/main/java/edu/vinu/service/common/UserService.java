@@ -18,9 +18,9 @@ import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
-import edu.vinu.request.update_user_details.InstituteDetailsUpdateRequest;
-import edu.vinu.request.update_user_details.StudentDetailsUpdateRequest;
-import edu.vinu.request.update_user_details.TeacherDetailsUpdateRequest;
+import edu.vinu.domain.user.request.update.InstituteDetailsUpdateRequest;
+import edu.vinu.domain.user.request.update.StudentDetailsUpdateRequest;
+import edu.vinu.domain.user.request.update.TeacherDetailsUpdateRequest;
 import jakarta.validation.Valid;
 
 import java.util.List;
