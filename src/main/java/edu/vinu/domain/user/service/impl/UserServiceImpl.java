@@ -28,7 +28,7 @@ import edu.vinu.domain.institute.repository.InstituteRepository;
 import edu.vinu.domain.user.repository.StudentRepository;
 import edu.vinu.domain.user.repository.TeacherRepository;
 import edu.vinu.domain.user.repository.UserRepository;
-import edu.vinu.domain.user.request.update.InstituteDetailsUpdateRequest;
+import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.StudentDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.TeacherDetailsUpdateRequest;
 import edu.vinu.domain.user.service.UserService;
