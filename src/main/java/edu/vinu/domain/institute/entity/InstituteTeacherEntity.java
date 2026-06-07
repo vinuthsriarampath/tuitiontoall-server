@@ -11,9 +11,8 @@
  *
  */
 
-package edu.vinu.entity;
+package edu.vinu.domain.institute.entity;
 
-import edu.vinu.domain.user.entity.InstituteEntity;
 import edu.vinu.domain.user.entity.TeacherEntity;
 import edu.vinu.enums.InstituteTeacherStatus;
 import jakarta.persistence.*;

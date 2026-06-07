@@ -11,11 +11,11 @@
  *
  */
 
-package edu.vinu.domain.user.entity;
+package edu.vinu.domain.institute.entity;
 
+import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.entity.AnnouncementEntity;
 import edu.vinu.entity.CourseEntity;
-import edu.vinu.entity.InstituteTeacherEntity;
 import edu.vinu.entity.TeacherVacancyEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
