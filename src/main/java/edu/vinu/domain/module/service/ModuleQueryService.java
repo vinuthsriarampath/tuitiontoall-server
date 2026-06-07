@@ -11,14 +11,14 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.module.service;
 
 import edu.vinu.domain.module.response.ModuleResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-public interface BatchModuleService {
+public interface ModuleQueryService {
 
     Page<ModuleResponse> getAllModulesByBatch(Long batchId, int page, int size, String direction, List<String> sortBy);
 }

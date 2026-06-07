@@ -11,11 +11,11 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.module.service.impl;
 
 import edu.vinu.domain.module.request.ModuleFilterRequest;
 import edu.vinu.domain.module.response.ModuleResponse;
-import edu.vinu.service.common.BatchModuleService;
+import edu.vinu.domain.module.service.ModuleQueryService;
 import edu.vinu.domain.module.service.ModuleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +25,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BatchModuleServiceImpl implements BatchModuleService {
+public class ModuleQueryServiceImpl implements ModuleQueryService {
 
     private final ModuleService moduleService;
 
