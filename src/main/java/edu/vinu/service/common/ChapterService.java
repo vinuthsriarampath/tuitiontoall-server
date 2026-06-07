@@ -15,9 +15,9 @@ package edu.vinu.service.common;
 
 import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentFilterRequest;
-import edu.vinu.request.chapter.ChapterCreateRequest;
-import edu.vinu.request.chapter.ChapterDetailsUpdateRequest;
-import edu.vinu.request.chapter.ChapterReorderRequest;
+import edu.vinu.domain.chapter.request.ChapterCreateRequest;
+import edu.vinu.domain.chapter.request.ChapterDetailsUpdateRequest;
+import edu.vinu.domain.chapter.request.ChapterReorderRequest;
 import edu.vinu.request.resource.ResourceFilterRequest;
 import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
