@@ -17,9 +17,9 @@ import edu.vinu.model.user_models.Institute;
 import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
 import edu.vinu.domain.auth.request.LoginRequest;
-import edu.vinu.request.registration.InstituteRegistrationRequest;
-import edu.vinu.request.registration.StudentRegistrationRequest;
-import edu.vinu.request.registration.TeacherRegistrationRequest;
+import edu.vinu.domain.user.request.registration.InstituteRegistrationRequest;
+import edu.vinu.domain.user.request.registration.StudentRegistrationRequest;
+import edu.vinu.domain.user.request.registration.TeacherRegistrationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.auth.response.AuthResponse;
 
