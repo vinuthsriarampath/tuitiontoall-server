@@ -11,9 +11,9 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.infastructure.service.email.impl;
 
-import edu.vinu.service.common.EmailService;
+import edu.vinu.infastructure.service.email.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;

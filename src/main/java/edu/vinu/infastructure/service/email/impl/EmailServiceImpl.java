@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -11,9 +11,9 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.infastructure.service.email.impl;
 
-import edu.vinu.service.common.EmailService;
+import edu.vinu.infastructure.service.email.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

@@ -11,11 +11,11 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.infastructure.service.file_storage.impl;
 
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
-import edu.vinu.service.common.FileService;
+import edu.vinu.infastructure.service.file_storage.FileService;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.ResourceRegion;
