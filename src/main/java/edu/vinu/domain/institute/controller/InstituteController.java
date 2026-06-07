@@ -15,7 +15,7 @@ package edu.vinu.domain.institute.controller;
 
 
 import edu.vinu.common.response.ApiResponse;
-import edu.vinu.service.common.TeacherVacancyService;
+import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

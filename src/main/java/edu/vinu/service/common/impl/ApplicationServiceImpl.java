@@ -14,10 +14,10 @@
 package edu.vinu.service.common.impl;
 
 import edu.vinu.entity.ApplicationEntity;
-import edu.vinu.entity.TeacherVacancyEntity;
+import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.enums.ApplicationStatus;
-import edu.vinu.enums.TeacherVacancyStatus;
+import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import edu.vinu.common.exception.custom.BadRequestException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
@@ -27,7 +27,7 @@ import edu.vinu.response.ApplicationDetailsResponse;
 import edu.vinu.domain.user.response.TeacherUserResponse;
 import edu.vinu.service.common.ApplicationService;
 import edu.vinu.service.common.EmailService;
-import edu.vinu.service.common.TeacherVacancyService;
+import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

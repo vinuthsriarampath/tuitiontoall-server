@@ -13,6 +13,7 @@
 
 package edu.vinu.entity;
 
+import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
 import edu.vinu.domain.user.entity.TeacherEntity;
 import edu.vinu.enums.ApplicationStatus;
 import jakarta.persistence.*;
