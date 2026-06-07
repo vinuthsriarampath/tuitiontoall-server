@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.institute.service.impl;
 
 import edu.vinu.domain.institute.response.InstituteTeacherResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherStatsResponse;
@@ -30,8 +30,8 @@ import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
 import edu.vinu.response.*;
 import edu.vinu.service.common.ApplicationService;
-import edu.vinu.service.common.InstituteService;
-import edu.vinu.service.common.InstituteTeacherService;
+import edu.vinu.domain.institute.service.InstituteService;
+import edu.vinu.domain.institute.service.InstituteTeacherService;
 import edu.vinu.domain.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
