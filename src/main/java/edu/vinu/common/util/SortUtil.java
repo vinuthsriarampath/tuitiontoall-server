@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.util;
+package edu.vinu.common.util;
 
 import org.springframework.data.domain.Sort;
 

@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.exception.custom;
+package edu.vinu.common.exception.custom;
 
-public class BadRequestException extends RuntimeException {
-    public BadRequestException(String message) {
+public class UnauthorizedException extends RuntimeException {
+    public UnauthorizedException(String message) {
         super(message);
     }
 }
