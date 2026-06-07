@@ -13,7 +13,7 @@
 
 package edu.vinu.repository;
 
-import edu.vinu.entity.BatchEntity;
+import edu.vinu.domain.batch.entity.BatchEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

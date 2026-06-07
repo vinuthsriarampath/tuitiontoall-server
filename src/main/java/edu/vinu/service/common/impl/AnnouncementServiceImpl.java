@@ -17,7 +17,7 @@ import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.user.service.UserService;
 import edu.vinu.entity.AnnouncementEntity;
-import edu.vinu.entity.BatchEntity;
+import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.enums.AnnouncementStatus;

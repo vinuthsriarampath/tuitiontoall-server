@@ -13,6 +13,7 @@
 
 package edu.vinu.entity;
 
+import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.enums.AnnouncementStatus;

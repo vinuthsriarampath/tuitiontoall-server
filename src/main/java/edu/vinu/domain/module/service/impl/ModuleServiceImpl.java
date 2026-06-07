@@ -19,7 +19,7 @@ import edu.vinu.domain.module.request.update.ModuleBatchUpdateRequest;
 import edu.vinu.domain.module.request.update.ModuleNameUpdateRequest;
 import edu.vinu.domain.module.request.update.ModuleTeacherUpdateRequest;
 import edu.vinu.domain.module.service.ModuleService;
-import edu.vinu.entity.BatchEntity;
+import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.domain.user.entity.TeacherEntity;
 import edu.vinu.domain.module.enums.ModuleStatus;
