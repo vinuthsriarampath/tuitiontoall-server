@@ -32,7 +32,7 @@ import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.response.module.ModuleDetailedResponse;
 import edu.vinu.response.module.ModuleResponse;
 import edu.vinu.service.common.BatchService;
-import edu.vinu.service.common.InstituteTeacherService;
+import edu.vinu.domain.institute.service.InstituteTeacherService;
 import edu.vinu.service.common.ModuleAssignmentQueryService;
 import edu.vinu.service.common.ModuleService;
 import edu.vinu.common.util.SortUtil;

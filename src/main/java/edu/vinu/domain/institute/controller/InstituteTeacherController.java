@@ -21,7 +21,7 @@ import edu.vinu.domain.user.response.TeacherBasicResponse;
 import edu.vinu.request.ApplicationRejectionRequest;
 import edu.vinu.request.ApplicationSelectionRequest;
 import edu.vinu.response.*;
-import edu.vinu.service.common.InstituteTeacherService;
+import edu.vinu.domain.institute.service.InstituteTeacherService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
