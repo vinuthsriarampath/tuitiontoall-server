@@ -49,4 +49,9 @@ public class ChapterAssignmentQueryServiceImpl implements ChapterAssignmentQuery
                 .last(pageData.isLast())
                 .build();
     }
+
+    @Override
+    public boolean existsByAssignmentId(Long assignmentId) {
+        return chapterAssignmentRepository.existsByAssignmentId(assignmentId);
+    }
 }

@@ -21,4 +21,5 @@ import java.util.List;
 
 public interface ChapterAssignmentQueryService {
     PaginatedApiResponse<ChapterAssignmentResponse> getAllChapterAssignmentByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ChapterAssignmentFilterRequest filters);
+    boolean existsByAssignmentId(Long assignmentId);
 }
