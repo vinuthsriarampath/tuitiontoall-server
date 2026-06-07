@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.repository.projection;
+package edu.vinu.domain.module.repository.projection;
 
 import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
 import edu.vinu.domain.batch.enums.BatchStatus;
