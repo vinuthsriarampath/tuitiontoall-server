@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.lecture_record.service;
 
 import edu.vinu.domain.lecture_record.entity.VideoStreamTokenEntity;
 

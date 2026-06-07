@@ -11,11 +11,11 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.lecture_record.service.impl;
 
 import edu.vinu.domain.lecture_record.entity.VideoStreamTokenEntity;
 import edu.vinu.common.exception.custom.UnauthorizedException;
-import edu.vinu.service.common.VideoStreamTokenService;
+import edu.vinu.domain.lecture_record.service.VideoStreamTokenService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

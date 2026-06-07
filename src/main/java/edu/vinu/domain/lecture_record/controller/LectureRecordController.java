@@ -20,7 +20,7 @@ import edu.vinu.domain.lecture_record.response.LectureRecordChunkUploadResponse;
 import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
 import edu.vinu.domain.lecture_record.response.LectureRecordUploadInitResponse;
 import edu.vinu.domain.lecture_record.service.LectureRecordService;
-import edu.vinu.service.common.VideoStreamTokenService;
+import edu.vinu.domain.lecture_record.service.VideoStreamTokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.support.ResourceRegion;
