@@ -13,7 +13,7 @@
 
 package edu.vinu.entity;
 
-import edu.vinu.domain.user.entity.InstituteEntity;
+import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.enums.AnnouncementStatus;
 import edu.vinu.enums.AnnouncementVisibility;
 import jakarta.persistence.*;

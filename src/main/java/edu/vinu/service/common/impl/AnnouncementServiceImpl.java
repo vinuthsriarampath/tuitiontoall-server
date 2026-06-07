@@ -17,7 +17,7 @@ import edu.vinu.domain.user.service.UserService;
 import edu.vinu.entity.AnnouncementEntity;
 import edu.vinu.entity.BatchEntity;
 import edu.vinu.entity.CourseEntity;
-import edu.vinu.domain.user.entity.InstituteEntity;
+import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.enums.AnnouncementStatus;
 import edu.vinu.enums.AnnouncementVisibility;
 import edu.vinu.common.exception.custom.BadRequestException;

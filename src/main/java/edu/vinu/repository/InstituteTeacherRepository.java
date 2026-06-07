@@ -13,7 +13,7 @@
 
 package edu.vinu.repository;
 
-import edu.vinu.entity.InstituteTeacherEntity;
+import edu.vinu.domain.institute.entity.InstituteTeacherEntity;
 import edu.vinu.repository.projection.InstituteTeacherProjection;
 import edu.vinu.repository.projection.InstituteTeacherStatsProjection;
 import edu.vinu.domain.user.repository.projection.TeacherProjection;

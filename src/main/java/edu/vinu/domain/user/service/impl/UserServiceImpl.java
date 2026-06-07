@@ -13,7 +13,7 @@
 
 package edu.vinu.domain.user.service.impl;
 
-import edu.vinu.domain.user.entity.InstituteEntity;
+import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.user.entity.StudentEntity;
 import edu.vinu.domain.user.entity.TeacherEntity;
 import edu.vinu.domain.user.entity.UserEntity;

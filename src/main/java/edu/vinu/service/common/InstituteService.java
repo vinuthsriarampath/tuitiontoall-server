@@ -13,7 +13,7 @@
 
 package edu.vinu.service.common;
 
-import edu.vinu.domain.user.entity.InstituteEntity;
+import edu.vinu.domain.institute.entity.InstituteEntity;
 
 public interface InstituteService {
     InstituteEntity getCurrentInstitute();

@@ -13,7 +13,7 @@
 
 package edu.vinu.service.common.impl;
 
-import edu.vinu.domain.user.entity.InstituteEntity;
+import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.domain.auth.service.UserAuthenticationService;

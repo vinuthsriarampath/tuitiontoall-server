@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.user.entity;
 
+import edu.vinu.domain.institute.entity.InstituteEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
