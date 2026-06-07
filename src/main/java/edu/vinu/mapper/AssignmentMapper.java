@@ -16,6 +16,7 @@ package edu.vinu.mapper;
 import edu.vinu.entity.AssignmentEntity;
 import edu.vinu.request.assignments.AssignmentCreateRequest;
 import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentCreateRequest;
+import edu.vinu.request.assignments.module_assignments.ModuleAssignmentCreateRequest;
 import edu.vinu.response.assignments.AssignmentDetailedResponse;
 import edu.vinu.response.grading_range.GradingRageResponse;
 import org.springframework.stereotype.Component;
@@ -69,6 +70,21 @@ public class AssignmentMapper {
                 .createdDate(assignmentEntity.getCreatedDate())
                 .lastModifiedDate(assignmentEntity.getLastModifiedDate())
                 .gradingRangers(gradingRangers)
+                .build();
+    }
+
+    public static AssignmentCreateRequest toAssignmentCreateRequest(ModuleAssignmentCreateRequest request){
+        return AssignmentCreateRequest.builder()
+                .topic(request.topic())
+                .description(request.description())
+                .fileName(null)
+                .totalMarks(request.totalMarks())
+                .availableOn(request.availableOn())
+                .dueDate(request.dueDate())
+                .lateSubmission(request.lateSubmission())
+                .resubmission(request.resubmission())
+                .maxAttempts(request.maxAttempts())
+                .gradingRanges(request.gradingRanges())
                 .build();
     }
 }
