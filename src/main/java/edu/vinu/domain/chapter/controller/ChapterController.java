@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.controller;
+package edu.vinu.domain.chapter.controller;
 
 import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentFilterRequest;
 import edu.vinu.request.chapter.ChapterCreateRequest;
