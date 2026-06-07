@@ -13,7 +13,7 @@
 
 package edu.vinu.domain.course.dto;
 
-import edu.vinu.enums.*;
+import edu.vinu.domain.course.enums.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

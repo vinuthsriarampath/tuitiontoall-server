@@ -14,10 +14,10 @@
 package edu.vinu.domain.course.entity;
 
 
+import edu.vinu.domain.course.enums.*;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.entity.AnnouncementEntity;
 import edu.vinu.entity.BatchEntity;
-import edu.vinu.enums.*;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

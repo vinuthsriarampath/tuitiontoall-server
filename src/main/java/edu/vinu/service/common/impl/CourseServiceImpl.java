@@ -15,7 +15,7 @@ package edu.vinu.service.common.impl;
 
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.institute.entity.InstituteEntity;
-import edu.vinu.enums.CourseStatus;
+import edu.vinu.domain.course.enums.CourseStatus;
 import edu.vinu.domain.course.events.CourseCreatedEvent;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;

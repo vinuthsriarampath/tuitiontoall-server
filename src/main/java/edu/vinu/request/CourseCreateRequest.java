@@ -14,7 +14,7 @@
 package edu.vinu.request;
 
 
-import edu.vinu.enums.*;
+import edu.vinu.domain.course.enums.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
