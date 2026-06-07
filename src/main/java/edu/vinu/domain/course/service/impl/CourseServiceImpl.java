@@ -26,7 +26,7 @@ import edu.vinu.domain.institute.repository.InstituteRepository;
 import edu.vinu.domain.course.request.CourseCreateRequest;
 import edu.vinu.domain.course.request.CourseFilterRequest;
 import edu.vinu.domain.course.request.CourseUpdateRequest;
-import edu.vinu.service.common.FileService;
+import edu.vinu.infastructure.service.file_storage.FileService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

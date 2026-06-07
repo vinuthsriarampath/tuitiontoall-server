@@ -26,7 +26,7 @@ import edu.vinu.domain.application.dto.Application;
 import edu.vinu.domain.application.repository.ApplicationRepository;
 import edu.vinu.domain.application.response.ApplicationDetailsResponse;
 import edu.vinu.domain.user.response.TeacherUserResponse;
-import edu.vinu.service.common.EmailService;
+import edu.vinu.infastructure.service.email.EmailService;
 import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;

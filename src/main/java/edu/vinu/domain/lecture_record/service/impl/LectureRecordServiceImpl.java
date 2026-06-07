@@ -29,7 +29,7 @@ import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
 import edu.vinu.domain.lecture_record.response.LectureRecordUploadInitResponse;
 import edu.vinu.domain.chapter.service.ChapterService;
 import edu.vinu.domain.lecture_record.service.LectureRecordService;
-import edu.vinu.service.common.FileService;
+import edu.vinu.infastructure.service.file_storage.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;

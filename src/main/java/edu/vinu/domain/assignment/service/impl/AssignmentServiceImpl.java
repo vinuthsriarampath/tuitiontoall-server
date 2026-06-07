@@ -25,7 +25,7 @@ import edu.vinu.domain.assignment.request.AssignmentCreateRequest;
 import edu.vinu.domain.assignment.request.AssignmentUpdateRequest;
 import edu.vinu.domain.assignment.response.AssignmentDetailedResponse;
 import edu.vinu.domain.grading.response.GradingRageResponse;
-import edu.vinu.service.common.FileService;
+import edu.vinu.infastructure.service.file_storage.FileService;
 import edu.vinu.domain.grading.service.GradingRangeService;
 import edu.vinu.domain.assignment.validator.AssignmentValidator;
 import edu.vinu.domain.grading.validator.GradingRangeValidator;

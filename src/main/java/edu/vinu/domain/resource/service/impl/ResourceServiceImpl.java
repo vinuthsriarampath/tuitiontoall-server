@@ -27,7 +27,7 @@ import edu.vinu.domain.resource.response.ResourceInitResponse;
 import edu.vinu.domain.resource.response.ResourceResponse;
 import edu.vinu.domain.chapter.service.ChapterService;
 import edu.vinu.domain.resource.service.ResourceService;
-import edu.vinu.service.common.FileService;
+import edu.vinu.infastructure.service.file_storage.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;

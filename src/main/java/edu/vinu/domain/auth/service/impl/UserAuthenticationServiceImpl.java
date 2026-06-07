@@ -35,7 +35,7 @@ import edu.vinu.domain.user.request.registration.TeacherRegistrationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.auth.response.AuthResponse;
 import edu.vinu.domain.auth.service.UserAuthenticationService;
-import edu.vinu.service.common.EmailService;
+import edu.vinu.infastructure.service.email.EmailService;
 import edu.vinu.domain.user.service.UserService;
 import edu.vinu.domain.user.validator.UserValidator;
 import jakarta.annotation.Nullable;
