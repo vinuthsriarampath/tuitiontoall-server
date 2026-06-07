@@ -18,7 +18,7 @@ import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
-import edu.vinu.mapper.ChapterMapper;
+import edu.vinu.domain.chapter.mapper.ChapterMapper;
 import edu.vinu.repository.ChapterRepository;
 import edu.vinu.request.assignments.chapter_assignments.ChapterAssignmentFilterRequest;
 import edu.vinu.request.chapter.ChapterCreateRequest;
