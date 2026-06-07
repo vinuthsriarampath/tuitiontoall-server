@@ -31,7 +31,6 @@ import edu.vinu.request.registration.TeacherRegistrationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.auth.response.AuthResponse;
 import edu.vinu.domain.auth.service.UserAuthenticationService;
-import edu.vinu.service.auth.impl.JwtService;
 import edu.vinu.service.common.EmailService;
 import edu.vinu.service.common.UserService;
 import edu.vinu.validator.UserValidator;

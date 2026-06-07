@@ -13,8 +13,8 @@
 
 package edu.vinu.config.filter;
 
-import edu.vinu.service.auth.impl.JwtService;
-import edu.vinu.service.auth.impl.UserDetailsServiceImpl;
+import edu.vinu.domain.auth.service.impl.JwtService;
+import edu.vinu.domain.auth.service.impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
