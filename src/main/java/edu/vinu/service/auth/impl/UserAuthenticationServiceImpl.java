@@ -24,7 +24,7 @@ import edu.vinu.model.user_models.Student;
 import edu.vinu.model.user_models.Teacher;
 import edu.vinu.model.user_models.User;
 import edu.vinu.repository.*;
-import edu.vinu.domain.request.LoginRequest;
+import edu.vinu.domain.auth.request.LoginRequest;
 import edu.vinu.request.registration.InstituteRegistrationRequest;
 import edu.vinu.request.registration.StudentRegistrationRequest;
 import edu.vinu.request.registration.TeacherRegistrationRequest;
