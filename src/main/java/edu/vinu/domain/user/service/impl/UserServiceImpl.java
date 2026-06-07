@@ -20,7 +20,7 @@ import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
-import edu.vinu.model.user_models.Institute;
+import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.Teacher;
 import edu.vinu.domain.user.dto.User;

@@ -13,7 +13,7 @@
 
 package edu.vinu.domain.user.controller;
 
-import edu.vinu.model.user_models.Institute;
+import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.Teacher;
 import edu.vinu.domain.user.dto.User;
