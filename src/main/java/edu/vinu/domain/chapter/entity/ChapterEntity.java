@@ -11,9 +11,10 @@
  *
  */
 
-package edu.vinu.entity;
+package edu.vinu.domain.chapter.entity;
 
 import edu.vinu.domain.module.entity.ModuleEntity;
+import edu.vinu.entity.LectureRecordEntity;
 import edu.vinu.enums.ChapterStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
