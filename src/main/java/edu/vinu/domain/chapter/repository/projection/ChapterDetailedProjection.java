@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.repository.projection;
+package edu.vinu.domain.chapter.repository.projection;
 
 import edu.vinu.domain.chapter.enums.ChapterStatus;
 import edu.vinu.domain.module.enums.ModuleStatus;

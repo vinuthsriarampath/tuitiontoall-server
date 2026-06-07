@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.domain.chapter.repository;
 
 import edu.vinu.domain.chapter.entity.ChapterEntity;
-import edu.vinu.repository.projection.ChapterDetailedProjection;
+import edu.vinu.domain.chapter.repository.projection.ChapterDetailedProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
