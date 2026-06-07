@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.response;
+package edu.vinu.domain.institute.response;
 
 import edu.vinu.domain.user.response.TeacherUserResponse;
 import edu.vinu.domain.institute.enums.InstituteTeacherStatus;

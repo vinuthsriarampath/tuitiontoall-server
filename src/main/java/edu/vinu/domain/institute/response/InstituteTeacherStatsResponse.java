@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.response;
+package edu.vinu.domain.institute.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
