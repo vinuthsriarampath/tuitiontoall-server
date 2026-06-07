@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -11,11 +11,11 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.search.service.impl;
 
+import edu.vinu.domain.search.service.SearchService;
 import edu.vinu.domain.user.dto.User;
-import edu.vinu.response.SearchResponse;
-import edu.vinu.service.common.SearchService;
+import edu.vinu.domain.search.response.SearchResponse;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;

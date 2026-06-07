@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.controller;
+package edu.vinu.domain.search.controller;
 
-import edu.vinu.response.SearchResponse;
-import edu.vinu.service.common.SearchService;
+import edu.vinu.domain.search.response.SearchResponse;
+import edu.vinu.domain.search.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

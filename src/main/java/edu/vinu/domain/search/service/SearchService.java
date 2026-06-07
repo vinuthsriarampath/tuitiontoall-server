@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -11,9 +11,9 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.search.service;
 
-import edu.vinu.response.SearchResponse;
+import edu.vinu.domain.search.response.SearchResponse;
 
 public interface SearchService {
     SearchResponse search(String query);
