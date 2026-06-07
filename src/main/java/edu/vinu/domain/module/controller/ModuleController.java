@@ -26,7 +26,7 @@ import edu.vinu.response.chapter.ChapterResponse;
 import edu.vinu.domain.module.response.ModuleDetailedResponse;
 import edu.vinu.domain.module.response.ModuleResponse;
 import edu.vinu.service.common.ChapterQueryService;
-import edu.vinu.service.common.ModuleService;
+import edu.vinu.domain.module.service.ModuleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

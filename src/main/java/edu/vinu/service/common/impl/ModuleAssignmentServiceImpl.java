@@ -25,7 +25,7 @@ import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.service.common.AssignmentService;
 import edu.vinu.service.common.ChapterAssignmentQueryService;
 import edu.vinu.service.common.ModuleAssignmentService;
-import edu.vinu.service.common.ModuleService;
+import edu.vinu.domain.module.service.ModuleService;
 import edu.vinu.validator.AssignmentValidator;
 import edu.vinu.validator.GradingRangeValidator;
 import lombok.RequiredArgsConstructor;
