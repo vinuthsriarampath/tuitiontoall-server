@@ -14,6 +14,7 @@
 package edu.vinu.domain.auth.service.impl;
 
 import edu.vinu.common.exception.custom.*;
+import edu.vinu.domain.institute.repository.InstituteRepository;
 import edu.vinu.domain.user.entity.RoleEntity;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.user.entity.StudentEntity;
@@ -27,7 +28,6 @@ import edu.vinu.model.user_models.Institute;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.Teacher;
 import edu.vinu.domain.user.dto.User;
-import edu.vinu.repository.*;
 import edu.vinu.domain.auth.request.LoginRequest;
 import edu.vinu.domain.user.request.registration.InstituteRegistrationRequest;
 import edu.vinu.domain.user.request.registration.StudentRegistrationRequest;

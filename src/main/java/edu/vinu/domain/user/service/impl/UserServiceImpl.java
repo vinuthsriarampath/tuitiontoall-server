@@ -24,7 +24,7 @@ import edu.vinu.model.user_models.Institute;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.Teacher;
 import edu.vinu.domain.user.dto.User;
-import edu.vinu.repository.InstituteRepository;
+import edu.vinu.domain.institute.repository.InstituteRepository;
 import edu.vinu.domain.user.repository.StudentRepository;
 import edu.vinu.domain.user.repository.TeacherRepository;
 import edu.vinu.domain.user.repository.UserRepository;

@@ -19,7 +19,7 @@ import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.enums.TeacherVacancyStatus;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.model.TeacherVacancy;
-import edu.vinu.repository.InstituteRepository;
+import edu.vinu.domain.institute.repository.InstituteRepository;
 import edu.vinu.repository.TeacherVacancyRepository;
 import edu.vinu.request.CreateVacancyRequest;
 import edu.vinu.request.UpdateVacancyRequest;

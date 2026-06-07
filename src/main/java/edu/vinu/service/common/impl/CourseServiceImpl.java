@@ -21,7 +21,7 @@ import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.model.Course;
 import edu.vinu.repository.CourseRepository;
-import edu.vinu.repository.InstituteRepository;
+import edu.vinu.domain.institute.repository.InstituteRepository;
 import edu.vinu.request.CourseCreateRequest;
 import edu.vinu.request.CourseFilterRequest;
 import edu.vinu.request.CourseUpdateRequest;
