@@ -11,28 +11,27 @@
  *
  */
 
-package edu.vinu.request.schedule_lecture;
+package edu.vinu.domain.schedule_lecture.response;
 
-import edu.vinu.enums.ScheduleLectureStatus;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import edu.vinu.domain.schedule_lecture.enums.ScheduleLectureStatus;
+import lombok.Builder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public record ScheduleLectureUpdateRequest(
-        @NotBlank(message = "Topic is mandatory!")
+@Builder
+public record ScheduleLectureResponse (
+        Long id,
+        Long chapterId,
         String topic,
-        @NotNull(message = "Meeting start date is mandatory!")
         LocalDate startDate,
-        @NotNull(message = "Meeting start time is mandatory!")
         LocalTime startTime,
-        @NotNull(message = "Meeting end time is mandatory!")
         LocalTime endTime,
         boolean lateAttendance,
-        @NotBlank(message = "Meeting url is mandatory!")
         String meetingUrl,
-        @NotNull(message = "Status is mandatory!")
-        ScheduleLectureStatus status
-) {
+        ScheduleLectureStatus status,
+        LocalDateTime createdDate,
+        LocalDateTime lastModifiedDate
+){
 }

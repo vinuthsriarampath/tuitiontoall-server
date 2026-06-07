@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.entity;
+package edu.vinu.domain.schedule_lecture.entity;
 
 import edu.vinu.domain.chapter.entity.ChapterEntity;
-import edu.vinu.enums.ScheduleLectureStatus;
+import edu.vinu.domain.schedule_lecture.enums.ScheduleLectureStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

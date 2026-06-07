@@ -11,11 +11,11 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.schedule_lecture.service;
 
-import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
+import edu.vinu.domain.schedule_lecture.request.ScheduleLectureFilterRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
-import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
+import edu.vinu.domain.schedule_lecture.response.ScheduleLectureResponse;
 
 import java.util.List;
 

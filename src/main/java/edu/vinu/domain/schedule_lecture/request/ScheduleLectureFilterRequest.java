@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.request.schedule_lecture;
+package edu.vinu.domain.schedule_lecture.request;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

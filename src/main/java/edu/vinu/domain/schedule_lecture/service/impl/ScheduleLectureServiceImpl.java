@@ -11,21 +11,21 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.schedule_lecture.service.impl;
 
 import edu.vinu.domain.chapter.entity.ChapterEntity;
-import edu.vinu.entity.ScheduleLectureEntity;
-import edu.vinu.enums.ScheduleLectureStatus;
+import edu.vinu.domain.schedule_lecture.entity.ScheduleLectureEntity;
+import edu.vinu.domain.schedule_lecture.enums.ScheduleLectureStatus;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
-import edu.vinu.mapper.ScheduleLectureMapper;
-import edu.vinu.repository.ScheduleLectureRepository;
-import edu.vinu.request.schedule_lecture.ScheduleLectureCreateRequest;
-import edu.vinu.request.schedule_lecture.ScheduleLectureUpdateRequest;
+import edu.vinu.domain.schedule_lecture.mapper.ScheduleLectureMapper;
+import edu.vinu.domain.schedule_lecture.repository.ScheduleLectureRepository;
+import edu.vinu.domain.schedule_lecture.request.create.ScheduleLectureCreateRequest;
+import edu.vinu.domain.schedule_lecture.request.update.ScheduleLectureUpdateRequest;
 import edu.vinu.common.dto.FieldError;
-import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
+import edu.vinu.domain.schedule_lecture.response.ScheduleLectureResponse;
 import edu.vinu.domain.chapter.service.ChapterService;
-import edu.vinu.service.common.ScheduleLectureService;
+import edu.vinu.domain.schedule_lecture.service.ScheduleLectureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;

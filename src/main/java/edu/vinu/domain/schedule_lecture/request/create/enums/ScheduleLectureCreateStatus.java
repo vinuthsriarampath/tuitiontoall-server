@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.request.schedule_lecture.enums;
+package edu.vinu.domain.schedule_lecture.request.create.enums;
 
 public enum ScheduleLectureCreateStatus {
     DRAFT,

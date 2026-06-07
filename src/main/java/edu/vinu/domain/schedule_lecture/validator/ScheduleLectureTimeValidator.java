@@ -11,11 +11,11 @@
  *
  */
 
-package edu.vinu.validator;
+package edu.vinu.domain.schedule_lecture.validator;
 
 import edu.vinu.annotation.ValidScheduleLectureTime;
-import edu.vinu.request.schedule_lecture.ScheduleLectureCreateRequest;
-import edu.vinu.request.schedule_lecture.ScheduleLectureUpdateRequest;
+import edu.vinu.domain.schedule_lecture.request.create.ScheduleLectureCreateRequest;
+import edu.vinu.domain.schedule_lecture.request.update.ScheduleLectureUpdateRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

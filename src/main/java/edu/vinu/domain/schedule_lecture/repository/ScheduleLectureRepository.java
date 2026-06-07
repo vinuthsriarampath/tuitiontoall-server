@@ -11,10 +11,9 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.domain.schedule_lecture.repository;
 
-import edu.vinu.entity.ScheduleLectureEntity;
-import edu.vinu.enums.ScheduleLectureStatus;
+import edu.vinu.domain.schedule_lecture.entity.ScheduleLectureEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -11,11 +11,11 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.schedule_lecture.service;
 
-import edu.vinu.request.schedule_lecture.ScheduleLectureCreateRequest;
-import edu.vinu.request.schedule_lecture.ScheduleLectureUpdateRequest;
-import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
+import edu.vinu.domain.schedule_lecture.request.create.ScheduleLectureCreateRequest;
+import edu.vinu.domain.schedule_lecture.request.update.ScheduleLectureUpdateRequest;
+import edu.vinu.domain.schedule_lecture.response.ScheduleLectureResponse;
 
 public interface ScheduleLectureService {
     ScheduleLectureResponse scheduleLecture(ScheduleLectureCreateRequest request);

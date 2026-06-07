@@ -11,15 +11,15 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.schedule_lecture.service.impl;
 
-import edu.vinu.mapper.ScheduleLectureMapper;
-import edu.vinu.repository.ScheduleLectureRepository;
-import edu.vinu.request.schedule_lecture.ScheduleLectureFilterRequest;
+import edu.vinu.domain.schedule_lecture.mapper.ScheduleLectureMapper;
+import edu.vinu.domain.schedule_lecture.repository.ScheduleLectureRepository;
+import edu.vinu.domain.schedule_lecture.request.ScheduleLectureFilterRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
-import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
-import edu.vinu.service.common.ScheduleLectureQueryService;
+import edu.vinu.domain.schedule_lecture.response.ScheduleLectureResponse;
 import edu.vinu.common.util.SortUtil;
+import edu.vinu.domain.schedule_lecture.service.ScheduleLectureQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

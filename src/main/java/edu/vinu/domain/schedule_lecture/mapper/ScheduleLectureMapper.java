@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.mapper;
+package edu.vinu.domain.schedule_lecture.mapper;
 
-import edu.vinu.entity.ScheduleLectureEntity;
-import edu.vinu.response.schedule_lecture.ScheduleLectureResponse;
+import edu.vinu.domain.schedule_lecture.entity.ScheduleLectureEntity;
+import edu.vinu.domain.schedule_lecture.response.ScheduleLectureResponse;
 import org.springframework.stereotype.Component;
 
 @Component
