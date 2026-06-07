@@ -20,7 +20,7 @@ import edu.vinu.domain.module.enums.ModuleStatus;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
-import edu.vinu.repository.ModuleRepository;
+import edu.vinu.domain.module.repository.ModuleRepository;
 import edu.vinu.request.assignments.module_assignments.ModuleAssignmentFilterRequest;
 import edu.vinu.request.modules.*;
 import edu.vinu.request.modules.enums.ModuleCreateStatus;
