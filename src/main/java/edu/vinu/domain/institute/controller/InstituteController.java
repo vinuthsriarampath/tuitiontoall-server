@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.controller;
+package edu.vinu.domain.institute.controller;
 
 
 import edu.vinu.common.response.ApiResponse;
