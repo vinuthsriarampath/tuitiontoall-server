@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.domain.institute.repository;
 
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

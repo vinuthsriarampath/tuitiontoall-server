@@ -11,11 +11,11 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.domain.institute.repository;
 
 import edu.vinu.domain.institute.entity.InstituteTeacherEntity;
-import edu.vinu.repository.projection.InstituteTeacherProjection;
-import edu.vinu.repository.projection.InstituteTeacherStatsProjection;
+import edu.vinu.domain.institute.repository.projection.InstituteTeacherProjection;
+import edu.vinu.domain.institute.repository.projection.InstituteTeacherStatsProjection;
 import edu.vinu.domain.user.repository.projection.TeacherProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.repository.projection;
+package edu.vinu.domain.institute.repository.projection;
 
 import edu.vinu.enums.InstituteTeacherStatus;
 
