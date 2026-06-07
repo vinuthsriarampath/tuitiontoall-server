@@ -13,7 +13,7 @@
 
 package edu.vinu.request.chapter;
 
-import edu.vinu.enums.ChapterStatus;
+import edu.vinu.domain.chapter.enums.ChapterStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

@@ -13,7 +13,7 @@
 
 package edu.vinu.repository.projection;
 
-import edu.vinu.enums.ChapterStatus;
+import edu.vinu.domain.chapter.enums.ChapterStatus;
 import edu.vinu.domain.module.enums.ModuleStatus;
 
 import java.time.LocalDateTime;

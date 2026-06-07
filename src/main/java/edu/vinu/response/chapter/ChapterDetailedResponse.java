@@ -13,7 +13,7 @@
 
 package edu.vinu.response.chapter;
 
-import edu.vinu.enums.ChapterStatus;
+import edu.vinu.domain.chapter.enums.ChapterStatus;
 import edu.vinu.domain.module.response.ModuleResponse;
 import lombok.Builder;
 
