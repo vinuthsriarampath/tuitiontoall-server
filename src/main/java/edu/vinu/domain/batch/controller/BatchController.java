@@ -14,8 +14,8 @@
 package edu.vinu.domain.batch.controller;
 
 import edu.vinu.domain.batch.dto.Batch;
-import edu.vinu.request.BatchCreateRequest;
-import edu.vinu.request.BatchUpdateRequest;
+import edu.vinu.domain.batch.request.BatchCreateRequest;
+import edu.vinu.domain.batch.request.BatchUpdateRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.module.response.ModuleResponse;
