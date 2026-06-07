@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.mapper;
+package edu.vinu.domain.chapter.mapper;
 
 import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.repository.projection.ChapterDetailedProjection;
