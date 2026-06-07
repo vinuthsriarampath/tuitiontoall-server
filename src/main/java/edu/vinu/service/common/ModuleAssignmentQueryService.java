@@ -13,6 +13,13 @@
 
 package edu.vinu.service.common;
 
+import edu.vinu.request.assignments.module_assignments.ModuleAssignmentFilterRequest;
+import edu.vinu.response.PaginatedApiResponse;
+import edu.vinu.response.assignments.module_assignment.ModuleAssignmentResponse;
+import org.springframework.data.domain.Pageable;
+
 public interface ModuleAssignmentQueryService {
     boolean existsByAssignmentId(Long assignmentId);
+
+    PaginatedApiResponse<ModuleAssignmentResponse> getAssignmentsByModule(Long moduleId, ModuleAssignmentFilterRequest filters, Pageable pageable);
 }
