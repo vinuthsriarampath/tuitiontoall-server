@@ -11,9 +11,9 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.domain.resource.repository;
 
-import edu.vinu.entity.ResourceUploadEntity;
+import edu.vinu.domain.resource.entity.ResourceUploadEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

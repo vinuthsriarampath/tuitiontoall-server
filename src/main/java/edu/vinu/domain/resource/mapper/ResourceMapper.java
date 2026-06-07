@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.mapper;
+package edu.vinu.domain.resource.mapper;
 
-import edu.vinu.entity.ResourceEntity;
-import edu.vinu.response.resource.ResourceResponse;
+import edu.vinu.domain.resource.entity.ResourceEntity;
+import edu.vinu.domain.resource.response.ResourceResponse;
 
 public class ResourceMapper {
 

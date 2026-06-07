@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.request.resource;
+package edu.vinu.domain.resource.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -11,15 +11,15 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.resource.service.impl;
 
-import edu.vinu.mapper.ResourceMapper;
-import edu.vinu.repository.ResourceRepository;
-import edu.vinu.request.resource.ResourceFilterRequest;
+import edu.vinu.domain.resource.mapper.ResourceMapper;
+import edu.vinu.domain.resource.repository.ResourceRepository;
+import edu.vinu.domain.resource.request.ResourceFilterRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
-import edu.vinu.response.resource.ResourceResponse;
-import edu.vinu.service.common.ResourceQueryService;
+import edu.vinu.domain.resource.response.ResourceResponse;
 import edu.vinu.common.util.SortUtil;
+import edu.vinu.domain.resource.service.ResourceQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

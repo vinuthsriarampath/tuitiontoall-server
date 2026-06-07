@@ -11,12 +11,10 @@
  *
  */
 
-package edu.vinu.response.resource;
+package edu.vinu.domain.resource.request;
 
-import lombok.Builder;
-
-@Builder
-public record ResourceChunkUploadResponse(
-        Integer uploadedChunkIndex
+public record ResourceFilterRequest(
+        Long resourceId,
+        String name
 ) {
 }

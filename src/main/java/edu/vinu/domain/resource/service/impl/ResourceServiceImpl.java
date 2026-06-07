@@ -11,23 +11,23 @@
  *
  */
 
-package edu.vinu.service.common.impl;
+package edu.vinu.domain.resource.service.impl;
 
 import edu.vinu.domain.chapter.entity.ChapterEntity;
-import edu.vinu.entity.ResourceEntity;
-import edu.vinu.entity.ResourceUploadEntity;
+import edu.vinu.domain.resource.entity.ResourceEntity;
+import edu.vinu.domain.resource.entity.ResourceUploadEntity;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
-import edu.vinu.mapper.ResourceMapper;
-import edu.vinu.repository.ResourceRepository;
-import edu.vinu.repository.ResourceUploadRepository;
-import edu.vinu.request.resource.ResourceInitRequest;
-import edu.vinu.response.resource.ResourceChunkUploadResponse;
-import edu.vinu.response.resource.ResourceInitResponse;
-import edu.vinu.response.resource.ResourceResponse;
+import edu.vinu.domain.resource.mapper.ResourceMapper;
+import edu.vinu.domain.resource.repository.ResourceRepository;
+import edu.vinu.domain.resource.repository.ResourceUploadRepository;
+import edu.vinu.domain.resource.request.ResourceInitRequest;
+import edu.vinu.domain.resource.response.ResourceChunkUploadResponse;
+import edu.vinu.domain.resource.response.ResourceInitResponse;
+import edu.vinu.domain.resource.response.ResourceResponse;
 import edu.vinu.domain.chapter.service.ChapterService;
+import edu.vinu.domain.resource.service.ResourceService;
 import edu.vinu.service.common.FileService;
-import edu.vinu.service.common.ResourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;

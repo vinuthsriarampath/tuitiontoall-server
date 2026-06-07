@@ -11,14 +11,14 @@
  *
  */
 
-package edu.vinu.controller;
+package edu.vinu.domain.resource.controller;
 
-import edu.vinu.request.resource.ResourceInitRequest;
+import edu.vinu.domain.resource.request.ResourceInitRequest;
 import edu.vinu.common.response.ApiResponse;
-import edu.vinu.response.resource.ResourceChunkUploadResponse;
-import edu.vinu.response.resource.ResourceInitResponse;
-import edu.vinu.response.resource.ResourceResponse;
-import edu.vinu.service.common.ResourceService;
+import edu.vinu.domain.resource.response.ResourceChunkUploadResponse;
+import edu.vinu.domain.resource.response.ResourceInitResponse;
+import edu.vinu.domain.resource.response.ResourceResponse;
+import edu.vinu.domain.resource.service.ResourceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;

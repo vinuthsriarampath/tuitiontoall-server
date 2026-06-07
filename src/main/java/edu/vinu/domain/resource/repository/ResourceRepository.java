@@ -11,9 +11,9 @@
  *
  */
 
-package edu.vinu.repository;
+package edu.vinu.domain.resource.repository;
 
-import edu.vinu.entity.ResourceEntity;
+import edu.vinu.domain.resource.entity.ResourceEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

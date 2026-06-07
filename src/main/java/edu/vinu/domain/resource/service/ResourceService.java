@@ -11,12 +11,12 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.resource.service;
 
-import edu.vinu.request.resource.ResourceInitRequest;
-import edu.vinu.response.resource.ResourceChunkUploadResponse;
-import edu.vinu.response.resource.ResourceInitResponse;
-import edu.vinu.response.resource.ResourceResponse;
+import edu.vinu.domain.resource.request.ResourceInitRequest;
+import edu.vinu.domain.resource.response.ResourceChunkUploadResponse;
+import edu.vinu.domain.resource.response.ResourceInitResponse;
+import edu.vinu.domain.resource.response.ResourceResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.ResponseEntity;

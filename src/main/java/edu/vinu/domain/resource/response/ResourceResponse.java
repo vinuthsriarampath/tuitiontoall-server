@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.response.resource;
+package edu.vinu.domain.resource.response;
 
 import lombok.Builder;
 

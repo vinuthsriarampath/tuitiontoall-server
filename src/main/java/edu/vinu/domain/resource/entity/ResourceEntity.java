@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.entity;
+package edu.vinu.domain.resource.entity;
 
 import edu.vinu.domain.chapter.entity.ChapterEntity;
 import jakarta.persistence.*;
@@ -25,50 +25,35 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "resource_upload",
+@Table(name = "resource",
     uniqueConstraints = {
-        @UniqueConstraint(name = "uk_chapter_id_name",columnNames = {"chapter_id","name"})
+        @UniqueConstraint(name = "uk_chapter_id_name", columnNames = {"chapter_id", "name"})
     }
 )
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ResourceUploadEntity {
+public class ResourceEntity {
     @Id
-    private String uploadId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "chapter_id",nullable = false)
+    private ChapterEntity chapter;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "chapter_id", nullable = false)
-    private ChapterEntity chapter;
-
-    @OneToOne
-    @JoinColumn(name = "resource_id")
-    private ResourceEntity resource;
-
-    @Column(name = "original_file_name", nullable = false)
-    private String originalFileName;
-
-    @Column(name = "completed")
-    private boolean completed = false;
-
-    @Column(name = "total_size",nullable = false)
-    private Long totalSize;
-
-    @Column(name = "total_chunks",nullable = false)
-    private Integer totalChunks;
-
-    @Column(name = "uploaded_chunks",nullable = false)
-    private Integer uploadedChunks;
+    @Column(name = "file_name",nullable = false)
+    private String fileName;
 
     @CreationTimestamp
-    @Column(name = "created_date", updatable = false, nullable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    @Column(name = "last_modified_date",insertable = false)
+    @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime lastModifiedDate;
 }

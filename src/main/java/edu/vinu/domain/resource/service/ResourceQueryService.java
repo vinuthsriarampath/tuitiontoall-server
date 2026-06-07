@@ -11,11 +11,11 @@
  *
  */
 
-package edu.vinu.service.common;
+package edu.vinu.domain.resource.service;
 
-import edu.vinu.request.resource.ResourceFilterRequest;
+import edu.vinu.domain.resource.request.ResourceFilterRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
-import edu.vinu.response.resource.ResourceResponse;
+import edu.vinu.domain.resource.response.ResourceResponse;
 
 import java.util.List;
 
