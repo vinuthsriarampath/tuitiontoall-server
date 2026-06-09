@@ -13,8 +13,11 @@
 
 package edu.vinu.config.filter;
 
+import edu.vinu.common.exception.custom.InternalServerErrorException;
+import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.domain.auth.service.impl.JwtService;
 import edu.vinu.domain.auth.service.impl.UserDetailsServiceImpl;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -86,9 +89,12 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (IOException e) {
             log.error("JWTFilter Section 4: {}", e.getMessage());
             handlerExceptionResolver.resolveException(request, response, null, e);
+        }catch(SignatureException e){
+            log.error("JWT has signed with an invalid signature!");
+            handlerExceptionResolver.resolveException(request, response, null, new UnauthorizedException("JWT has signed with an invalid signature!"));
         } catch (RuntimeException e) {
             log.error("RuntimeException in JWTFilter: {}", e.getMessage());
-            handlerExceptionResolver.resolveException(request, response, null, e);
+            handlerExceptionResolver.resolveException(request, response, null, new InternalServerErrorException("An unexpected error occurred during JWT processing"));
         }
     }
 
