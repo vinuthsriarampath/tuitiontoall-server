@@ -35,7 +35,7 @@ public class ChapterAssignmentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "chapter_id",nullable = false)
     private ChapterEntity chapter;
 

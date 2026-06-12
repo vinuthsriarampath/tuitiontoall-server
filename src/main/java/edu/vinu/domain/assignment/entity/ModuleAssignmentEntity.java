@@ -36,7 +36,7 @@ public class ModuleAssignmentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "module_id",nullable = false)
     private ModuleEntity module;
 
