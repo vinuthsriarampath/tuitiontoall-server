@@ -60,7 +60,8 @@ public class SecurityConfig {
                                 "/api/v2/courses/thumbnail/**",
                                 "/api/v2/lecture-records/stream/**",
                                 "/api/v2/resources/view/**",
-                                "/api/v2/resources/download/**"
+                                "/api/v2/resources/download/**",
+                                "/api/v2/assignments/download/**"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
