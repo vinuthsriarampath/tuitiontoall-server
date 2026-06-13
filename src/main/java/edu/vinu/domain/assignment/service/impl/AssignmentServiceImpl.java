@@ -31,10 +31,15 @@ import edu.vinu.domain.grading.validator.GradingRangeValidator;
 import edu.vinu.infastructure.service.file_storage.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
@@ -133,6 +138,24 @@ public class AssignmentServiceImpl implements AssignmentService {
         return AssignmentMapper.toAssignmentDetailedResponse(assignmentEntity, gradingRangers);
     }
 
+    @Override
+    public ResponseEntity<Resource> downloadFile(String fileName) {
+        Path path = getAssignmentPath(fileName);
+
+        Resource resource = fileService.getResource(getAssignmentPath(), fileName);
+
+        MediaType mediaType = MediaType.parseMediaType(fileService.detectContentType(path));
+
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + fileName + "\""
+                )
+                .contentLength(fileService.size(path))
+                .body(resource);
+    }
+
     private AssignmentEntity getAssignmentEntity(Long id){
         return assignmentRepository.findById(id).orElseThrow(()-> new NotFoundException("Assignment not found by id!"));
     }
@@ -152,6 +175,12 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     private Path getAssignmentPath(){
         return Path.of(assignmentPath);
+    }
+
+    private Path getAssignmentPath(String fileName) {
+        Path path = Path.of(assignmentPath,fileName);
+        if(!Files.exists(path)) throw new NotFoundException("Assignment File not found.");
+        return path;
     }
 
 }

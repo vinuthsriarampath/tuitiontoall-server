@@ -17,6 +17,8 @@ import edu.vinu.domain.assignment.entity.AssignmentEntity;
 import edu.vinu.domain.assignment.request.AssignmentCreateRequest;
 import edu.vinu.domain.assignment.request.AssignmentUpdateRequest;
 import edu.vinu.domain.assignment.response.AssignmentDetailedResponse;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface AssignmentService {
@@ -29,4 +31,6 @@ public interface AssignmentService {
     String updateAssignmentFile(Long id, MultipartFile file);
 
     AssignmentDetailedResponse getDetailedAssignmentById(Long id);
+
+    ResponseEntity<Resource> downloadFile(String fileName);
 }
