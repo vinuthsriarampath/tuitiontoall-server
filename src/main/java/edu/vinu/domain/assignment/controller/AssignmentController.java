@@ -19,6 +19,7 @@ import edu.vinu.domain.assignment.response.AssignmentDetailedResponse;
 import edu.vinu.domain.assignment.service.AssignmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -49,5 +50,10 @@ public class AssignmentController {
     public ResponseEntity<ApiResponse> getDetailedAssignmentById(@PathVariable Long id){
         AssignmentDetailedResponse response = assignmentService.getDetailedAssignmentById(id);
         return ResponseEntity.ok(new ApiResponse("Assignment retrieved successfully!",response));
+    }
+
+    @GetMapping("/download/{fileName:.+}")
+    public ResponseEntity<Resource> downloadResource(@PathVariable String fileName){
+        return assignmentService.downloadFile(fileName);
     }
 }
