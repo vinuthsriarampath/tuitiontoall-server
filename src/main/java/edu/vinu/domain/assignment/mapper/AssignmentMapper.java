@@ -65,7 +65,7 @@ public class AssignmentMapper {
                 .availableOn(assignmentEntity.getAvailableOn())
                 .dueDate(assignmentEntity.getDueDate())
                 .lateSubmission(assignmentEntity.isLateSubmission())
-                .reSubmission(assignmentEntity.isResubmission())
+                .resubmission(assignmentEntity.isResubmission())
                 .maxAttempts(assignmentEntity.getMaxAttempts())
                 .createdDate(assignmentEntity.getCreatedDate())
                 .lastModifiedDate(assignmentEntity.getLastModifiedDate())

@@ -37,7 +37,7 @@ public class ChapterAssignmentQueryServiceImpl implements ChapterAssignmentQuery
     public PaginatedApiResponse<ChapterAssignmentResponse> getAllChapterAssignmentByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ChapterAssignmentFilterRequest filters) {
         Pageable pageable = PageRequest.of(page, size, SortUtil.buildSort(direction, sortBy, List.of("created_date")));
 
-        Page<ChapterAssignmentResponse> pageData = chapterAssignmentRepository.getAllChapterAssignmentByChapter(chapterId, filters.assignmentId(), filters.topic(), filters.reSubmission(),filters.lateSubmission(),filters.totalMarks(),filters.maxAttempts(),filters.availableOn(),filters.dueDate(),filters.createdDate(),filters.lastModifiedDate(),pageable).map(ChapterAssignmentMapper::toChapterAssignmentResponse);
+        Page<ChapterAssignmentResponse> pageData = chapterAssignmentRepository.getAllChapterAssignmentByChapter(chapterId, filters.assignmentId(), filters.topic(), filters.resubmission(),filters.lateSubmission(),filters.totalMarks(),filters.maxAttempts(),filters.availableOn(),filters.dueDate(),filters.createdDate(),filters.lastModifiedDate(),pageable).map(ChapterAssignmentMapper::toChapterAssignmentResponse);
 
         return PaginatedApiResponse.<ChapterAssignmentResponse>builder()
                 .message("All assignments related to chapter fetched successfully!")

@@ -29,7 +29,7 @@ public record ModuleAssignmentResponse(
         LocalDateTime availableOn,
         LocalDateTime dueDate,
         boolean lateSubmission,
-        boolean reSubmission,
+        boolean resubmission,
         Integer maxAttempts,
         LocalDateTime createdDate,
         LocalDateTime lastModifiedDate

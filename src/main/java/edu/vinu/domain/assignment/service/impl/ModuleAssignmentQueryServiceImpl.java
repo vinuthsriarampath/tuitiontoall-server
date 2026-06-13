@@ -37,7 +37,7 @@ public class ModuleAssignmentQueryServiceImpl implements ModuleAssignmentQuerySe
 
     @Override
     public PaginatedApiResponse<ModuleAssignmentResponse> getAssignmentsByModule(Long moduleId, ModuleAssignmentFilterRequest filters, Pageable pageable) {
-        Page<ModuleAssignmentResponse> pageData = moduleAssignmentRepository.getAllModuleAssignmentByModule(moduleId, filters.assignmentId(), filters.topic(), filters.reSubmission(),filters.lateSubmission(),filters.totalMarks(),filters.maxAttempts(),filters.availableOn(),filters.dueDate(),filters.createdDate(),filters.lastModifiedDate(),pageable).map(ModuleAssignmentMapper::toModuleAssignmentResponse);
+        Page<ModuleAssignmentResponse> pageData = moduleAssignmentRepository.getAllModuleAssignmentByModule(moduleId, filters.assignmentId(), filters.topic(), filters.resubmission(),filters.lateSubmission(),filters.totalMarks(),filters.maxAttempts(),filters.availableOn(),filters.dueDate(),filters.createdDate(),filters.lastModifiedDate(),pageable).map(ModuleAssignmentMapper::toModuleAssignmentResponse);
         return PaginatedApiResponse.<ModuleAssignmentResponse>builder()
                 .message("All assignments related to module fetched successfully!")
                 .data(pageData.getContent())

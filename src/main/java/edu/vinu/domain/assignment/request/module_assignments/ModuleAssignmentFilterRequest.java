@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public record ModuleAssignmentFilterRequest(
         Long assignmentId,
         String topic,
-        Boolean reSubmission,
+        Boolean resubmission,
         Boolean lateSubmission,
         Integer totalMarks,
         Integer maxAttempts,
