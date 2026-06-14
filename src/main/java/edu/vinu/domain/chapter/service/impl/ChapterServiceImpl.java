@@ -29,6 +29,7 @@ import edu.vinu.domain.chapter.request.ChapterOrderRequest;
 import edu.vinu.domain.chapter.request.ChapterReorderRequest;
 import edu.vinu.domain.chapter.response.ChapterDetailedResponse;
 import edu.vinu.domain.chapter.response.ChapterResponse;
+import edu.vinu.domain.chapter.response.ChapterStatCountResponse;
 import edu.vinu.domain.chapter.service.ChapterService;
 import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
 import edu.vinu.domain.lecture_record.service.LectureRecordQueryService;
@@ -179,6 +180,11 @@ public class ChapterServiceImpl implements ChapterService {
     @Override
     public PaginatedApiResponse<ChapterAssignmentResponse> getAllChapterAssignmentsByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ChapterAssignmentFilterRequest filters) {
         return chapterAssignmentQueryService.getAllChapterAssignmentByChapter(chapterId, page, size, direction, sortBy, filters);
+    }
+
+    @Override
+    public ChapterStatCountResponse getStatCountByCourseId(Long id) {
+        return ChapterMapper.toChapterStatCountResponse(chapterRepository.getStatCountByChapterId(id));
     }
 
     private boolean isChapterExistsInModule(Long moduleId,String chapterName){

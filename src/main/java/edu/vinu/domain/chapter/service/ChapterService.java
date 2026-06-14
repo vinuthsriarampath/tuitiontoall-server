@@ -22,6 +22,7 @@ import edu.vinu.domain.chapter.request.ChapterDetailsUpdateRequest;
 import edu.vinu.domain.chapter.request.ChapterReorderRequest;
 import edu.vinu.domain.chapter.response.ChapterDetailedResponse;
 import edu.vinu.domain.chapter.response.ChapterResponse;
+import edu.vinu.domain.chapter.response.ChapterStatCountResponse;
 import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
 import edu.vinu.domain.resource.request.ResourceFilterRequest;
 import edu.vinu.domain.resource.response.ResourceResponse;
@@ -48,4 +49,6 @@ public interface ChapterService {
     PaginatedApiResponse<ResourceResponse> getAllResourcesByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ResourceFilterRequest filters);
 
     PaginatedApiResponse<ChapterAssignmentResponse> getAllChapterAssignmentsByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ChapterAssignmentFilterRequest filters);
+
+    ChapterStatCountResponse getStatCountByCourseId(Long id);
 }
