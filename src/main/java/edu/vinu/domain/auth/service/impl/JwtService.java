@@ -13,22 +13,19 @@
 
 package edu.vinu.domain.auth.service.impl;
 
-import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.domain.auth.dto.UserPrinciple;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,15 +34,11 @@ import java.util.function.Function;
 @Service
 public class JwtService {
     private final String secretKey;
-    public JwtService(){
-        try {
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey sk =keyGenerator.generateKey();
-            secretKey = Base64.getEncoder().encodeToString(sk.getEncoded());
-        } catch (NoSuchAlgorithmException e) {
-            throw new InternalServerErrorException("Internal Server Error while generating secret key");
-        }
+
+    public JwtService(@Value("${app.jwt.secret}") String secretKey) {
+        this.secretKey = secretKey;
     }
+
     public String generateToken(Authentication authentication) {
         UserPrinciple userPrincipal = (UserPrinciple) authentication.getPrincipal();
 
