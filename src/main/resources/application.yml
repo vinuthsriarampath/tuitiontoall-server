@@ -53,5 +53,7 @@ file:
   assignment-path: uploads/assignments
 
 app:
+  jwt:
+    secret: ${JWT_SECRET}
   reset:
-    frontend-reset-url: "http://localhost:4200/reset?token="
+    frontend-reset-url: ${FRONTEND_URL}/reset?token=
