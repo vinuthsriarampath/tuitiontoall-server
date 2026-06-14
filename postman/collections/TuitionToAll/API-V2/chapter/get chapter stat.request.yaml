@@ -1,0 +1,5 @@
+$kind: http-request
+name: get chapter stat
+url: http://localhost:8080/api/v2/chapters/1/stats
+method: GET
+order: 4483180325346686
