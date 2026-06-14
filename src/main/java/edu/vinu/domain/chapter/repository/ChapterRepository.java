@@ -15,6 +15,7 @@ package edu.vinu.domain.chapter.repository;
 
 import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.domain.chapter.repository.projection.ChapterDetailedProjection;
+import edu.vinu.domain.chapter.repository.projection.ChapterStatCountProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -53,4 +54,38 @@ public interface ChapterRepository extends JpaRepository<ChapterEntity,Long> {
     WHERE ch.id = :id
 """,nativeQuery = true)
     Optional<ChapterDetailedProjection> findDetailedById(Long id);
+
+    @Query( value =
+            """
+    SELECT
+    (SELECT COUNT(*)
+        FROM lecture_recording lr
+        WHERE lr.chapter_id = ch.id
+    ) AS lectureRecordingCount,
+    
+    (SELECT COUNT(*)
+        FROM chapter_assignment ca
+        JOIN assignment a
+        ON a.id = ca.assignment_id
+        WHERE ca.chapter_id = ch.id
+        AND a.available_on <= CURRENT_TIMESTAMP
+    ) AS activeAssignmentsCount,
+    
+    (SELECT COUNT(*)
+        FROM resource r
+        WHERE r.chapter_id = ch.id
+    ) AS resourceCount,
+    
+    (SELECT COUNT(*)
+     FROM schedule_lecture sl
+     WHERE sl.chapter_id = ch.id
+     AND TIMESTAMP(sl.start_date, sl.end_time) >= CURRENT_TIMESTAMP
+     AND sl.status IN ('SCHEDULED', 'LIVE')
+    ) AS upcomingScheduleLectureCount
+    
+    FROM chapter ch
+    WHERE ch.id = :chapterId
+    """,
+    nativeQuery = true)
+    ChapterStatCountProjection getStatCountByChapterId(Long chapterId);
 }
