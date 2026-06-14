@@ -15,8 +15,10 @@ package edu.vinu.domain.chapter.mapper;
 
 import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.domain.chapter.repository.projection.ChapterDetailedProjection;
+import edu.vinu.domain.chapter.repository.projection.ChapterStatCountProjection;
 import edu.vinu.domain.chapter.response.ChapterDetailedResponse;
 import edu.vinu.domain.chapter.response.ChapterResponse;
+import edu.vinu.domain.chapter.response.ChapterStatCountResponse;
 import edu.vinu.domain.module.response.ModuleResponse;
 import org.springframework.stereotype.Component;
 
@@ -51,6 +53,15 @@ public class ChapterMapper {
                         .createdDate(proj.getCreatedDate())
                         .lastModifiedDate(proj.getLastModifiedDate())
                         .build())
+                .build();
+    }
+
+    public static ChapterStatCountResponse toChapterStatCountResponse(ChapterStatCountProjection proj){
+        return ChapterStatCountResponse.builder()
+                .resourceCount(proj.getResourceCount())
+                .lectureRecordingCount(proj.getLectureRecordingCount())
+                .activeAssignmentsCount(proj.getActiveAssignmentsCount())
+                .upcomingScheduleLectureCount(proj.getUpcomingScheduleLectureCount())
                 .build();
     }
 }
