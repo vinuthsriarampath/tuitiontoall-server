@@ -22,6 +22,7 @@ import edu.vinu.domain.chapter.request.ChapterDetailsUpdateRequest;
 import edu.vinu.domain.chapter.request.ChapterReorderRequest;
 import edu.vinu.domain.chapter.response.ChapterDetailedResponse;
 import edu.vinu.domain.chapter.response.ChapterResponse;
+import edu.vinu.domain.chapter.response.ChapterStatCountResponse;
 import edu.vinu.domain.chapter.service.ChapterService;
 import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
 import edu.vinu.domain.resource.request.ResourceFilterRequest;
@@ -124,5 +125,12 @@ public class ChapterController {
     ){
         PaginatedApiResponse<ChapterAssignmentResponse> response = chapterService.getAllChapterAssignmentsByChapter(chapterId, page, size, direction, sortBy, filters);
         return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("{id}/stats")
+    public ResponseEntity<ApiResponse> getStats(@PathVariable("id") Long id){
+        ChapterStatCountResponse response = chapterService.getStatCountByCourseId(id);
+        return ResponseEntity.ok(new ApiResponse("Chapter stats fetched successfully!", response));
     }
 }
