@@ -28,7 +28,11 @@ public class TeacherVacancyScheduler {
 
     @Scheduled(cron = "0 */5 * * * *", zone = "Asia/Colombo")
     private void closeVacancies(){
-        int updated = teacherVacancyRepository.closeExpiredVacancies(TeacherVacancyStatus.OPEN, TeacherVacancyStatus.CLOSED);
-        log.atInfo().log("Closed {} expired vacancies", updated);
+        int updated = teacherVacancyRepository.closeExpiredVacancies(
+                TeacherVacancyStatus.OPEN.name(),
+                TeacherVacancyStatus.CLOSED.name()
+        );
+
+        log.info("Closed {} vacancies", updated);
     }
 }

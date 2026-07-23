@@ -43,5 +43,5 @@ public interface TeacherVacancyRepository extends JpaRepository<TeacherVacancyEn
     SET status = :closedStatus
     WHERE vacancy_closing_date <= CURRENT_TIMESTAMP AND status = :openStatus
     """,nativeQuery = true)
-    int closeExpiredVacancies(@Param("openStatus") TeacherVacancyStatus openStatus, @Param("closedStatus") TeacherVacancyStatus closedStatus);
+    int closeExpiredVacancies(@Param("openStatus") String openStatus, @Param("closedStatus") String closedStatus);
 }
