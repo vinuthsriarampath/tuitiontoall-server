@@ -15,9 +15,11 @@ package edu.vinu.domain.batch.repository;
 
 import edu.vinu.domain.batch.entity.BatchEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,4 +32,21 @@ public interface BatchRepository extends JpaRepository<BatchEntity, Long> {
             WHERE b.course_id = :courseId
     """,nativeQuery = true)
     List<BatchEntity> getAllBatchesByCourseId(@Param("courseId") Long courseId);
+
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+    UPDATE batch
+    SET enrollment_status = :closeEnrollmentStatus, batch_status = :ongoingBatchStatus
+    WHERE TIMESTAMP(start_date,start_time) <= CURRENT_TIMESTAMP
+    AND batch_status = :preparationStatus
+    and enrollment_status = :openEnrollmentStatus;
+    """, nativeQuery = true)
+    int closeEnrollmentAndStartPreparationBatch(
+            @Param("openEnrollmentStatus") String openEnrollmentStatus,
+            @Param("closeEnrollmentStatus") String closeEnrollmentStatus,
+            @Param("preparationStatus") String preparationStatus,
+            @Param("ongoingBatchStatus") String ongoingBatchStatus
+    );
 }
