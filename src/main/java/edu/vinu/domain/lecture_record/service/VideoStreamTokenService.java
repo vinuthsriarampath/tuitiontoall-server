@@ -15,7 +15,11 @@ package edu.vinu.domain.lecture_record.service;
 
 import edu.vinu.domain.lecture_record.entity.VideoStreamTokenEntity;
 
+import java.util.Map;
+
 public interface VideoStreamTokenService {
     String generateToken(String fileName);
     VideoStreamTokenEntity validateToken(String token);
+
+    Map<String, VideoStreamTokenEntity> getAllTokens();
 }

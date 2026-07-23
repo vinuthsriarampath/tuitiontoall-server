@@ -60,4 +60,9 @@ public class VideoStreamTokenServiceImpl implements VideoStreamTokenService {
 
         return streamToken;
     }
+
+    @Override
+    public Map<String, VideoStreamTokenEntity> getAllTokens(){
+        return tokens;
+    }
 }
