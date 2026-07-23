@@ -17,8 +17,11 @@ import edu.vinu.domain.schedule_lecture.entity.ScheduleLectureEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -72,4 +75,14 @@ public interface ScheduleLectureRepository extends JpaRepository<ScheduleLecture
     """,
     nativeQuery = true)
     Page<ScheduleLectureEntity> getAllModules(Long chapterId, Long id, LocalDate start_date, LocalTime start_time, LocalTime end_time, String status, Pageable pageable);
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+    UPDATE schedule_lecture
+    SET status = :completedStatus
+    WHERE TIMESTAMP(start_date, end_time) <= CURRENT_TIMESTAMP
+    AND status in (:liveStatus, :scheduledStatus);
+""",nativeQuery = true)
+    int completeEndedLectures(@Param("completedStatus") String completedStatus, @Param("liveStatus") String liveStatus, @Param("scheduledStatus") String scheduledStatus);
 }
