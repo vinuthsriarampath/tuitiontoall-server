@@ -63,7 +63,9 @@ public class SecurityConfig {
                                 "/api/v2/resources/download/**",
                                 "/api/v2/assignments/download/**"
                         ).permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/api/v2/**").authenticated()
+                        .anyRequest().permitAll()
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
