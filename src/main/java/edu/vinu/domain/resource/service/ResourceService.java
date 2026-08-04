@@ -32,4 +32,6 @@ public interface ResourceService {
     ResponseEntity<ResourceRegion> viewResource(String fileName, String range);
 
     ResponseEntity<Resource> downloadFile(String fileName);
+
+    void deleteResource(Long resourceId);
 }

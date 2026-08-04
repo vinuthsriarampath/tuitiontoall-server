@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.resource.service.impl;
 
+import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.domain.chapter.entity.ChapterEntity;
@@ -197,6 +198,17 @@ public class ResourceServiceImpl implements ResourceService {
                 .body(resource);
     }
 
+    @Override
+    public void deleteResource(Long resourceId) {
+        ResourceEntity resourceEntity = resourceRepository.findById(resourceId).orElseThrow(() -> new NotFoundException("Resource not found."));
+        fileService.delete(getResourceFilePath(resourceEntity.getFileName()));
+        if(deleteResourceUploadEntity(resourceId)){
+            resourceRepository.delete(resourceEntity);
+        }else{
+            throw new InternalServerErrorException("Resource Deletion Failed.");
+        }
+    }
+
     private Path getResourceFilePath(String fileName) {
         Path path = Path.of(resourcePath,fileName);
         if(!Files.exists(path)) throw new NotFoundException("Resource not found.");
@@ -213,5 +225,13 @@ public class ResourceServiceImpl implements ResourceService {
 
     private boolean alreadyExistsByNameAndChapterInResourceUpload(String name, Long chapterId){
         return resourceUploadRepository.existsByNameAndChapterId(name, chapterId);
+    }
+
+    private boolean deleteResourceUploadEntity(Long uploadId){
+        resourceUploadRepository.findByResourceId(uploadId).ifPresentOrElse(
+                resourceUploadRepository::delete,
+                () -> { throw new NotFoundException("Resource upload initialization not found."); }
+        );
+        return true;
     }
 }
