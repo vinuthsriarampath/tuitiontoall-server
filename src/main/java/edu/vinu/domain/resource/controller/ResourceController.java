@@ -68,4 +68,10 @@ public class ResourceController {
         return resourceService.downloadFile(fileName);
     }
 
+    @DeleteMapping("/{resourceId}")
+    public ResponseEntity<ApiResponse> deleteResource(@PathVariable Long resourceId){
+        resourceService.deleteResource(resourceId);
+        return ResponseEntity.ok(new ApiResponse("Resource deleted successfully", null));
+    }
+
 }
