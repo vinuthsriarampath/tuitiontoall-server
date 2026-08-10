@@ -14,6 +14,8 @@
 package edu.vinu.domain.batch.repository;
 
 import edu.vinu.domain.batch.entity.BatchEntity;
+import edu.vinu.domain.batch.repository.projection.BatchProjection;
+import org.apache.logging.log4j.simple.internal.SimpleProvider;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -49,4 +51,25 @@ public interface BatchRepository extends JpaRepository<BatchEntity, Long> {
             @Param("preparationStatus") String preparationStatus,
             @Param("ongoingBatchStatus") String ongoingBatchStatus
     );
+
+    @Query(value = """
+SELECT
+    b.id AS id,
+    b.course_id AS courseId,
+    b.name AS name,
+    b.is_seat_limited AS isSeatLimited,
+    b.max_seat_limit AS maxSeatLimit,
+    b.start_date AS startDate,
+    b.start_time AS startTime,
+    b.batch_status AS batchStatus,
+    b.enrollment_status AS enrollmentStatus,
+    b.created_date AS createdDate,
+    b.last_modified_date AS lastModifiedDate
+FROM batch b
+WHERE b.course_id = :courseId
+    AND b.enrollment_status = 'OPEN'
+    AND b.batch_status != 'COMPLETED'
+ORDER BY b.start_date DESC
+""", nativeQuery = true)
+    List<BatchProjection> getAllEnrollableBatchesByCourse(Long courseId);
 }
