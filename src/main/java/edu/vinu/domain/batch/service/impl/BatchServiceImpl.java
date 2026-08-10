@@ -16,10 +16,12 @@ package edu.vinu.domain.batch.service.impl;
 import edu.vinu.common.dto.FieldError;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.batch.dto.Batch;
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
 import edu.vinu.domain.batch.enums.BatchStatus;
+import edu.vinu.domain.batch.mapper.BatchMapper;
 import edu.vinu.domain.batch.repository.BatchRepository;
 import edu.vinu.domain.batch.request.BatchCreateRequest;
 import edu.vinu.domain.batch.request.BatchUpdateRequest;
@@ -135,6 +137,19 @@ public class BatchServiceImpl implements BatchService {
     @Override
     public Boolean isBatchBelongToCourse(BatchEntity batchEntity, Long courseId) {
         return batchEntity.getCourse().getId().equals(courseId);
+    }
+
+    @Override
+    public ApiResponse getAllEnrollableBatchesOfCourse(Long courseId) {
+
+        List<Batch> batches = batchRepository.getAllEnrollableBatchesByCourse(courseId).stream()
+                .map(BatchMapper::toBatch)
+                .toList();
+
+        return ApiResponse.builder()
+                .message("All Enrollable Batches Related to Course ID")
+                .data(batches)
+                .build();
     }
 
 

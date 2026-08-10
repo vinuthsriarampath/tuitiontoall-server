@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.batch.service;
 
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.batch.dto.Batch;
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.batch.request.BatchCreateRequest;
@@ -36,4 +37,6 @@ public interface BatchService {
     Boolean isBatchOwner(BatchEntity batchEntity);
 
     Boolean isBatchBelongToCourse(BatchEntity batchEntity, Long courseId);
+
+    ApiResponse getAllEnrollableBatchesOfCourse(Long courseId);
 }
