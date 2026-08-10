@@ -86,4 +86,11 @@ public class BatchController {
                 .build();
         return ResponseEntity.status(200).body(response);
     }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("{courseId}/enrollables")
+    public ResponseEntity<ApiResponse> getAllEnrollableBatchesOfCourse(@PathVariable Long courseId){
+        ApiResponse response = batchService.getAllEnrollableBatchesOfCourse(courseId);
+        return ResponseEntity.status(200).body(response);
+    }
 }
