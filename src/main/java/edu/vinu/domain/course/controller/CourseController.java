@@ -88,7 +88,7 @@ public class CourseController {
         return ResponseEntity.status(200).body(new ApiResponse("Course archived successfully", archivedCourse ));
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student')")
     @GetMapping("/get/{courseId}")
     public ResponseEntity<ApiResponse> getCourseById(@PathVariable Long courseId){
         Course course = courseService.getCourseById(courseId);

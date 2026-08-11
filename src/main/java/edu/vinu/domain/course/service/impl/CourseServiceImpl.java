@@ -132,26 +132,13 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course getCourseById(Long courseId) {
         return courseRepository.findById(courseId)
-                .map(courseEntity -> {
-                    if (isCourseOwner(courseEntity)) {
-                        return mapper.map(courseEntity, Course.class);
-                    } else {
-                        throw new UnauthorizedException("You are not authorized to view this course");
-                    }
-                })
+                .map(courseEntity -> mapper.map(courseEntity, Course.class))
                 .orElseThrow(() -> new NotFoundException("Course not found with id: " + courseId));
     }
 
     @Override
     public CourseEntity getCourseEntityById(Long courseId) {
         return courseRepository.findById(courseId)
-                .map(courseEntity -> {
-                    if (isCourseOwner(courseEntity)){
-                        return courseEntity;
-                    } else {
-                        throw new UnauthorizedException("You are not authorized to view this course");
-                    }
-                })
                 .orElseThrow(() -> new NotFoundException("Course not found with id: " + courseId));
     }
 

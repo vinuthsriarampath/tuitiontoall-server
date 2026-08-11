@@ -87,7 +87,7 @@ public class BatchController {
         return ResponseEntity.status(200).body(response);
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student')")
     @GetMapping("{courseId}/enrollables")
     public ResponseEntity<ApiResponse> getAllEnrollableBatchesOfCourse(@PathVariable Long courseId){
         ApiResponse response = batchService.getAllEnrollableBatchesOfCourse(courseId);
