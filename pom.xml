@@ -138,6 +138,14 @@
             <version>1.0.2</version>
         </dependency>
 
+        <!--OPEN PDF-->
+        <dependency>
+            <groupId>com.github.librepdf</groupId>
+            <artifactId>openpdf</artifactId>
+            <version>3.0.5</version>
+            <scope>compile</scope>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
