@@ -27,7 +27,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
@@ -88,7 +87,7 @@ public class Payment {
     private void generateTransactionRef() {
         if (transactionRef == null) {
             transactionRef = "REF-" +
-                    LocalDate.now().format(DateTimeFormatter.ISO_DATE_TIME) +
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmm")) +
                     "-" +
                     UUID.randomUUID()
                             .toString()
