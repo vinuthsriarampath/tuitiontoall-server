@@ -18,6 +18,8 @@ import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentRequest;
 import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,9 +35,15 @@ public class EnrollmentController {
     private final EnrollmentService enrollmentService;
 
     @PreAuthorize("hasAuthority('student')")
-    @PostMapping
-    public ResponseEntity<ApiResponse> enrollStudents(@Valid @RequestBody EnrollmentRequest request){
-        ApiResponse response = enrollmentService.enrollStudent(request);
-        return ResponseEntity.ok(response);
+    @PostMapping(produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> enrollStudents(@Valid @RequestBody EnrollmentRequest request){
+        byte[] invoice = enrollmentService.enrollStudent(request);
+        return ResponseEntity.ok()
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"invoice.pdf\""
+                )
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(invoice);
     }
 }

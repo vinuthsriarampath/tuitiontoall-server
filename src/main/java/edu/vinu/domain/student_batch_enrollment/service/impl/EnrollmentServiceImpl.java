@@ -15,17 +15,16 @@ package edu.vinu.domain.student_batch_enrollment.service.impl;
 
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
-import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.batch.service.BatchService;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.service.CourseService;
+import edu.vinu.domain.openPdf.service.InvoicePdfGeneratorService;
 import edu.vinu.domain.payment.entity.Payment;
 import edu.vinu.domain.payment.service.PaymentService;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentRequest;
 import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
 import edu.vinu.domain.student_batch_enrollment.enums.StudentBatchEnrollmentStatus;
-import edu.vinu.domain.student_batch_enrollment.mapper.StudentBatchEnrollmentMapper;
 import edu.vinu.domain.student_batch_enrollment.repository.StudentBatchEnrollmentRepository;
 import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
 import edu.vinu.domain.user.entity.StudentEntity;
@@ -46,10 +45,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private final BatchService batchService;
     private final PaymentService paymentService;
     private final StudentBatchEnrollmentRepository  studentBatchEnrollmentRepository;
+    private final InvoicePdfGeneratorService invoicePdfGenerator;
 
     @Override
     @Transactional
-    public ApiResponse enrollStudent(EnrollmentRequest request) {
+    public byte[] enrollStudent(EnrollmentRequest request) {
         UserEntity userEntity = userService.getUserEntityByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         StudentEntity studentEntity;
 
@@ -74,10 +74,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
             StudentBatchEnrollment savedEnrollment = studentBatchEnrollmentRepository.save(studentBatchEnrollment);
 
-            return ApiResponse.builder()
-                    .message("Student Enrolled Successfully")
-                    .data(StudentBatchEnrollmentMapper.toEnrollmentResponse(savedEnrollment, payment))
-                    .build();
+            return invoicePdfGenerator.generate(savedEnrollment, payment);
         }
         throw new UnauthorizedException("Only Students can enroll with courses");
     }

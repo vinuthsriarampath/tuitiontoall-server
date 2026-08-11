@@ -17,5 +17,5 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentRequest;
 
 public interface EnrollmentService {
-    ApiResponse enrollStudent(EnrollmentRequest request);
+    byte[] enrollStudent(EnrollmentRequest request);
 }
