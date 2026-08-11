@@ -30,6 +30,8 @@ public interface UserService {
 
     UserEntity getUserEntityByEmail(String email);
 
+    UserEntity getUserEntityById(Long id);
+
     boolean isUserExist(String email);
 
     boolean isTeacherExistByTeacherId(Long teacherId);

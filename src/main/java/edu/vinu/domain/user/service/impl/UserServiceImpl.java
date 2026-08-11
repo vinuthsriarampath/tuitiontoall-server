@@ -81,6 +81,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserEntity getUserEntityById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found with ID: " + id));
+    }
+
+    @Override
     public boolean isUserExist(String email) {
         return userRepository.existsByEmail(email);
     }
