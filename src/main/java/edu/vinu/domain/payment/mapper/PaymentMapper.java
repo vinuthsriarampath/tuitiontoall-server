@@ -22,7 +22,6 @@ public class PaymentMapper {
                 .id(payment.getId())
                 .studentId(payment.getStudent().getId())
                 .instituteId(payment.getInstitute().getId())
-                .courseId(payment.getCourse().getId())
                 .amount(payment.getAmount())
                 .status(payment.getStatus())
                 .paymentMethod(payment.getPaymentMethod())

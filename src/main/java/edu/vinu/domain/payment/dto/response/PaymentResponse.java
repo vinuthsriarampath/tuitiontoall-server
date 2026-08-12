@@ -25,7 +25,6 @@ public record PaymentResponse(
         Long id,
         Long studentId,
         Long instituteId,
-        Long courseId,
         BigDecimal amount,
         PaymentStatus status,
         PaymentMethod paymentMethod,

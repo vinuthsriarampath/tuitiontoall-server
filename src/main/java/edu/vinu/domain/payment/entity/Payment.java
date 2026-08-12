@@ -36,12 +36,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(
-        name = "payment",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"student_id","course_id","institute_id"},name = "uk_student_course_payment")
-        }
-)
+@Table(name = "payment")
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,10 +69,6 @@ public class Payment {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "student_id", nullable = false)
     private StudentEntity student;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "course_id", nullable = false)
-    private CourseEntity course;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "institute_id", nullable = false)
