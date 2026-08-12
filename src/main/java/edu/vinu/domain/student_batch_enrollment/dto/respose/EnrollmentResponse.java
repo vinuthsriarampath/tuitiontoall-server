@@ -25,7 +25,6 @@ public record EnrollmentResponse(
         Long id,
         Long studentId,
         Long instituteId,
-        Long courseId,
         Long batchId,
         StudentBatchEnrollmentStatus batchEnrollmentStatus,
         LocalDateTime enrolledDate,

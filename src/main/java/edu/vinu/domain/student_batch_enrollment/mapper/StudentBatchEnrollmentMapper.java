@@ -23,7 +23,6 @@ public class StudentBatchEnrollmentMapper {
                 .id(studentBatchEnrollment.getId())
                 .studentId(studentBatchEnrollment.getStudent().getId())
                 .instituteId(payment.getInstitute().getId())
-                .courseId(payment.getCourse().getId())
                 .batchId(studentBatchEnrollment.getBatch().getId())
                 .batchEnrollmentStatus(studentBatchEnrollment.getStatus())
                 .enrolledDate(studentBatchEnrollment.getCreatedDate())
