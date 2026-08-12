@@ -31,10 +31,12 @@ import edu.vinu.domain.user.entity.StudentEntity;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Service
@@ -63,7 +65,24 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 throw new InvalidInputException("Batch does not belong to the course");
             }
 
-            Payment payment = paymentService.pay(studentEntity, courseEntity, courseEntity.getInstitute());
+            if (studentBatchEnrollmentRepository.countByStudentIdAndBatchId(studentEntity.getId(), batchEntity.getId()) > 0) {
+                throw new InvalidInputException("Student is already enrolled in this batch");
+            }
+
+            if (studentBatchEnrollmentRepository.countActiveEnrollmentByStudentAndCourse(studentEntity.getId(), courseEntity.getId()) > 0) {
+                throw new InvalidInputException("Student is already enrolled in another ACTIVE batch of this course");
+            }
+
+            if (Boolean.TRUE.equals(batchEntity.getIs_seat_limited())) {
+
+                long enrolledStudents = studentBatchEnrollmentRepository.countEnrollmentsByBatchId(batchEntity.getId());
+
+                if (enrolledStudents >= batchEntity.getMax_seat_limit()) {
+                    throw new InvalidInputException("This batch has reached its maximum seat capacity");
+                }
+            }
+
+            Payment payment = paymentService.pay(BigDecimal.valueOf(courseEntity.getPrice()),studentEntity, courseEntity.getInstitute());
 
             StudentBatchEnrollment studentBatchEnrollment = StudentBatchEnrollment.builder()
                     .student(studentEntity)
@@ -72,7 +91,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                     .status(StudentBatchEnrollmentStatus.ACTIVE)
                     .build();
 
-            StudentBatchEnrollment savedEnrollment = studentBatchEnrollmentRepository.save(studentBatchEnrollment);
+            StudentBatchEnrollment savedEnrollment;
+            try {
+                savedEnrollment = studentBatchEnrollmentRepository.save(studentBatchEnrollment);
+            } catch (DataIntegrityViolationException e) {
+                throw new InvalidInputException("Student has already been enrolled");
+            }
 
             return invoicePdfGenerator.generate(savedEnrollment, payment);
         }
