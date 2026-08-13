@@ -15,15 +15,21 @@ package edu.vinu.domain.student_batch_enrollment.service.impl;
 
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
+import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.auth.service.UserAuthenticationService;
 import edu.vinu.domain.batch.entity.BatchEntity;
+import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
 import edu.vinu.domain.batch.service.BatchService;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.openPdf.service.InvoicePdfGeneratorService;
 import edu.vinu.domain.payment.entity.Payment;
 import edu.vinu.domain.payment.service.PaymentService;
+import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentEligibilityCheckRequest;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentRequest;
+import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentEligibilityResponse;
 import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
+import edu.vinu.domain.student_batch_enrollment.enums.EnrollmentEligibilityReason;
 import edu.vinu.domain.student_batch_enrollment.enums.StudentBatchEnrollmentStatus;
 import edu.vinu.domain.student_batch_enrollment.repository.StudentBatchEnrollmentRepository;
 import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
@@ -48,11 +54,12 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private final PaymentService paymentService;
     private final StudentBatchEnrollmentRepository  studentBatchEnrollmentRepository;
     private final InvoicePdfGeneratorService invoicePdfGenerator;
+    private final UserAuthenticationService authService;
 
     @Override
     @Transactional
     public byte[] enrollStudent(EnrollmentRequest request) {
-        UserEntity userEntity = userService.getUserEntityByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
         StudentEntity studentEntity;
 
         if(userEntity.getRole().getRole().equals("student")){
@@ -101,5 +108,93 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             return invoicePdfGenerator.generate(savedEnrollment, payment);
         }
         throw new UnauthorizedException("Only Students can enroll with courses");
+    }
+
+    @Override
+    public ApiResponse checkEnrollmentEligibility(EnrollmentEligibilityCheckRequest request) {
+        CourseEntity course = courseService.getCourseEntityById(request.courseId());
+        BatchEntity batch = batchService.getBatchEntityById(request.batchId());
+
+        UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
+        StudentEntity studentEntity;
+
+        if(userEntity.getRole().getRole().equals("student")){
+            studentEntity = userEntity.getStudent();
+            if (!Objects.equals(batch.getCourse().getId(), course.getId())) {
+                return ApiResponse.builder()
+                        .message("The selected batch does not belong to this course")
+                        .data(
+                                EnrollmentEligibilityResponse.builder()
+                                .canEnroll(false)
+                                .reason(EnrollmentEligibilityReason.INVALID_BATCH)
+                                .build()
+                        )
+                        .build();
+            }
+
+            if (batch.getEnrollment_status() != BatchEnrollmentStatus.OPEN) {
+                return ApiResponse.builder()
+                        .message("Enrollment for this batch is currently closed")
+                        .data(
+                                EnrollmentEligibilityResponse.builder()
+                                        .canEnroll(false)
+                                        .reason(EnrollmentEligibilityReason.ENROLLMENT_CLOSED)
+                                        .build()
+                        )
+                        .build();
+            }
+
+            if (studentBatchEnrollmentRepository.countByStudentIdAndBatchId(studentEntity.getId(), request.batchId()) > 0) {
+                return ApiResponse.builder()
+                        .message("Student is already enrolled in this batch")
+                        .data(
+                                EnrollmentEligibilityResponse.builder()
+                                        .canEnroll(false)
+                                        .reason(EnrollmentEligibilityReason.ALREADY_ENROLLED)
+                                        .build()
+                        )
+                        .build();
+            }
+
+            if (studentBatchEnrollmentRepository.countActiveEnrollmentByStudentAndCourse(studentEntity.getId(), request.courseId()) > 0) {
+                return ApiResponse.builder()
+                        .message("Student is already enrolled in another active batch of this course")
+                        .data(
+                                EnrollmentEligibilityResponse.builder()
+                                        .canEnroll(false)
+                                        .reason(EnrollmentEligibilityReason.ANOTHER_ACTIVE_BATCH)
+                                        .build()
+                        )
+                        .build();
+            }
+
+            if (Boolean.TRUE.equals(batch.getIs_seat_limited())) {
+
+                long enrolledStudents = studentBatchEnrollmentRepository.countEnrollmentsByBatchId(request.batchId());
+
+                if (enrolledStudents >= batch.getMax_seat_limit()) {
+                    return ApiResponse.builder()
+                            .message("This batch has reached its maximum seat capacity")
+                            .data(
+                                    EnrollmentEligibilityResponse.builder()
+                                            .canEnroll(false)
+                                            .reason(EnrollmentEligibilityReason.BATCH_FULL)
+                                            .build()
+                            )
+                            .build();
+                }
+            }
+
+            return ApiResponse.builder()
+                    .message("Student can enroll in this batch")
+                    .data(
+                            EnrollmentEligibilityResponse.builder()
+                                    .canEnroll(true)
+                                    .reason(EnrollmentEligibilityReason.ELIGIBLE)
+                                    .build()
+                    )
+                    .build();
+        }
+        throw new UnauthorizedException("Only Students can check enrollment eligibility");
     }
 }
