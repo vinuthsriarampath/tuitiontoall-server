@@ -172,31 +172,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-    @Override
-    public Student updateStudentDetails(String email, StudentDetailsUpdateRequest studentDetailsUpdateRequest) {
-        if (!isUserExist(email)){
-            throw new NotFoundException("No User Found By "+email);
-        }
-        if (!isValidDob(studentDetailsUpdateRequest.getDob())){
-            throw new InvalidInputException("You must be at least 6 years old");
-        }
-        return Optional.ofNullable(userRepository.findByEmail(email))
-                .map(userEntity -> {
-                    userEntity.setAddress(studentDetailsUpdateRequest.getAddress());
-                    userEntity.setContact(studentDetailsUpdateRequest.getContact());
 
-                    userRepository.save(userEntity);
-
-                    StudentEntity studentEntity = userEntity.getStudent();
-
-                    studentEntity.setFirstName(studentDetailsUpdateRequest.getFirstName());
-                    studentEntity.setLastName(studentDetailsUpdateRequest.getLastName());
-                    studentEntity.setDob(studentDetailsUpdateRequest.getDob());
-
-                    return convertToStudentModel(studentRepository.save(studentEntity));
-                })
-                .orElseThrow(() -> new NotFoundException("No Student found by "+email));
-    }
 
     @Override
     public void disableUserAccountByEmail(String email) {

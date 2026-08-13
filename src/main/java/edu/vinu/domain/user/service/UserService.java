@@ -54,7 +54,7 @@ public interface UserService {
 
 
 
-    Student updateStudentDetails(String email, @Valid StudentDetailsUpdateRequest studentDetailsUpdateRequest);
+
 
     void disableUserAccountByEmail(String email);
 

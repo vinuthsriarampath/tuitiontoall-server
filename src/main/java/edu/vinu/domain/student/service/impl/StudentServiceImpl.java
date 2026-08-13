@@ -13,22 +13,31 @@
 
 package edu.vinu.domain.student.service.impl;
 
+import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
+import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;
+import edu.vinu.domain.student.entity.StudentEntity;
 import edu.vinu.domain.student.mapper.StudentMapper;
 import edu.vinu.domain.student.repository.StudentRepository;
 import edu.vinu.domain.student.service.StudentService;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.User;
+import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.mapper.UserMapper;
+import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
+import static edu.vinu.domain.user.validator.UserValidator.isValidDob;
 
 @Service
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
+    private final UserService userService;
 
     @Override
     public List<Student> getAllStudents() {
@@ -47,5 +56,24 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.getStudentsByFirstNameLike(firstName).stream()
                 .map(studentEntity -> UserMapper.toUser(studentEntity.getUser(), StudentMapper.toStudent(studentEntity)))
                 .toList();
+    }
+
+    @Override
+    public Student updateStudentDetails(String email, StudentDetailsUpdateRequest studentDetailsUpdateRequest) {
+        if (!isValidDob(studentDetailsUpdateRequest.getDob())){
+            throw new InvalidInputException("You must be at least 6 years old");
+        }
+
+        UserEntity userEntity = userService.getUserEntityByEmail(email);
+        userService.updateUserDetails(email, studentDetailsUpdateRequest);
+
+        StudentEntity studentEntity = userEntity.getStudent();
+
+        studentEntity.setFirstName(studentDetailsUpdateRequest.getFirstName());
+        studentEntity.setLastName(studentDetailsUpdateRequest.getLastName());
+        studentEntity.setDob(studentDetailsUpdateRequest.getDob());
+
+
+        return StudentMapper.toStudent(studentRepository.save(studentEntity));
     }
 }

@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.student.service;
 
+import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.User;
 
@@ -23,4 +24,6 @@ public interface StudentService {
     List<Student> getAllStudents();
 
     List<User> getAllStudentsByFirstName(String firstName);
+
+    Student updateStudentDetails(String email, StudentDetailsUpdateRequest studentDetailsUpdateRequest);
 }
