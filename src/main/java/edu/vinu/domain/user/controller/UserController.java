@@ -17,10 +17,11 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.dto.Student;
-import edu.vinu.domain.user.dto.Teacher;
+import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.user.request.update.StudentDetailsUpdateRequest;
-import edu.vinu.domain.user.request.update.TeacherDetailsUpdateRequest;
+import edu.vinu.domain.teacher.dtos.request.TeacherDetailsUpdateRequest;
+import edu.vinu.domain.teacher.service.TeacherService;
 import edu.vinu.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ import static org.springframework.http.HttpStatus.OK;
 @SuppressWarnings("unused")
 public class UserController {
     private final UserService userService;
+    private final TeacherService teacherService;
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse> getUserDetails(){
@@ -68,7 +70,7 @@ public class UserController {
 
     @GetMapping("/teachers")
     public ResponseEntity<ApiResponse> getAllTeachers(){
-        List<Teacher> teacherList = userService.getAllTeachers();
+        List<Teacher> teacherList = teacherService.getAllTeachers();
         return ResponseEntity.status(FOUND).body(new ApiResponse("All Teachers!",teacherList));
     }
 
@@ -94,7 +96,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('teacher')")
     @PatchMapping("/teachers/update/me")
     public ResponseEntity<ApiResponse> updateTeacherDetails(@Valid @RequestBody TeacherDetailsUpdateRequest teacherDetailsUpdateRequest){
-        Teacher updatedTeacherDetails = userService.updateTeacherDetails(SecurityContextHolder.getContext().getAuthentication().getName(),teacherDetailsUpdateRequest);
+        Teacher updatedTeacherDetails = teacherService.updateTeacherDetails(SecurityContextHolder.getContext().getAuthentication().getName(),teacherDetailsUpdateRequest);
         return ResponseEntity.status(OK).body(new ApiResponse("Teacher Profile Updated!",updatedTeacherDetails));
     }
 
