@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.domain.user.service;
+package edu.vinu.domain.student.service;
 
 public interface StudentService {
 }

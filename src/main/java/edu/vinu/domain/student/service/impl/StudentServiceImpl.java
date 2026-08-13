@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.domain.user.service.impl;
+package edu.vinu.domain.student.service.impl;
 
-import edu.vinu.domain.user.repository.StudentRepository;
-import edu.vinu.domain.user.service.StudentService;
+import edu.vinu.domain.student.repository.StudentRepository;
+import edu.vinu.domain.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
