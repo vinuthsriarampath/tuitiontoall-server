@@ -16,6 +16,7 @@ package edu.vinu.domain.search.service.impl;
 import edu.vinu.domain.search.response.SearchResponse;
 import edu.vinu.domain.search.service.SearchService;
 import edu.vinu.domain.user.dto.User;
+import edu.vinu.domain.teacher.service.TeacherService;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -29,6 +30,7 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
     private final UserService userService;
+    private final TeacherService teacherService;
 
     @Async
     private CompletableFuture<List<User>> searchStudents(String query){
@@ -37,7 +39,7 @@ public class SearchServiceImpl implements SearchService {
     
     @Async
     private CompletableFuture<List<User>> searchTeachers(String query){
-        return CompletableFuture.completedFuture(userService.getAllTeachersByFirstNameLike(query));
+        return CompletableFuture.completedFuture(teacherService.getAllTeachersByFirstName(query));
     }
     
     @Async
