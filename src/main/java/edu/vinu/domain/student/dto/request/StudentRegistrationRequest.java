@@ -11,9 +11,10 @@
  *
  */
 
-package edu.vinu.domain.user.request.registration;
+package edu.vinu.domain.student.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import edu.vinu.domain.user.request.registration.UserRegistrationRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;

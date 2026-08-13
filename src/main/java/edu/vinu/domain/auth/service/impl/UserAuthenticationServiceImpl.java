@@ -33,7 +33,7 @@ import edu.vinu.domain.student.repository.StudentRepository;
 import edu.vinu.domain.teacher.repository.TeacherRepository;
 import edu.vinu.domain.user.repository.UserRepository;
 import edu.vinu.domain.institute.request.InstituteRegistrationRequest;
-import edu.vinu.domain.user.request.registration.StudentRegistrationRequest;
+import edu.vinu.domain.student.dto.request.StudentRegistrationRequest;
 import edu.vinu.domain.teacher.dtos.request.TeacherRegistrationRequest;
 import edu.vinu.domain.user.service.UserService;
 import edu.vinu.domain.user.validator.UserValidator;

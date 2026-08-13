@@ -36,7 +36,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Async
     private CompletableFuture<List<User>> searchStudents(String query){
-        return CompletableFuture.completedFuture(userService.getAllStudentsByFirstNameLike(query));
+        return CompletableFuture.completedFuture(userService.getAllStudentsByFirstName(query));
     }
     
     @Async

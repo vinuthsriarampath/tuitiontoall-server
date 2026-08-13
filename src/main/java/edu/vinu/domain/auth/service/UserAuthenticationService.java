@@ -20,7 +20,7 @@ import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.institute.request.InstituteRegistrationRequest;
-import edu.vinu.domain.user.request.registration.StudentRegistrationRequest;
+import edu.vinu.domain.student.dto.request.StudentRegistrationRequest;
 import edu.vinu.domain.teacher.dtos.request.TeacherRegistrationRequest;
 
 public interface UserAuthenticationService {
