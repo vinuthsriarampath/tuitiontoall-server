@@ -117,18 +117,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-    @Override
-    public List<Institute> getAllInstitutes() {
-        List<Institute> instituteList =  instituteRepository.getAllInstitutes()
-                .stream()
-                .map(this::convertToInstituteModel)
-                .toList();
 
-        if (instituteList.isEmpty()){
-            throw new NotFoundException("No Institutes Found!");
-        }
-        return instituteList;
-    }
 
     @Override
     public List<User> getAllInstitutesByInstituteName(String instituteName) {

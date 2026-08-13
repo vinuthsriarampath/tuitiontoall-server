@@ -16,6 +16,7 @@ package edu.vinu.domain.user.controller;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
+import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.student.service.StudentService;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
@@ -45,6 +46,7 @@ public class UserController {
     private final UserService userService;
     private final TeacherService teacherService;
     private final StudentService studentService;
+    private final InstituteService instituteService;
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse> getUserDetails(){
@@ -78,7 +80,7 @@ public class UserController {
 
     @GetMapping("/institutes")
     public ResponseEntity<ApiResponse> getAllInstitutes(){
-        List<Institute> instituteList=userService.getAllInstitutes();
+        List<Institute> instituteList=instituteService.getAllInstitutes();
         return ResponseEntity.status(FOUND).body(new ApiResponse("All Institutes!",instituteList));
     }
 

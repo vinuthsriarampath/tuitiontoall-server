@@ -22,6 +22,7 @@ import edu.vinu.domain.course.enums.*;
 import edu.vinu.domain.course.repository.CourseRepository;
 import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.entity.InstituteEntity;
+import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.user.entity.RoleEntity;
 import edu.vinu.domain.user.repository.RoleRepository;
 import edu.vinu.domain.user.repository.UserRepository;
@@ -53,6 +54,7 @@ public class DatabaseSeeder implements CommandLineRunner {
     private final CourseRepository courseRepository;
     private final RoleRepository roleRepository;
     private final ModelMapper mapper;
+    private final InstituteService instituteService;
 
     @Override
     public void run(String... args) {
@@ -129,7 +131,7 @@ public class DatabaseSeeder implements CommandLineRunner {
     }
 
     private void seedCourses(){
-        List<Institute> institutes = userService.getAllInstitutes();
+        List<Institute> institutes = instituteService.getAllInstitutes();
         if (institutes.isEmpty()) return;
 
         CourseEntity request = new CourseEntity();

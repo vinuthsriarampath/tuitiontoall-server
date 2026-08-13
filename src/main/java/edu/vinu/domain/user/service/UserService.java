@@ -44,7 +44,7 @@ public interface UserService {
 
 
 
-    List<Institute> getAllInstitutes();
+
 
     List<User> getAllInstitutesByInstituteName(String instituteName);
 

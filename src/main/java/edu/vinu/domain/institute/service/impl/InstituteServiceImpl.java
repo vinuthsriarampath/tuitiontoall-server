@@ -13,20 +13,27 @@
 
 package edu.vinu.domain.institute.service.impl;
 
+import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.domain.auth.service.UserAuthenticationService;
+import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.entity.InstituteEntity;
+import edu.vinu.domain.institute.mapper.InstituteMapper;
+import edu.vinu.domain.institute.repository.InstituteRepository;
 import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class InstituteServiceImpl implements InstituteService {
 
     private final UserAuthenticationService  authenticationService;
+    private final InstituteRepository instituteRepository;
     private final UserServiceImpl userService;
 
     @Override
@@ -37,5 +44,18 @@ public class InstituteServiceImpl implements InstituteService {
             throw new UnauthorizedException("You are not associated with any institute.");
         }
         return instituteEntity;
+    }
+
+    @Override
+    public List<Institute> getAllInstitutes() {
+        List<Institute> instituteList =  instituteRepository.getAllInstitutes()
+                .stream()
+                .map(InstituteMapper::toInstitute)
+                .toList();
+
+        if (instituteList.isEmpty()){
+            throw new NotFoundException("No Institutes Found!");
+        }
+        return instituteList;
     }
 }
