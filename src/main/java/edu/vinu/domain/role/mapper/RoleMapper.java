@@ -11,10 +11,10 @@
  *
  */
 
-package edu.vinu.domain.user.mapper;
+package edu.vinu.domain.role.mapper;
 
-import edu.vinu.domain.user.dto.Role;
-import edu.vinu.domain.user.entity.RoleEntity;
+import edu.vinu.domain.role.dto.Role;
+import edu.vinu.domain.role.entity.RoleEntity;
 
 public class RoleMapper {
     public static Role toRole(RoleEntity roleEntity) {

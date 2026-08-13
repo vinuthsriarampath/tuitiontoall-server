@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.domain.user.dto;
+package edu.vinu.domain.role.dto;
 
 public interface RoleDetails {
 }

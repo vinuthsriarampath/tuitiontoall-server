@@ -13,7 +13,8 @@
 
 package edu.vinu.domain.user.mapper;
 
-import edu.vinu.domain.user.dto.RoleDetails;
+import edu.vinu.domain.role.dto.RoleDetails;
+import edu.vinu.domain.role.mapper.RoleMapper;
 import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.user.entity.UserEntity;
 

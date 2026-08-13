@@ -15,6 +15,8 @@ package edu.vinu.domain.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.vinu.domain.role.dto.Role;
+import edu.vinu.domain.role.dto.RoleDetails;
 import lombok.*;
 
 import java.time.LocalDateTime;

@@ -14,7 +14,7 @@
 package edu.vinu.domain.student.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import edu.vinu.domain.user.dto.RoleDetails;
+import edu.vinu.domain.role.dto.RoleDetails;
 import lombok.*;
 
 import java.time.LocalDate;

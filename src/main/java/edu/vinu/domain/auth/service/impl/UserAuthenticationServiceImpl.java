@@ -24,7 +24,7 @@ import edu.vinu.domain.institute.repository.InstituteRepository;
 import edu.vinu.domain.student.dto.response.Student;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.user.dto.User;
-import edu.vinu.domain.user.entity.RoleEntity;
+import edu.vinu.domain.role.entity.RoleEntity;
 import edu.vinu.domain.student.entity.StudentEntity;
 import edu.vinu.domain.teacher.entity.TeacherEntity;
 import edu.vinu.domain.user.entity.UserEntity;

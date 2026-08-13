@@ -13,7 +13,7 @@
 
 package edu.vinu.domain.institute.dto;
 
-import edu.vinu.domain.user.dto.RoleDetails;
+import edu.vinu.domain.role.dto.RoleDetails;
 import lombok.*;
 
 @Setter

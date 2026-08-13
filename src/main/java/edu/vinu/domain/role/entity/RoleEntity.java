@@ -11,8 +11,9 @@
  *
  */
 
-package edu.vinu.domain.user.entity;
+package edu.vinu.domain.role.entity;
 
+import edu.vinu.domain.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

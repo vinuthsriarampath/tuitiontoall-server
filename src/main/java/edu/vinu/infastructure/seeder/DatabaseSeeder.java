@@ -23,7 +23,7 @@ import edu.vinu.domain.course.repository.CourseRepository;
 import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.institute.service.InstituteService;
-import edu.vinu.domain.user.entity.RoleEntity;
+import edu.vinu.domain.role.entity.RoleEntity;
 import edu.vinu.domain.user.repository.RoleRepository;
 import edu.vinu.domain.user.repository.UserRepository;
 import edu.vinu.domain.institute.request.InstituteRegistrationRequest;
