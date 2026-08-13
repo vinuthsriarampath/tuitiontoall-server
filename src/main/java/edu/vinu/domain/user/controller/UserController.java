@@ -14,65 +14,25 @@
 package edu.vinu.domain.user.controller;
 
 import edu.vinu.common.response.ApiResponse;
-import edu.vinu.domain.institute.dto.Institute;
-import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
-import edu.vinu.domain.institute.service.InstituteService;
-import edu.vinu.domain.student.service.StudentService;
-import edu.vinu.domain.student.dto.response.Student;
-import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.user.dto.User;
-import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;
-import edu.vinu.domain.teacher.dtos.request.TeacherDetailsUpdateRequest;
-import edu.vinu.domain.teacher.service.TeacherService;
 import edu.vinu.domain.user.service.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-import static org.springframework.http.HttpStatus.FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
-@CrossOrigin
 @RestController
 @RequestMapping("api/v2/users")
 @RequiredArgsConstructor
-@SuppressWarnings("unused")
 public class UserController {
     private final UserService userService;
-    private final TeacherService teacherService;
-    private final StudentService studentService;
-    private final InstituteService instituteService;
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse> getUserDetails(){
         User user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(new ApiResponse("User Verified!",user));
-    }
-
-    @PreAuthorize("hasAuthority('institute')")
-    @PatchMapping("/institutes/update/me")
-    public ResponseEntity<ApiResponse> updateInstituteDetails(@Valid @RequestBody InstituteDetailsUpdateRequest instituteDetailsUpdateRequest){
-        Institute updateInstituteDetails = instituteService.updateInstituteDetails(SecurityContextHolder.getContext().getAuthentication().getName(),instituteDetailsUpdateRequest);
-        return ResponseEntity.status(OK).body(new ApiResponse("Profile Updated",updateInstituteDetails));
-    }
-
-    @PreAuthorize("hasAuthority('teacher')")
-    @PatchMapping("/teachers/update/me")
-    public ResponseEntity<ApiResponse> updateTeacherDetails(@Valid @RequestBody TeacherDetailsUpdateRequest teacherDetailsUpdateRequest){
-        Teacher updatedTeacherDetails = teacherService.updateTeacherDetails(SecurityContextHolder.getContext().getAuthentication().getName(),teacherDetailsUpdateRequest);
-        return ResponseEntity.status(OK).body(new ApiResponse("Teacher Profile Updated!",updatedTeacherDetails));
-    }
-
-    @PreAuthorize("hasAuthority('student')")
-    @PatchMapping("/student/update/me")
-    public ResponseEntity<ApiResponse> updateStudentDetails(@Valid @RequestBody StudentDetailsUpdateRequest studentDetailsUpdateRequest){
-        Student updatedStudentDetails = studentService.updateStudentDetails(SecurityContextHolder.getContext().getAuthentication().getName(),studentDetailsUpdateRequest);
-        return ResponseEntity.status(OK).body(new ApiResponse("Student Profile Updated!",updatedStudentDetails));
     }
 
     @DeleteMapping("/disable/me")
@@ -85,12 +45,6 @@ public class UserController {
     public ResponseEntity<ApiResponse> getUserByUserSlug(@PathVariable String userSlug){
         User user = userService.getUserByUserSlug(userSlug);
         return ResponseEntity.status(OK).body(new ApiResponse("User Found By "+userSlug,user));
-    }
-
-    @PreAuthorize("hasAuthority('institute')")
-    @GetMapping("validate/institute-role")
-    public ResponseEntity<ApiResponse> validateInstituteRole(){
-        return ResponseEntity.status(OK).body(new ApiResponse("User has institute role!",null));
     }
 
 }
