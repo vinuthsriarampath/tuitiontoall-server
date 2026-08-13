@@ -16,11 +16,10 @@ package edu.vinu.domain.user.service;
 import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.dto.Student;
-import edu.vinu.domain.user.dto.Teacher;
 import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.request.update.StudentDetailsUpdateRequest;
-import edu.vinu.domain.user.request.update.TeacherDetailsUpdateRequest;
+import edu.vinu.domain.user.request.update.UserDetailsUpdateRequest;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -34,17 +33,16 @@ public interface UserService {
 
     boolean isUserExist(String email);
 
-    boolean isTeacherExistByTeacherId(Long teacherId);
+    User updateUserDetails(String email, UserDetailsUpdateRequest userUpdateRequest);
 
     List<Object> getAllUsersByFirstNameLike(String firstname);
 
     List<User> getAllStudentsByFirstNameLike(String firstName);
 
-    List<User> getAllTeachersByFirstNameLike(String lastName);
+
 
     List<Student> getAllStudents();
 
-    List<Teacher> getAllTeachers();
 
     List<Institute> getAllInstitutes();
 
@@ -54,7 +52,7 @@ public interface UserService {
 
     String generateUserSlug(String base);
 
-    Teacher updateTeacherDetails(String email, TeacherDetailsUpdateRequest teacherDetailsUpdateRequest);
+
 
     Student updateStudentDetails(String email, @Valid StudentDetailsUpdateRequest studentDetailsUpdateRequest);
 

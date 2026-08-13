@@ -18,19 +18,22 @@ import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.entity.InstituteEntity;
+import edu.vinu.domain.institute.mapper.InstituteMapper;
 import edu.vinu.domain.institute.repository.InstituteRepository;
 import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.dto.Student;
-import edu.vinu.domain.user.dto.Teacher;
+import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.user.entity.StudentEntity;
-import edu.vinu.domain.user.entity.TeacherEntity;
+import edu.vinu.domain.teacher.entity.TeacherEntity;
 import edu.vinu.domain.user.entity.UserEntity;
+import edu.vinu.domain.user.mapper.StudentMapper;
+import edu.vinu.domain.user.mapper.UserMapper;
 import edu.vinu.domain.user.repository.StudentRepository;
-import edu.vinu.domain.user.repository.TeacherRepository;
+import edu.vinu.domain.teacher.repository.TeacherRepository;
 import edu.vinu.domain.user.repository.UserRepository;
 import edu.vinu.domain.user.request.update.StudentDetailsUpdateRequest;
-import edu.vinu.domain.user.request.update.TeacherDetailsUpdateRequest;
+import edu.vinu.domain.user.request.update.UserDetailsUpdateRequest;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -91,15 +94,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isTeacherExistByTeacherId(Long teacherId) {
-        return teacherRepository.existsById(teacherId);
+    public User updateUserDetails(String email, UserDetailsUpdateRequest userUpdateRequest) {
+        UserEntity userEntity = getUserEntityByEmail(email);
+
+        userEntity.setAddress(userUpdateRequest.getAddress());
+        userEntity.setContact(userUpdateRequest.getContact());
+
+        return UserMapper.toUser(userRepository.save(userEntity));
     }
 
     @Override
     public List<Object> getAllUsersByFirstNameLike(String firstname) {
         List<Object> userList =new ArrayList<>();
         userList.addAll(getAllStudentsByFirstNameLike(firstname));
-        userList.addAll(getAllTeachersByFirstNameLike(firstname));
+//        userList.addAll(getAllTeachersByFirstName(firstname));
         if (userList.isEmpty()){
             throw new NotFoundException("There are no users starts with "+firstname);
         }
@@ -109,22 +117,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllStudentsByFirstNameLike(String firstName) {
         return studentRepository.getStudentsByFirstNameLike(firstName).stream()
-                .map(studentEntity -> {
-                    User user = mapper.map(studentEntity,User.class);
-                    user.setDetails(mapper.map(studentEntity, Student.class));
-                    return user;
-                })
-                .toList();
-    }
-
-    @Override
-    public List<User> getAllTeachersByFirstNameLike(String firstName) {
-        return teacherRepository.getTeachersByFirstNameLike(firstName).stream()
-                .map(teacherEntity -> {
-                    User user = mapper.map(teacherEntity.getUser(), User.class);
-                    user.setDetails(mapper.map(teacherEntity, Teacher.class));
-                    return user;
-                })
+                .map(studentEntity -> UserMapper.toUser(studentEntity.getUser(), StudentMapper.toStudent(studentEntity)))
                 .toList();
     }
 
@@ -138,18 +131,6 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException("No Students Found");
         }
         return studentList;
-    }
-
-    @Override
-    public List<Teacher> getAllTeachers() {
-        List<Teacher> teacherList = teacherRepository.getAllTeachers()
-                .stream()
-                .map(this::convertToTeacherModel)
-                .toList();
-        if (teacherList.isEmpty()){
-            throw new NotFoundException("No Teachers Found!");
-        }
-        return teacherList;
     }
 
     @Override
@@ -169,11 +150,7 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllInstitutesByInstituteName(String instituteName) {
         return instituteRepository.findByInstituteName(instituteName)
                 .stream()
-                .map(instituteEntity -> {
-                    User user =  mapper.map(instituteEntity.getUser(), User.class);
-                    user.setDetails(mapper.map(instituteEntity, Institute.class));
-                    return user;
-                })
+                .map(instituteEntity -> UserMapper.toUser(instituteEntity.getUser(), InstituteMapper.toInstitute(instituteEntity)))
                 .toList();
     }
 
@@ -209,31 +186,7 @@ public class UserServiceImpl implements UserService {
         return uniqueSlug;
     }
 
-    @Override
-    public Teacher updateTeacherDetails(String email, TeacherDetailsUpdateRequest teacherDetailsUpdateRequest) {
-        if (!isUserExist(email)){
-            throw new NotFoundException("No User Found By "+email);
-        }
-        if (!isValidDob(teacherDetailsUpdateRequest.getDob())) {
-            throw new InvalidInputException("You must be at least 6 years old");
-        }
-        return Optional.ofNullable(userRepository.findByEmail(email))
-                .map(userEntity -> {
-                    userEntity.setAddress(teacherDetailsUpdateRequest.getAddress());
-                    userEntity.setContact(teacherDetailsUpdateRequest.getContact());
 
-                    userRepository.save(userEntity);
-
-                    TeacherEntity teacherEntity = userEntity.getTeacher();
-
-                    teacherEntity.setFirstName(teacherDetailsUpdateRequest.getFirstName());
-                    teacherEntity.setLastName(teacherDetailsUpdateRequest.getLastName());
-                    teacherEntity.setDob(teacherDetailsUpdateRequest.getDob());
-
-                    return convertToTeacherModel(teacherRepository.save(teacherEntity));
-                })
-                .orElseThrow(() -> new NotFoundException("No teacher found by "+email));
-    }
 
     @Override
     public Student updateStudentDetails(String email, StudentDetailsUpdateRequest studentDetailsUpdateRequest) {
