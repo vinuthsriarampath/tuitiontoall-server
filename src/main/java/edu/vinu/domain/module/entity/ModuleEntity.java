@@ -16,7 +16,7 @@ package edu.vinu.domain.module.entity;
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.domain.module.enums.ModuleStatus;
-import edu.vinu.domain.user.entity.TeacherEntity;
+import edu.vinu.domain.teacher.entity.TeacherEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

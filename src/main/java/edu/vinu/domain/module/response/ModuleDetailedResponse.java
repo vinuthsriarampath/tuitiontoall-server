@@ -15,7 +15,7 @@ package edu.vinu.domain.module.response;
 
 import edu.vinu.domain.batch.response.BatchBasicResponse;
 import edu.vinu.domain.module.enums.ModuleStatus;
-import edu.vinu.domain.user.response.TeacherBasicResponse;
+import edu.vinu.domain.teacher.dtos.response.TeacherBasicResponse;
 import lombok.Builder;
 
 import java.time.LocalDateTime;

@@ -22,7 +22,7 @@ import edu.vinu.domain.application.response.ApplicationSelectionResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherStatsResponse;
 import edu.vinu.domain.institute.service.InstituteTeacherService;
-import edu.vinu.domain.user.response.TeacherBasicResponse;
+import edu.vinu.domain.teacher.dtos.response.TeacherBasicResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

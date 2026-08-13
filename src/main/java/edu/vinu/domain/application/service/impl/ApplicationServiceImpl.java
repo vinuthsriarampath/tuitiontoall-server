@@ -27,6 +27,7 @@ import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.response.TeacherUserResponse;
+import edu.vinu.domain.teacher.dtos.response.TeacherUserResponse;
 import edu.vinu.domain.user.service.UserService;
 import edu.vinu.infastructure.service.email.EmailService;
 import lombok.RequiredArgsConstructor;

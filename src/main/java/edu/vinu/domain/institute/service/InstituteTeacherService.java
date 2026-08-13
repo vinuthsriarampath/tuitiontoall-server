@@ -19,8 +19,8 @@ import edu.vinu.domain.application.response.ApplicationRejectionResponse;
 import edu.vinu.domain.application.response.ApplicationSelectionResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherStatsResponse;
-import edu.vinu.domain.user.entity.TeacherEntity;
-import edu.vinu.domain.user.response.TeacherBasicResponse;
+import edu.vinu.domain.teacher.entity.TeacherEntity;
+import edu.vinu.domain.teacher.dtos.response.TeacherBasicResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

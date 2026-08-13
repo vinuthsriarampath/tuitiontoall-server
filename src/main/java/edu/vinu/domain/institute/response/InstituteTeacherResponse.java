@@ -14,7 +14,7 @@
 package edu.vinu.domain.institute.response;
 
 import edu.vinu.domain.institute.enums.InstituteTeacherStatus;
-import edu.vinu.domain.user.response.TeacherUserResponse;
+import edu.vinu.domain.teacher.dtos.response.TeacherUserResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
