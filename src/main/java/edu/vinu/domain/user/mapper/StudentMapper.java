@@ -11,14 +11,18 @@
  *
  */
 
-package edu.vinu.domain.payment.service;
+package edu.vinu.domain.user.mapper;
 
-import edu.vinu.domain.institute.entity.InstituteEntity;
-import edu.vinu.domain.payment.entity.Payment;
+import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.student.entity.StudentEntity;
 
-import java.math.BigDecimal;
-
-public interface PaymentService {
-    Payment pay(BigDecimal amount, StudentEntity studentEntity, InstituteEntity instituteEntity);
+public class StudentMapper {
+    public static Student toStudent(StudentEntity studentEntity){
+        return Student.builder()
+                .id(studentEntity.getId())
+                .firstName(studentEntity.getFirstName())
+                .lastName(studentEntity.getLastName())
+                .dob(studentEntity.getDob())
+                .build();
+    }
 }

@@ -13,11 +13,10 @@
 
 package edu.vinu.domain.payment.entity;
 
-import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.payment.enums.PaymentMethod;
 import edu.vinu.domain.payment.enums.PaymentStatus;
-import edu.vinu.domain.user.entity.StudentEntity;
+import edu.vinu.domain.student.entity.StudentEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

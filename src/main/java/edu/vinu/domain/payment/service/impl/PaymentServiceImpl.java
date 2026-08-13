@@ -14,16 +14,13 @@
 package edu.vinu.domain.payment.service.impl;
 
 import edu.vinu.common.exception.custom.InvalidInputException;
-import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.institute.entity.InstituteEntity;
-import edu.vinu.domain.payment.dto.response.PaymentResponse;
 import edu.vinu.domain.payment.entity.Payment;
 import edu.vinu.domain.payment.enums.PaymentMethod;
 import edu.vinu.domain.payment.enums.PaymentStatus;
-import edu.vinu.domain.payment.mapper.PaymentMapper;
 import edu.vinu.domain.payment.repository.PaymentRepository;
 import edu.vinu.domain.payment.service.PaymentService;
-import edu.vinu.domain.user.entity.StudentEntity;
+import edu.vinu.domain.student.entity.StudentEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;

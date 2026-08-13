@@ -13,7 +13,7 @@
 
 package edu.vinu.domain.user.repository;
 
-import edu.vinu.domain.user.entity.StudentEntity;
+import edu.vinu.domain.student.entity.StudentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

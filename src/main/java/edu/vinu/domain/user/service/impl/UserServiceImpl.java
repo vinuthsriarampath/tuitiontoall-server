@@ -24,7 +24,7 @@ import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.user.dto.User;
-import edu.vinu.domain.user.entity.StudentEntity;
+import edu.vinu.domain.student.entity.StudentEntity;
 import edu.vinu.domain.teacher.entity.TeacherEntity;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.mapper.StudentMapper;

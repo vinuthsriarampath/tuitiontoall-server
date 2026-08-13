@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.search.service.impl;
 
+import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.search.response.SearchResponse;
 import edu.vinu.domain.search.service.SearchService;
 import edu.vinu.domain.user.dto.User;
@@ -31,6 +32,7 @@ import java.util.concurrent.CompletableFuture;
 public class SearchServiceImpl implements SearchService {
     private final UserService userService;
     private final TeacherService teacherService;
+    private final InstituteService instituteService;
 
     @Async
     private CompletableFuture<List<User>> searchStudents(String query){

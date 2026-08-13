@@ -11,14 +11,15 @@
  *
  */
 
-package edu.vinu.domain.payment.service;
+package edu.vinu.domain.user.service.impl;
 
-import edu.vinu.domain.institute.entity.InstituteEntity;
-import edu.vinu.domain.payment.entity.Payment;
-import edu.vinu.domain.student.entity.StudentEntity;
+import edu.vinu.domain.user.repository.StudentRepository;
+import edu.vinu.domain.user.service.StudentService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-
-public interface PaymentService {
-    Payment pay(BigDecimal amount, StudentEntity studentEntity, InstituteEntity instituteEntity);
+@Service
+@RequiredArgsConstructor
+public class StudentServiceImpl implements StudentService {
+    private final StudentRepository studentRepository;
 }

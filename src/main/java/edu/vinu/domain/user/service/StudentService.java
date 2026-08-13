@@ -11,14 +11,7 @@
  *
  */
 
-package edu.vinu.domain.payment.service;
+package edu.vinu.domain.user.service;
 
-import edu.vinu.domain.institute.entity.InstituteEntity;
-import edu.vinu.domain.payment.entity.Payment;
-import edu.vinu.domain.student.entity.StudentEntity;
-
-import java.math.BigDecimal;
-
-public interface PaymentService {
-    Payment pay(BigDecimal amount, StudentEntity studentEntity, InstituteEntity instituteEntity);
+public interface StudentService {
 }

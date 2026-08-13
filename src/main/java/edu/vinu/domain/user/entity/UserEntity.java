@@ -14,6 +14,7 @@
 package edu.vinu.domain.user.entity;
 
 import edu.vinu.domain.institute.entity.InstituteEntity;
+import edu.vinu.domain.student.entity.StudentEntity;
 import edu.vinu.domain.teacher.entity.TeacherEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;

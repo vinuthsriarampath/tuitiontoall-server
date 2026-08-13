@@ -33,12 +33,11 @@ import edu.vinu.domain.student_batch_enrollment.enums.EnrollmentEligibilityReaso
 import edu.vinu.domain.student_batch_enrollment.enums.StudentBatchEnrollmentStatus;
 import edu.vinu.domain.student_batch_enrollment.repository.StudentBatchEnrollmentRepository;
 import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
-import edu.vinu.domain.user.entity.StudentEntity;
+import edu.vinu.domain.student.entity.StudentEntity;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
