@@ -41,7 +41,7 @@ public interface UserService {
 
 
 
-    List<Student> getAllStudents();
+
 
 
     List<Institute> getAllInstitutes();

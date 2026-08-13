@@ -13,9 +13,11 @@
 
 package edu.vinu.domain.student.service.impl;
 
+import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.domain.student.mapper.StudentMapper;
 import edu.vinu.domain.student.repository.StudentRepository;
 import edu.vinu.domain.student.service.StudentService;
+import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
+
+    @Override
+    public List<Student> getAllStudents() {
+        List<Student> studentList = studentRepository.getAllStudents()
+                .stream()
+                .map(StudentMapper::toStudent)
+                .toList();
+        if (studentList.isEmpty()){
+            throw new NotFoundException("No Students Found");
+        }
+        return studentList;
+    }
 
     @Override
     public List<User> getAllStudentsByFirstName(String firstName) {

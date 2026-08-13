@@ -13,10 +13,14 @@
 
 package edu.vinu.domain.student.service;
 
+import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.User;
 
 import java.util.List;
 
 public interface StudentService {
+
+    List<Student> getAllStudents();
+
     List<User> getAllStudentsByFirstName(String firstName);
 }
