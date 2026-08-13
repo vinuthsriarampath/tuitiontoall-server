@@ -29,7 +29,7 @@ import edu.vinu.domain.student.entity.StudentEntity;
 import edu.vinu.domain.teacher.entity.TeacherEntity;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.repository.RoleRepository;
-import edu.vinu.domain.user.repository.StudentRepository;
+import edu.vinu.domain.student.repository.StudentRepository;
 import edu.vinu.domain.teacher.repository.TeacherRepository;
 import edu.vinu.domain.user.repository.UserRepository;
 import edu.vinu.domain.institute.request.InstituteRegistrationRequest;

@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.domain.user.mapper;
+package edu.vinu.domain.student.mapper;
 
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.student.entity.StudentEntity;

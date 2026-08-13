@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.domain.user.repository;
+package edu.vinu.domain.student.repository;
 
 import edu.vinu.domain.student.entity.StudentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
