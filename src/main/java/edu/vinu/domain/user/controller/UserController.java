@@ -93,7 +93,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/institutes/update/me")
     public ResponseEntity<ApiResponse> updateInstituteDetails(@Valid @RequestBody InstituteDetailsUpdateRequest instituteDetailsUpdateRequest){
-        Institute updateInstituteDetails = userService.updateInstituteDetails(SecurityContextHolder.getContext().getAuthentication().getName(),instituteDetailsUpdateRequest);
+        Institute updateInstituteDetails = instituteService.updateInstituteDetails(SecurityContextHolder.getContext().getAuthentication().getName(),instituteDetailsUpdateRequest);
         return ResponseEntity.status(OK).body(new ApiResponse("Profile Updated",updateInstituteDetails));
     }
 

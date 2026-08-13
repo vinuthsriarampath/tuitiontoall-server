@@ -20,6 +20,7 @@ import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.institute.mapper.InstituteMapper;
 import edu.vinu.domain.institute.repository.InstituteRepository;
+import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.user.entity.UserEntity;
@@ -29,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -67,5 +69,16 @@ public class InstituteServiceImpl implements InstituteService {
                 .stream()
                 .map(instituteEntity -> UserMapper.toUser(instituteEntity.getUser(), InstituteMapper.toInstitute(instituteEntity)))
                 .toList();
+    }
+
+    @Override
+    public Institute updateInstituteDetails(String email, InstituteDetailsUpdateRequest instituteDetailsUpdateRequest) {
+        UserEntity userEntity = userService.getUserEntityByEmail(email);
+
+        userService.updateUserDetails(email, instituteDetailsUpdateRequest);
+
+        userEntity.getInstitute().setInstituteName(instituteDetailsUpdateRequest.getInstituteName());
+
+        return InstituteMapper.toInstitute(instituteRepository.save(userEntity.getInstitute()));
     }
 }

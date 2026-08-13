@@ -121,24 +121,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-    @Override
-    public Institute updateInstituteDetails(String email, InstituteDetailsUpdateRequest instituteDetailsUpdateRequest) {
-        if (!isUserExist(email)) {
-            throw new NotFoundException("User not found for " + email);
-        }
-        return Optional.ofNullable(userRepository.findByEmail(email))
-                .map(userEntity -> {
-                    userEntity.setAddress(instituteDetailsUpdateRequest.getAddress());
-                    userEntity.setContact(instituteDetailsUpdateRequest.getContact());
 
-                    userRepository.save(userEntity);
-
-                    userEntity.getInstitute().setInstituteName(instituteDetailsUpdateRequest.getInstituteName());
-
-                    return convertToInstituteModel(instituteRepository.save(userEntity.getInstitute()));
-                })
-                .orElseThrow(() -> new NotFoundException("Institute not found for " + email));
-    }
 
     @Override
     public String generateUserSlug(String base) {

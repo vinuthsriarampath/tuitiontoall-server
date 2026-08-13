@@ -45,7 +45,7 @@ public interface UserService {
 
 
 
-    Institute updateInstituteDetails(String currentEmail, InstituteDetailsUpdateRequest instituteDetailsUpdateRequest);
+
 
     String generateUserSlug(String base);
 
