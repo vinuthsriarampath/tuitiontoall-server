@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.domain.user.repository.projection;
+package edu.vinu.domain.teacher.repository.projection;
 
 
 import java.time.LocalDate;

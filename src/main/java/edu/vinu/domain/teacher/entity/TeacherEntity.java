@@ -11,12 +11,13 @@
  *
  */
 
-package edu.vinu.domain.user.entity;
+package edu.vinu.domain.teacher.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import edu.vinu.domain.application.entity.ApplicationEntity;
 import edu.vinu.domain.institute.entity.InstituteTeacherEntity;
 import edu.vinu.domain.module.entity.ModuleEntity;
+import edu.vinu.domain.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

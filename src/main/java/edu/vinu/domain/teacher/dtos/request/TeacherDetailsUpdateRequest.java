@@ -11,9 +11,10 @@
  *
  */
 
-package edu.vinu.domain.user.request.update;
+package edu.vinu.domain.teacher.dtos.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import edu.vinu.domain.user.request.update.UserDetailsUpdateRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -28,7 +29,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeacherDetailsUpdateRequest extends UserDetailsUpdateRequest{
+public class TeacherDetailsUpdateRequest extends UserDetailsUpdateRequest {
     @NotBlank(message = "First Name cannot be blank")
     private String firstName;
 

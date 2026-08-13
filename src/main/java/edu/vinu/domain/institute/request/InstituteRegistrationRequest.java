@@ -11,24 +11,23 @@
  *
  */
 
-package edu.vinu.domain.user.response;
+package edu.vinu.domain.institute.request;
 
+import edu.vinu.domain.user.request.registration.UserRegistrationRequest;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class TeacherBasicResponse {
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String contact;
-    private String dp;
-    private String userslug;
+public class InstituteRegistrationRequest extends UserRegistrationRequest {
+
+    @NotBlank(message = "Institute Name cannot be blank")
+    private String instituteName;
+
 }

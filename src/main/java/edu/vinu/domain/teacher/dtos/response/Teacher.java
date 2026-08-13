@@ -11,13 +11,11 @@
  *
  */
 
-package edu.vinu.domain.user.dto;
+package edu.vinu.domain.teacher.dtos.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import edu.vinu.domain.user.dto.RoleDetails;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -25,6 +23,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Teacher implements RoleDetails {
     private Long id;
     private String firstName;
