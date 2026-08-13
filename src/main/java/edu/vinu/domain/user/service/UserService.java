@@ -18,7 +18,7 @@ import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.user.entity.UserEntity;
-import edu.vinu.domain.user.request.update.StudentDetailsUpdateRequest;
+import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.UserDetailsUpdateRequest;
 import jakarta.validation.Valid;
 
@@ -37,7 +37,7 @@ public interface UserService {
 
     List<Object> getAllUsersByFirstNameLike(String firstname);
 
-    List<User> getAllStudentsByFirstNameLike(String firstName);
+
 
 
 

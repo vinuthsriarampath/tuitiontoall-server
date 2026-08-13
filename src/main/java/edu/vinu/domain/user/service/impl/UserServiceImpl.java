@@ -27,12 +27,11 @@ import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.student.entity.StudentEntity;
 import edu.vinu.domain.teacher.entity.TeacherEntity;
 import edu.vinu.domain.user.entity.UserEntity;
-import edu.vinu.domain.user.mapper.StudentMapper;
 import edu.vinu.domain.user.mapper.UserMapper;
-import edu.vinu.domain.user.repository.StudentRepository;
+import edu.vinu.domain.student.repository.StudentRepository;
 import edu.vinu.domain.teacher.repository.TeacherRepository;
 import edu.vinu.domain.user.repository.UserRepository;
-import edu.vinu.domain.user.request.update.StudentDetailsUpdateRequest;
+import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.UserDetailsUpdateRequest;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -106,7 +105,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Object> getAllUsersByFirstNameLike(String firstname) {
         List<Object> userList =new ArrayList<>();
-        userList.addAll(getAllStudentsByFirstNameLike(firstname));
+//        userList.addAll(getAllStudentsByFirstName(firstname));
 //        userList.addAll(getAllTeachersByFirstName(firstname));
         if (userList.isEmpty()){
             throw new NotFoundException("There are no users starts with "+firstname);
@@ -114,12 +113,7 @@ public class UserServiceImpl implements UserService {
         return userList;
     }
 
-    @Override
-    public List<User> getAllStudentsByFirstNameLike(String firstName) {
-        return studentRepository.getStudentsByFirstNameLike(firstName).stream()
-                .map(studentEntity -> UserMapper.toUser(studentEntity.getUser(), StudentMapper.toStudent(studentEntity)))
-                .toList();
-    }
+
 
     @Override
     public List<Student> getAllStudents() {
