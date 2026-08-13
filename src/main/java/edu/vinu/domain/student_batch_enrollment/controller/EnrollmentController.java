@@ -14,6 +14,7 @@
 package edu.vinu.domain.student_batch_enrollment.controller;
 
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentEligibilityCheckRequest;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentRequest;
 import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
 import jakarta.validation.Valid;
@@ -22,10 +23,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v2/enrollments")
@@ -45,5 +43,12 @@ public class EnrollmentController {
                 )
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(invoice);
+    }
+
+    @PreAuthorize("hasAuthority('student')")
+    @GetMapping("/eligibility-check")
+    public ResponseEntity<ApiResponse> checkEnrolmentEligibility(@Valid EnrollmentEligibilityCheckRequest request){
+        ApiResponse response = enrollmentService.checkEnrollmentEligibility(request);
+        return ResponseEntity.ok(response);
     }
 }
