@@ -54,42 +54,6 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse("User Verified!",user));
     }
 
-    @GetMapping("/by-email")
-    public ResponseEntity<ApiResponse> getUserByEmail(@RequestParam String email){
-        User userByEmail = userService.getUserByEmail(email);
-        return ResponseEntity.status(FOUND).body(new ApiResponse("User Found By "+email,userByEmail));
-    }
-
-    @GetMapping("/by-firstname/{firstName}")
-    public ResponseEntity<ApiResponse> getUsersByFirstName(@PathVariable String firstName){
-        List<Object> userList = userService.getAllUsersByFirstNameLike(firstName);
-        return ResponseEntity.status(FOUND).body(new ApiResponse("User List Found by "+firstName,userList));
-    }
-
-    @GetMapping("/students")
-    public ResponseEntity<ApiResponse> getAllStudents(){
-        List<Student> studentList = studentService.getAllStudents();
-        return ResponseEntity.status(FOUND).body(new ApiResponse("All Students!",studentList));
-    }
-
-    @GetMapping("/teachers")
-    public ResponseEntity<ApiResponse> getAllTeachers(){
-        List<Teacher> teacherList = teacherService.getAllTeachers();
-        return ResponseEntity.status(FOUND).body(new ApiResponse("All Teachers!",teacherList));
-    }
-
-    @GetMapping("/institutes")
-    public ResponseEntity<ApiResponse> getAllInstitutes(){
-        List<Institute> instituteList=instituteService.getAllInstitutes();
-        return ResponseEntity.status(FOUND).body(new ApiResponse("All Institutes!",instituteList));
-    }
-
-    @GetMapping("/institutes/by-name/{instituteName}")
-    public ResponseEntity<ApiResponse> getInstitutesByName(@PathVariable String instituteName){
-        List<User> instituteList = instituteService.getAllInstitutesByName(instituteName);
-        return ResponseEntity.status(FOUND).body(new ApiResponse("Related institutes for "+instituteName,instituteList));
-    }
-
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/institutes/update/me")
     public ResponseEntity<ApiResponse> updateInstituteDetails(@Valid @RequestBody InstituteDetailsUpdateRequest instituteDetailsUpdateRequest){
