@@ -21,7 +21,9 @@ import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.institute.mapper.InstituteMapper;
 import edu.vinu.domain.institute.repository.InstituteRepository;
 import edu.vinu.domain.institute.service.InstituteService;
+import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.user.entity.UserEntity;
+import edu.vinu.domain.user.mapper.UserMapper;
 import edu.vinu.domain.user.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -57,5 +59,13 @@ public class InstituteServiceImpl implements InstituteService {
             throw new NotFoundException("No Institutes Found!");
         }
         return instituteList;
+    }
+
+    @Override
+    public List<User> getAllInstitutesByName(String instituteName) {
+        return instituteRepository.findByInstituteName(instituteName)
+                .stream()
+                .map(instituteEntity -> UserMapper.toUser(instituteEntity.getUser(), InstituteMapper.toInstitute(instituteEntity)))
+                .toList();
     }
 }

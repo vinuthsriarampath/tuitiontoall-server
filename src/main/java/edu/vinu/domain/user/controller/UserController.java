@@ -86,7 +86,7 @@ public class UserController {
 
     @GetMapping("/institutes/by-name/{instituteName}")
     public ResponseEntity<ApiResponse> getInstitutesByName(@PathVariable String instituteName){
-        List<User> instituteList = userService.getAllInstitutesByInstituteName(instituteName);
+        List<User> instituteList = instituteService.getAllInstitutesByName(instituteName);
         return ResponseEntity.status(FOUND).body(new ApiResponse("Related institutes for "+instituteName,instituteList));
     }
 

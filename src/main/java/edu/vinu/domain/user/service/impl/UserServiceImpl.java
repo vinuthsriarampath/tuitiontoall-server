@@ -119,13 +119,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-    @Override
-    public List<User> getAllInstitutesByInstituteName(String instituteName) {
-        return instituteRepository.findByInstituteName(instituteName)
-                .stream()
-                .map(instituteEntity -> UserMapper.toUser(instituteEntity.getUser(), InstituteMapper.toInstitute(instituteEntity)))
-                .toList();
-    }
+
 
     @Override
     public Institute updateInstituteDetails(String email, InstituteDetailsUpdateRequest instituteDetailsUpdateRequest) {

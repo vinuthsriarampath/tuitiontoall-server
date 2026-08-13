@@ -15,6 +15,7 @@ package edu.vinu.domain.institute.service;
 
 import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.entity.InstituteEntity;
+import edu.vinu.domain.user.dto.User;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface InstituteService {
     InstituteEntity getCurrentInstitute();
 
     List<Institute> getAllInstitutes();
+
+    List<User> getAllInstitutesByName(String instituteName);
 }

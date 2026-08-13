@@ -15,12 +15,9 @@ package edu.vinu.domain.user.service;
 
 import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
-import edu.vinu.domain.user.dto.Student;
 import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.user.entity.UserEntity;
-import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.UserDetailsUpdateRequest;
-import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -46,7 +43,7 @@ public interface UserService {
 
 
 
-    List<User> getAllInstitutesByInstituteName(String instituteName);
+
 
     Institute updateInstituteDetails(String currentEmail, InstituteDetailsUpdateRequest instituteDetailsUpdateRequest);
 
