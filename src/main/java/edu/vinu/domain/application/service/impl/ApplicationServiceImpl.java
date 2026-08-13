@@ -26,8 +26,8 @@ import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
 import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
 import edu.vinu.domain.user.entity.UserEntity;
-import edu.vinu.domain.user.response.TeacherUserResponse;
 import edu.vinu.domain.teacher.dtos.response.TeacherUserResponse;
+import edu.vinu.domain.teacher.service.TeacherService;
 import edu.vinu.domain.user.service.UserService;
 import edu.vinu.infastructure.service.email.EmailService;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +48,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final TeacherVacancyService teacherVacancyService;
     private final EmailService emailService;
+    private final TeacherService teacherService;
 
     @Override
     public Application createApplication(Long vacancyId) {
@@ -88,7 +89,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         if(!teacherVacancyService.existsById(vacancyId)){
             throw new NotFoundException("Vacancy not found!");
         }
-        if (!userService.isTeacherExistByTeacherId(teacherId)) {
+        if (!teacherService.isTeacherExistById(teacherId)) {
             throw new NotFoundException("Teacher not found!");
         }
         return applicationRepository.isUserAlreadyApplied(teacherId,vacancyId) == 1;
