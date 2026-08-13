@@ -18,7 +18,7 @@ import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.student.service.StudentService;
-import edu.vinu.domain.user.dto.Student;
+import edu.vinu.domain.student.dto.response.Student;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;

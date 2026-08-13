@@ -13,7 +13,7 @@
 
 package edu.vinu.domain.student.mapper;
 
-import edu.vinu.domain.user.dto.Student;
+import edu.vinu.domain.student.dto.response.Student;
 import edu.vinu.domain.student.entity.StudentEntity;
 
 public class StudentMapper {

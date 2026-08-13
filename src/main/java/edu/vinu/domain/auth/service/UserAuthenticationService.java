@@ -17,7 +17,7 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.auth.request.LoginRequest;
 import edu.vinu.domain.auth.response.AuthResponse;
 import edu.vinu.domain.institute.dto.Institute;
-import edu.vinu.domain.user.dto.Student;
+import edu.vinu.domain.student.dto.response.Student;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.institute.request.InstituteRegistrationRequest;
 import edu.vinu.domain.student.dto.request.StudentRegistrationRequest;

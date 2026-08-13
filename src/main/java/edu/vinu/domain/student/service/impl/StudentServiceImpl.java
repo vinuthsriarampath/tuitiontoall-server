@@ -20,7 +20,7 @@ import edu.vinu.domain.student.entity.StudentEntity;
 import edu.vinu.domain.student.mapper.StudentMapper;
 import edu.vinu.domain.student.repository.StudentRepository;
 import edu.vinu.domain.student.service.StudentService;
-import edu.vinu.domain.user.dto.Student;
+import edu.vinu.domain.student.dto.response.Student;
 import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.mapper.UserMapper;
@@ -29,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static edu.vinu.domain.user.validator.UserValidator.isValidDob;
 

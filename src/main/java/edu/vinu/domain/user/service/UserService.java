@@ -13,8 +13,6 @@
 
 package edu.vinu.domain.user.service;
 
-import edu.vinu.domain.institute.dto.Institute;
-import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
 import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.request.update.UserDetailsUpdateRequest;
@@ -30,28 +28,11 @@ public interface UserService {
 
     boolean isUserExist(String email);
 
-    User updateUserDetails(String email, UserDetailsUpdateRequest userUpdateRequest);
+    void updateUserDetails(String email, UserDetailsUpdateRequest userUpdateRequest);
 
     List<Object> getAllUsersByFirstNameLike(String firstname);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     String generateUserSlug(String base);
-
-
-
-
 
     void disableUserAccountByEmail(String email);
 

@@ -14,14 +14,14 @@
 package edu.vinu.domain.user.service.impl;
 
 import edu.vinu.common.exception.custom.InternalServerErrorException;
-import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.institute.mapper.InstituteMapper;
 import edu.vinu.domain.institute.repository.InstituteRepository;
-import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
-import edu.vinu.domain.user.dto.Student;
+import edu.vinu.domain.student.mapper.StudentMapper;
+import edu.vinu.domain.teacher.mapper.TeacherMapper;
+import edu.vinu.domain.student.dto.response.Student;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.user.dto.User;
 import edu.vinu.domain.student.entity.StudentEntity;
@@ -31,7 +31,6 @@ import edu.vinu.domain.user.mapper.UserMapper;
 import edu.vinu.domain.student.repository.StudentRepository;
 import edu.vinu.domain.teacher.repository.TeacherRepository;
 import edu.vinu.domain.user.repository.UserRepository;
-import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;
 import edu.vinu.domain.user.request.update.UserDetailsUpdateRequest;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +41,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static edu.vinu.domain.user.validator.UserValidator.isValidDob;
 
 @Service
 @RequiredArgsConstructor
@@ -61,13 +58,13 @@ public class UserServiceImpl implements UserService {
         User user = mapper.map(userEntity, User.class);
         switch (user.getRole().getRole()){
             case "student":
-                user.setDetails(mapper.map(userEntity.getStudent(), Student.class));
+                user.setDetails(StudentMapper.toStudent(userEntity.getStudent()));
                 break;
             case "teacher":
-                user.setDetails(mapper.map(userEntity.getTeacher(), Teacher.class));
+                user.setDetails(TeacherMapper.toTeacher(userEntity.getTeacher()));
                 break;
             case "institute":
-                user.setDetails(mapper.map(userEntity.getInstitute(), Institute.class));
+                user.setDetails(InstituteMapper.toInstitute(userEntity.getInstitute()));
                 break;
         }
         return user;
@@ -93,13 +90,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserDetails(String email, UserDetailsUpdateRequest userUpdateRequest) {
+    public void updateUserDetails(String email, UserDetailsUpdateRequest userUpdateRequest) {
         UserEntity userEntity = getUserEntityByEmail(email);
 
         userEntity.setAddress(userUpdateRequest.getAddress());
         userEntity.setContact(userUpdateRequest.getContact());
 
-        return UserMapper.toUser(userRepository.save(userEntity));
+        UserMapper.toUser(userRepository.save(userEntity));
     }
 
     @Override
@@ -113,16 +110,6 @@ public class UserServiceImpl implements UserService {
         return userList;
     }
 
-
-
-
-
-
-
-
-
-
-
     @Override
     public String generateUserSlug(String base) {
         String slug = base.trim().toLowerCase().replaceAll("[^a-z0-9]+", "-");
@@ -135,10 +122,6 @@ public class UserServiceImpl implements UserService {
 
         return uniqueSlug;
     }
-
-
-
-
 
     @Override
     public void disableUserAccountByEmail(String email) {

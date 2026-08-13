@@ -14,7 +14,7 @@
 package edu.vinu.domain.student.service;
 
 import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;
-import edu.vinu.domain.user.dto.Student;
+import edu.vinu.domain.student.dto.response.Student;
 import edu.vinu.domain.user.dto.User;
 
 import java.util.List;
