@@ -14,15 +14,13 @@
 package edu.vinu.domain.institute.dto;
 
 import edu.vinu.domain.user.dto.RoleDetails;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Institute implements RoleDetails {
     private Long id;
     private String instituteName;
