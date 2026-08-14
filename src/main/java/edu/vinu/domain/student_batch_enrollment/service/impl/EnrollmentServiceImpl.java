@@ -13,9 +13,12 @@
 
 package edu.vinu.domain.student_batch_enrollment.service.impl;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.common.util.SortUtil;
 import edu.vinu.domain.auth.service.UserAuthenticationService;
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
@@ -25,6 +28,8 @@ import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.openPdf.service.InvoicePdfGeneratorService;
 import edu.vinu.domain.payment.entity.Payment;
 import edu.vinu.domain.payment.service.PaymentService;
+import edu.vinu.domain.student.dto.response.StudentUserResponse;
+import edu.vinu.domain.student.mapper.StudentMapper;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentEligibilityCheckRequest;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentRequest;
 import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentEligibilityResponse;
@@ -38,10 +43,14 @@ import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -195,5 +204,20 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                     .build();
         }
         throw new UnauthorizedException("Only Students can check enrollment eligibility");
+    }
+
+    @Override
+    public PaginatedApiResponse<StudentUserResponse> getStudentsByBatch(Long batchId, PaginationRequest pagination) {
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));;
+        Page<StudentUserResponse> pageDate = studentBatchEnrollmentRepository.findAllStudentsByBatchId(batchId, pageable).map(StudentMapper::toStudentUserResponse);
+        return PaginatedApiResponse.<StudentUserResponse>builder()
+                .message("Students fetched successfully")
+                .data(pageDate.getContent())
+                .totalElements(pageDate.getTotalElements())
+                .totalPages(pageDate.getTotalPages())
+                .page(pageDate.getNumber())
+                .size(pageDate.getSize())
+                .last(pageDate.isLast())
+                .build();
     }
 }

@@ -13,7 +13,10 @@
 
 package edu.vinu.domain.student_batch_enrollment.service;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.student.dto.response.StudentUserResponse;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentEligibilityCheckRequest;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentRequest;
 import jakarta.validation.Valid;
@@ -22,4 +25,6 @@ public interface EnrollmentService {
     byte[] enrollStudent(EnrollmentRequest request);
 
     ApiResponse checkEnrollmentEligibility(EnrollmentEligibilityCheckRequest request);
+
+    PaginatedApiResponse<StudentUserResponse> getStudentsByBatch(Long batchId, PaginationRequest pagination);
 }
