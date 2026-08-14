@@ -14,15 +14,31 @@
 package edu.vinu.domain.student.mapper;
 
 import edu.vinu.domain.student.dto.response.Student;
+import edu.vinu.domain.student.dto.response.StudentUserResponse;
 import edu.vinu.domain.student.entity.StudentEntity;
+import edu.vinu.domain.student.repository.projection.StudentUserProjection;
 
 public class StudentMapper {
-    public static Student toStudent(StudentEntity studentEntity){
+    public static Student toStudent(StudentEntity studentEntity) {
         return Student.builder()
                 .id(studentEntity.getId())
                 .firstName(studentEntity.getFirstName())
                 .lastName(studentEntity.getLastName())
                 .dob(studentEntity.getDob())
+                .build();
+    }
+
+    public static StudentUserResponse toStudentUserResponse(StudentUserProjection p) {
+        return StudentUserResponse.builder()
+                .studentId(p.getStudentId())
+                .firstName(p.getFirstName())
+                .lastName(p.getLastName())
+                .dob(p.getDob())
+                .userId(p.getUserId())
+                .email(p.getEmail())
+                .contact(p.getContact())
+                .dp(p.getDp())
+                .address(p.getAddress())
                 .build();
     }
 }
