@@ -13,7 +13,10 @@
 
 package edu.vinu.domain.student_batch_enrollment.repository;
 
+import edu.vinu.domain.student.repository.projection.StudentUserProjection;
 import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -46,4 +49,23 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
     WHERE sbe.batch_id = :batchId
     """, nativeQuery = true)
     long countEnrollmentsByBatchId(@Param("batchId") Long batchId);
+
+
+    @Query(value = """
+SELECT
+u.id AS userId,
+u.email AS email,
+u.contact AS contact,
+u.dp AS dp,
+u.address AS address,
+s.id AS studentId,
+s.first_name AS firstName,
+s.last_name AS lastName,
+s.dob AS dob
+FROM student_batch_enrollment sbe
+INNER JOIN student s ON s.id = sbe.student_id
+INNER JOIN users u ON u.id = s.user_id
+WHERE sbe.batch_id = :batchId
+""",nativeQuery = true)
+    Page<StudentUserProjection> findAllStudentsByBatchId(Long batchId, Pageable pageable);
 }
