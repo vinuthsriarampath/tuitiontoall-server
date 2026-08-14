@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.batch.controller;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.batch.dto.Batch;
@@ -21,6 +22,8 @@ import edu.vinu.domain.batch.request.BatchUpdateRequest;
 import edu.vinu.domain.batch.service.BatchService;
 import edu.vinu.domain.module.response.ModuleResponse;
 import edu.vinu.domain.module.service.ModuleQueryService;
+import edu.vinu.domain.student.dto.response.StudentUserResponse;
+import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,6 +39,7 @@ import java.util.List;
 public class BatchController {
     private final BatchService batchService;
     private final ModuleQueryService moduleQueryService;
+    private final EnrollmentService enrollmentService;
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping("/create")
@@ -91,6 +95,13 @@ public class BatchController {
     @GetMapping("{courseId}/enrollables")
     public ResponseEntity<ApiResponse> getAllEnrollableBatchesOfCourse(@PathVariable Long courseId){
         ApiResponse response = batchService.getAllEnrollableBatchesOfCourse(courseId);
+        return ResponseEntity.status(200).body(response);
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("{batchId}/students")
+    public ResponseEntity<PaginatedApiResponse<StudentUserResponse>> getStudentsByBatch(@PathVariable Long batchId, PaginationRequest pagination){
+        PaginatedApiResponse<StudentUserResponse> response = enrollmentService.getStudentsByBatch(batchId, pagination);
         return ResponseEntity.status(200).body(response);
     }
 }
