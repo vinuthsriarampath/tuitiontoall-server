@@ -52,20 +52,31 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
 
 
     @Query(value = """
-SELECT
-u.id AS userId,
-u.email AS email,
-u.contact AS contact,
-u.dp AS dp,
-u.address AS address,
-s.id AS studentId,
-s.first_name AS firstName,
-s.last_name AS lastName,
-s.dob AS dob
-FROM student_batch_enrollment sbe
-INNER JOIN student s ON s.id = sbe.student_id
-INNER JOIN users u ON u.id = s.user_id
-WHERE sbe.batch_id = :batchId
-""",nativeQuery = true)
+    SELECT
+        u.id AS userId,
+        u.email AS email,
+        u.contact AS contact,
+        u.dp AS dp,
+        u.address AS address,
+        s.id AS studentId,
+        s.first_name AS firstName,
+        s.last_name AS lastName,
+        s.dob AS dob
+    FROM student_batch_enrollment sbe
+    INNER JOIN student s ON s.id = sbe.student_id
+    INNER JOIN users u ON u.id = s.user_id
+    WHERE sbe.batch_id = :batchId
+    """,nativeQuery = true)
     Page<StudentUserProjection> findAllStudentsByBatchId(Long batchId, Pageable pageable);
+
+    @Query(value = """
+    SELECT EXISTS (
+        SELECT 1
+        FROM student_batch_enrollment sbe
+        INNER JOIN batch b ON b.id = sbe.batch_id
+        WHERE sbe.student_id = :studentId
+            AND b.course_id = :courseId
+    )
+    """, nativeQuery = true)
+    int existsEnrollmentByStudentAndCourse(Long studentId, Long courseId);
 }
