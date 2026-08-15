@@ -14,6 +14,7 @@
 package edu.vinu.domain.review.service.impl;
 
 import edu.vinu.common.dto.PaginationRequest;
+import edu.vinu.common.exception.custom.BadRequestException;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.common.util.SortUtil;
@@ -56,6 +57,10 @@ public class ReviewServiceImpl implements ReviewService {
     public ApiResponse createReview(ReviewCreateRequest request) {
         UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
         CourseEntity courseEntity = courseService.getCourseEntityById(request.courseId());
+
+        if(reviewRepository.countUserReviewsByCourseId(courseEntity.getId(), userEntity.getId()) > 0){
+            throw new BadRequestException("User has already reviewed this course");
+        }
 
         Review review = Review.builder()
                 .review(request.review())
