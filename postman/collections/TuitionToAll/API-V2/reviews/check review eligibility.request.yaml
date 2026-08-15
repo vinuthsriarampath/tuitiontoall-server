@@ -1,0 +1,5 @@
+$kind: http-request
+name: check review eligibility
+url: http://localhost:8080/api/v2/reviews/course/4/eligibility
+method: GET
+order: 3143550684178682
