@@ -13,9 +13,14 @@
 
 package edu.vinu.domain.review.service;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.review.request.ReviewCreateRequest;
+import edu.vinu.domain.review.response.BasicReviewResponse;
 
 public interface ReviewService {
     ApiResponse createReview(ReviewCreateRequest request);
+
+    PaginatedApiResponse<BasicReviewResponse> getReviewsByCourseId(Long courseId, PaginationRequest pagination);
 }

@@ -13,23 +13,34 @@
 
 package edu.vinu.domain.review.service.impl;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.common.util.SortUtil;
 import edu.vinu.domain.auth.service.UserAuthenticationService;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.repository.CourseRepository;
 import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.review.entity.Review;
+import edu.vinu.domain.review.mapper.ReviewMapper;
 import edu.vinu.domain.review.repository.ReviewRepository;
+import edu.vinu.domain.review.repository.projector.BasicReviewProjector;
 import edu.vinu.domain.review.request.ReviewCreateRequest;
+import edu.vinu.domain.review.response.BasicReviewResponse;
 import edu.vinu.domain.review.service.ReviewService;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -76,6 +87,21 @@ public class ReviewServiceImpl implements ReviewService {
         return ApiResponse.builder()
                 .message("Review created successfully")
                 .data(null)
+                .build();
+    }
+
+    @Override
+    public PaginatedApiResponse<BasicReviewResponse> getReviewsByCourseId(Long courseId, PaginationRequest pagination) {
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of(("created_date"))));
+        Page<BasicReviewResponse> pageData = reviewRepository.findReviewsByCourseId(courseId, pageable).map(ReviewMapper::toBasicReviewResponse);
+        return PaginatedApiResponse.<BasicReviewResponse>builder()
+                .message("Reviews fetched successfully!")
+                .data(pageData.getContent())
+                .page(pageData.getNumber())
+                .size(pageData.getSize())
+                .totalElements(pageData.getTotalElements())
+                .totalPages(pageData.getTotalPages())
+                .last(pageData.isLast())
                 .build();
     }
 }
