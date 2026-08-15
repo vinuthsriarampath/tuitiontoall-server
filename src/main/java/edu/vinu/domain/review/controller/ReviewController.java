@@ -13,17 +13,17 @@
 
 package edu.vinu.domain.review.controller;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.review.request.ReviewCreateRequest;
+import edu.vinu.domain.review.response.BasicReviewResponse;
 import edu.vinu.domain.review.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v2/reviews")
@@ -35,5 +35,11 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity<ApiResponse> createReview(@Valid @RequestBody ReviewCreateRequest request){
         return ResponseEntity.ok(reviewService.createReview(request));
+    }
+
+    @GetMapping("/course/{courseId}")
+    @PreAuthorize("hasAnyAuthority('student', 'institute')")
+    public ResponseEntity<PaginatedApiResponse<BasicReviewResponse>> getReviewsByCourseId(@PathVariable Long courseId, PaginationRequest request){
+        return ResponseEntity.ok(reviewService.getReviewsByCourseId(courseId, request));
     }
 }
