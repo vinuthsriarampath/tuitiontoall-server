@@ -1,7 +1,0 @@
-$kind: collection
-name: reviews
-auth:
-  type: bearer
-  credentials:
-    token: "{{JWT_TOKEN}}"
-order: 2325062644400127
