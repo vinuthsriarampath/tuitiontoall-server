@@ -18,6 +18,7 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.review.request.ReviewCreateRequest;
 import edu.vinu.domain.review.response.BasicReviewResponse;
+import edu.vinu.domain.review.response.ReviewEligibilityResponse;
 import edu.vinu.domain.review.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +42,11 @@ public class ReviewController {
     @PreAuthorize("hasAnyAuthority('student', 'institute')")
     public ResponseEntity<PaginatedApiResponse<BasicReviewResponse>> getReviewsByCourseId(@PathVariable Long courseId, PaginationRequest request){
         return ResponseEntity.ok(reviewService.getReviewsByCourseId(courseId, request));
+    }
+
+    @GetMapping("/course/{courseId}/eligibility")
+    @PreAuthorize("hasAnyAuthority('student', 'institute')")
+    public ResponseEntity<ReviewEligibilityResponse> checkReviewEligibility(@PathVariable Long courseId){
+        return ResponseEntity.ok(reviewService.checkReviewEligibility(courseId));
     }
 }
