@@ -23,12 +23,15 @@ import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.repository.CourseRepository;
 import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.review.entity.Review;
+import edu.vinu.domain.review.enums.ReviewEligibilityReason;
 import edu.vinu.domain.review.mapper.ReviewMapper;
 import edu.vinu.domain.review.repository.ReviewRepository;
 import edu.vinu.domain.review.repository.projector.BasicReviewProjector;
 import edu.vinu.domain.review.request.ReviewCreateRequest;
 import edu.vinu.domain.review.response.BasicReviewResponse;
+import edu.vinu.domain.review.response.ReviewEligibilityResponse;
 import edu.vinu.domain.review.service.ReviewService;
+import edu.vinu.domain.student_batch_enrollment.repository.StudentBatchEnrollmentRepository;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import lombok.Builder;
@@ -51,6 +54,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserService userService;
     private final UserAuthenticationService authService;
     private final CourseRepository courseRepository;
+    private final StudentBatchEnrollmentRepository enrollmentRepository;
 
     @Override
     @Transactional
@@ -107,6 +111,36 @@ public class ReviewServiceImpl implements ReviewService {
                 .totalElements(pageData.getTotalElements())
                 .totalPages(pageData.getTotalPages())
                 .last(pageData.isLast())
+                .build();
+    }
+
+    @Override
+    public ReviewEligibilityResponse checkReviewEligibility(Long courseId) {
+        UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
+        CourseEntity courseEntity = courseService.getCourseEntityById(courseId);
+
+        if(!userEntity.getRole().getRole().equals("student")){
+            return ReviewEligibilityResponse.builder()
+                    .canReview(false)
+                    .reason(ReviewEligibilityReason.NOT_STUDENT)
+                    .build();
+        }else if(enrollmentRepository.existsEnrollmentByStudentAndCourse(userEntity.getStudent().getId(), courseEntity.getId()) == 0){
+            return ReviewEligibilityResponse.builder()
+                    .canReview(false)
+                    .reason(ReviewEligibilityReason.NOT_ENROLLED)
+                    .build();
+        }
+
+        if(reviewRepository.countUserReviewsByCourseId(courseEntity.getId(), userEntity.getId()) > 0){
+            return ReviewEligibilityResponse.builder()
+                    .canReview(false)
+                    .reason(ReviewEligibilityReason.ALREADY_REVIEWED)
+                    .build();
+        }
+
+        return ReviewEligibilityResponse.builder()
+                .canReview(true)
+                .reason(ReviewEligibilityReason.ELIGIBLE)
                 .build();
     }
 }
