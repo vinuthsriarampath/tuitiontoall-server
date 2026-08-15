@@ -36,7 +36,13 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     WHERE r.course_id = :courseId
     """,
     countQuery = """
-    SELECT COUNT(*) FROM review r WHERE r.course_id = :courseId
+    SELECT COUNT(*) FROM reviews r WHERE r.course_id = :courseId
     """, nativeQuery = true)
     Page<BasicReviewProjector> findReviewsByCourseId(Long courseId, Pageable pageable);
+
+
+    @Query(value = """
+    SELECT COUNT(*) FROM reviews r WHERE r.course_id = :courseId AND r.user_id = :userId
+    """, nativeQuery = true)
+    Long countUserReviewsByCourseId(Long courseId, Long userId);
 }
