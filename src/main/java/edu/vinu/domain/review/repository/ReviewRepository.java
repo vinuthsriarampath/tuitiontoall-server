@@ -14,9 +14,29 @@
 package edu.vinu.domain.review.repository;
 
 import edu.vinu.domain.review.entity.Review;
+import edu.vinu.domain.review.repository.projector.BasicReviewProjector;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
+
+
+    @Query(value = """
+    SELECT
+        r.id AS id,
+        r.review AS review,
+        r.rating AS rating,
+        r.created_date AS createdDate,
+        r.last_modified_date AS lastModifiedDate
+    FROM reviews r
+    WHERE r.course_id = :courseId
+    """,
+    countQuery = """
+    SELECT COUNT(*) FROM review r WHERE r.course_id = :courseId
+    """, nativeQuery = true)
+    Page<BasicReviewProjector> findReviewsByCourseId(Long courseId, Pageable pageable);
 }
