@@ -18,9 +18,11 @@ import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentBatchEnrollment,Long> {
@@ -79,4 +81,15 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
     )
     """, nativeQuery = true)
     int existsEnrollmentByStudentAndCourse(Long studentId, Long courseId);
+
+    @Transactional
+    @Modifying
+    @Query(value = """
+    UPDATE student_batch_enrollment sbe
+        INNER JOIN batch b ON b.id = sbe.batch_id
+        SET sbe.status = 'COMPLETED'
+        WHERE b.batch_status = 'COMPLETED'
+            AND sbe.status <> 'COMPLETED'
+    """,nativeQuery = true)
+    int completeEnrollmentsWhereBatchCompleted();
 }
