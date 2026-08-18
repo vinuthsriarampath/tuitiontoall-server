@@ -1,0 +1,5 @@
+$kind: http-request
+name: get all feedbacks by course
+url: http://localhost:8080/api/v2/feedbacks/course/3
+method: GET
+order: 1978131599380225
