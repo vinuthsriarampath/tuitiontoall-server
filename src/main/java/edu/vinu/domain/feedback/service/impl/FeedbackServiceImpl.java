@@ -13,8 +13,11 @@
 
 package edu.vinu.domain.feedback.service.impl;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.exception.custom.BadRequestException;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.common.util.SortUtil;
 import edu.vinu.domain.auth.service.UserAuthenticationService;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.service.CourseService;
@@ -22,11 +25,17 @@ import edu.vinu.domain.feedback.entity.Feedback;
 import edu.vinu.domain.feedback.mapper.FeedbackMapper;
 import edu.vinu.domain.feedback.repository.FeedbackRepository;
 import edu.vinu.domain.feedback.request.FeedbackCreateRequest;
+import edu.vinu.domain.feedback.response.FeedbackResponse;
 import edu.vinu.domain.feedback.service.FeedbackService;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +65,22 @@ public class FeedbackServiceImpl implements FeedbackService {
         return ApiResponse.builder()
                 .message("Feedback submitted successfully")
                 .data(FeedbackMapper.toFeedbackResponse(save))
+                .build();
+    }
+
+    @Override
+    public PaginatedApiResponse<FeedbackResponse> getFeedbacksByCourse(Long courseId, PaginationRequest pagination) {
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));
+        Page<FeedbackResponse> pageData = feedbackRepository.getFeedbacksByCourse(courseId,pageable).map(FeedbackMapper::toFeedbackResponse);
+
+        return PaginatedApiResponse.<FeedbackResponse>builder()
+                .message("Feedbacks fetched successfully")
+                .data(pageData.getContent())
+                .page(pageData.getNumber())
+                .size(pageData.getSize())
+                .totalElements(pageData.getTotalElements())
+                .totalPages(pageData.getTotalPages())
+                .last(pageData.isLast())
                 .build();
     }
 }

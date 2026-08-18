@@ -13,9 +13,14 @@
 
 package edu.vinu.domain.feedback.service;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.feedback.request.FeedbackCreateRequest;
+import edu.vinu.domain.feedback.response.FeedbackResponse;
 
 public interface FeedbackService {
     ApiResponse submitFeedback(FeedbackCreateRequest request);
+
+    PaginatedApiResponse<FeedbackResponse> getFeedbacksByCourse(Long courseId, PaginationRequest pagination);
 }
