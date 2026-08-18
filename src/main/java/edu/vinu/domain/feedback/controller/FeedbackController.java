@@ -13,17 +13,17 @@
 
 package edu.vinu.domain.feedback.controller;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.feedback.request.FeedbackCreateRequest;
+import edu.vinu.domain.feedback.response.FeedbackResponse;
 import edu.vinu.domain.feedback.service.FeedbackService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v2/feedbacks")
@@ -35,5 +35,11 @@ public class FeedbackController {
     @PostMapping
     public ResponseEntity<ApiResponse> submitFeedback(@Valid @RequestBody FeedbackCreateRequest request){
          return ResponseEntity.ok(feedbackService.submitFeedback(request));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("course/{courseId}")
+    public ResponseEntity<PaginatedApiResponse<FeedbackResponse>> getFeedbacks(@PathVariable Long courseId, PaginationRequest pagination){
+        return ResponseEntity.ok(feedbackService.getFeedbacksByCourse(courseId, pagination));
     }
 }
