@@ -17,6 +17,7 @@ import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.feedback.request.FeedbackCreateRequest;
+import edu.vinu.domain.feedback.response.FeedbackEligibilityResponse;
 import edu.vinu.domain.feedback.response.FeedbackResponse;
 import edu.vinu.domain.feedback.service.FeedbackService;
 import jakarta.validation.Valid;
@@ -41,5 +42,11 @@ public class FeedbackController {
     @GetMapping("course/{courseId}")
     public ResponseEntity<PaginatedApiResponse<FeedbackResponse>> getFeedbacks(@PathVariable Long courseId, PaginationRequest pagination){
         return ResponseEntity.ok(feedbackService.getFeedbacksByCourse(courseId, pagination));
+    }
+
+    @PreAuthorize("hasAnyAuthority('student','institute')")
+    @GetMapping("course/{courseId}/eligibility")
+    public ResponseEntity<FeedbackEligibilityResponse> checkFeedbackEligibility(@PathVariable Long courseId){
+        return ResponseEntity.ok(feedbackService.checkFeedbackEligibility(courseId));
     }
 }
