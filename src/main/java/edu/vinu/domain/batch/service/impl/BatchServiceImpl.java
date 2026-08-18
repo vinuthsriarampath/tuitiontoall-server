@@ -85,6 +85,10 @@ public class BatchServiceImpl implements BatchService {
         List<FieldError> errors = new ArrayList<>();
 
         Batch oldBatch = this.getBatchById(batchId);
+
+        if(oldBatch.getBatch_status().equals(BatchStatus.COMPLETED)){
+            throw new InvalidInputException("Batch has already been completed and cannot be updated !!");
+        }
         if(oldBatch.getStart_date()!=null && oldBatch.getStart_date().isBefore(LocalDate.now())){
             if(!oldBatch.getName().equals(request.getName()) || !oldBatch.getCourseId().equals(request.getCourseId()) || !oldBatch.getStart_date().isEqual(request.getStart_date()) || !oldBatch.getStart_time().equals(request.getStart_time()) ){
                 throw new InvalidInputException("Batch name, course, start date & time cannot be updated for a batch that has already started");
