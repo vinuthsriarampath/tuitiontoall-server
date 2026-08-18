@@ -22,11 +22,14 @@ import edu.vinu.domain.auth.service.UserAuthenticationService;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.feedback.entity.Feedback;
+import edu.vinu.domain.feedback.enums.FeedbackEligibilityReason;
 import edu.vinu.domain.feedback.mapper.FeedbackMapper;
 import edu.vinu.domain.feedback.repository.FeedbackRepository;
 import edu.vinu.domain.feedback.request.FeedbackCreateRequest;
+import edu.vinu.domain.feedback.response.FeedbackEligibilityResponse;
 import edu.vinu.domain.feedback.response.FeedbackResponse;
 import edu.vinu.domain.feedback.service.FeedbackService;
+import edu.vinu.domain.student_batch_enrollment.repository.StudentBatchEnrollmentRepository;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +48,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     private final UserAuthenticationService authService;
     private final CourseService courseService;
     private final UserService userService;
+    private final StudentBatchEnrollmentRepository enrollmentRepository;
 
     @Override
     public ApiResponse submitFeedback(FeedbackCreateRequest request) {
@@ -81,6 +85,46 @@ public class FeedbackServiceImpl implements FeedbackService {
                 .totalElements(pageData.getTotalElements())
                 .totalPages(pageData.getTotalPages())
                 .last(pageData.isLast())
+                .build();
+    }
+
+    @Override
+    public FeedbackEligibilityResponse checkFeedbackEligibility(Long courseId) {
+        UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
+        CourseEntity courseEntity;
+        try {
+            courseEntity = courseService.getCourseEntityById(courseId);
+        } catch (Exception e) {
+            return FeedbackEligibilityResponse.builder()
+                    .canFeedback(false)
+                    .reason(FeedbackEligibilityReason.COURSE_NOT_FOUND)
+                    .build();
+        }
+
+        if(!userEntity.getRole().getRole().equals("student")){
+            return FeedbackEligibilityResponse.builder()
+                    .canFeedback(false)
+                    .reason(FeedbackEligibilityReason.NOT_STUDENT)
+                    .build();
+
+        } else if (enrollmentRepository.existsEnrollmentByStudentAndCourse(userEntity.getStudent().getId(), courseEntity.getId()) == 0) {
+            return FeedbackEligibilityResponse.builder()
+                    .canFeedback(false)
+                    .reason(FeedbackEligibilityReason.NOT_ENROLLED)
+                    .build();
+
+        }
+
+        if(feedbackRepository.countUserFeedbacksByCourseId(courseEntity.getId(), userEntity.getId()) > 0) {
+            return FeedbackEligibilityResponse.builder()
+                    .canFeedback(false)
+                    .reason(FeedbackEligibilityReason.ALREADY_SUBMITTED)
+                    .build();
+        }
+
+        return FeedbackEligibilityResponse.builder()
+                .canFeedback(true)
+                .reason(FeedbackEligibilityReason.ELIGIBLE)
                 .build();
     }
 }
