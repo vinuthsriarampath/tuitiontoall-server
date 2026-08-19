@@ -92,4 +92,14 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
             AND sbe.status <> 'COMPLETED'
     """,nativeQuery = true)
     int completeEnrollmentsWhereBatchCompleted();
+
+    @Query(value = """
+    SELECT COUNT(DISTINCT sbe.student_id)
+        FROM student_batch_enrollment sbe
+            INNER JOIN batch b ON b.id = sbe.batch_id
+        WHERE b.course_id = :courseId
+            AND b.batch_status = :batchStatus
+            AND sbe.status = :enrollmentStatus
+    """, nativeQuery = true)
+    Long countActiveStudentsByCourseId(Long courseId, String batchStatus, String enrollmentStatus);
 }
