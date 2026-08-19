@@ -14,6 +14,7 @@
 package edu.vinu.domain.batch.repository;
 
 import edu.vinu.domain.batch.entity.BatchEntity;
+import edu.vinu.domain.batch.enums.BatchStatus;
 import edu.vinu.domain.batch.repository.projection.BatchProjection;
 import org.apache.logging.log4j.simple.internal.SimpleProvider;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -72,4 +73,13 @@ WHERE b.course_id = :courseId
 ORDER BY b.start_date DESC
 """, nativeQuery = true)
     List<BatchProjection> getAllEnrollableBatchesByCourse(Long courseId);
+
+
+    @Query(value = """
+    SELECT COUNT(*)
+    FROM batch b
+    WHERE b.course_id = :courseId
+    AND b.batch_status = :batchStatus
+    """, nativeQuery = true)
+    Long countByCourseIdAndBatchStatus(Long courseId, String batchStatus);
 }
