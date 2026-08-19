@@ -19,6 +19,7 @@ import edu.vinu.domain.course.request.CourseCreateRequest;
 import edu.vinu.domain.course.request.CourseFilterRequest;
 import edu.vinu.domain.course.request.CourseUpdateRequest;
 import edu.vinu.domain.course.service.CourseService;
+import edu.vinu.domain.course.service.CourseStatsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -45,6 +46,7 @@ import static edu.vinu.domain.user.validator.UserValidator.USER_VALIDATION_FAILE
 public class CourseController {
 
     private final CourseService courseService;
+    private final CourseStatsService courseStatsService;
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping(value = "/create", consumes = {"multipart/form-data"})
@@ -120,6 +122,11 @@ public class CourseController {
     ){
         List<Course> courses = courseService.getAllCoursesByInstituteId(instituteId,filters);
         return ResponseEntity.status(200).body(new ApiResponse("Courses for the institute", courses));
+    }
+
+    @GetMapping("{courseId}/stats")
+    public ResponseEntity<ApiResponse> getCourseStats(@PathVariable Long courseId){
+        return ResponseEntity.ok(courseStatsService.getCourseStats(courseId));
     }
 
 }
