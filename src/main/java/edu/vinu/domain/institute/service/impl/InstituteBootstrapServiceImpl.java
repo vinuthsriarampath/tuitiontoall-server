@@ -51,7 +51,6 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
         InstituteEntity currentInstitute = instituteService.getCurrentInstitute();
 
         InstituteBootstrapResponse response = new InstituteBootstrapResponse();
-        response.setInstituteId(currentInstitute.getId());
 
         InstituteDashboardKpiStats kpiStats = new InstituteDashboardKpiStats();
 

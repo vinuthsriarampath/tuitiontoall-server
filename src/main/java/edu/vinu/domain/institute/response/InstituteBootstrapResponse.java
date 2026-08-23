@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class InstituteBootstrapResponse{
-    private Long instituteId;
     private InstituteDashboardKpiStats kpiStats;
 
 }
