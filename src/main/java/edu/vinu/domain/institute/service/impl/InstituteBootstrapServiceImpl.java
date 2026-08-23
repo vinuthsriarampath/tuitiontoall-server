@@ -67,7 +67,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
 
     private DashboardKpi buildStudentKpi(Long instituteId){
 
-        ReportingPeriodRange periodRange = periodService.getRange(ReportingPeriod.CURRENT_WEEK);
+        ReportingPeriodRange periodRange = periodService.getRange(ReportingPeriod.CURRENT_MONTH);
 
         BigDecimal totalActiveStudents = enrollmentService.countActiveStudentsByInstitute(instituteId);
 
