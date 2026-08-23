@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.student_batch_enrollment.repository;
 
+import edu.vinu.domain.reporting.projection.TrendPointProjection;
 import edu.vinu.domain.student.repository.projection.StudentUserProjection;
 import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentBatchEnrollment,Long> {
@@ -102,4 +106,71 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
             AND sbe.status = :enrollmentStatus
     """, nativeQuery = true)
     Long countActiveStudentsByCourseId(Long courseId, String batchStatus, String enrollmentStatus);
+
+    @Query(value = """
+    SELECT COUNT(DISTINCT sbe.student_id)
+        FROM student_batch_enrollment sbe
+            INNER JOIN batch b ON b.id = sbe.batch_id
+            INNER JOIN courses c ON c.id = b.course_id
+        WHERE c.institute_id = :instituteId
+            AND sbe.status = :enrollmentStatus
+    """, nativeQuery = true)
+    Long countActiveStudentsByInstitute(Long instituteId, String enrollmentStatus);
+
+    @Query(value = """
+    SELECT COUNT(DISTINCT sbe.student_id)
+        FROM student_batch_enrollment sbe
+        INNER JOIN batch b ON b.id = sbe.batch_id
+        INNER JOIN courses c ON c.id = b.course_id
+        INNER JOIN institute i ON i.id = c.institute_id
+        WHERE c.institute_id = :instituteId
+            AND sbe.created_date >= :startDateTime
+            AND sbe.created_date < :endDateTime
+    """, nativeQuery = true)
+    Long countStudentsEnrolledBetween(Long instituteId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    @Query(value = """
+    SELECT
+        DATE_FORMAT(sbe.created_date, '%Y-%m-%d %H:00:00') AS bucket,
+        COUNT(DISTINCT sbe.student_id) AS value
+    FROM student_batch_enrollment sbe
+    INNER JOIN batch b ON b.id = sbe.batch_id
+    INNER JOIN courses c ON c.id = b.course_id
+    WHERE c.institute_id = :instituteId
+        AND sbe.created_date >= :startDateTime
+        AND sbe.created_date < :endDateTime
+    GROUP BY DATE_FORMAT(sbe.created_date, '%Y-%m-%d %H')
+    ORDER BY bucket
+    """,nativeQuery = true)
+    List<TrendPointProjection> getHourlyStudentEnrollmentTrend(Long instituteId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    @Query(value = """
+    SELECT
+        DATE_FORMAT(sbe.created_date, '%Y-%m-%d 00:00:00') AS bucket,
+        COUNT(DISTINCT sbe.student_id) AS value
+    FROM student_batch_enrollment sbe
+    INNER JOIN batch b ON b.id = sbe.batch_id
+    INNER JOIN courses c ON c.id = b.course_id
+    WHERE c.institute_id = :instituteId
+        AND sbe.created_date >= :startDateTime
+        AND sbe.created_date < :endDateTime
+    GROUP BY DATE(sbe.created_date)
+    ORDER BY bucket
+    """,nativeQuery = true)
+    List<TrendPointProjection> getDailyStudentEnrollmentTrend(Long instituteId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    @Query(value = """
+    SELECT
+        DATE_FORMAT(sbe.created_date, '%Y-%m-01 00:00:00') AS bucket,
+        COUNT(DISTINCT sbe.student_id) AS value
+    FROM student_batch_enrollment sbe
+    INNER JOIN batch b ON b.id = sbe.batch_id
+    INNER JOIN courses c ON c.id = b.course_id
+    WHERE c.institute_id = :instituteId
+        AND sbe.created_date >= :startDateTime
+        AND sbe.created_date < :endDateTime
+    GROUP BY YEAR(sbe.created_date), MONTH(sbe.created_date)
+    ORDER BY bucket
+    """,nativeQuery = true)
+    List<TrendPointProjection> getMonthlyStudentEnrollmentTrend(Long instituteId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 }
