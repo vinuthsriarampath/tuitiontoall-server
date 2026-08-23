@@ -21,6 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -28,9 +29,14 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class DashboardKpi {
-    private BigDecimal value;
-    private BigDecimal changeValue;
-    private ChangeValueType changeValueType;
-    private String changeLabel;
-    private List<TrendPoint> trend;
+    @Builder.Default
+    private BigDecimal value = BigDecimal.ZERO;
+    @Builder.Default
+    private BigDecimal changeValue = BigDecimal.ZERO;
+    @Builder.Default
+    private ChangeValueType changeValueType = ChangeValueType.ABSOLUTE;
+    @Builder.Default
+    private String changeLabel = "no data available";
+    @Builder.Default
+    private List<TrendPoint> trend = new ArrayList<>();
 }

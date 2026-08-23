@@ -24,9 +24,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class InstituteDashboardKpiStats {
-    private DashboardKpi activeStudents;
-    private DashboardKpi ongoingBatches;
-    private DashboardKpi activeCourses;
-    private DashboardKpi activeTeachers;
-    private DashboardKpi revenue;
+    @Builder.Default
+    private DashboardKpi activeStudents = new DashboardKpi();
+    @Builder.Default
+    private DashboardKpi ongoingBatches = new DashboardKpi();
+    @Builder.Default
+    private DashboardKpi activeCourses = new DashboardKpi();
+    @Builder.Default
+    private DashboardKpi activeTeachers = new DashboardKpi();
+    @Builder.Default
+    private DashboardKpi revenue = new DashboardKpi();
 }

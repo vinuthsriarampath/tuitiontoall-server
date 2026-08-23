@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class InstituteBootstrapResponse{
-    private InstituteDashboardKpiStats kpiStats;
+    @Builder.Default
+    private InstituteDashboardKpiStats kpiStats = new InstituteDashboardKpiStats();
 
 }
