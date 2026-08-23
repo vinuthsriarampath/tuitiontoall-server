@@ -16,10 +16,16 @@ package edu.vinu.domain.student_batch_enrollment.service;
 import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.reporting.enums.ReportingPeriod;
+import edu.vinu.domain.reporting.response.ReportingPeriodRange;
+import edu.vinu.domain.reporting.response.TrendPoint;
 import edu.vinu.domain.student.dto.response.StudentUserResponse;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentEligibilityCheckRequest;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentRequest;
-import jakarta.validation.Valid;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface EnrollmentService {
     byte[] enrollStudent(EnrollmentRequest request);
@@ -27,4 +33,10 @@ public interface EnrollmentService {
     ApiResponse checkEnrollmentEligibility(EnrollmentEligibilityCheckRequest request);
 
     PaginatedApiResponse<StudentUserResponse> getStudentsByBatch(Long batchId, PaginationRequest pagination);
+
+    BigDecimal countActiveStudentsByInstitute(Long instituteId);
+
+    BigDecimal countUniqueStudentsEnrolledBetween(Long instituteId, LocalDateTime start, LocalDateTime end);
+
+    List<TrendPoint> getStudentEnrollmentTrend(Long instituteId, ReportingPeriod period, ReportingPeriodRange range);
 }

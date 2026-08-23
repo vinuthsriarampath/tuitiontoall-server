@@ -28,6 +28,12 @@ import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.openPdf.service.InvoicePdfGeneratorService;
 import edu.vinu.domain.payment.entity.Payment;
 import edu.vinu.domain.payment.service.PaymentService;
+import edu.vinu.domain.reporting.enums.ReportingPeriod;
+import edu.vinu.domain.reporting.enums.TrendType;
+import edu.vinu.domain.reporting.projection.TrendPointProjection;
+import edu.vinu.domain.reporting.response.ReportingPeriodRange;
+import edu.vinu.domain.reporting.response.TrendPoint;
+import edu.vinu.domain.reporting.utility.TrendBuilder;
 import edu.vinu.domain.student.dto.response.StudentUserResponse;
 import edu.vinu.domain.student.mapper.StudentMapper;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentEligibilityCheckRequest;
@@ -50,6 +56,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -219,5 +226,44 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 .size(pageDate.getSize())
                 .last(pageDate.isLast())
                 .build();
+    }
+
+    @Override
+    public BigDecimal countActiveStudentsByInstitute(Long instituteId) {
+        Long count = studentBatchEnrollmentRepository.countActiveStudentsByInstitute(instituteId, StudentBatchEnrollmentStatus.ACTIVE.name());
+        if (count == null) count = 0L;
+        return BigDecimal.valueOf(count);
+    }
+
+    @Override
+    public BigDecimal countUniqueStudentsEnrolledBetween(Long instituteId, LocalDateTime start, LocalDateTime end) {
+        Long count = studentBatchEnrollmentRepository.countStudentsEnrolledBetween(instituteId, start, end);
+        if (count == null) count = 0L;
+        return BigDecimal.valueOf(count);
+    }
+
+    @Override
+    public List<TrendPoint> getStudentEnrollmentTrend(Long instituteId, ReportingPeriod period, ReportingPeriodRange range) {
+        return switch (period) {
+            case TODAY -> getHourlyStudentEnrollmentTrend(instituteId, range.currentStart(), range.currentEnd());
+            case CURRENT_WEEK, CURRENT_MONTH, CURRENT_3_MONTHS -> getDailyStudentEnrollmentTrend(instituteId, range.currentStart(), range.currentEnd());
+            case CURRENT_YEAR, OVERALL -> getMonthlyStudentEnrollmentTrend(instituteId, range.currentStart(), range.currentEnd());
+        };
+    }
+
+    private List<TrendPoint> getHourlyStudentEnrollmentTrend(Long instituteId, LocalDateTime start, LocalDateTime end) {
+        List<TrendPointProjection> hourlyTrendProjection = studentBatchEnrollmentRepository.getHourlyStudentEnrollmentTrend(instituteId, start, end);
+        return TrendBuilder.build(start, end, TrendType.HOUR, hourlyTrendProjection);
+
+    }
+
+    private List<TrendPoint> getDailyStudentEnrollmentTrend(Long instituteId, LocalDateTime start, LocalDateTime end) {
+        List<TrendPointProjection> dailyTrendProjection = studentBatchEnrollmentRepository.getDailyStudentEnrollmentTrend(instituteId, start, end);
+        return TrendBuilder.build(start, end, TrendType.DAY, dailyTrendProjection);
+    }
+
+    private List<TrendPoint> getMonthlyStudentEnrollmentTrend(Long instituteId, LocalDateTime start, LocalDateTime end) {
+        List<TrendPointProjection> monthlyTrendProjection = studentBatchEnrollmentRepository.getMonthlyStudentEnrollmentTrend(instituteId, start, end);
+        return TrendBuilder.build(start, end, TrendType.MONTH, monthlyTrendProjection);
     }
 }
