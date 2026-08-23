@@ -17,6 +17,7 @@ package edu.vinu.domain.institute.controller;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
+import edu.vinu.domain.institute.service.InstituteBootstrapService;
 import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
 import jakarta.validation.Valid;
@@ -33,6 +34,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 public class InstituteController {
 
+    private final InstituteBootstrapService instituteBootstrapService;
     private final InstituteService instituteService;
     private final TeacherVacancyService vacancyService;
 
@@ -52,5 +54,11 @@ public class InstituteController {
     @GetMapping("validate/role")
     public ResponseEntity<ApiResponse> validateInstituteRole(){
         return ResponseEntity.status(OK).body(new ApiResponse("User has institute role!",null));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("/me/bootstrap")
+    public ResponseEntity<ApiResponse> getInstituteBootstrapData(){
+        return ResponseEntity.ok(instituteBootstrapService.getCurrentInstituteBootstrapData());
     }
 }
