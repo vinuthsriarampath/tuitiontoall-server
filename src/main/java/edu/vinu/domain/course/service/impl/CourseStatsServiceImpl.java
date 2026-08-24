@@ -20,6 +20,8 @@ import edu.vinu.domain.batch.repository.BatchRepository;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.enums.CourseStatus;
 import edu.vinu.domain.course.repository.CourseRepository;
+import edu.vinu.domain.course.repository.SimpleCourseProjection.SimpleCourseProjection;
+import edu.vinu.domain.course.response.CoursePerformanceResponse;
 import edu.vinu.domain.course.response.CourseStatsResponse;
 import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.course.service.CourseStatsService;
@@ -38,6 +40,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -96,6 +99,27 @@ public class CourseStatsServiceImpl implements CourseStatsService {
             case CURRENT_WEEK, CURRENT_MONTH, CURRENT_3_MONTHS -> getDailyCourseTrend(instituteId, status, range.currentStart(), range.currentEnd());
             case CURRENT_YEAR, OVERALL -> getMonthlyCourseTrend(instituteId, status, range.currentStart(), range.currentEnd());
         };
+    }
+
+    @Override
+    public List<CoursePerformanceResponse> getTopPerformingCoursesByRatingAndInstituteId(Long instituteId, int limit) {
+        List<SimpleCourseProjection> topPerformingCourses = courseRepository.getTopPerformingCoursesByRatingAndInstituteId(instituteId, limit);
+        List<CoursePerformanceResponse> responseList = new ArrayList<>();
+        for (SimpleCourseProjection course : topPerformingCourses){
+                Long ongoingBatchCount = batchRepository.countByCourseIdAndBatchStatus(course.getId(), BatchStatus.ONGOING.name());
+                Long activeStudentsCount = enrollmentRepository.countActiveStudentsByCourseId(course.getId(), BatchStatus.ONGOING.name(), StudentBatchEnrollmentStatus.ACTIVE.name());
+
+                responseList.add(
+                        CoursePerformanceResponse.builder()
+                                .id(course.getId())
+                                .title(course.getTitle())
+                                .activeStudentsCount(activeStudentsCount)
+                                .ongoingBatchesCount(ongoingBatchCount)
+                                .avgRating(course.getAvgRating())
+                                .build()
+                );
+        }
+        return responseList;
     }
 
 
