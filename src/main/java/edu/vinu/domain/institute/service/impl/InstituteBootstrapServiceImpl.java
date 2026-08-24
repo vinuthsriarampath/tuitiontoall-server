@@ -14,6 +14,8 @@
 package edu.vinu.domain.institute.service.impl;
 
 import edu.vinu.common.enums.ChangeValueType;
+import edu.vinu.domain.batch.enums.BatchStatus;
+import edu.vinu.domain.batch.service.BatchStatService;
 import edu.vinu.domain.course.enums.CourseStatus;
 import edu.vinu.domain.course.service.CourseStatsService;
 import edu.vinu.domain.reporting.enums.ReportingPeriod;
@@ -45,6 +47,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
     private final EnrollmentService enrollmentService;
     private final PaymentService paymentService;
     private final CourseStatsService courseStatsService;
+    private final BatchStatService batchStatService;
     private final PeriodService periodService;
 
     @Override
@@ -57,6 +60,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
 
         kpiStats.setActiveStudents(buildStudentKpi(currentInstitute.getId()));
         kpiStats.setPublishedCourses(buildCourseKpi(currentInstitute.getId()));
+        kpiStats.setOngoingBatches(buildBatchKpi(currentInstitute.getId()));
 
         response.setKpiStats(kpiStats);
 
@@ -108,4 +112,26 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
                 .trend(coursePublishedTrend)
                 .build();
     }
+
+    private DashboardKpi buildBatchKpi(Long instituteId){
+        ReportingPeriodRange periodRange = periodService.getRange(ReportingPeriod.CURRENT_MONTH);
+
+        BigDecimal totalBatches = batchStatService.countBatchesByInstituteAndBatchStatus(instituteId, BatchStatus.ONGOING);
+
+        BigDecimal currentPeriodBatchesCount = batchStatService.countBatchesByInstituteAndBatchStatusBetween(instituteId, BatchStatus.ONGOING, periodRange.currentStart(), periodRange.currentEnd());
+        BigDecimal previousPeriodBatchesCount = batchStatService.countBatchesByInstituteAndBatchStatusBetween(instituteId, BatchStatus.ONGOING, periodRange.previousStart(), periodRange.previousEnd());
+
+        BigDecimal changeValue = DifferenceCalculator.calculate(currentPeriodBatchesCount, previousPeriodBatchesCount, ChangeValueType.ABSOLUTE);
+
+        List<TrendPoint> batchTrend = batchStatService.getBatchesTrendByInstituteAndBatchStatus(instituteId, BatchStatus.ONGOING, ReportingPeriod.CURRENT_MONTH, periodRange);
+
+        return DashboardKpi.builder()
+                .value(totalBatches)
+                .changeValue(changeValue)
+                .changeValueType(ChangeValueType.ABSOLUTE)
+                .changeLabel("vs Previous Month")
+                .trend(batchTrend)
+                .build();
+    }
+
 }
