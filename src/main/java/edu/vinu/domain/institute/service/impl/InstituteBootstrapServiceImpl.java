@@ -14,11 +14,12 @@
 package edu.vinu.domain.institute.service.impl;
 
 import edu.vinu.common.enums.ChangeValueType;
+import edu.vinu.domain.course.enums.CourseStatus;
+import edu.vinu.domain.course.service.CourseStatsService;
 import edu.vinu.domain.reporting.enums.ReportingPeriod;
 import edu.vinu.domain.reporting.response.ReportingPeriodRange;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.DashboardKpi;
-import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.institute.response.InstituteBootstrapResponse;
 import edu.vinu.domain.institute.response.InstituteDashboardKpiStats;
@@ -43,7 +44,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
     private final InstituteTeacherService instituteTeacherService;
     private final EnrollmentService enrollmentService;
     private final PaymentService paymentService;
-    private final CourseService courseService;
+    private final CourseStatsService courseStatsService;
     private final PeriodService periodService;
 
     @Override
@@ -55,6 +56,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
         InstituteDashboardKpiStats kpiStats = new InstituteDashboardKpiStats();
 
         kpiStats.setActiveStudents(buildStudentKpi(currentInstitute.getId()));
+        kpiStats.setPublishedCourses(buildCourseKpi(currentInstitute.getId()));
 
         response.setKpiStats(kpiStats);
 
@@ -83,6 +85,27 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
                 .changeValueType(ChangeValueType.PERCENTAGE)
                 .changeLabel("vs Previous Month")
                 .trend(studentEnrollmentTrend)
+                .build();
+    }
+
+    private DashboardKpi buildCourseKpi(Long instituteId){
+        ReportingPeriodRange periodRange = periodService.getRange(ReportingPeriod.CURRENT_MONTH);
+
+        BigDecimal totalPublishedCourses = courseStatsService.countCoursesByStatusAndInstituteId(instituteId, CourseStatus.PUBLISHED);
+
+        BigDecimal currentPeriodPublishedCoursesCount = courseStatsService.countCoursesByStatusAndInstituteIdBetween(instituteId, CourseStatus.PUBLISHED, periodRange.currentStart(), periodRange.currentEnd());
+        BigDecimal previousPeriodPublishedCoursesCount = courseStatsService.countCoursesByStatusAndInstituteIdBetween(instituteId, CourseStatus.PUBLISHED, periodRange.previousStart(), periodRange.previousEnd());
+
+        BigDecimal changeValue = DifferenceCalculator.calculate(currentPeriodPublishedCoursesCount, previousPeriodPublishedCoursesCount, ChangeValueType.ABSOLUTE);
+
+        List<TrendPoint> coursePublishedTrend = courseStatsService.getCoursesTrendByInstituteAndStatus(instituteId, CourseStatus.PUBLISHED, ReportingPeriod.CURRENT_MONTH, periodRange);
+
+        return DashboardKpi.builder()
+                .value(totalPublishedCourses)
+                .changeValue(changeValue)
+                .changeValueType(ChangeValueType.ABSOLUTE)
+                .changeLabel("vs Previous Month")
+                .trend(coursePublishedTrend)
                 .build();
     }
 }
