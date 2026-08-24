@@ -18,6 +18,8 @@ import edu.vinu.domain.batch.enums.BatchStatus;
 import edu.vinu.domain.batch.service.BatchStatService;
 import edu.vinu.domain.course.enums.CourseStatus;
 import edu.vinu.domain.course.service.CourseStatsService;
+import edu.vinu.domain.institute.enums.InstituteTeacherStatus;
+import edu.vinu.domain.institute.service.InstituteTeacherStatService;
 import edu.vinu.domain.reporting.enums.ReportingPeriod;
 import edu.vinu.domain.reporting.response.ReportingPeriodRange;
 import edu.vinu.common.response.ApiResponse;
@@ -43,7 +45,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InstituteBootstrapServiceImpl implements InstituteBootstrapService {
     private final InstituteService instituteService;
-    private final InstituteTeacherService instituteTeacherService;
+    private final InstituteTeacherStatService instituteTeacherStatService;
     private final EnrollmentService enrollmentService;
     private final PaymentService paymentService;
     private final CourseStatsService courseStatsService;
@@ -61,6 +63,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
         kpiStats.setActiveStudents(buildStudentKpi(currentInstitute.getId()));
         kpiStats.setPublishedCourses(buildCourseKpi(currentInstitute.getId()));
         kpiStats.setOngoingBatches(buildBatchKpi(currentInstitute.getId()));
+        kpiStats.setActiveTeachers(buildTeacherKpi(currentInstitute.getId()));
 
         response.setKpiStats(kpiStats);
 
@@ -131,6 +134,27 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
                 .changeValueType(ChangeValueType.ABSOLUTE)
                 .changeLabel("vs Previous Month")
                 .trend(batchTrend)
+                .build();
+    }
+
+    private DashboardKpi buildTeacherKpi(Long instituteId){
+        ReportingPeriodRange periodRange = periodService.getRange(ReportingPeriod.CURRENT_MONTH);
+
+        BigDecimal totalTeachers = instituteTeacherStatService.countInstituteTeachersByInstituteAndStatus(instituteId, InstituteTeacherStatus.ACTIVE);
+
+        BigDecimal currentPeriodTeachersCount = instituteTeacherStatService.countActiveTeachersByInstituteAndStatusIdBetween(instituteId, InstituteTeacherStatus.ACTIVE, periodRange.currentStart(), periodRange.currentEnd());
+        BigDecimal previousPeriodTeachersCount = instituteTeacherStatService.countActiveTeachersByInstituteAndStatusIdBetween(instituteId, InstituteTeacherStatus.ACTIVE, periodRange.previousStart(), periodRange.previousEnd());
+
+        BigDecimal changeValue = DifferenceCalculator.calculate(currentPeriodTeachersCount, previousPeriodTeachersCount, ChangeValueType.ABSOLUTE);
+
+        List<TrendPoint> teacherTrend = instituteTeacherStatService.getInstituteTeachersTrends(instituteId, InstituteTeacherStatus.ACTIVE, ReportingPeriod.CURRENT_MONTH, periodRange);
+
+        return DashboardKpi.builder()
+                .value(totalTeachers)
+                .changeValue(changeValue)
+                .changeValueType(ChangeValueType.ABSOLUTE)
+                .changeLabel("vs Previous Month")
+                .trend(teacherTrend)
                 .build();
     }
 
