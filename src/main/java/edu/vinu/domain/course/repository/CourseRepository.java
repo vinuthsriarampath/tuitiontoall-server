@@ -14,6 +14,7 @@
 package edu.vinu.domain.course.repository;
 
 import edu.vinu.domain.course.entity.CourseEntity;
+import edu.vinu.domain.course.repository.SimpleCourseProjection.SimpleCourseProjection;
 import edu.vinu.domain.reporting.projection.TrendPointProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -98,4 +99,13 @@ public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
     ORDER BY bucket
     """,nativeQuery = true)
     List<TrendPointProjection> getMonthlyCoursesTrendByStatusAndInstitute(String status, Long instituteId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    @Query(value = """
+    SELECT c.id AS id, c.title AS title, c.avg_rating AS avgRating
+    FROM courses c
+    WHERE c.institute_id = :instituteId
+    ORDER BY c.avg_rating DESC
+    LIMIT :limitBy
+    """,nativeQuery = true)
+    List<SimpleCourseProjection> getTopPerformingCoursesByRatingAndInstituteId(Long instituteId, int limitBy);
 }
