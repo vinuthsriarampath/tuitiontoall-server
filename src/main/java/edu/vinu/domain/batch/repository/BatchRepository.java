@@ -16,6 +16,7 @@ package edu.vinu.domain.batch.repository;
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.batch.enums.BatchStatus;
 import edu.vinu.domain.batch.repository.projection.BatchProjection;
+import edu.vinu.domain.reporting.projection.TrendPointProjection;
 import org.apache.logging.log4j.simple.internal.SimpleProvider;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,6 +25,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -82,4 +84,70 @@ ORDER BY b.start_date DESC
     AND b.batch_status = :batchStatus
     """, nativeQuery = true)
     Long countByCourseIdAndBatchStatus(Long courseId, String batchStatus);
+
+
+    @Query(value = """
+    SELECT COUNT(*)
+    FROM batch b
+    JOIN courses c ON b.course_id = c.id
+    WHERE c.institute_id = :instituteId
+    AND b.batch_status = :batchStatus
+    """,nativeQuery = true)
+    Long countBatchesByInstituteIdAndBatchStatus(Long instituteId, String batchStatus);
+
+    @Query(value = """
+    SELECT COUNT(*)
+    FROM batch b
+    JOIN courses c ON b.course_id = c.id
+    WHERE c.institute_id = :instituteId
+    AND b.batch_status = :batchStatus
+    AND b.created_date >= :startDateTime
+    AND b.created_date < :endDateTime
+    """,nativeQuery = true)
+    Long countBatchesByInstituteIdAndBatchStatusBetween(Long instituteId, String batchStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    @Query(value = """
+    SELECT
+    DATE_FORMAT(b.created_date, '%Y-%m-%d %H:00:00') AS bucket,
+    COUNT(*) AS value
+    FROM batch b
+    JOIN courses c ON b.course_id = c.id
+    WHERE c.institute_id = :instituteId
+    AND b.batch_status = :batchStatus
+    AND b.created_date >= :startDateTime
+    AND b.created_date < :endDateTime
+    GROUP BY DATE_FORMAT(b.created_date, '%Y-%m-%d %H')
+    ORDER BY bucket
+    """,nativeQuery = true)
+    List<TrendPointProjection> getHourlyBatchesTrendByInstituteAndBatchStatus(Long instituteId, String batchStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    @Query(value = """
+    SELECT
+    DATE_FORMAT(b.created_date, '%Y-%m-%d 00:00:00') AS bucket,
+    COUNT(*) AS value
+    FROM batch b
+    JOIN courses c ON b.course_id = c.id
+    WHERE c.institute_id = :instituteId
+    AND b.batch_status = :batchStatus
+    AND b.created_date >= :startDateTime
+    AND b.created_date < :endDateTime
+    GROUP BY DATE(b.created_date)
+    ORDER BY bucket
+    """,nativeQuery = true)
+    List<TrendPointProjection> getDailyBatchesTrendByInstituteAndBatchStatus(Long instituteId, String batchStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    @Query(value = """
+    SELECT
+    DATE_FORMAT(b.created_date, '%Y-%m-01 00:00:00') AS bucket,
+    COUNT(*) AS value
+    FROM batch b
+    JOIN courses c ON b.course_id = c.id
+    WHERE c.institute_id = :instituteId
+    AND b.batch_status = :batchStatus
+    AND b.created_date >= :startDateTime
+    AND b.created_date < :endDateTime
+    GROUP BY YEAR(b.created_date), MONTH(b.created_date)
+    ORDER BY bucket
+    """,nativeQuery = true)
+    List<TrendPointProjection> getMonthlyBatchesTrendByInstituteAndBatchStatus(Long instituteId, String batchStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
 }
