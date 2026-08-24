@@ -18,18 +18,27 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.batch.enums.BatchStatus;
 import edu.vinu.domain.batch.repository.BatchRepository;
 import edu.vinu.domain.course.entity.CourseEntity;
+import edu.vinu.domain.course.enums.CourseStatus;
 import edu.vinu.domain.course.repository.CourseRepository;
 import edu.vinu.domain.course.response.CourseStatsResponse;
 import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.course.service.CourseStatsService;
 import edu.vinu.domain.payment.enums.PaymentStatus;
 import edu.vinu.domain.payment.repository.PaymentRepository;
+import edu.vinu.domain.reporting.enums.ReportingPeriod;
+import edu.vinu.domain.reporting.enums.TrendType;
+import edu.vinu.domain.reporting.projection.TrendPointProjection;
+import edu.vinu.domain.reporting.response.ReportingPeriodRange;
+import edu.vinu.domain.reporting.response.TrendPoint;
+import edu.vinu.domain.reporting.utility.TrendBuilder;
 import edu.vinu.domain.student_batch_enrollment.enums.StudentBatchEnrollmentStatus;
 import edu.vinu.domain.student_batch_enrollment.repository.StudentBatchEnrollmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +47,7 @@ public class CourseStatsServiceImpl implements CourseStatsService {
     private final BatchRepository batchRepository;
     private final StudentBatchEnrollmentRepository enrollmentRepository;
     private final PaymentRepository paymentRepository;
+    private final CourseRepository courseRepository;
 
     @Override
     public ApiResponse getCourseStats(Long courseId) {
@@ -63,5 +73,44 @@ public class CourseStatsServiceImpl implements CourseStatsService {
                 .message("Course stats retrieved successfully")
                 .data(stats)
                 .build();
+    }
+
+    @Override
+    public BigDecimal countCoursesByStatusAndInstituteId(Long instituteId, CourseStatus status) {
+        Long count = courseRepository.countCoursesByStatusAndInstituteId(status.name(), instituteId);
+        if(count == null) count = 0L;
+        return BigDecimal.valueOf(count);
+    }
+
+    @Override
+    public BigDecimal countCoursesByStatusAndInstituteIdBetween(Long instituteId, CourseStatus status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        Long count = courseRepository.countCoursesByStatusAndInstituteIdBetween(status.name(), instituteId, startDateTime, endDateTime);
+        if(count == null) count = 0L;
+        return BigDecimal.valueOf(count);
+    }
+
+    @Override
+    public List<TrendPoint> getCoursesTrendByInstituteAndStatus(Long instituteId, CourseStatus status, ReportingPeriod period, ReportingPeriodRange range) {
+        return switch (period){
+            case TODAY -> getHourlyCourseTrend(instituteId, status, range.currentStart(), range.currentEnd());
+            case CURRENT_WEEK, CURRENT_MONTH, CURRENT_3_MONTHS -> getDailyCourseTrend(instituteId, status, range.currentStart(), range.currentEnd());
+            case CURRENT_YEAR, OVERALL -> getMonthlyCourseTrend(instituteId, status, range.currentStart(), range.currentEnd());
+        };
+    }
+
+
+    private List<TrendPoint> getHourlyCourseTrend(Long instituteId, CourseStatus status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        List<TrendPointProjection> hourlyCourseTrend = courseRepository.getHourlyCoursesTrendByStatusAndInstitute(status.name(), instituteId, startDateTime, endDateTime);
+        return TrendBuilder.build(startDateTime, endDateTime, TrendType.HOUR, hourlyCourseTrend);
+    }
+
+    private List<TrendPoint> getDailyCourseTrend(Long instituteId, CourseStatus status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        List<TrendPointProjection> dailyCourseTrend = courseRepository.getDailyCoursesTrendByStatusAndInstitute(status.name(), instituteId, startDateTime, endDateTime);
+        return TrendBuilder.build(startDateTime, endDateTime, TrendType.DAY, dailyCourseTrend);
+    }
+
+    private List<TrendPoint> getMonthlyCourseTrend(Long instituteId, CourseStatus status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        List<TrendPointProjection> monthlyCourseTrend = courseRepository.getMonthlyCoursesTrendByStatusAndInstitute(status.name(), instituteId, startDateTime, endDateTime);
+        return TrendBuilder.build(startDateTime, endDateTime, TrendType.MONTH, monthlyCourseTrend);
     }
 }
