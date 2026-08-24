@@ -29,7 +29,7 @@ public class InstituteDashboardKpiStats {
     @Builder.Default
     private DashboardKpi ongoingBatches = new DashboardKpi();
     @Builder.Default
-    private DashboardKpi activeCourses = new DashboardKpi();
+    private DashboardKpi publishedCourses = new DashboardKpi();
     @Builder.Default
     private DashboardKpi activeTeachers = new DashboardKpi();
     @Builder.Default
