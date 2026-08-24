@@ -69,6 +69,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
         kpiStats.setRevenue(buildRevenueKpi(currentInstitute.getId()));
 
         response.setKpiStats(kpiStats);
+        response.setCoursePerformance(courseStatsService.getTopPerformingCoursesByRatingAndInstituteId(currentInstitute.getId(), 5));
 
         return ApiResponse.builder()
                 .message("Bootstrap data retrieved successfully")
