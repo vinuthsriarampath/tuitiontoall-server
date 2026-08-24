@@ -29,7 +29,11 @@ public class DifferenceCalculator {
         }
 
         if (previous.compareTo(BigDecimal.ZERO) == 0) {
-            return null;
+            if (current.compareTo(BigDecimal.ZERO) > 0) {
+                return BigDecimal.valueOf(100);
+            }else {
+                return BigDecimal.ZERO;
+            }
         }
 
         return current
