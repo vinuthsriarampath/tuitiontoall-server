@@ -13,10 +13,14 @@
 
 package edu.vinu.domain.institute.response;
 
+import edu.vinu.domain.course.response.CoursePerformanceResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,5 +29,6 @@ import lombok.NoArgsConstructor;
 public class InstituteBootstrapResponse{
     @Builder.Default
     private InstituteDashboardKpiStats kpiStats = new InstituteDashboardKpiStats();
-
+    @Builder.Default
+    private List<CoursePerformanceResponse> coursePerformance = new ArrayList<>();
 }
