@@ -20,6 +20,8 @@ import edu.vinu.domain.course.enums.CourseStatus;
 import edu.vinu.domain.course.service.CourseStatsService;
 import edu.vinu.domain.institute.enums.InstituteTeacherStatus;
 import edu.vinu.domain.institute.service.InstituteTeacherStatService;
+import edu.vinu.domain.payment.enums.PaymentStatus;
+import edu.vinu.domain.payment.service.PaymentStatService;
 import edu.vinu.domain.reporting.enums.ReportingPeriod;
 import edu.vinu.domain.reporting.response.ReportingPeriodRange;
 import edu.vinu.common.response.ApiResponse;
@@ -47,7 +49,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
     private final InstituteService instituteService;
     private final InstituteTeacherStatService instituteTeacherStatService;
     private final EnrollmentService enrollmentService;
-    private final PaymentService paymentService;
+    private final PaymentStatService paymentStatService;
     private final CourseStatsService courseStatsService;
     private final BatchStatService batchStatService;
     private final PeriodService periodService;
@@ -64,6 +66,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
         kpiStats.setPublishedCourses(buildCourseKpi(currentInstitute.getId()));
         kpiStats.setOngoingBatches(buildBatchKpi(currentInstitute.getId()));
         kpiStats.setActiveTeachers(buildTeacherKpi(currentInstitute.getId()));
+        kpiStats.setRevenue(buildRevenueKpi(currentInstitute.getId()));
 
         response.setKpiStats(kpiStats);
 
@@ -155,6 +158,27 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
                 .changeValueType(ChangeValueType.ABSOLUTE)
                 .changeLabel("vs Previous Month")
                 .trend(teacherTrend)
+                .build();
+    }
+
+    private DashboardKpi buildRevenueKpi(Long instituteId){
+        ReportingPeriodRange periodRange = periodService.getRange(ReportingPeriod.CURRENT_MONTH);
+
+        BigDecimal totalRevenue = paymentStatService.sumPaymentsByInstituteIdAndPaymentStatus(instituteId, PaymentStatus.PAID);
+
+        BigDecimal currentPeriodRevenue = paymentStatService.sumPaymentsByInstituteIdAndPaymentStatusBetween(instituteId, PaymentStatus.PAID, periodRange.currentStart(), periodRange.currentEnd());
+        BigDecimal previousPeriodRevenue = paymentStatService.sumPaymentsByInstituteIdAndPaymentStatusBetween(instituteId, PaymentStatus.PAID, periodRange.previousStart(), periodRange.previousEnd());
+
+        BigDecimal changeValue = DifferenceCalculator.calculate(currentPeriodRevenue, previousPeriodRevenue, ChangeValueType.PERCENTAGE);
+
+        List<TrendPoint> revenueTrend = paymentStatService.getRevenueTrendByInstituteAndPaymentStatus(instituteId, PaymentStatus.PAID, ReportingPeriod.CURRENT_MONTH, periodRange);
+
+        return DashboardKpi.builder()
+                .value(totalRevenue)
+                .changeValue(changeValue)
+                .changeValueType(ChangeValueType.PERCENTAGE)
+                .changeLabel("vs Previous Month")
+                .trend(revenueTrend)
                 .build();
     }
 
