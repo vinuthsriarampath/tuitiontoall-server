@@ -13,6 +13,8 @@
 
 package edu.vinu.domain.institute.response;
 
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.batch.response.BatchDetailedResponse;
 import edu.vinu.domain.course.response.CoursePerformanceResponse;
 import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentDistributionResponse;
 import edu.vinu.domain.student_batch_enrollment.dto.respose.OverallEnrollmentResponse;
@@ -37,4 +39,6 @@ public class InstituteBootstrapResponse{
     private EnrollmentDistributionResponse enrollmentDistribution = new EnrollmentDistributionResponse();
     @Builder.Default
     private OverallEnrollmentResponse overallEnrollment = new OverallEnrollmentResponse();
+    @Builder.Default
+    private PaginatedApiResponse<BatchDetailedResponse> activeBatches = new PaginatedApiResponse<>();
 }

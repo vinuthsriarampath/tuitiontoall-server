@@ -16,7 +16,9 @@ package edu.vinu.domain.batch.mapper;
 import edu.vinu.domain.batch.dto.Batch;
 import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
 import edu.vinu.domain.batch.enums.BatchStatus;
+import edu.vinu.domain.batch.repository.projection.BatchDetailedProjection;
 import edu.vinu.domain.batch.repository.projection.BatchProjection;
+import edu.vinu.domain.batch.response.BatchDetailedResponse;
 
 public class BatchMapper {
 
@@ -33,6 +35,24 @@ public class BatchMapper {
                 .enrollment_status(BatchEnrollmentStatus.valueOf(p.getEnrollmentStatus()))
                 .created_date(p.getCreatedDate())
                 .last_modified_date(p.getLastModifiedDate())
+                .build();
+    }
+
+    public static BatchDetailedResponse toBatchDetailedResponse(BatchDetailedProjection p) {
+        return BatchDetailedResponse.builder()
+                .id(p.getId())
+                .name(p.getName())
+                .courseId(p.getCourseId())
+                .courseTitle(p.getCourseTitle())
+                .isSeatLimited(p.getIsSeatLimited())
+                .maxSeatsLimit(p.getMaxSeatsLimit())
+                .totalEnrollments(p.getTotalEnrollments())
+                .batchStatus(p.getBatchStatus())
+                .enrollmentStatus(p.getEnrollmentStatus())
+                .startDate(p.getStartDate())
+                .startTime(p.getStartTime())
+                .createdDate(p.getCreatedDate())
+                .lastModifiedDate(p.getLastModifiedDate())
                 .build();
     }
 }
