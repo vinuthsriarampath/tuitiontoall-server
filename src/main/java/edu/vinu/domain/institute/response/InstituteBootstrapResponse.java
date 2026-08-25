@@ -15,6 +15,7 @@ package edu.vinu.domain.institute.response;
 
 import edu.vinu.domain.course.response.CoursePerformanceResponse;
 import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentDistributionResponse;
+import edu.vinu.domain.student_batch_enrollment.dto.respose.OverallEnrollmentResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,4 +35,6 @@ public class InstituteBootstrapResponse{
     private List<CoursePerformanceResponse> coursePerformance = new ArrayList<>();
     @Builder.Default
     private EnrollmentDistributionResponse enrollmentDistribution = new EnrollmentDistributionResponse();
+    @Builder.Default
+    private OverallEnrollmentResponse overallEnrollment = new OverallEnrollmentResponse();
 }
