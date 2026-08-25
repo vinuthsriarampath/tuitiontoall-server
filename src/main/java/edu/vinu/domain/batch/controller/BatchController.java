@@ -18,7 +18,9 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.batch.dto.Batch;
 import edu.vinu.domain.batch.request.BatchCreateRequest;
+import edu.vinu.domain.batch.request.BatchFilterRequest;
 import edu.vinu.domain.batch.request.BatchUpdateRequest;
+import edu.vinu.domain.batch.response.BatchDetailedResponse;
 import edu.vinu.domain.batch.service.BatchService;
 import edu.vinu.domain.module.response.ModuleResponse;
 import edu.vinu.domain.module.service.ModuleQueryService;
@@ -103,5 +105,11 @@ public class BatchController {
     public ResponseEntity<PaginatedApiResponse<StudentUserResponse>> getStudentsByBatch(@PathVariable Long batchId, PaginationRequest pagination){
         PaginatedApiResponse<StudentUserResponse> response = enrollmentService.getStudentsByBatch(batchId, pagination);
         return ResponseEntity.status(200).body(response);
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("detailed")
+    public ResponseEntity<PaginatedApiResponse<BatchDetailedResponse>> getDetailedBatches(PaginationRequest pagination, BatchFilterRequest filters){
+        return ResponseEntity.ok(batchService.getAllBatches(pagination,filters));
     }
 }
