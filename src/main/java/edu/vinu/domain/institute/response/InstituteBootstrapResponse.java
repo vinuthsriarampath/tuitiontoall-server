@@ -14,6 +14,7 @@
 package edu.vinu.domain.institute.response;
 
 import edu.vinu.domain.course.response.CoursePerformanceResponse;
+import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentDistributionResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,4 +32,6 @@ public class InstituteBootstrapResponse{
     private InstituteDashboardKpiStats kpiStats = new InstituteDashboardKpiStats();
     @Builder.Default
     private List<CoursePerformanceResponse> coursePerformance = new ArrayList<>();
+    @Builder.Default
+    private EnrollmentDistributionResponse enrollmentDistribution = new EnrollmentDistributionResponse();
 }
