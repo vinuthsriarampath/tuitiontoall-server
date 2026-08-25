@@ -31,16 +31,16 @@ import edu.vinu.domain.institute.response.InstituteBootstrapResponse;
 import edu.vinu.domain.institute.response.InstituteDashboardKpiStats;
 import edu.vinu.domain.institute.service.InstituteBootstrapService;
 import edu.vinu.domain.institute.service.InstituteService;
-import edu.vinu.domain.institute.service.InstituteTeacherService;
-import edu.vinu.domain.payment.service.PaymentService;
 import edu.vinu.domain.reporting.response.TrendPoint;
 import edu.vinu.domain.reporting.service.PeriodService;
 import edu.vinu.domain.reporting.utility.DifferenceCalculator;
+import edu.vinu.domain.student_batch_enrollment.dto.respose.OverallEnrollmentResponse;
 import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -71,6 +71,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
         response.setKpiStats(kpiStats);
         response.setCoursePerformance(courseStatsService.getTopPerformingCoursesByRatingAndInstituteId(currentInstitute.getId(), 5));
         response.setEnrollmentDistribution(enrollmentService.getEnrollmentDistributionByInstitute(currentInstitute.getId()));
+        response.setOverallEnrollment(enrollmentService.getOverallEnrollmentStatsByInstitute(currentInstitute.getId(),currentInstitute.getUser().getCreationTimeStamp().toLocalDate()));
 
         return ApiResponse.builder()
                 .message("Bootstrap data retrieved successfully")
