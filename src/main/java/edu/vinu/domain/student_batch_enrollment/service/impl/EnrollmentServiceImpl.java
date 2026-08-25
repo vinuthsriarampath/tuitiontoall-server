@@ -38,11 +38,13 @@ import edu.vinu.domain.student.dto.response.StudentUserResponse;
 import edu.vinu.domain.student.mapper.StudentMapper;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentEligibilityCheckRequest;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentRequest;
+import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentDistributionResponse;
 import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentEligibilityResponse;
 import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
 import edu.vinu.domain.student_batch_enrollment.enums.EnrollmentEligibilityReason;
 import edu.vinu.domain.student_batch_enrollment.enums.StudentBatchEnrollmentStatus;
 import edu.vinu.domain.student_batch_enrollment.repository.StudentBatchEnrollmentRepository;
+import edu.vinu.domain.student_batch_enrollment.repository.projection.EnrollmentDistributionProjection;
 import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
 import edu.vinu.domain.student.entity.StudentEntity;
 import edu.vinu.domain.user.entity.UserEntity;
@@ -56,6 +58,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -230,16 +233,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public BigDecimal countActiveStudentsByInstitute(Long instituteId) {
-        Long count = studentBatchEnrollmentRepository.countActiveStudentsByInstitute(instituteId, StudentBatchEnrollmentStatus.ACTIVE.name());
-        if (count == null) count = 0L;
-        return BigDecimal.valueOf(count);
+        Long count = studentBatchEnrollmentRepository.countEnrollmentsByInstitute(instituteId, StudentBatchEnrollmentStatus.ACTIVE.name());
+        return count != null ? BigDecimal.valueOf(count) : BigDecimal.ZERO;
     }
 
     @Override
     public BigDecimal countUniqueStudentsEnrolledBetween(Long instituteId, LocalDateTime start, LocalDateTime end) {
         Long count = studentBatchEnrollmentRepository.countStudentsEnrolledBetween(instituteId, start, end);
-        if (count == null) count = 0L;
-        return BigDecimal.valueOf(count);
+        return count != null ? BigDecimal.valueOf(count) : BigDecimal.ZERO;
     }
 
     @Override
@@ -249,6 +250,36 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             case CURRENT_WEEK, CURRENT_MONTH, CURRENT_3_MONTHS -> getDailyStudentEnrollmentTrend(instituteId, range.currentStart(), range.currentEnd());
             case CURRENT_YEAR, OVERALL -> getMonthlyStudentEnrollmentTrend(instituteId, range.currentStart(), range.currentEnd());
         };
+    }
+
+    @Override
+    public EnrollmentDistributionResponse getEnrollmentDistributionByInstitute(Long instituteId) {
+        EnrollmentDistributionProjection distributionProjection = studentBatchEnrollmentRepository.getEnrollmentDistributionByInstituteId(instituteId);
+
+        Long totalEnrollments = distributionProjection.getTotalEnrollments();
+        Long activeEnrollments = distributionProjection.getActiveEnrollments();
+        Long completedEnrollments = distributionProjection.getCompletedEnrollments();
+        Long suspendedEnrollments = distributionProjection.getSuspendedEnrollments();
+
+        BigDecimal activeEnrollmentsPercentage = totalEnrollments != null && totalEnrollments > 0
+                ? BigDecimal.valueOf(activeEnrollments).multiply(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(totalEnrollments), 2, RoundingMode.HALF_UP)
+                : BigDecimal.ZERO;
+        BigDecimal completedEnrollmentsPercentage = totalEnrollments != null && totalEnrollments > 0
+                ? BigDecimal.valueOf(completedEnrollments).multiply(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(totalEnrollments), 2, RoundingMode.HALF_UP)
+                : BigDecimal.ZERO;
+        BigDecimal suspendedEnrollmentsPercentage = totalEnrollments != null && totalEnrollments > 0
+                ? BigDecimal.valueOf(suspendedEnrollments).multiply(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(totalEnrollments), 2, RoundingMode.HALF_UP)
+                : BigDecimal.ZERO;
+
+        return EnrollmentDistributionResponse.builder()
+                .totalEnrollments(totalEnrollments)
+                .activeEnrollments(activeEnrollments)
+                .activeEnrollmentsPercentage(activeEnrollmentsPercentage)
+                .completedEnrollments(completedEnrollments)
+                .completedEnrollmentsPercentage(completedEnrollmentsPercentage)
+                .suspendedEnrollments(suspendedEnrollments)
+                .suspendedEnrollmentsPercentage(suspendedEnrollmentsPercentage)
+                .build();
     }
 
     private List<TrendPoint> getHourlyStudentEnrollmentTrend(Long instituteId, LocalDateTime start, LocalDateTime end) {

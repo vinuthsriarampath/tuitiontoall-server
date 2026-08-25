@@ -22,6 +22,7 @@ import edu.vinu.domain.reporting.response.TrendPoint;
 import edu.vinu.domain.student.dto.response.StudentUserResponse;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentEligibilityCheckRequest;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentRequest;
+import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentDistributionResponse;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -39,4 +40,6 @@ public interface EnrollmentService {
     BigDecimal countUniqueStudentsEnrolledBetween(Long instituteId, LocalDateTime start, LocalDateTime end);
 
     List<TrendPoint> getStudentEnrollmentTrend(Long instituteId, ReportingPeriod period, ReportingPeriodRange range);
+
+    EnrollmentDistributionResponse getEnrollmentDistributionByInstitute(Long instituteId);
 }
