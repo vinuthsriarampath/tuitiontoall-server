@@ -14,6 +14,7 @@
 package edu.vinu.domain.student_batch_enrollment.service.impl;
 
 import edu.vinu.common.dto.PaginationRequest;
+import edu.vinu.common.enums.ChangeValueType;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.common.response.ApiResponse;
@@ -25,14 +26,19 @@ import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
 import edu.vinu.domain.batch.service.BatchService;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.service.CourseService;
+import edu.vinu.domain.institute.entity.InstituteEntity;
+import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.openPdf.service.InvoicePdfGeneratorService;
 import edu.vinu.domain.payment.entity.Payment;
 import edu.vinu.domain.payment.service.PaymentService;
 import edu.vinu.domain.reporting.enums.ReportingPeriod;
 import edu.vinu.domain.reporting.enums.TrendType;
+import edu.vinu.domain.reporting.mapper.TrendPointMapper;
 import edu.vinu.domain.reporting.projection.TrendPointProjection;
 import edu.vinu.domain.reporting.response.ReportingPeriodRange;
 import edu.vinu.domain.reporting.response.TrendPoint;
+import edu.vinu.domain.reporting.service.PeriodService;
+import edu.vinu.domain.reporting.utility.DifferenceCalculator;
 import edu.vinu.domain.reporting.utility.TrendBuilder;
 import edu.vinu.domain.student.dto.response.StudentUserResponse;
 import edu.vinu.domain.student.mapper.StudentMapper;
@@ -40,6 +46,7 @@ import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentEligibilit
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentRequest;
 import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentDistributionResponse;
 import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentEligibilityResponse;
+import edu.vinu.domain.student_batch_enrollment.dto.respose.OverallEnrollmentResponse;
 import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
 import edu.vinu.domain.student_batch_enrollment.enums.EnrollmentEligibilityReason;
 import edu.vinu.domain.student_batch_enrollment.enums.StudentBatchEnrollmentStatus;
@@ -59,6 +66,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -73,6 +81,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private final StudentBatchEnrollmentRepository  studentBatchEnrollmentRepository;
     private final InvoicePdfGeneratorService invoicePdfGenerator;
     private final UserAuthenticationService authService;
+    private final PeriodService periodService;
+    private final InstituteService instituteService;
 
     @Override
     @Transactional
@@ -279,6 +289,42 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 .completedEnrollmentsPercentage(completedEnrollmentsPercentage)
                 .suspendedEnrollments(suspendedEnrollments)
                 .suspendedEnrollmentsPercentage(suspendedEnrollmentsPercentage)
+                .build();
+    }
+
+    @Override
+    public List<TrendPoint> getPeakMonthlyEnrollmentTrendByInstitute(Long instituteId, int limit, ReportingPeriodRange range) {
+        return studentBatchEnrollmentRepository.getPeakMonthlyEnrollmentTrendByInstitute(instituteId, limit, range.currentStart(), range.currentEnd()).stream().map(TrendPointMapper::toTrendPoint).toList();
+    }
+
+    @Override
+    public OverallEnrollmentResponse getOverallEnrollmentStatsByInstitute(Long instituteId, LocalDate instituteStartDate) {
+
+        ReportingPeriodRange periodRange = periodService.getRange(ReportingPeriod.OVERALL, instituteStartDate);
+
+
+        List<TrendPoint> overallEnrollmentTrend = getStudentEnrollmentTrend(instituteId, ReportingPeriod.OVERALL, periodRange);
+        TrendPoint peakMonthTrend = getPeakMonthlyEnrollmentTrendByInstitute(instituteId,1, periodRange).get(0);
+
+        LocalDateTime peakMonthStart = peakMonthTrend.getDate();
+        LocalDateTime monthAfterPeakMonth = peakMonthStart.plusMonths(1);
+        LocalDateTime monthAfterCurrentMonth = LocalDate.now().withDayOfMonth(1).plusMonths(1).atStartOfDay();
+
+        long peakCumulativeEnrollments = studentBatchEnrollmentRepository.countEnrollmentsBefore(instituteId, monthAfterPeakMonth);
+        long currentCumulativeEnrollments = studentBatchEnrollmentRepository.countEnrollmentsBefore(instituteId, monthAfterCurrentMonth);
+
+        return OverallEnrollmentResponse.builder()
+                .trendPoints(overallEnrollmentTrend)
+                .startDate(periodRange.currentStart().toLocalDate())
+                .endDate(periodRange.currentEnd().toLocalDate())
+                .peakMonthTrend(peakMonthTrend)
+                .growthRateSincePeakMonth(
+                        DifferenceCalculator.calculate(
+                            BigDecimal.valueOf(currentCumulativeEnrollments),
+                            BigDecimal.valueOf(peakCumulativeEnrollments),
+                            ChangeValueType.PERCENTAGE
+                        )
+                )
                 .build();
     }
 
