@@ -16,6 +16,7 @@ package edu.vinu.domain.student_batch_enrollment.repository;
 import edu.vinu.domain.reporting.projection.TrendPointProjection;
 import edu.vinu.domain.student.repository.projection.StudentUserProjection;
 import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
+import edu.vinu.domain.student_batch_enrollment.repository.projection.EnrollmentDistributionProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -113,9 +114,9 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
             INNER JOIN batch b ON b.id = sbe.batch_id
             INNER JOIN courses c ON c.id = b.course_id
         WHERE c.institute_id = :instituteId
-            AND sbe.status = :enrollmentStatus
+            AND (:enrollmentStatus IS NULL OR sbe.status = :enrollmentStatus)
     """, nativeQuery = true)
-    Long countActiveStudentsByInstitute(Long instituteId, String enrollmentStatus);
+    Long countEnrollmentsByInstitute(Long instituteId, String enrollmentStatus);
 
     @Query(value = """
     SELECT COUNT(DISTINCT sbe.student_id)
@@ -173,4 +174,17 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
     ORDER BY bucket
     """,nativeQuery = true)
     List<TrendPointProjection> getMonthlyStudentEnrollmentTrend(Long instituteId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    @Query(value = """
+    SELECT
+    COUNT(*) AS totalEnrollments,
+    COUNT(CASE WHEN sbe.status = 'ACTIVE' THEN 1 END) AS activeEnrollments,
+    COUNT(CASE WHEN sbe.status = 'COMPLETED' THEN 1 END) AS completedEnrollments,
+    COUNT(CASE WHEN sbe.status = 'SUSPENDED' THEN 1 END) AS suspendedEnrollments
+    FROM student_batch_enrollment sbe
+    INNER JOIN batch b ON b.id = sbe.batch_id
+    INNER JOIN courses c ON c.id = b.course_id
+    WHERE c.institute_id = :instituteId
+    """, nativeQuery = true)
+    EnrollmentDistributionProjection getEnrollmentDistributionByInstituteId(Long instituteId);
 }
