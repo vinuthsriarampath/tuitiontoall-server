@@ -187,4 +187,31 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
     WHERE c.institute_id = :instituteId
     """, nativeQuery = true)
     EnrollmentDistributionProjection getEnrollmentDistributionByInstituteId(Long instituteId);
+
+
+    @Query(value = """
+    SELECT
+    DATE_FORMAT(sbe.created_date, '%Y-%m-01 00:00:00') as bucket,
+    COUNT(distinct sbe.student_id) as value
+    FROM student_batch_enrollment sbe
+    INNER JOIN batch b ON b.id = sbe.batch_id
+    INNER JOIN courses c ON c.id = b.course_id
+    WHERE c.institute_id = :instituteId
+    AND sbe.created_date >= :startDateTime
+    AND sbe.created_date < :endDateTime
+    GROUP BY YEAR(sbe.created_date), MONTH(sbe.created_date)
+    ORDER BY value DESC
+    LIMIT :limit;
+    """,nativeQuery = true)
+    List<TrendPointProjection> getPeakMonthlyEnrollmentTrendByInstitute(Long instituteId, int limit, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    @Query(value = """
+    SELECT COUNT(DISTINCT sbe.student_id)
+    FROM student_batch_enrollment sbe
+    INNER JOIN batch b ON b.id = sbe.batch_id
+    INNER JOIN courses c ON c.id = b.course_id
+    WHERE c.institute_id = :instituteId
+    AND sbe.created_date < :endDateTime
+    """,nativeQuery = true)
+    long countEnrollmentsBefore(Long instituteId, LocalDateTime endDateTime);
 }
