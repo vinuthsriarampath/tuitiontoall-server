@@ -13,11 +13,15 @@
 
 package edu.vinu.domain.batch.service;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.batch.dto.Batch;
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.batch.request.BatchCreateRequest;
+import edu.vinu.domain.batch.request.BatchFilterRequest;
 import edu.vinu.domain.batch.request.BatchUpdateRequest;
+import edu.vinu.domain.batch.response.BatchDetailedResponse;
 import edu.vinu.domain.course.entity.CourseEntity;
 
 import java.util.List;
@@ -39,4 +43,6 @@ public interface BatchService {
     Boolean isBatchBelongToCourse(BatchEntity batchEntity, Long courseId);
 
     ApiResponse getAllEnrollableBatchesOfCourse(Long courseId);
+
+    PaginatedApiResponse<BatchDetailedResponse> getAllBatches(PaginationRequest pagination, BatchFilterRequest filters);
 }

@@ -14,9 +14,12 @@
 package edu.vinu.domain.batch.service.impl;
 
 import edu.vinu.common.dto.FieldError;
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.common.util.SortUtil;
 import edu.vinu.domain.batch.dto.Batch;
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
@@ -24,8 +27,11 @@ import edu.vinu.domain.batch.enums.BatchStatus;
 import edu.vinu.domain.batch.mapper.BatchMapper;
 import edu.vinu.domain.batch.repository.BatchRepository;
 import edu.vinu.domain.batch.request.BatchCreateRequest;
+import edu.vinu.domain.batch.request.BatchFilterRequest;
 import edu.vinu.domain.batch.request.BatchUpdateRequest;
+import edu.vinu.domain.batch.response.BatchDetailedResponse;
 import edu.vinu.domain.batch.service.BatchService;
+import edu.vinu.domain.batch.service.BatchStatService;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.events.CourseCreatedEvent;
 import edu.vinu.domain.course.service.CourseService;
@@ -33,6 +39,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +56,7 @@ public class BatchServiceImpl implements BatchService {
     private final BatchRepository batchRepository;
     private final CourseService courseService;
     private final ModelMapper mapper;
+    private final BatchStatService batchStatService;
 
     @Override
     public Batch createBatch(BatchCreateRequest request) {
@@ -153,6 +163,30 @@ public class BatchServiceImpl implements BatchService {
         return ApiResponse.builder()
                 .message("All Enrollable Batches Related to Course ID")
                 .data(batches)
+                .build();
+    }
+
+    @Override
+    public PaginatedApiResponse<BatchDetailedResponse> getAllBatches(PaginationRequest pagination, BatchFilterRequest filters) {
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));
+
+        Page<BatchDetailedResponse> page = batchRepository.getBatches(
+                filters.getId(),
+                filters.getBatchName(),
+                filters.getStatus() != null ? filters.getStatus().name() : null,
+                filters.getEnrollmentStatus() != null ? filters.getEnrollmentStatus().name() : null,
+                filters.getCourseId(),
+                filters.getInstituteId(),
+                pageable
+        ).map(BatchMapper::toBatchDetailedResponse);
+
+        return PaginatedApiResponse.<BatchDetailedResponse>builder().message("All detailed batches")
+                .data(page.getContent())
+                .page(page.getNumber())
+                .size(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .last(page.isLast())
                 .build();
     }
 
