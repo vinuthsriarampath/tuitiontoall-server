@@ -39,6 +39,19 @@ public class PeriodServiceImpl implements PeriodService {
         };
     }
 
+    @Override
+    public ReportingPeriodRange getRange(ReportingPeriod period, LocalDate instituteCreatedAt){
+        if(period == ReportingPeriod.OVERALL){
+            LocalDate today = LocalDate.now(clock);
+            LocalDateTime start = instituteCreatedAt.withDayOfYear(1).atStartOfDay();
+            LocalDateTime end = today.plusMonths(1).withDayOfMonth(1).atStartOfDay();
+
+            return new ReportingPeriodRange(start, end, null, null);
+        } else {
+            return getRange(period);
+        }
+    }
+
     private ReportingPeriodRange getTodayRange(LocalDate today) {
         LocalDateTime currentStart = today.atStartOfDay();
         LocalDateTime currentEnd = today.plusDays(1).atStartOfDay();

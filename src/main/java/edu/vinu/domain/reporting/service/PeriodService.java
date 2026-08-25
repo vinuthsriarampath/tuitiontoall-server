@@ -16,6 +16,9 @@ package edu.vinu.domain.reporting.service;
 import edu.vinu.domain.reporting.response.ReportingPeriodRange;
 import edu.vinu.domain.reporting.enums.ReportingPeriod;
 
+import java.time.LocalDate;
+
 public interface PeriodService {
     ReportingPeriodRange getRange(ReportingPeriod period);
+    ReportingPeriodRange getRange(ReportingPeriod period, LocalDate instituteCreatedDate);
 }
