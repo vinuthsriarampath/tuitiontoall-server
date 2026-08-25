@@ -15,9 +15,12 @@ package edu.vinu.domain.batch.repository;
 
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.batch.enums.BatchStatus;
+import edu.vinu.domain.batch.repository.projection.BatchDetailedProjection;
 import edu.vinu.domain.batch.repository.projection.BatchProjection;
 import edu.vinu.domain.reporting.projection.TrendPointProjection;
 import org.apache.logging.log4j.simple.internal.SimpleProvider;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -150,4 +153,58 @@ ORDER BY b.start_date DESC
     ORDER BY bucket
     """,nativeQuery = true)
     List<TrendPointProjection> getMonthlyBatchesTrendByInstituteAndBatchStatus(Long instituteId, String batchStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    @Query(value =
+            """
+    SELECT
+    b.id AS id,
+    b.course_id AS courseId,
+    c.title AS courseTitle,
+    b.name AS name,
+    b.is_seat_limited AS isSeatLimited,
+    b.max_seat_limit AS maxSeatsLimit,
+    b.batch_status AS batchStatus,
+    b.enrollment_status AS enrollmentStatus,
+    b.start_date AS startDate,
+    b.start_time AS startTime,
+    COUNT(sbe.student_id) AS totalEnrollments,
+    b.created_date AS createdDate,
+    b.last_modified_date AS lastModifiedDate
+    FROM batch b
+    INNER JOIN courses c ON b.course_id = c.id
+    LEFT JOIN student_batch_enrollment sbe ON b.id = sbe.batch_id AND sbe.status = 'ACTIVE'
+    WHERE
+    ( :id IS NULL OR b.id = :id )
+    AND ( :batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%') )
+    AND ( :batchStatus IS NULL OR b.batch_status = :batchStatus )
+    AND ( :enrollmentStatus IS NULL OR b.enrollment_status = :enrollmentStatus )
+    AND ( :courseId IS NULL OR b.course_id = :courseId )
+    AND ( :instituteId IS NULL OR c.institute_id = :instituteId )
+    GROUP BY
+    b.id,
+    b.course_id,
+    c.title,
+    b.name,
+    b.is_seat_limited,
+    b.batch_status,
+    b.enrollment_status,
+    b.start_date,
+    b.start_time,
+    b.created_date,
+    b.last_modified_date
+    """,
+    countQuery = """
+    SELECT COUNT(*)
+    FROM batch b
+    INNER JOIN courses c ON b.course_id = c.id
+    WHERE
+    ( :id IS NULL OR b.id = :id )
+    AND ( :batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%') )
+    AND ( :batchStatus IS NULL OR b.batch_status = :batchStatus )
+    AND ( :enrollmentStatus IS NULL OR b.enrollment_status = :enrollmentStatus )
+    AND ( :courseId IS NULL OR b.course_id = :courseId )
+    AND ( :instituteId IS NULL OR c.institute_id = :instituteId )
+    """
+    ,nativeQuery = true)
+   Page<BatchDetailedProjection> getBatches(Long id, String batchName, String batchStatus, String enrollmentStatus,Long courseId, Long instituteId, Pageable pageable);
 }
