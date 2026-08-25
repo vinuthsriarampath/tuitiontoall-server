@@ -13,8 +13,11 @@
 
 package edu.vinu.domain.institute.service.impl;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.enums.ChangeValueType;
 import edu.vinu.domain.batch.enums.BatchStatus;
+import edu.vinu.domain.batch.request.BatchFilterRequest;
+import edu.vinu.domain.batch.service.BatchService;
 import edu.vinu.domain.batch.service.BatchStatService;
 import edu.vinu.domain.course.enums.CourseStatus;
 import edu.vinu.domain.course.service.CourseStatsService;
@@ -52,6 +55,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
     private final PaymentStatService paymentStatService;
     private final CourseStatsService courseStatsService;
     private final BatchStatService batchStatService;
+    private final BatchService batchService;
     private final PeriodService periodService;
 
     @Override
@@ -72,6 +76,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
         response.setCoursePerformance(courseStatsService.getTopPerformingCoursesByRatingAndInstituteId(currentInstitute.getId(), 5));
         response.setEnrollmentDistribution(enrollmentService.getEnrollmentDistributionByInstitute(currentInstitute.getId()));
         response.setOverallEnrollment(enrollmentService.getOverallEnrollmentStatsByInstitute(currentInstitute.getId(),currentInstitute.getUser().getCreationTimeStamp().toLocalDate()));
+        response.setActiveBatches(batchService.getAllBatches(new PaginationRequest(0,5,null,  List.of("created_date")), new BatchFilterRequest(null, null, null, currentInstitute.getId(), BatchStatus.ONGOING, null)));
 
         return ApiResponse.builder()
                 .message("Bootstrap data retrieved successfully")
