@@ -1,0 +1,7 @@
+$kind: collection
+name: assignment
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 3182736880697343

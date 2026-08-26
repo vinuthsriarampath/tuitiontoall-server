@@ -1,0 +1,52 @@
+/*
+ * Copyright (c) 2026 vinuth sri arampath
+ *
+ * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
+ * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
+ * without prior written permission is strictly prohibited.
+ *
+ * Portions of this code may be generated with AI and modified by vinuth sri arampath
+ * All rights reserved.
+ *
+ *
+ */
+
+package edu.vinu.domain.feedback.controller;
+
+import edu.vinu.common.dto.PaginationRequest;
+import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.feedback.request.FeedbackCreateRequest;
+import edu.vinu.domain.feedback.response.FeedbackEligibilityResponse;
+import edu.vinu.domain.feedback.response.FeedbackResponse;
+import edu.vinu.domain.feedback.service.FeedbackService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("api/v2/feedbacks")
+@RequiredArgsConstructor
+public class FeedbackController {
+    private final FeedbackService feedbackService;
+
+    @PreAuthorize("hasAuthority('student')")
+    @PostMapping
+    public ResponseEntity<ApiResponse> submitFeedback(@Valid @RequestBody FeedbackCreateRequest request){
+         return ResponseEntity.ok(feedbackService.submitFeedback(request));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("course/{courseId}")
+    public ResponseEntity<PaginatedApiResponse<FeedbackResponse>> getFeedbacks(@PathVariable Long courseId, PaginationRequest pagination){
+        return ResponseEntity.ok(feedbackService.getFeedbacksByCourse(courseId, pagination));
+    }
+
+    @PreAuthorize("hasAnyAuthority('student','institute')")
+    @GetMapping("course/{courseId}/eligibility")
+    public ResponseEntity<FeedbackEligibilityResponse> checkFeedbackEligibility(@PathVariable Long courseId){
+        return ResponseEntity.ok(feedbackService.checkFeedbackEligibility(courseId));
+    }
+}

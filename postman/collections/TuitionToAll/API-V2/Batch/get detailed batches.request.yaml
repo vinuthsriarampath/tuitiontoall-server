@@ -1,0 +1,12 @@
+$kind: http-request
+name: get detailed batches
+url: http://localhost:8080/api/v2/batches/detailed?page=0&size=5&direction=desc&sortby=created_dat&instituteId=1&status=ONGOING
+method: GET
+queryParams:
+  page: "0"
+  size: "5"
+  direction: desc
+  sortby: created_dat
+  instituteId: "1"
+  status: ONGOING
+order: 4495276925895379

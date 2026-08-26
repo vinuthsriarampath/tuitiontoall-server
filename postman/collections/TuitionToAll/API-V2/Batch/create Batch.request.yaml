@@ -1,0 +1,30 @@
+$kind: http-request
+name: create Batch
+url: http://localhost:8080/api/v2/batches/create
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"courseId\": 21,\r
+
+    \  \"name\": \"Batch 2026 - MAY\",\r
+
+    \  \"is_seat_limited\": false,\r
+
+    \  \"max_seat_limit\":0,\r
+
+    \  \"start_date\": \"2026-05-15\",\r
+
+    \  \"start_time\": \"09:00:00\",\r
+
+    \  \"batch_status\": \"PREPARATION\",\r
+
+    \  \"enrollment_status\": \"OPEN\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 1000

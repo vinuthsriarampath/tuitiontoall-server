@@ -1,0 +1,5 @@
+$kind: http-request
+name: get all reviews by course ID
+url: http://localhost:8080/api/v2/reviews/course/3
+method: GET
+order: 2835149767115231

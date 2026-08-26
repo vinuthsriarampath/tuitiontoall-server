@@ -1,0 +1,5 @@
+$kind: http-request
+name: get all teachers by current institute
+url: http://localhost:8080/api/v2/institutes/teachers/basic
+method: GET
+order: 4120249239603594

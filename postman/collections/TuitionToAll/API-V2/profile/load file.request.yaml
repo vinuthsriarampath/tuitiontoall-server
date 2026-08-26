@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/profile-files/load/dp/student-firstname-student-lastname.png
+method: GET
+order: 2000

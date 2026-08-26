@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8080/institutes/delete/I1
+method: DELETE
+order: 1000

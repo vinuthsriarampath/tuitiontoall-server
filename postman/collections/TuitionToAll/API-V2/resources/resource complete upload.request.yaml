@@ -1,0 +1,5 @@
+$kind: http-request
+name: resource complete upload
+url: http://localhost:8080/api/v2/resources/upload/complete/6d44251e-940d-4845-a805-32c5a5ddc75e
+method: POST
+order: 2671130980411240

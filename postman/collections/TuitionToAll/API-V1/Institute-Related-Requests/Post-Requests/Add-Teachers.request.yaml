@@ -1,0 +1,15 @@
+$kind: http-request
+url: http://localhost:8080/institutes/teachers/add
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"teacherId\":\"T2\",\r
+
+    \    \"instituteId\":\"I2\",\r
+
+    \    \"date\":\"2004-01-01\"\r
+
+    }"
+order: 3000

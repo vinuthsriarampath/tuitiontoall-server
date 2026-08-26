@@ -1,0 +1,8 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/courses/institute/all
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 3000

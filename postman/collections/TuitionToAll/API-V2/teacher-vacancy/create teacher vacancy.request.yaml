@@ -1,0 +1,19 @@
+$kind: http-request
+name: create teacher vacancy
+url: http://localhost:8080/api/v2/vacancies/
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"title\": \"Software Engineer\",\r
+
+    \  \"requiredExperienceYears\": 2,\r
+
+    \  \"jobDescription\": \"Responsible for developing and maintaining
+    applications.\",\r
+
+    \  \"vacancyClosingDate\": \"2026-04-30T23:59:59\"\r
+
+    }"
+order: 3000

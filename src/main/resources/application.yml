@@ -1,6 +1,10 @@
 spring:
   application:
-    name: TuitionToAll-V2
+    name: TuitionToAll
+    version: 2.3.0
+
+  profiles:
+    active: ${SPRING_PROFILE}
 
   datasource:
     url: ${DB_URL}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
@@ -11,10 +15,10 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
-        hibernate:
-            format_sql: true
+      hibernate:
+        format_sql: true
 
   servlet:
     multipart:
@@ -39,7 +43,18 @@ file:
   profile:
     pic-path: uploads/profiles/dp
     banner-path: uploads/profiles/banner
+  course:
+    thumbnail-path: uploads/courses/thumbnails
+  lecture-record:
+    temp-path: uploads/lecture-records/temp
+    video-path: uploads/lecture-records/videos
+  chapter-resource:
+    temp-path: uploads/chapter-resources/temp
+    resource-path: uploads/chapter-resources/resources
+  assignment-path: uploads/assignments
 
 app:
+  jwt:
+    secret: ${JWT_SECRET}
   reset:
-    frontend-reset-url: "http://localhost:4200/reset?token="
+    frontend-reset-url: ${FRONTEND_URL}/reset?token=

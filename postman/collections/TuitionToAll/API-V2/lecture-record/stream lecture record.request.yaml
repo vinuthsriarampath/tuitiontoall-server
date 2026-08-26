@@ -1,0 +1,11 @@
+$kind: http-request
+name: stream lecture record
+url: http://localhost:8080/api/v2/lecture-records/stream/2f72afed-fe8b-45ba-995c-d6e241f487cd.mp4?token={{STREAM_TOKEN}}
+method: GET
+headers:
+  Range: bytes=0-999999
+queryParams:
+  token: "{{STREAM_TOKEN}}"
+auth:
+  type: noauth
+order: 4475999995731983

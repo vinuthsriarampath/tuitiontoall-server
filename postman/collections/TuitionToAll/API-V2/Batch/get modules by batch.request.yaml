@@ -1,0 +1,10 @@
+$kind: http-request
+name: get modules by batch
+url: http://localhost:8080/api/v2/batches/2/modules?page=0&size=10&direction=desc&sortBy=created_date
+method: GET
+queryParams:
+  page: "0"
+  size: "10"
+  direction: desc
+  sortBy: created_date
+order: 4067724349934254

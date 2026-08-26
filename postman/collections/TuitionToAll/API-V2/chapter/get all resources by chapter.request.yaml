@@ -1,0 +1,12 @@
+$kind: http-request
+name: get all resources by chapter
+url: http://localhost:8080/api/v2/chapters/1/resources?page=0&size=10&direction=desc&sortBy=created_date&resourceId=1&name=basic
+method: GET
+queryParams:
+  page: "0"
+  size: "10"
+  direction: desc
+  sortBy: created_date
+  resourceId: "1"
+  name: basic
+order: 4403131339167553

@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8080/courses/search/C2/institute/I1
+method: GET
+order: 3000

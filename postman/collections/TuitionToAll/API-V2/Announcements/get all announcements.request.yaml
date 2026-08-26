@@ -1,0 +1,16 @@
+$kind: http-request
+name: get all announcements
+url: http://localhost:8080/api/v2/announcements?page=0&size=5&direction=desc&sortBy=published_date,title
+method: GET
+queryParams:
+  - key: page
+    value: "0"
+    description: page index
+  - key: size
+    value: "5"
+    description: no of elements for a page
+  - key: direction
+    value: desc
+  - key: sortBy
+    value: published_date,title
+order: 4000

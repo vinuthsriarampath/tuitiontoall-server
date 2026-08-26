@@ -1,0 +1,77 @@
+$kind: http-request
+url: http://localhost:8080/institutes/register
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\" : \"Apex Institute\",\r
+
+    \    \"email\" : \"apexinstitute@gmial.com\",\r
+
+    \    \"contact\" : \"0719401820\",\r
+
+    \    \"address\" : \"Nugegoda\",\r
+
+    \    \"password\" : \"Password3\"\r
+
+    }"
+scripts:
+  - type: afterResponse
+    code: "pm.test(\"Response status code is 200\", function () {\r
+
+      \    pm.response.to.have.status(200);\r
+
+      });\r
+
+      \r
+
+      \r
+
+      pm.test(\"Response time is less than 200ms\", function () {\r
+
+      \  pm.expect(pm.response.responseTime).to.be.below(200);\r
+
+      });\r
+
+      \r
+
+      \r
+
+      pm.test(\"Response has a valid XML content type\", function () {\r
+
+      \    pm.response.to.have.header(\"Content-Type\", \"text/xml\");\r
+
+      });\r
+
+      \r
+
+      \r
+
+      pm.test(\"Response body follows the expected XML schema\", function () {\r
+
+      \    const responseData = xml2Json(pm.response.text());\r
+
+      \r
+
+      \    pm.expect(responseData).to.be.an('object');\r
+
+      \    // Add specific checks for the expected XML schema\r
+
+      });\r
+
+      \r
+
+      \r
+
+      pm.test(\"Response body is not null\", function () {\r
+
+      \    const responseData = xml2Json(pm.response.text());\r
+
+      \    \r
+
+      \    pm.expect(responseData).to.not.be.null;\r
+
+      });\r\n"
+    language: text/javascript
+order: 1000

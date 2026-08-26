@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 vinuth sri arampath
+ * Copyright (c) 2026 vinuth sri arampath
  *
  * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
  * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
@@ -13,6 +13,7 @@
 
 package edu.vinu.config;
 
+import com.github.javafaker.Faker;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,11 @@ public class AppConfig {
     @Bean
     public ModelMapper getModelMapper(){
         return new ModelMapper();
+    }
+
+    @Bean
+    public Faker faker(){
+        return new Faker();
     }
 
 }

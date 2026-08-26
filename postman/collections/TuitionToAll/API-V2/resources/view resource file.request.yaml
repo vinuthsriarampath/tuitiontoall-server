@@ -1,0 +1,7 @@
+$kind: http-request
+name: view resource file
+url: http://localhost:8080/api/v2/resources/view/ef8afe13-2669-448a-91b5-0aac933c96e0.pdf
+method: GET
+headers:
+  Range: bytes=0-300000
+order: 4149794302406815

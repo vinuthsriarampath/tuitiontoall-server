@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8080/courses/C2/teacher/add/T2
+method: POST
+order: 3000

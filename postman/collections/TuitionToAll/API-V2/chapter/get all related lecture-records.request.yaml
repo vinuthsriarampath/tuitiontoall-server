@@ -1,0 +1,5 @@
+$kind: http-request
+name: get all related lecture-records
+url: http://localhost:8080/api/v2/chapters/6/lecture-records
+method: GET
+order: 4312700392556587

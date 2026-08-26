@@ -1,0 +1,5 @@
+$kind: http-request
+name: check feedback eligibility
+url: http://localhost:8080/api/v2/feedbacks/course/3/eligibility
+method: GET
+order: 3486354056435129

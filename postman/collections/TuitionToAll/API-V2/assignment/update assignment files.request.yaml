@@ -1,0 +1,13 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/assignments/1/files
+method: PATCH
+body:
+  type: formdata
+  content:
+    - type: file
+      key: file
+      src:
+        - /C:/Users/vinut/OneDrive/Documents/education-related-docs/NodeJS_with_ExpressJS.pdf
+      description: ""
+      disabled: false
+order: 2378773768874095

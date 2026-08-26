@@ -1,0 +1,7 @@
+$kind: collection
+name: lecture-record
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 1026669164888063

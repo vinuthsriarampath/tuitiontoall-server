@@ -1,0 +1,8 @@
+$kind: http-request
+name: check pre applications
+url: http://localhost:8080/api/v2/applications/check?vacancyId=1&teacherId=1
+method: GET
+queryParams:
+  vacancyId: "1"
+  teacherId: "1"
+order: 3177416940212652

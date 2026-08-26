@@ -1,0 +1,46 @@
+$kind: http-request
+name: reorder chapters
+url: http://localhost:8080/api/v2/chapters/reorder
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \    \"chapters\":[\r
+
+    \        {\r
+
+    \            \"chapterId\":3,\r
+
+    \            \"chapterOrder\":2\r
+
+    \        },\r
+
+    \        {\r
+
+    \            \"chapterId\":4,\r
+
+    \            \"chapterOrder\":3\r
+
+    \        },\r
+
+    \        {\r
+
+    \            \"chapterId\":5,\r
+
+    \            \"chapterOrder\":4\r
+
+    \        },\r
+
+    \        {\r
+
+    \            \"chapterId\":6,\r
+
+    \            \"chapterOrder\":1\r
+
+    \        }\r
+
+    \    ]\r
+
+    }"
+order: 1640162736808590

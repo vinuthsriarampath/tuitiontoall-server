@@ -1,0 +1,5 @@
+$kind: http-request
+name: archive announcement
+url: http://localhost:8080/api/v2/announcements/1/archive
+method: PATCH
+order: 2905

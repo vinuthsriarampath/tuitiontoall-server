@@ -1,0 +1,5 @@
+$kind: http-request
+name: batch students
+url: http://localhost:8080/api/v2/batches/8/students
+method: GET
+order: 4488898468788778

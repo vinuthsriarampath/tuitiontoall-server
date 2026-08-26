@@ -1,0 +1,37 @@
+/*
+ * Copyright (c) 2026 vinuth sri arampath
+ *
+ * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
+ * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
+ * without prior written permission is strictly prohibited.
+ *
+ * Portions of this code may be generated with AI and modified by vinuth sri arampath
+ * All rights reserved.
+ *
+ *
+ */
+
+package edu.vinu.domain.resource.service;
+
+import edu.vinu.domain.resource.request.ResourceInitRequest;
+import edu.vinu.domain.resource.response.ResourceChunkUploadResponse;
+import edu.vinu.domain.resource.response.ResourceInitResponse;
+import edu.vinu.domain.resource.response.ResourceResponse;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourceRegion;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
+
+public interface ResourceService {
+    ResourceInitResponse initializeUpload(ResourceInitRequest request);
+
+    ResourceChunkUploadResponse uploadChunk(String uploadId, Integer chunkIndex, MultipartFile file);
+
+    ResourceResponse completeUpload(String uploadId);
+
+    ResponseEntity<ResourceRegion> viewResource(String fileName, String range);
+
+    ResponseEntity<Resource> downloadFile(String fileName);
+
+    void deleteResource(Long resourceId);
+}

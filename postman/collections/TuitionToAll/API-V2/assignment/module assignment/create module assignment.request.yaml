@@ -1,0 +1,63 @@
+$kind: http-request
+name: create module assignment
+url: http://localhost:8080/api/v2/module-assignments
+method: POST
+body:
+  type: formdata
+  content:
+    - type: text
+      key: request
+      value: |-
+        {
+          "moduleId": 1,
+          "topic": "Java OOP Assignment",
+          "description": "Implement a Student Management System using Java OOP concepts.",
+          "totalMarks": 100,
+          "availableOn": "2026-06-08T09:00:00",
+          "dueDate": "2026-06-15T23:59:59",
+          "lateSubmission": true,
+          "resubmission": true,
+          "maxAttempts": 3,
+          "gradingRanges": [
+            {
+              "minMarks": 80,
+              "maxMarks": 100,
+              "desiredGrade": "A",
+              "description": "Excellent performance"
+            },
+            {
+              "minMarks": 65,
+              "maxMarks": 79,
+              "desiredGrade": "B",
+              "description": "Good performance"
+            },
+            {
+              "minMarks": 50,
+              "maxMarks": 64,
+              "desiredGrade": "C",
+              "description": "Satisfactory performance"
+            },
+            {
+              "minMarks": 40,
+              "maxMarks": 49,
+              "desiredGrade": "D",
+              "description": "Pass"
+            },
+            {
+              "minMarks": 0,
+              "maxMarks": 39,
+              "desiredGrade": "F",
+              "description": "Fail"
+            }
+          ]
+        }
+      contentType: application/json
+      description: ""
+      disabled: false
+    - type: file
+      key: file
+      src:
+        - /C:/Users/vinut/OneDrive/Documents/education-related-docs/NodeJS.pdf
+      description: ""
+      disabled: false
+order: 1780801696637

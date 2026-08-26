@@ -1,0 +1,7 @@
+$kind: collection
+name: teacher-vacancy
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 3495349356331007

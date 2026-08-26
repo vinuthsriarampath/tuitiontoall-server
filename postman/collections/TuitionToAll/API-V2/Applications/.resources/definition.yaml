@@ -1,0 +1,7 @@
+$kind: collection
+name: Applications
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 2356525908623359

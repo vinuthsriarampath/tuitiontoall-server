@@ -1,0 +1,5 @@
+$kind: http-request
+name: unpin announcements
+url: http://localhost:8080/api/v2/announcements/19/unpin
+method: PATCH
+order: 2222084264688925

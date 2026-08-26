@@ -1,0 +1,22 @@
+$kind: http-request
+name: initialize lecture record upload
+url: http://localhost:8080/api/v2/lecture-records/upload/init
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"title\":\"fake upload 1\",\r
+
+    \    \"recordedDate\":\"2026-05-20\",\r
+
+    \    \"chapterId\": 1,\r
+
+    \    \"originalFileName\":\"fake-file-name\",\r
+
+    \    \"totalSize\":15,\r
+
+    \    \"totalChunks\":3\r
+
+    }"
+order: 1779295924648

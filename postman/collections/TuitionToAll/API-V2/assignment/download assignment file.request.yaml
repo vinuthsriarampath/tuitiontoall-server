@@ -1,0 +1,7 @@
+$kind: http-request
+name: download assignment file
+url: http://localhost:8080/api/v2/assignments/download/ccf18161-5092-4be5-961c-4c666a3ab6d4.pdf
+method: GET
+auth:
+  type: noauth
+order: 4499426286554830

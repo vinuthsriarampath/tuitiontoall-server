@@ -1,0 +1,11 @@
+$kind: http-request
+name: get stream token
+url: http://localhost:8080/api/v2/lecture-records/stream-token/2f72afed-fe8b-45ba-995c-d6e241f487cd.mp4
+method: GET
+scripts:
+  - type: afterResponse
+    code: "let response = pm.response.json();\r
+
+      pm.collectionVariables.set(\"STREAM_TOKEN\", response.data);"
+    language: text/javascript
+order: 4491800881313000

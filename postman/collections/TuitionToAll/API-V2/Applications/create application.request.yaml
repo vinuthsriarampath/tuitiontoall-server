@@ -1,0 +1,5 @@
+$kind: http-request
+name: create application
+url: http://localhost:8080/api/v2/applications/vacancies/1/apply
+method: POST
+order: 1776741365277

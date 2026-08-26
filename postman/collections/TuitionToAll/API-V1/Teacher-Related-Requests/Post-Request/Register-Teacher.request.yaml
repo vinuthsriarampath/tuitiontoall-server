@@ -1,0 +1,23 @@
+$kind: http-request
+url: http://localhost:8080/teachers/register
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"firstName\":\"Kamal\",\r
+
+    \    \"lastName\":\"Perera\",\r
+
+    \    \"dob\":\"2004-01-01\",\r
+
+    \    \"contact\":\"0719401853\",\r
+
+    \    \"email\":\"kamalperera@gmail.com\",\r
+
+    \    \"address\":\"Colombo 1\",\r
+
+    \    \"password\":\"Password@123\"\r
+
+    }"
+order: 1000

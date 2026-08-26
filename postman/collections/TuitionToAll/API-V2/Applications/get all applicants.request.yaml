@@ -1,0 +1,10 @@
+$kind: http-request
+name: get all applicants
+url: http://localhost:8080/api/v2/applications/vacancies/5?page=0&size=10&drection=desc&sortBy=appliedDate
+method: GET
+queryParams:
+  page: "0"
+  size: "10"
+  drection: desc
+  sortBy: appliedDate
+order: 3676394972677323

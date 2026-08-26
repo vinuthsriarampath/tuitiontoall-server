@@ -1,0 +1,20 @@
+$kind: http-request
+name: update teacher vacancy
+url: http://localhost:8080/api/v2/vacancies/1
+method: PUT
+body:
+  type: json
+  content: "{\r
+
+    \  \"title\": \"Senior Software Engineer\",\r
+
+    \  \"requiredExperienceYears\": 5,\r
+
+    \  \"jobDescription\": \"Lead development and mentor junior developers.\",\r
+
+    \  \"status\": \"OPEN\",\r
+
+    \  \"vacancyClosingDate\": \"2026-05-15T23:59:59\"\r
+
+    }"
+order: 1000

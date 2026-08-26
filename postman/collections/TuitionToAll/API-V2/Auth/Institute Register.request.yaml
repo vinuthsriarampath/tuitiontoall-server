@@ -1,0 +1,21 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/auth/register/institute
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"instituteName\": \"DFG Institute\",\r
+
+    \  \"address\": \"Colombo 2\",\r
+
+    \  \"contact\": \"0719401810\",\r
+
+    \  \"email\": \"vinuthsriarampath@outlook.com\",\r
+
+    \  \"password\": \"Password@123\"\r
+
+    }\r\n"
+auth:
+  type: noauth
+order: 2000

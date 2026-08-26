@@ -1,0 +1,9 @@
+$kind: http-request
+name: Get Batch By ID
+url: http://localhost:8080/api/v2/batches/find/batch/7
+method: GET
+auth:
+  credentials:
+    token: "{{JWT_TOKEN}}"
+  type: bearer
+order: 2124

@@ -1,0 +1,48 @@
+/*
+ * Copyright (c) 2026 vinuth sri arampath
+ *
+ * This code is the intellectual property of vinuth sri arampath and is protected under copyright law.
+ * Unauthorized copying, modification, distribution, or use of this code, in whole or in part,
+ * without prior written permission is strictly prohibited.
+ *
+ * Portions of this code may be generated with AI and modified by vinuth sri arampath
+ * All rights reserved.
+ *
+ *
+ */
+
+package edu.vinu.domain.batch.service;
+
+import edu.vinu.common.dto.PaginationRequest;
+import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.batch.dto.Batch;
+import edu.vinu.domain.batch.entity.BatchEntity;
+import edu.vinu.domain.batch.request.BatchCreateRequest;
+import edu.vinu.domain.batch.request.BatchFilterRequest;
+import edu.vinu.domain.batch.request.BatchUpdateRequest;
+import edu.vinu.domain.batch.response.BatchDetailedResponse;
+import edu.vinu.domain.course.entity.CourseEntity;
+
+import java.util.List;
+
+public interface BatchService {
+    Batch createBatch(BatchCreateRequest request);
+    Batch createBatch(CourseEntity course,BatchCreateRequest request);
+
+    List<Batch> getAllBatchesByCourseId(Long courseId);
+
+    Batch getBatchById(Long batchId);
+
+    Batch updateBatchById(Long batchId, BatchUpdateRequest request);
+
+    BatchEntity getBatchEntityById(Long batchId);
+
+    Boolean isBatchOwner(BatchEntity batchEntity);
+
+    Boolean isBatchBelongToCourse(BatchEntity batchEntity, Long courseId);
+
+    ApiResponse getAllEnrollableBatchesOfCourse(Long courseId);
+
+    PaginatedApiResponse<BatchDetailedResponse> getAllBatches(PaginationRequest pagination, BatchFilterRequest filters);
+}

@@ -1,0 +1,5 @@
+$kind: http-request
+name: complete lecture-record upload
+url: http://localhost:8080/api/v2/lecture-records/upload/complete/0bc1bf37-252d-4533-a266-067483cc1c37
+method: POST
+order: 4243858692756095

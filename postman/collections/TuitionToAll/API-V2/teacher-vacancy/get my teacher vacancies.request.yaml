@@ -1,0 +1,22 @@
+$kind: http-request
+name: get my teacher vacancies
+url: http://localhost:8080/api/v2/vacancies/my?page=1&size=10
+method: GET
+queryParams:
+  page: "1"
+  size: "10"
+body:
+  type: json
+  content: "{\r
+
+    \  \"title\": \"Software Engineer\",\r
+
+    \  \"requiredExperienceYears\": 2,\r
+
+    \  \"jobDescription\": \"Responsible for developing and maintaining
+    applications.\",\r
+
+    \  \"vacancyClosingDate\": \"2026-04-30T23:59:59\"\r
+
+    }"
+order: 225078245592792

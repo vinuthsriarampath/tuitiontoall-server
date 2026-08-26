@@ -1,0 +1,32 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/courses/update/3
+method: PATCH
+body:
+  type: json
+  content: "{\r
+
+    \  \"title\": \"Java level two\",\r
+
+    \  \"description\": \"A beginner-friendly course to learn Java programming
+    oop concepts.\",\r
+
+    \  \"durationInHours\": 20,\r
+
+    \  \"price\": 100,\r
+
+    \  \"level\": \"BEGINNER\",\r
+
+    \  \"category\": \"ENGINEERING\",\r
+
+    \  \"status\": \"DRAFT\",\r
+
+    \  \"language\": \"SINHALA\",\r
+
+    \  \"mode\": \"OFFLINE\"\r
+
+    }\r\n"
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 5000

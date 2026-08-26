@@ -1,0 +1,57 @@
+$kind: http-request
+name: create chapter assignment
+url: http://localhost:8080/api/v2/chapter-assignments
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: file
+      src:
+        - /C:/Users/vinut/OneDrive/Documents/education-related-docs/NodeJS.pdf
+      description: ""
+      disabled: false
+    - type: text
+      key: request
+      value: |-
+        {
+          "chapterId": 1,
+          "topic": "Java OOP Assignment",
+          "description": "Complete all questions",
+          "totalMarks": 100,
+          "availableOn": "2026-06-03T10:00:00",
+          "dueDate": "2026-06-10T23:59:59",
+          "lateSubmission": true,
+          "resubmission": true,
+          "maxAttempts": 3,
+          "gradingRanges": [
+            {
+              "minMarks": 0,
+              "maxMarks": 49,
+              "desiredGrade": "F"
+            },
+            {
+              "minMarks": 50,
+              "maxMarks": 64,
+              "desiredGrade": "C"
+            },
+            {
+              "minMarks": 65,
+              "maxMarks": 79,
+              "desiredGrade": "B"
+            },
+            {
+              "minMarks": 80,
+              "maxMarks": 100,
+              "desiredGrade": "A"
+            }
+          ]
+        }
+      contentType: application/json
+      description: ""
+      disabled: false
+auth:
+  type: inherit
+  credentials:
+    id: folder-90ec654cF11eBB87Bfa6E52d-bearer
+order: 1780281002111
