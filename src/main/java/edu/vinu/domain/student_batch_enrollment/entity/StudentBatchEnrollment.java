@@ -15,8 +15,8 @@ package edu.vinu.domain.student_batch_enrollment.entity;
 
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.payment.entity.Payment;
-import edu.vinu.domain.student_batch_enrollment.enums.StudentBatchEnrollmentStatus;
 import edu.vinu.domain.student.entity.StudentEntity;
+import edu.vinu.domain.student_batch_enrollment.enums.StudentBatchEnrollmentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

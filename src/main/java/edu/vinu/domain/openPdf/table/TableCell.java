@@ -17,7 +17,6 @@ import org.openpdf.text.Phrase;
 import org.openpdf.text.pdf.PdfPCell;
 
 import static edu.vinu.domain.openPdf.colours.ColourPalette.*;
-import static edu.vinu.domain.openPdf.colours.ColourPalette.SKY_800;
 import static edu.vinu.domain.openPdf.font.Fonts.labelFont;
 import static edu.vinu.domain.openPdf.font.Fonts.valueFont;
 

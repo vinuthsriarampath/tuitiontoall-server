@@ -14,11 +14,9 @@
 package edu.vinu.domain.batch.repository;
 
 import edu.vinu.domain.batch.entity.BatchEntity;
-import edu.vinu.domain.batch.enums.BatchStatus;
 import edu.vinu.domain.batch.repository.projection.BatchDetailedProjection;
 import edu.vinu.domain.batch.repository.projection.BatchProjection;
 import edu.vinu.domain.reporting.projection.TrendPointProjection;
-import org.apache.logging.log4j.simple.internal.SimpleProvider;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

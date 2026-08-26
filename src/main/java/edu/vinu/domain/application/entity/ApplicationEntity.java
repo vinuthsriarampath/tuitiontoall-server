@@ -14,8 +14,8 @@
 package edu.vinu.domain.application.entity;
 
 import edu.vinu.domain.application.enums.ApplicationStatus;
-import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
 import edu.vinu.domain.teacher.entity.TeacherEntity;
+import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -13,9 +13,9 @@
 
 package edu.vinu.domain.teacher.service;
 
+import edu.vinu.domain.teacher.dtos.request.TeacherDetailsUpdateRequest;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.user.dto.User;
-import edu.vinu.domain.teacher.dtos.request.TeacherDetailsUpdateRequest;
 
 import java.util.List;
 
