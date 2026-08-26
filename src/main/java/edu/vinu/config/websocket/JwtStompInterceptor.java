@@ -65,8 +65,6 @@ public class JwtStompInterceptor implements ChannelInterceptor {
 
             accessor.setUser(authentication);
 
-            log.info("STOMP authenticated user: {}", username);
-            log.info("STOMP authenticated user: {}", authentication);
         }
 
         return ChannelInterceptor.super.preSend(message, channel);
