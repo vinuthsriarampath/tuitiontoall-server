@@ -1,6 +1,7 @@
 spring:
   application:
-    name: TuitionToAll-V2
+    name: TuitionToAll
+    version: 2.3.0
 
   profiles:
     active: ${SPRING_PROFILE}
