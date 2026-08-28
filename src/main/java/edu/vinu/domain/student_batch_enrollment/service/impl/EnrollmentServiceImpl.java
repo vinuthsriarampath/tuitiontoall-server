@@ -50,12 +50,14 @@ import edu.vinu.domain.student_batch_enrollment.dto.respose.OverallEnrollmentRes
 import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
 import edu.vinu.domain.student_batch_enrollment.enums.EnrollmentEligibilityReason;
 import edu.vinu.domain.student_batch_enrollment.enums.StudentBatchEnrollmentStatus;
+import edu.vinu.domain.student_batch_enrollment.event.EnrollmentCreatedEvent;
 import edu.vinu.domain.student_batch_enrollment.repository.StudentBatchEnrollmentRepository;
 import edu.vinu.domain.student_batch_enrollment.repository.projection.EnrollmentDistributionProjection;
 import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -81,7 +83,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private final InvoicePdfGeneratorService invoicePdfGenerator;
     private final UserAuthenticationService authService;
     private final PeriodService periodService;
-    private final InstituteService instituteService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional
@@ -131,6 +133,13 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             } catch (DataIntegrityViolationException e) {
                 throw new InvalidInputException("Student has already been enrolled");
             }
+
+            applicationEventPublisher.publishEvent(
+                    new EnrollmentCreatedEvent(
+                            courseEntity.getInstitute().getId(),
+                            courseEntity.getInstitute().getUser().getCreationTimeStamp().toLocalDate()
+                    )
+            );
 
             return invoicePdfGenerator.generate(savedEnrollment, payment);
         }
