@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.institute.service.impl;
 
+import edu.vinu.domain.institute.response.InstituteTeacherMatricsUpdatedResponse;
 import edu.vinu.domain.institute.service.InstituteDashboardWebSocketService;
 import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentMetricsUpdatedResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,12 @@ public class InstituteDashboardWebSocketServiceImpl implements InstituteDashboar
     @Override
     public void updateEnrollmentMetrics(Long instituteId, EnrollmentMetricsUpdatedResponse response) {
         String destination = "/topic/institute/" + instituteId + "/enrollment-metrics";
+        simpMessagingTemplate.convertAndSend(destination, response);
+    }
+
+    @Override
+    public void updateTeacherMetrics(Long instituteId, InstituteTeacherMatricsUpdatedResponse response) {
+        String destination = "/topic/institute/"+ instituteId + "/active-teacher-metrics";
         simpMessagingTemplate.convertAndSend(destination, response);
     }
 }
