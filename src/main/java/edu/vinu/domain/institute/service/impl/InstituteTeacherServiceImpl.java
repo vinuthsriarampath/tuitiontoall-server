@@ -23,6 +23,7 @@ import edu.vinu.domain.application.response.ApplicationSelectionResponse;
 import edu.vinu.domain.application.service.ApplicationService;
 import edu.vinu.domain.institute.entity.InstituteTeacherEntity;
 import edu.vinu.domain.institute.enums.InstituteTeacherStatus;
+import edu.vinu.domain.institute.event.TeacherOnboardedEvent;
 import edu.vinu.domain.institute.repository.InstituteTeacherRepository;
 import edu.vinu.domain.institute.repository.projection.InstituteTeacherStatsProjection;
 import edu.vinu.domain.institute.response.InstituteTeacherResponse;
@@ -36,6 +37,7 @@ import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -56,6 +58,7 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
     private final ApplicationService applicationService;
     private final InstituteTeacherRepository instituteTeacherRepository;
     private final InstituteService instituteService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
@@ -111,6 +114,10 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
                 failedIds.add(applicationId);
             }
         }
+        
+        eventPublisher.publishEvent(
+                TeacherOnboardedEvent.builder().instituteId(instituteId).build()
+        );
 
         return ApplicationSelectionResponse.builder()
                 .successApplicationIds(successIds)
