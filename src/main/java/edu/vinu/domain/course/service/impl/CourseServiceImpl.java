@@ -18,7 +18,10 @@ import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.domain.course.dto.Course;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.enums.CourseStatus;
+import edu.vinu.domain.course.events.CourseArchivedEvent;
 import edu.vinu.domain.course.events.CourseCreatedEvent;
+import edu.vinu.domain.course.events.CourseDeletedEvent;
+import edu.vinu.domain.course.events.CourseUpdatedEvent;
 import edu.vinu.domain.course.repository.CourseRepository;
 import edu.vinu.domain.course.request.CourseCreateRequest;
 import edu.vinu.domain.course.request.CourseFilterRequest;
@@ -74,6 +77,7 @@ public class CourseServiceImpl implements CourseService {
         return mapper.map(savedEntity, Course.class);
     }
 
+    @Transactional
     @Override
     public Course updateCourse(Long courseId, CourseUpdateRequest updatedCourseDetails, MultipartFile thumbnail) {
         return courseRepository.findById(courseId)
@@ -91,6 +95,7 @@ public class CourseServiceImpl implements CourseService {
                         }
 
                         CourseEntity saved = courseRepository.save(updatedCourseEntity);
+                        eventPublisher.publishEvent(new CourseUpdatedEvent(saved.getInstitute().getId()));
                         return mapper.map(saved, Course.class);
                     } else {
                         throw new UnauthorizedException("You are not authorized to update this course");
@@ -99,12 +104,14 @@ public class CourseServiceImpl implements CourseService {
                 .orElseThrow(() -> new NotFoundException("Course not found with id: " + courseId));
     }
 
+    @Transactional
     @Override
     public void deleteCourse(Long courseId) {
         courseRepository.findById(courseId)
                 .ifPresentOrElse(courseEntity -> {
                     if (courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
                         courseRepository.delete(courseEntity);
+                        eventPublisher.publishEvent(new CourseDeletedEvent(courseEntity.getInstitute().getId()));
                     } else {
                         throw new UnauthorizedException("You are not authorized to delete this course");
                     }
@@ -113,7 +120,7 @@ public class CourseServiceImpl implements CourseService {
                 });
     }
 
-
+    @Transactional
     @Override
     public Course archiveCourse(Long courseId) {
         return courseRepository.findById(courseId)
@@ -121,6 +128,7 @@ public class CourseServiceImpl implements CourseService {
                     if (courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName())) {
                         courseEntity.setStatus(CourseStatus.ARCHIVED);
                         CourseEntity saved = courseRepository.save(courseEntity);
+                        eventPublisher.publishEvent(new CourseArchivedEvent(courseEntity.getInstitute().getId()));
                         return mapper.map(saved, Course.class);
                     } else {
                         throw new UnauthorizedException("You are not authorized to archive this course");
