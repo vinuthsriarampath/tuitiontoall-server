@@ -13,6 +13,8 @@
 
 package edu.vinu.domain.institute.service.impl;
 
+import edu.vinu.domain.batch.response.BatchMetricsUpdatedResponse;
+import edu.vinu.domain.course.response.CourseMetricsUpdatedResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherMatricsUpdatedResponse;
 import edu.vinu.domain.institute.service.InstituteDashboardWebSocketService;
 import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentMetricsUpdatedResponse;
@@ -36,5 +38,17 @@ public class InstituteDashboardWebSocketServiceImpl implements InstituteDashboar
     public void updateTeacherMetrics(Long instituteId, InstituteTeacherMatricsUpdatedResponse response) {
         String destination = "/topic/institute/"+ instituteId + "/active-teacher-metrics";
         simpMessagingTemplate.convertAndSend(destination, response);
+    }
+
+    @Override
+    public void updateCourseMetrics(Long instituteId, CourseMetricsUpdatedResponse build) {
+        String destination = "/topic/institute/"+ instituteId + "/course-metrics";
+        simpMessagingTemplate.convertAndSend(destination, build);
+    }
+
+    @Override
+    public void updateBatchMetrics(Long instituteId, BatchMetricsUpdatedResponse build) {
+        String destination = "/topic/institute/"+ instituteId + "/batch-metrics";
+        simpMessagingTemplate.convertAndSend(destination, build);
     }
 }

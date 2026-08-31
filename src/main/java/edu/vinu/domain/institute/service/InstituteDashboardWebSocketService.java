@@ -13,6 +13,8 @@
 
 package edu.vinu.domain.institute.service;
 
+import edu.vinu.domain.batch.response.BatchMetricsUpdatedResponse;
+import edu.vinu.domain.course.response.CourseMetricsUpdatedResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherMatricsUpdatedResponse;
 import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentMetricsUpdatedResponse;
 
@@ -21,4 +23,8 @@ public interface InstituteDashboardWebSocketService {
     void updateEnrollmentMetrics(Long instituteId, EnrollmentMetricsUpdatedResponse response);
 
     void updateTeacherMetrics(Long instituteId, InstituteTeacherMatricsUpdatedResponse response);
+
+    void updateCourseMetrics(Long instituteId, CourseMetricsUpdatedResponse build);
+
+    void updateBatchMetrics(Long instituteId, BatchMetricsUpdatedResponse build);
 }
