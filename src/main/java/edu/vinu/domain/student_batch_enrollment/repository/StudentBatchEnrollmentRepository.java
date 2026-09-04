@@ -14,6 +14,7 @@
 package edu.vinu.domain.student_batch_enrollment.repository;
 
 import edu.vinu.domain.reporting.projection.TrendPointProjection;
+import edu.vinu.domain.student.repository.projection.StudentLearningProjection;
 import edu.vinu.domain.student.repository.projection.StudentUserProjection;
 import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
 import edu.vinu.domain.student_batch_enrollment.repository.projection.EnrollmentDistributionProjection;
@@ -214,4 +215,38 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
     AND sbe.created_date < :endDateTime
     """,nativeQuery = true)
     long countEnrollmentsBefore(Long instituteId, LocalDateTime endDateTime);
+
+    @Query(value = """
+    SELECT
+        sbe.id AS enrollmentId,
+        sbe.status AS enrollmentStatus,
+        sbe.created_date AS enrollmentDate,
+    
+        b.id AS batchId,
+        b.name AS batchName,
+        b.batch_status AS batchStatus,
+        b.start_date AS batchStartDate,
+    
+        c.id AS courseId,
+        c.title AS courseTitle,
+        c.description AS courseDescription,
+        c.category AS courseCategory,
+        c.status AS courseStatus,
+        c.level AS courseLevel,
+        c.language AS courseLanguage,
+        c.mode AS courseMode,
+        c.thumbnail AS thumbnail,
+        c.avg_rating AS avgRating,
+        c.total_no_ratings AS totalRatings,
+    
+        i.id AS instituteId,
+        i.institute_name AS instituteName
+    FROM student_batch_enrollment sbe
+    INNER JOIN batch b ON b.id = sbe.batch_id
+    INNER JOIN courses c ON c.id = b.course_id
+    INNER JOIN institute i ON i.id = c.institute_id
+    WHERE sbe.student_id = :studentId
+    ORDER BY i.id
+    """,nativeQuery = true)
+    List<StudentLearningProjection> findStudentLearning(Long studentId);
 }
