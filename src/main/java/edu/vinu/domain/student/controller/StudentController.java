@@ -16,6 +16,7 @@ package edu.vinu.domain.student.controller;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;
 import edu.vinu.domain.student.dto.response.Student;
+import edu.vinu.domain.student.service.StudentLearningService;
 import edu.vinu.domain.student.service.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 public class StudentController {
     private final StudentService studentService;
+    private final StudentLearningService studentLearningService;
 
     @PreAuthorize("hasAuthority('student')")
     @PatchMapping("/me")
@@ -43,5 +45,11 @@ public class StudentController {
     @GetMapping("/validate/role")
     public ResponseEntity<ApiResponse> validateStudent(){
         return ResponseEntity.status(OK).body(new ApiResponse("User has student role!", null));
+    }
+
+    @PreAuthorize("hasAuthority('student')")
+    @GetMapping("/me/learning")
+    public ResponseEntity<ApiResponse> getMyLearningDetails(){
+        return ResponseEntity.ok(studentLearningService.getMyLearningDetails());
     }
 }
