@@ -52,4 +52,10 @@ public class StudentController {
     public ResponseEntity<ApiResponse> getMyLearningDetails(){
         return ResponseEntity.ok(studentLearningService.getMyLearningDetails());
     }
+
+    @PreAuthorize("hasAuthority('student')")
+    @GetMapping("/me/learning/courses/{courseId}/enrollment-history")
+    public ResponseEntity<ApiResponse> getEnrollmentHistory(@PathVariable Long courseId) {
+        return ResponseEntity.ok(studentLearningService.getEnrollmentHistory(courseId));
+    }
 }
