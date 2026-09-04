@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.student.service.impl;
 
+import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.student.dto.response.CourseLearningResponse;
 import edu.vinu.domain.student.dto.response.CurrentEnrollmentResponse;
@@ -21,8 +22,11 @@ import edu.vinu.domain.student.entity.StudentEntity;
 import edu.vinu.domain.student.repository.projection.StudentLearningProjection;
 import edu.vinu.domain.student.service.StudentLearningService;
 import edu.vinu.domain.student.service.StudentService;
+import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentHistoryItemResponse;
+import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentHistoryResponse;
 import edu.vinu.domain.student_batch_enrollment.enums.StudentBatchEnrollmentStatus;
 import edu.vinu.domain.student_batch_enrollment.repository.StudentBatchEnrollmentRepository;
+import edu.vinu.domain.student_batch_enrollment.repository.projection.EnrollmentHistoryProjection;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +71,38 @@ public class StudentLearningServiceImpl implements StudentLearningService {
 
 
     }
+
+    @Override
+    public ApiResponse getEnrollmentHistory(Long courseId) {
+        StudentEntity currentStudent = studentService.getCurrentStudent();
+
+        List<EnrollmentHistoryProjection> projections = enrollmentRepository.findEnrollmentHistory(currentStudent.getId(), courseId);
+
+        if (projections.isEmpty()) {
+            throw new NotFoundException("Enrollment history not found for this course");
+        }
+
+        EnrollmentHistoryProjection first = projections.get(0);
+
+        List<EnrollmentHistoryItemResponse> enrollments =
+                projections.stream()
+                        .map(this::buildHistoryItem)
+                        .toList();
+
+        EnrollmentHistoryResponse response =
+                EnrollmentHistoryResponse.builder()
+                        .courseId(first.getCourseId())
+                        .courseTitle(first.getCourseTitle())
+                        .enrollments(enrollments)
+                        .build();
+
+        return ApiResponse.builder()
+                .message("Enrollment history retrieved successfully")
+                .data(response)
+                .build();
+
+    }
+
     private StudentLearningResponse buildInstituteResponse(List<StudentLearningProjection> instituteRows){
         StudentLearningProjection first = instituteRows.get(0);
 
@@ -139,6 +175,19 @@ public class StudentLearningServiceImpl implements StudentLearningService {
                 .batchName(projection.getBatchName())
                 .batchStatus(projection.getBatchStatus())
                 .startDate(projection.getBatchStartDate())
+                .build();
+    }
+
+    private EnrollmentHistoryItemResponse buildHistoryItem(EnrollmentHistoryProjection projection) {
+
+        return EnrollmentHistoryItemResponse.builder()
+                .enrollmentId(projection.getEnrollmentId())
+                .enrollmentStatus(projection.getEnrollmentStatus())
+                .enrollmentDate(projection.getEnrollmentDate())
+                .batchId(projection.getBatchId())
+                .batchName(projection.getBatchName())
+                .batchStatus(projection.getBatchStatus())
+                .batchStartDate(projection.getBatchStartDate())
                 .build();
     }
 }

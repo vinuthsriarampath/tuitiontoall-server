@@ -17,4 +17,6 @@ import edu.vinu.common.response.ApiResponse;
 
 public interface StudentLearningService {
     ApiResponse getMyLearningDetails();
+
+    ApiResponse getEnrollmentHistory(Long courseId);
 }
