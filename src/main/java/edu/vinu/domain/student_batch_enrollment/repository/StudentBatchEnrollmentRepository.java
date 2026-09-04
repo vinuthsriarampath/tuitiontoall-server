@@ -18,6 +18,7 @@ import edu.vinu.domain.student.repository.projection.StudentLearningProjection;
 import edu.vinu.domain.student.repository.projection.StudentUserProjection;
 import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
 import edu.vinu.domain.student_batch_enrollment.repository.projection.EnrollmentDistributionProjection;
+import edu.vinu.domain.student_batch_enrollment.repository.projection.EnrollmentHistoryProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -249,4 +250,27 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
     ORDER BY i.id
     """,nativeQuery = true)
     List<StudentLearningProjection> findStudentLearning(Long studentId);
+
+
+    @Query(value = """
+    SELECT
+        sbe.id AS enrollmentId,
+        sbe.status AS enrollmentStatus,
+        sbe.created_date AS enrollmentDate,
+
+        b.id AS batchId,
+        b.name AS batchName,
+        b.batch_status AS batchStatus,
+        b.start_date AS batchStartDate,
+
+        c.id AS courseId,
+        c.title AS courseTitle
+    FROM student_batch_enrollment sbe
+    INNER JOIN batch b ON b.id = sbe.batch_id
+    INNER JOIN courses c ON c.id = b.course_id
+    WHERE sbe.student_id = :studentId
+        AND c.id = :courseId
+    ORDER BY sbe.created_date DESC
+    """, nativeQuery = true)
+    List<EnrollmentHistoryProjection> findEnrollmentHistory(Long studentId, Long courseId);
 }
