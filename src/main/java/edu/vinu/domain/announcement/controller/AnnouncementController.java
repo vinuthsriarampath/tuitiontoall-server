@@ -98,7 +98,7 @@ public class AnnouncementController {
         return ResponseEntity.status(200).body(new ApiResponse("Announcement Found!", response));
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping
     public ResponseEntity<PaginatedApiResponse<AnnouncementResponse>> getAllAnnouncements(
             @RequestParam(defaultValue = "0") int page,
