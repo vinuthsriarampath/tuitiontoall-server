@@ -37,6 +37,9 @@ import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.institute.service.InstituteService;
+import edu.vinu.domain.student.entity.StudentEntity;
+import edu.vinu.domain.teacher.entity.TeacherEntity;
+import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -104,12 +107,56 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public Page<AnnouncementResponse> getAllAnnouncements(int page, int size, String direction, List<String> sortBy, AnnouncementFilterRequest filters) {
-
         Pageable pageable = PageRequest.of(page, size, SortUtil.buildSort(direction, sortBy, List.of("published_date")));
 
-        InstituteEntity instituteEntity = instituteService.getCurrentInstitute();
+        UserEntity currentUser = userService.getUserEntityByEmail(userAuthenticationService.getCurrentUserEmail());
+        String roleName = currentUser.getRole().getRole();
 
-        return announcementRepository.findAllByInstituteWithFilters(instituteEntity.getId(), filters.visibility(), filters.status(), filters.courseId(), filters.batchId(), pageable).map(this::mapToAnnouncementResponse);
+        switch (roleName.toLowerCase()){
+            case "institute" -> {
+                InstituteEntity institute = instituteService.getCurrentInstitute();
+                if (institute == null) {
+                    throw new UnauthorizedException("User is not associated with an institute.");
+                }
+                return announcementRepository.findAllForInstitute(
+                        institute.getId(),
+                        filters.visibility(),
+                        filters.status(),
+                        filters.courseId(),
+                        filters.batchId(),
+                        pageable
+                ).map(this::mapToAnnouncementResponse);
+            }
+            case "student" -> {
+                StudentEntity student = currentUser.getStudent();
+                if (student == null) {
+                    throw new UnauthorizedException("User is not associated with a student.");
+                }
+                return announcementRepository.findAllForStudent(
+                        student.getId(),
+                        filters.status(),
+                        filters.courseId(),
+                        filters.batchId(),
+                        pageable
+                ).map(this::mapToAnnouncementResponse);
+            }
+            case "teacher" -> {
+                TeacherEntity teacher = currentUser.getTeacher();
+                if (teacher == null) {
+                    throw new UnauthorizedException("User is not associated with a teacher.");
+                }
+                return announcementRepository.findAllForTeacher(
+                        teacher.getId(),
+                        null,
+                        filters.status(),
+                        filters.courseId(),
+                        filters.batchId(),
+                        pageable
+                ).map(this::mapToAnnouncementResponse);
+            }
+            default -> throw new UnauthorizedException("Access denied for current user role.");
+        }
+
     }
 
     @Override
