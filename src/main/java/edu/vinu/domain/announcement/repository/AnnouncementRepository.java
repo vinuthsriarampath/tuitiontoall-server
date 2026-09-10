@@ -26,79 +26,131 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity, Long> {
 
-    @Query(
-            value =
-                    """
-                            SELECT *
-                            FROM announcements a
-                            WHERE a.institute_id = :instituteId
-                            AND (:visibility IS NULL OR a.visibility = :visibility)
-                            AND (:status IS NULL OR a.status = :status)
-                            AND (:courseId IS NULL OR a.course_id = :courseId)
-                            AND (:batchId IS NULL OR a.batch_id = :batchId)
-                            
-                            """,
-            countQuery =
-                    """
-                            SELECT COUNT(*)
-                            FROM announcements a
-                            WHERE a.institute_id = :instituteId
-                            AND (:visibility IS NULL OR a.visibility = :visibility)
-                            AND (:status IS NULL OR a.status = :status)
-                            AND (:courseId IS NULL OR a.course_id = :courseId)
-                            AND (:batchId IS NULL OR a.batch_id = :batchId)
-                            """,
-            nativeQuery = true)
-    Page<AnnouncementEntity> findAllByInstituteWithFilters(
-            @Param("instituteId") Long instituteId,
-            @Param("visibility") String visibility,
-            @Param("status") String status,
-            @Param("courseId") Long courseId,
-            @Param("batchId") Long batchId,
-            Pageable pageable
-    );
+    @Query(value = """
+    SELECT a.*
+    FROM announcements a
+    JOIN courses c ON a.course_id = c.id
+    WHERE a.institute_id = :instituteId
+    AND (:visibility IS NULL OR a.visibility = :visibility)
+    AND (:status IS NULL OR a.status = :status)
+    AND (:courseId IS NULL OR (a.course_id = :courseId AND (c.institute_id = :instituteId)))
+    AND (:batchId IS NULL OR a.batch_id = :batchId)
+    """,
+    countQuery = """
+    SELECT COUNT(a.id)
+    FROM announcements a
+    JOIN courses c ON a.course_id = c.id
+    WHERE a.institute_id = :instituteId
+    AND (:visibility IS NULL OR a.visibility = :visibility)
+    AND (:status IS NULL OR a.status = :status)
+    AND (:courseId IS NULL OR (a.course_id = :courseId AND (c.institute_id = :instituteId)))
+    AND (:batchId IS NULL OR a.batch_id = :batchId)
+    """, nativeQuery = true)
+    Page<AnnouncementEntity> findAllForInstitute(@Param("instituteId") Long instituteId, @Param("visibility") String visibility, @Param("status") String status, @Param("courseId") Long courseId, @Param("batchId") Long batchId, Pageable pageable);
 
-    @Query(value =
-            """
-                        SELECT
-                        	COUNT(*)
-                        FROM
-                        	announcements a
-                        WHERE
-                        	a.institute_id = :instituteId
-                        	AND (:status IS NULL
-                        		OR a.status = :status)
-                        	AND (:pinned IS NULL
-                        		OR a.is_pinned = :pinned)
-                        	AND (:visibility IS NULL
-                        		OR a.visibility = :visibility)
-                        	AND (
-                                :visibility IS NULL
-                        		OR (:visibility = 'COURSE'
-                        			AND a.course_id = :courseId)
-                        		OR (:visibility = 'BATCH'
-                        			AND a.course_id = :courseId
-                        			AND a.batch_id = :batchId)
-                        		OR (:visibility IN ('PRIVATE', 'ALL_TEACHERS'))
-                          );
-                    """, nativeQuery = true)
-    int countAnnouncementsByInstitute(
-            @Param("instituteId") Long instituteId,
-            @Param("status") String status,
-            @Param("visibility") String visibility,
-            @Param("pinned") Boolean pinned,
-            @Param("courseId") Long courseId,
-            @Param("batchId") Long batchId
+    @Query(value = """
+    SELECT DISTINCT a.*
+    FROM announcements a
+    INNER JOIN batch b ON (
+            (a.visibility = 'BATCH' AND a.batch_id = b.id) OR (a.visibility = 'COURSE' AND a.course_id = b.course_id)
+    )
+    INNER JOIN student_batch_enrollment sbe ON sbe.student_id = :studentId
+    WHERE sbe.student_id = :studentId
+    AND a.visibility IN ('COURSE','BATCH')
+    AND (:status IS NULL OR a.status = :status)
+    AND (:courseId IS NULL OR a.course_id = :courseId)
+    AND (:batchId IS NULL OR a.batch_id = :batchId)
+    """,
+    countQuery = """
+    SELECT count(DISTINCT a.id)
+    FROM announcements a
+    INNER JOIN batch b ON (
+            (a.visibility = 'BATCH' AND a.batch_id = b.id) OR (a.visibility = 'COURSE' AND a.course_id = b.course_id)
+    )
+    INNER JOIN student_batch_enrollment sbe ON sbe.student_id = :studentId
+    WHERE sbe.student_id = :studentId
+    AND a.visibility IN ('COURSE','BATCH')
+    AND (:status IS NULL OR a.status = :status)
+    AND (:courseId IS NULL OR a.course_id = :courseId)
+    AND (:batchId IS NULL OR a.batch_id = :batchId)
+    """, nativeQuery = true)
+    Page<AnnouncementEntity> findAllForStudent(@Param("studentId") Long studentId, @Param("status") String status, @Param("courseId") Long courseId, @Param("batchId") Long batchId, Pageable pageable);
+
+    @Query(value = """
+    SELECT a.*
+    FROM announcements a
+    WHERE
+    (
+            ( a.visibility = 'ALL_TEACHERS' AND (:instituteId IS NULL OR a.institute_id = :instituteId) )
+        OR (a.visibility IN ('COURSE','BATCH')
+                AND EXISTS(
+                        SELECT 1
+                        FROM module m
+                        JOIN batch b ON m.batch_id = b.id
+                        WHERE m.teacher_id = :teacherId
+                        AND b.course_id = a.course_id
+                        AND ( a.visibility = 'COURSE'
+                            OR (
+                                a.visibility = 'BATCH'
+                                AND a.batch_id = b.id
+                            )
+                        )
+                    )
+                )
+    )
+    AND (:status IS NULL OR a.status = :status)
+    AND (:courseId IS NULL OR a.course_id = :courseId)
+    AND (:batchId IS NULL OR a.batch_id = :batchId)
+    """,countQuery = """
+    SELECT COUNT(a.id)
+    FROM announcements a
+    WHERE
+    (
+            ( a.visibility = 'ALL_TEACHERS' AND (:instituteId IS NULL OR a.institute_id = :instituteId) )
+        OR (a.visibility IN ('COURSE','BATCH')
+                AND EXISTS(
+                        SELECT 1
+                        FROM module m
+                        JOIN batch b ON m.batch_id = b.id
+                        WHERE m.teacher_id = :teacherId
+                        AND b.course_id = a.course_id
+                        AND ( a.visibility = 'COURSE'
+                            OR (
+                                a.visibility = 'BATCH'
+                                AND a.batch_id = b.id
+                            )
+                        )
+                    )
+                )
+    )
+    AND (:status IS NULL OR a.status = :status)
+    AND (:courseId IS NULL OR a.course_id = :courseId)
+    AND (:batchId IS NULL OR a.batch_id = :batchId)
+    """, nativeQuery = true)
+    Page<AnnouncementEntity> findAllForTeacher(@Param("teacherId") Long teacherId,@Param("instituteId") Long instituteId, @Param("status") String status, @Param("courseId") Long courseId, @Param("batchId") Long batchId, Pageable pageable);
+
+    @Query(value =  """
+    SELECT COUNT(*)
+    FROM announcements a
+    WHERE a.institute_id = :instituteId
+    AND (:status IS NULL OR a.status = :status)
+    AND (:pinned IS NULL OR a.is_pinned = :pinned)
+    AND (:visibility IS NULL OR a.visibility = :visibility)
+    AND ( :visibility IS NULL OR (:visibility = 'COURSE' AND a.course_id = :courseId)
+        OR (:visibility = 'BATCH' AND a.course_id = :courseId AND a.batch_id = :batchId)
+        OR (:visibility IN ('PRIVATE', 'ALL_TEACHERS'))
     );
+    """, nativeQuery = true)
+    int countAnnouncementsByInstitute(@Param("instituteId") Long instituteId, @Param("status") String status, @Param("visibility") String visibility, @Param("pinned") Boolean pinned, @Param("courseId") Long courseId, @Param("batchId") Long batchId);
 
 
     @Modifying
     @Transactional
     @Query(value = """
-        UPDATE announcements
-        SET status = :expireStatus, is_pinned = false
-        WHERE expire_at <= CURRENT_TIMESTAMP
-        AND status = :publishedStatus
+    UPDATE announcements
+    SET status = :expireStatus, is_pinned = false
+    WHERE expire_at <= CURRENT_TIMESTAMP
+    AND status = :publishedStatus
     """,nativeQuery = true)
     int expireAnnouncementsByExpireAt(@Param("expireStatus") String expireStatus, @Param("publishedStatus") String publishedStatus);
 }
