@@ -93,14 +93,14 @@ public class ModuleController {
         return ResponseEntity.ok(new ApiResponse("Module batch updated successfully", response));
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}")
     public ResponseEntity<ApiResponse> getModuleById(@PathVariable("id") Long id){
         ModuleResponse response = moduleService.getModuleById(id);
         return ResponseEntity.ok(new ApiResponse("Module fetched successfully", response));
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("/{id}/detailed")
     public ResponseEntity<ApiResponse> getDetailedModuleById(@PathVariable("id") Long id){
         ModuleDetailedResponse response = moduleService.getDetailedModuleById(id);
@@ -131,14 +131,14 @@ public class ModuleController {
         return ResponseEntity.status(200).body(response);
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("/{id}/chapters/all")
     public ResponseEntity<ApiResponse> getChaptersByModuleId(@PathVariable("id") Long id){
         List<ChapterResponse> responses = chapterQueryService.getAllChaptersByModuleId(id);
         return ResponseEntity.ok(new ApiResponse("Chapters fetched successfully", responses));
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}/assignments")
     public ResponseEntity<PaginatedApiResponse<ModuleAssignmentResponse>> getAssignmentsByModule(
             @PathVariable("id") Long id,
