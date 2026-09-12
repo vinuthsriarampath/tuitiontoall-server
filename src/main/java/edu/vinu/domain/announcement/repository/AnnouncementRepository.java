@@ -153,4 +153,53 @@ public interface AnnouncementRepository extends JpaRepository<AnnouncementEntity
     AND status = :publishedStatus
     """,nativeQuery = true)
     int expireAnnouncementsByExpireAt(@Param("expireStatus") String expireStatus, @Param("publishedStatus") String publishedStatus);
+
+    @Query(value = """
+    SELECT EXISTS (
+        SELECT 1
+        FROM announcements
+        WHERE id = :announcementId
+          AND institute_id = :instituteId
+    ) AS is_owner;
+    """,nativeQuery = true)
+    int isOwnerOfAnnouncement(Long announcementId, Long instituteId);
+
+
+    @Query(value = """
+    SELECT EXISTS(
+        SELECT 1
+        FROM announcements a
+        JOIN batch b ON (
+            (a.visibility = 'BATCH' AND a.batch_id = b.id) OR (a.visibility = 'COURSE' AND a.course_id = b.course_id)
+        )
+        JOIN student_batch_enrollment sbe ON sbe.batch_id = b.id
+        WHERE a.id = :announcementId
+        AND sbe.student_id = :studentId
+        AND a.visibility IN ('COURSE','BATCH')
+    )
+    """, nativeQuery = true)
+    int canStudentViewAnnouncement(Long announcementId, Long studentId);
+
+    @Query(value = """
+    SELECT EXISTS(
+            SELECT 1
+                FROM announcements a
+            WHERE a.id = :announcementId
+                AND (
+                        a.visibility = 'ALL_TEACHERS'
+                        OR EXISTS(
+                                    SELECT 1
+                                        FROM module m
+                                        JOIN batch b ON b.id = m.batch_id
+                                    WHERE m.teacher_id = :teacherId
+                                        AND (
+                                                (a.visibility = 'COURSE' and a.course_id = b.course_id)
+                                                OR
+                                                (a.visibility = 'BATCH' and a.batch_id = b.id)
+                                            )
+                            )
+                    )
+        )
+    """,nativeQuery = true)
+    int canTeacherViewAnnouncement(Long announcementId, Long teacherId);
 }
