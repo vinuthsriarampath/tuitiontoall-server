@@ -88,10 +88,10 @@ public class AnnouncementController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteAnnouncement(@PathVariable Long id){
         AnnouncementResponse response =  announcementService.deleteAnnouncementById(id);
-        return ResponseEntity.status(200).body(new ApiResponse("Announcement published successfully!", response));
+        return ResponseEntity.status(200).body(new ApiResponse("Announcement deleted successfully!", response));
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getAnnouncementById(@PathVariable Long id){
         AnnouncementResponse response =  announcementService.getAnnouncementById(id);
