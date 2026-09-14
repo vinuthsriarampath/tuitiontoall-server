@@ -50,7 +50,7 @@ public class ChapterController {
         return ResponseEntity.ok(new ApiResponse("Chapter created successfully", response));
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute')")
     @PatchMapping("{id}/details")
     public ResponseEntity<ApiResponse> updateChapterDetails(@PathVariable("id")Long id,@Valid @RequestBody ChapterDetailsUpdateRequest request){
         ChapterResponse response = chapterService.updateChapterDetailsById(id,request);
@@ -70,14 +70,14 @@ public class ChapterController {
         );
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}/detailed")
     public ResponseEntity<ApiResponse> getDetailedChapterById(@PathVariable("id")Long id){
         ChapterDetailedResponse response = chapterService.getDetailedChapterById(id);
         return ResponseEntity.ok(new ApiResponse("Chapter details fetched successfully", response));
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}/lecture-records")
     public ResponseEntity<ApiResponse> getAllLectureRecordsById(@PathVariable("id")Long id){
         List<LectureRecordResponse> responses = chapterService.getAllLectureRecordsByChapterId(id);
@@ -85,7 +85,7 @@ public class ChapterController {
     }
 
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}/schedule-lectures")
     public ResponseEntity<PaginatedApiResponse<ScheduleLectureResponse>> getAllScheduleLecturesWithFilters(
             @PathVariable("id") Long chapterId,
@@ -99,7 +99,7 @@ public class ChapterController {
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}/resources")
     public ResponseEntity<PaginatedApiResponse<ResourceResponse>> getAllResourcesWithFilters(
             @PathVariable("id") Long chapterId,
@@ -113,7 +113,7 @@ public class ChapterController {
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}/assignments")
     public ResponseEntity<PaginatedApiResponse<ChapterAssignmentResponse>> getAllChapterAssignmentsWithFilters(
             @PathVariable("id") Long chapterId,
@@ -127,7 +127,7 @@ public class ChapterController {
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}/stats")
     public ResponseEntity<ApiResponse> getStats(@PathVariable("id") Long id){
         ChapterStatCountResponse response = chapterService.getStatCountByCourseId(id);
