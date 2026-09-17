@@ -32,9 +32,11 @@ import edu.vinu.domain.student_assignment_submit.enums.SubmissionEligibilityReas
 import edu.vinu.domain.student_assignment_submit.mapper.AssignmentSubmissionMapper;
 import edu.vinu.domain.student_assignment_submit.repository.StudentAssignmentSubmitRepository;
 import edu.vinu.domain.student_assignment_submit.request.AssignmentSubmissionFilterRequest;
+import edu.vinu.domain.student_assignment_submit.request.StudentAssignmentSubmissionFilterRequest;
 import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDetailedResponse;
 import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionEligibilityResponse;
 import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionResponse;
+import edu.vinu.domain.student_assignment_submit.response.StudentAssignmentSubmissionResponse;
 import edu.vinu.domain.student_assignment_submit.service.AssignmentSubmitService;
 import edu.vinu.infastructure.service.file_storage.FileService;
 import lombok.RequiredArgsConstructor;
@@ -148,13 +150,7 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
     public PaginatedApiResponse<AssignmentSubmissionDetailedResponse> getAllSubmissionByAssignment(Long assignmentId, PaginationRequest pagination, AssignmentSubmissionFilterRequest filters) {
         assignmentSecurityService.validateAssignmentAccess(assignmentId);
 
-        if(filters.marksGained()!= null && (filters.minMarksGained()!= null || filters.maxMarksGained() != null)){
-            throw new BadRequestException("Cannot supply both exact 'marksGained' and range ('minMarksGained' / 'maxMarksGained') parameters.");
-        }
-
-        if (filters.minMarksGained() != null && filters.maxMarksGained() != null && filters.minMarksGained() >= filters.maxMarksGained()) {
-            throw new IllegalArgumentException("'minMarksGained' cannot be greater than or equal to 'maxMarksGained'.");
-        }
+        validateMarksGainedFilter(filters.marksGained(), filters.minMarksGained(), filters.maxMarksGained());
 
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(),pagination.sortBy().isEmpty() ? List.of("submitted_at") : pagination.sortBy(), List.of("submitted_at")));
 
@@ -186,6 +182,46 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
             throw new InternalServerErrorException("Failed to retrieve submissions for the assignment. Please try again.");
         }
 
+    }
+
+    @Override
+    public PaginatedApiResponse<StudentAssignmentSubmissionResponse> getAllSubmissionsByAssignmentOfStudent(Long assignmentId, PaginationRequest pagination, StudentAssignmentSubmissionFilterRequest filters) {
+
+        assignmentSecurityService.validateAssignmentAccess(assignmentId);
+
+        validateMarksGainedFilter(filters.marksGained(), filters.minMarksGained(), filters.maxMarksGained());
+
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(),pagination.sortBy().isEmpty() ? List.of("submitted_at") : pagination.sortBy(), List.of("submitted_at")));
+
+        StudentEntity currentStudent = studentService.getCurrentStudent();
+
+        try {
+            Page<StudentAssignmentSubmissionResponse> page = submitRepository.getAllByAssignmentWithFilters(
+                    assignmentId,
+                    filters.submissionId(),
+                    currentStudent.getId(),
+                    null,
+                    filters.grade(),
+                    filters.status() != null ? filters.status().name() : null,
+                    filters.attemptNo(),
+                    filters.marksGained(),
+                    filters.minMarksGained(),
+                    filters.maxMarksGained(),
+                    pageable
+            ).map(AssignmentSubmissionMapper::toStudentAssignmentSubmissionResponse);
+
+            return PaginatedApiResponse.<StudentAssignmentSubmissionResponse>builder()
+                    .message("Submissions for Assignment")
+                    .data(page.getContent())
+                    .page(page.getNumber())
+                    .size(page.getSize())
+                    .totalElements(page.getTotalElements())
+                    .totalPages(page.getTotalPages())
+                    .last(page.isLast())
+                    .build();
+        } catch (Exception e) {
+            throw new InternalServerErrorException("Failed to retrieve submissions for the assignment. Please try again.");
+        }
     }
 
     private void checkEligibility(AssignmentEntity assignmentEntity, int submissionCount) {
@@ -243,5 +279,15 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
         String assignmentIdPart = assignmentEntity.getId().toString()+(submissionCount+1);
 
         return String.format("%s_%s_%s_%s%s", namePart, assignmentIdPart , datePart, uuidPart, extension);
+    }
+
+    private void validateMarksGainedFilter(Integer marksGained,Integer minMarksGained,Integer maxMarksGained){
+        if(marksGained != null && (minMarksGained!= null || maxMarksGained != null)){
+            throw new BadRequestException("Cannot supply both exact 'marksGained' and range ('minMarksGained' / 'maxMarksGained') parameters.");
+        }
+
+        if (minMarksGained != null && maxMarksGained != null && minMarksGained >= maxMarksGained) {
+            throw new IllegalArgumentException("'minMarksGained' cannot be greater than or equal to 'maxMarksGained'.");
+        }
     }
 }
