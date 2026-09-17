@@ -21,6 +21,8 @@ import edu.vinu.domain.student_assignment_submit.request.AssignmentSubmissionFil
 import edu.vinu.domain.student_assignment_submit.request.StudentAssignmentSubmissionFilterRequest;
 import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDetailedResponse;
 import edu.vinu.domain.student_assignment_submit.response.StudentAssignmentSubmissionResponse;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface AssignmentSubmitService {
@@ -31,4 +33,6 @@ public interface AssignmentSubmitService {
     PaginatedApiResponse<AssignmentSubmissionDetailedResponse> getAllSubmissionByAssignment(Long assignmentId, PaginationRequest pagination, AssignmentSubmissionFilterRequest filters);
 
     PaginatedApiResponse<StudentAssignmentSubmissionResponse> getAllSubmissionsByAssignmentOfStudent(Long assignmentId,PaginationRequest pagination, StudentAssignmentSubmissionFilterRequest filters);
+
+    ResponseEntity<Resource> downloadSubmissionFile(String fileName);
 }

@@ -41,9 +41,13 @@ import edu.vinu.domain.student_assignment_submit.service.AssignmentSubmitService
 import edu.vinu.infastructure.service.file_storage.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -222,6 +226,24 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
         } catch (Exception e) {
             throw new InternalServerErrorException("Failed to retrieve submissions for the assignment. Please try again.");
         }
+    }
+
+    @Override
+    public ResponseEntity<Resource> downloadSubmissionFile(String fileName) {
+        Path path = getSubmissionPath(fileName);
+
+        Resource resource = fileService.getResource(getSubmissionPath(), fileName);
+
+        MediaType mediaType = MediaType.parseMediaType(fileService.detectContentType(path));
+
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + fileName + "\""
+                )
+                .contentLength(fileService.size(path))
+                .body(resource);
     }
 
     private void checkEligibility(AssignmentEntity assignmentEntity, int submissionCount) {
