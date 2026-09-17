@@ -33,4 +33,6 @@ public interface AssignmentService {
     AssignmentDetailedResponse getDetailedAssignmentById(Long id);
 
     ResponseEntity<Resource> downloadFile(String fileName);
+
+    AssignmentEntity getAssignmentEntity(Long id);
 }

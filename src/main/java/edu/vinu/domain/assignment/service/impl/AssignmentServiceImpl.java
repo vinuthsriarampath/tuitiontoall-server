@@ -22,6 +22,7 @@ import edu.vinu.domain.assignment.repository.AssignmentRepository;
 import edu.vinu.domain.assignment.request.AssignmentCreateRequest;
 import edu.vinu.domain.assignment.request.AssignmentUpdateRequest;
 import edu.vinu.domain.assignment.response.AssignmentDetailedResponse;
+import edu.vinu.domain.assignment.service.AssignmentSecurityService;
 import edu.vinu.domain.assignment.service.AssignmentService;
 import edu.vinu.domain.assignment.validator.AssignmentValidator;
 import edu.vinu.domain.grading.mapper.GradingRangeMapper;
@@ -51,6 +52,7 @@ public class AssignmentServiceImpl implements AssignmentService {
     private final AssignmentRepository assignmentRepository;
     private final GradingRangeService gradingRangeService;
     private final FileService fileService;
+    private final AssignmentSecurityService assignmentSecurityService;
 
     @Value("${file.assignment-path}")
     private String assignmentPath;
@@ -88,6 +90,9 @@ public class AssignmentServiceImpl implements AssignmentService {
     @Transactional
     @Override
     public AssignmentDetailedResponse updateAssignment(Long id, AssignmentUpdateRequest request) {
+
+        assignmentSecurityService.validateAssignmentAccess(id);
+
         AssignmentEntity existing = getAssignmentEntity(id);
 
         AssignmentValidator.validateUpdate(existing, request);
@@ -111,6 +116,9 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public String updateAssignmentFile(Long id, MultipartFile file) {
+
+        assignmentSecurityService.validateAssignmentAccess(id);
+
         AssignmentEntity existing = getAssignmentEntity(id);
 
         String oldFileName = existing.getFileName();
@@ -131,6 +139,9 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public AssignmentDetailedResponse getDetailedAssignmentById(Long id) {
+
+        assignmentSecurityService.validateAssignmentAccess(id);
+
         AssignmentEntity assignmentEntity = getAssignmentEntity(id);
         List<GradingRageResponse> gradingRangers = gradingRangeService.getAllGradingRangersByAssignmentId(id).stream()
                 .map(GradingRangeMapper::toGradingRageResponse)
@@ -156,7 +167,8 @@ public class AssignmentServiceImpl implements AssignmentService {
                 .body(resource);
     }
 
-    private AssignmentEntity getAssignmentEntity(Long id){
+    @Override
+    public AssignmentEntity getAssignmentEntity(Long id){
         return assignmentRepository.findById(id).orElseThrow(()-> new NotFoundException("Assignment not found by id!"));
     }
 
