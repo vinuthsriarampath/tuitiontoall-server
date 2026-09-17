@@ -14,11 +14,17 @@
 package edu.vinu.domain.student_assignment_submit.service;
 
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.student_assignment_submit.request.AssignmentSubmissionFilterRequest;
+import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDetailedResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface AssignmentSubmitService {
     ApiResponse submit(Long assignmentId, MultipartFile file);
 
     ApiResponse checkEligibility(Long assignmentId);
+
+    PaginatedApiResponse<AssignmentSubmissionDetailedResponse> getAllSubmissionByAssignment(Long assignmentId, PaginationRequest pagination, AssignmentSubmissionFilterRequest filters);
 }

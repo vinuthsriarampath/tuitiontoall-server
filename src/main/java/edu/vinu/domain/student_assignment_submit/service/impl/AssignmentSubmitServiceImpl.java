@@ -13,10 +13,14 @@
 
 package edu.vinu.domain.student_assignment_submit.service.impl;
 
+import edu.vinu.common.dto.PaginationRequest;
+import edu.vinu.common.exception.custom.BadRequestException;
 import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.common.util.SortUtil;
 import edu.vinu.domain.assignment.entity.AssignmentEntity;
 import edu.vinu.domain.assignment.service.AssignmentSecurityService;
 import edu.vinu.domain.assignment.service.AssignmentService;
@@ -27,11 +31,17 @@ import edu.vinu.domain.student_assignment_submit.enums.AssignmentSubmitStatus;
 import edu.vinu.domain.student_assignment_submit.enums.SubmissionEligibilityReason;
 import edu.vinu.domain.student_assignment_submit.mapper.AssignmentSubmissionMapper;
 import edu.vinu.domain.student_assignment_submit.repository.StudentAssignmentSubmitRepository;
+import edu.vinu.domain.student_assignment_submit.request.AssignmentSubmissionFilterRequest;
+import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDetailedResponse;
 import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionEligibilityResponse;
+import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionResponse;
 import edu.vinu.domain.student_assignment_submit.service.AssignmentSubmitService;
 import edu.vinu.infastructure.service.file_storage.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +50,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -50,7 +61,7 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
     private final AssignmentService assignmentService;
     private final StudentService studentService;
     private final AssignmentSecurityService assignmentSecurityService;
-    
+
     @Value("${file.assignment-submission-path}")
     private String submissionPath;
 
@@ -131,6 +142,50 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
         }
 
         return ApiResponse.builder().message("Assignment submission eligibility checked.").data(response).build();
+    }
+
+    @Override
+    public PaginatedApiResponse<AssignmentSubmissionDetailedResponse> getAllSubmissionByAssignment(Long assignmentId, PaginationRequest pagination, AssignmentSubmissionFilterRequest filters) {
+        assignmentSecurityService.validateAssignmentAccess(assignmentId);
+
+        if(filters.marksGained()!= null && (filters.minMarksGained()!= null || filters.maxMarksGained() != null)){
+            throw new BadRequestException("Cannot supply both exact 'marksGained' and range ('minMarksGained' / 'maxMarksGained') parameters.");
+        }
+
+        if (filters.minMarksGained() != null && filters.maxMarksGained() != null && filters.minMarksGained() >= filters.maxMarksGained()) {
+            throw new IllegalArgumentException("'minMarksGained' cannot be greater than or equal to 'maxMarksGained'.");
+        }
+
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(),pagination.sortBy().isEmpty() ? List.of("submitted_at") : pagination.sortBy(), List.of("submitted_at")));
+
+        try {
+            Page<AssignmentSubmissionDetailedResponse> page = submitRepository.getAllByAssignmentWithFilters(
+                    assignmentId,
+                    filters.submissionId(),
+                    filters.studentId(),
+                    filters.studentName(),
+                    filters.grade(),
+                    filters.status() != null ? filters.status().name() : null,
+                    filters.attemptNo(),
+                    filters.marksGained(),
+                    filters.minMarksGained(),
+                    filters.maxMarksGained(),
+                    pageable
+            ).map(AssignmentSubmissionMapper::toAssignmentSubmissionDetailedResponse);
+
+            return PaginatedApiResponse.<AssignmentSubmissionDetailedResponse>builder()
+                    .message("Submissions for Assignment")
+                    .data(page.getContent())
+                    .page(page.getNumber())
+                    .size(page.getSize())
+                    .totalElements(page.getTotalElements())
+                    .totalPages(page.getTotalPages())
+                    .last(page.isLast())
+                    .build();
+        } catch (Exception e) {
+            throw new InternalServerErrorException("Failed to retrieve submissions for the assignment. Please try again.");
+        }
+
     }
 
     private void checkEligibility(AssignmentEntity assignmentEntity, int submissionCount) {
