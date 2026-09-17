@@ -15,8 +15,15 @@ package edu.vinu.domain.student_assignment_submit.repository;
 
 import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StudentAssignmentSubmitRepository extends JpaRepository<StudentAssignmentSubmit,Long> {
+    @Query(value = """
+    SELECT COUNT(sas.id)
+        FROM student_assignment_submit sas
+        WHERE sas.assignment_id = :assignmentId AND sas.student_id = :studentId
+    """,nativeQuery = true)
+    int countSubmitsByAssignmentAndStudent(Long assignmentId, Long studentId);
 }
