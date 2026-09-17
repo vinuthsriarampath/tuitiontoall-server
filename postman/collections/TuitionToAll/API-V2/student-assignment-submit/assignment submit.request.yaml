@@ -1,0 +1,13 @@
+$kind: http-request
+url: localhost:8080/api/v2/assignment-submissions/assignment/12
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: file
+      src:
+        - /C:/Users/vinut/OneDrive/Documents/education-related-docs/ICET/MODULES/02_DBMS/DBMS_ASSIGNMENTS/HOME_ASSIGNMENTS/DBMS_HOME_ASSIGNMENT_04/DBMS HOME ASSIGNMENT 04.pdf
+      description: ""
+      disabled: false
+order: 433198430778651
