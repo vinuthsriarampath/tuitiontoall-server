@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.assignment.request;
 
+import edu.vinu.domain.assignment.enums.AssignmentType;
 import edu.vinu.domain.grading.request.GradingRangeCreateRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -53,6 +54,9 @@ public record AssignmentCreateRequest(
         @Valid
         @NotNull(message = "Grading ranges list is mandatory!")
         @NotEmpty(message = "At least one grading range is required!")
-        List<GradingRangeCreateRequest> gradingRanges
+        List<GradingRangeCreateRequest> gradingRanges,
+
+        @NotBlank(message ="assignment type is mandatory!")
+        AssignmentType type
 ) {
 }

@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.assignment.entity;
 
+import edu.vinu.domain.assignment.enums.AssignmentType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,6 +61,10 @@ public class AssignmentEntity {
 
     @Column(name = "max_attempts",nullable = false)
     private Integer maxAttempts;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private AssignmentType type;
 
     @CreationTimestamp
     @Column(name = "created_date",nullable = false, updatable = false)

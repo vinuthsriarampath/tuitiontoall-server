@@ -14,6 +14,7 @@
 package edu.vinu.domain.assignment.mapper;
 
 import edu.vinu.domain.assignment.entity.AssignmentEntity;
+import edu.vinu.domain.assignment.enums.AssignmentType;
 import edu.vinu.domain.assignment.request.AssignmentCreateRequest;
 import edu.vinu.domain.assignment.request.chapter_assignments.ChapterAssignmentCreateRequest;
 import edu.vinu.domain.assignment.request.module_assignments.ModuleAssignmentCreateRequest;
@@ -37,6 +38,7 @@ public class AssignmentMapper {
                 .lateSubmission(request.lateSubmission())
                 .resubmission(request.resubmission())
                 .maxAttempts(request.maxAttempts())
+                .type(request.type())
                 .build();
     }
 
@@ -52,6 +54,7 @@ public class AssignmentMapper {
                 .resubmission(request.resubmission())
                 .maxAttempts(request.maxAttempts())
                 .gradingRanges(request.gradingRanges())
+                .type(AssignmentType.CHAPTER)
                 .build();
     }
 
@@ -84,6 +87,7 @@ public class AssignmentMapper {
                 .lateSubmission(request.lateSubmission())
                 .resubmission(request.resubmission())
                 .maxAttempts(request.maxAttempts())
+                .type(AssignmentType.MODULE)
                 .gradingRanges(request.gradingRanges())
                 .build();
     }
