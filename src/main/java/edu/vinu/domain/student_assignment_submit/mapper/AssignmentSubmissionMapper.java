@@ -17,6 +17,7 @@ import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.repository.projections.AssignmentSubmissionDetailedProjection;
 import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDetailedResponse;
 import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionResponse;
+import edu.vinu.domain.student_assignment_submit.response.StudentAssignmentSubmissionResponse;
 
 public class AssignmentSubmissionMapper {
 
@@ -40,6 +41,20 @@ public class AssignmentSubmissionMapper {
                 .submissionId(p.getSubmissionId())
                 .studentId(p.getStudentId())
                 .studentName(p.getFirstName()+ " " + p.getLastName())
+                .assignmentId(p.getAssignmentId())
+                .url(p.getUrl())
+                .grade(p.getGrade())
+                .status(p.getStatus())
+                .marksGained(p.getMarksGained())
+                .attemptNo(p.getAttemptNo())
+                .submittedAt(p.getSubmittedAt())
+                .lastModifiedDate(p.getLastModifiedDate())
+                .build();
+    }
+
+    public static StudentAssignmentSubmissionResponse toStudentAssignmentSubmissionResponse(AssignmentSubmissionDetailedProjection p) {
+        return StudentAssignmentSubmissionResponse.builder()
+                .submissionId(p.getSubmissionId())
                 .assignmentId(p.getAssignmentId())
                 .url(p.getUrl())
                 .grade(p.getGrade())
