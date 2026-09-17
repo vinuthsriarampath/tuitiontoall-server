@@ -5,11 +5,10 @@ workspace:
 
 cloudResources:
   collections:
-    ..\postman\collections\TuitionToAll: 36584435-cf71f205-560b-4141-96d4-f3fabea8dc85
     ../postman/collections/TuitionToAll: 36584435-cf71f205-560b-4141-96d4-f3fabea8dc85
 
 localResources:
   collections:
     - ../postman/collections/TuitionToAll
   docs:
-    - ..\README.md
+    - ../README.md
