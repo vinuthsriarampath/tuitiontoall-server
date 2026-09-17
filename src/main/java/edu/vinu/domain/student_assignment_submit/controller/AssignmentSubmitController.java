@@ -13,7 +13,11 @@
 
 package edu.vinu.domain.student_assignment_submit.controller;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.student_assignment_submit.request.AssignmentSubmissionFilterRequest;
+import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDetailedResponse;
 import edu.vinu.domain.student_assignment_submit.service.AssignmentSubmitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,4 +44,11 @@ public class AssignmentSubmitController {
     public ResponseEntity<ApiResponse> checkEligibility(@PathVariable Long assignmentId) {
         return ResponseEntity.ok(submitService.checkEligibility(assignmentId));
     }
+
+    @PreAuthorize("hasAnyAuthority('institute','teacher')")
+    @GetMapping("/assignment/{assignmentId}")
+    public ResponseEntity<PaginatedApiResponse<AssignmentSubmissionDetailedResponse>> getAllSubmissions(@PathVariable Long assignmentId, PaginationRequest pagination, AssignmentSubmissionFilterRequest filters) {
+        return ResponseEntity.ok().body(submitService.getAllSubmissionByAssignment(assignmentId,pagination,filters));
+    }
+
 }
