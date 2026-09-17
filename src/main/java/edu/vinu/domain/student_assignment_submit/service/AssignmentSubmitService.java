@@ -14,5 +14,11 @@
 package edu.vinu.domain.student_assignment_submit.service;
 
 
+import edu.vinu.common.response.ApiResponse;
+import org.springframework.web.multipart.MultipartFile;
+
 public interface AssignmentSubmitService {
+    ApiResponse submit(Long assignmentId, MultipartFile file);
+
+    ApiResponse checkEligibility(Long assignmentId);
 }
