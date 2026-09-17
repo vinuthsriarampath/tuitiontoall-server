@@ -17,7 +17,9 @@ import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.student_assignment_submit.request.AssignmentSubmissionFilterRequest;
+import edu.vinu.domain.student_assignment_submit.request.StudentAssignmentSubmissionFilterRequest;
 import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDetailedResponse;
+import edu.vinu.domain.student_assignment_submit.response.StudentAssignmentSubmissionResponse;
 import edu.vinu.domain.student_assignment_submit.service.AssignmentSubmitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +51,12 @@ public class AssignmentSubmitController {
     @GetMapping("/assignment/{assignmentId}")
     public ResponseEntity<PaginatedApiResponse<AssignmentSubmissionDetailedResponse>> getAllSubmissions(@PathVariable Long assignmentId, PaginationRequest pagination, AssignmentSubmissionFilterRequest filters) {
         return ResponseEntity.ok().body(submitService.getAllSubmissionByAssignment(assignmentId,pagination,filters));
+    }
+
+    @PreAuthorize("hasAuthority('student')")
+    @GetMapping("/assignment/{assignmentId}/me")
+    public ResponseEntity<PaginatedApiResponse<StudentAssignmentSubmissionResponse>> getMySubmissions(@PathVariable Long assignmentId, PaginationRequest pagination, StudentAssignmentSubmissionFilterRequest filters) {
+        return ResponseEntity.ok().body(submitService.getAllSubmissionsByAssignmentOfStudent(assignmentId,pagination,filters));
     }
 
 }
