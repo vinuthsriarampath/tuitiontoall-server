@@ -22,6 +22,7 @@ import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDe
 import edu.vinu.domain.student_assignment_submit.response.StudentAssignmentSubmissionResponse;
 import edu.vinu.domain.student_assignment_submit.service.AssignmentSubmitService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -59,4 +60,8 @@ public class AssignmentSubmitController {
         return ResponseEntity.ok().body(submitService.getAllSubmissionsByAssignmentOfStudent(assignmentId,pagination,filters));
     }
 
+    @GetMapping("/download/{fileName:.+}")
+    public ResponseEntity<Resource> downloadSubmissionFile(@PathVariable String fileName) {
+        return submitService.downloadSubmissionFile(fileName);
+    }
 }
