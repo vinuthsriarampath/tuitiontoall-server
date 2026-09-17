@@ -52,6 +52,7 @@ file:
     temp-path: uploads/chapter-resources/temp
     resource-path: uploads/chapter-resources/resources
   assignment-path: uploads/assignments
+  assignment-submission-path: uploads/assignments/submissions
 
 app:
   jwt:
