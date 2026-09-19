@@ -17,6 +17,7 @@ package edu.vinu.domain.student_assignment_submit.service;
 import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.request.AssignmentSubmissionFilterRequest;
 import edu.vinu.domain.student_assignment_submit.request.StudentAssignmentSubmissionFilterRequest;
 import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDetailedResponse;
@@ -35,4 +36,6 @@ public interface AssignmentSubmitService {
     PaginatedApiResponse<StudentAssignmentSubmissionResponse> getAllSubmissionsByAssignmentOfStudent(Long assignmentId,PaginationRequest pagination, StudentAssignmentSubmissionFilterRequest filters);
 
     ResponseEntity<Resource> downloadSubmissionFile(String fileName);
+
+    StudentAssignmentSubmit getSubmissionEntityById(Long submissionId);
 }
