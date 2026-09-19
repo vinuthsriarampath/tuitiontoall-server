@@ -24,7 +24,7 @@ import edu.vinu.domain.grading.service.GradingService;
 import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.enums.AssignmentSubmitStatus;
 import edu.vinu.domain.student_assignment_submit.repository.StudentAssignmentSubmitRepository;
-import edu.vinu.domain.student_assignment_submit.response.SubmissionGradedResponse;
+import edu.vinu.domain.grading.response.SubmissionGradedResponse;
 import edu.vinu.domain.student_assignment_submit.service.AssignmentSubmitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

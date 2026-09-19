@@ -11,7 +11,7 @@
  *
  */
 
-package edu.vinu.domain.student_assignment_submit.response;
+package edu.vinu.domain.grading.response;
 
 import lombok.Builder;
 
