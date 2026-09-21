@@ -15,6 +15,7 @@ package edu.vinu.domain.module.repository;
 
 import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.domain.module.repository.projection.DetailedModuleProjection;
+import edu.vinu.domain.module.repository.projection.StudentModuleProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,6 +23,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -79,4 +81,27 @@ public interface ModuleRepository extends JpaRepository<ModuleEntity, Long> {
     WHERE m.id = :id
 """,nativeQuery = true)
     Optional<DetailedModuleProjection> getDetailedModuleById(Long id);
+
+    @Query(value = """
+    SELECT
+        m.id AS id,
+        m.name AS name,
+        m.status AS status,
+        m.batch_id AS batchId
+    FROM module m
+    WHERE m.batch_id = :batchId;
+    """,nativeQuery = true)
+    List<StudentModuleProjection> findAllStudentModulesByBatchId(Long batchId);
+
+    @Query(value = """
+    SELECT
+        m.id AS id,
+        m.name AS name,
+        m.status AS status,
+        m.batch_id AS batchId
+    FROM module m
+    WHERE m.batch_id = :batchId
+        AND m.status IN (:status);
+    """,nativeQuery = true)
+    List<StudentModuleProjection> findAllStudentModulesByBatchIdAndStatus(Long batchId, List<String> status);
 }

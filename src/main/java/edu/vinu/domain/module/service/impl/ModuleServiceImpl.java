@@ -28,6 +28,7 @@ import edu.vinu.domain.batch.service.BatchService;
 import edu.vinu.domain.institute.service.InstituteTeacherService;
 import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.domain.module.enums.ModuleStatus;
+import edu.vinu.domain.module.mapper.ModuleMapper;
 import edu.vinu.domain.module.repository.ModuleRepository;
 import edu.vinu.domain.module.request.ModuleFilterRequest;
 import edu.vinu.domain.module.request.create.ModuleCreateRequest;
@@ -37,6 +38,7 @@ import edu.vinu.domain.module.request.update.ModuleNameUpdateRequest;
 import edu.vinu.domain.module.request.update.ModuleTeacherUpdateRequest;
 import edu.vinu.domain.module.response.ModuleDetailedResponse;
 import edu.vinu.domain.module.response.ModuleResponse;
+import edu.vinu.domain.module.response.StudentModuleResponse;
 import edu.vinu.domain.module.service.ModuleService;
 import edu.vinu.domain.teacher.dtos.response.TeacherBasicResponse;
 import edu.vinu.domain.teacher.entity.TeacherEntity;
@@ -240,6 +242,17 @@ public class ModuleServiceImpl implements ModuleService {
     public PaginatedApiResponse<ModuleAssignmentResponse> getAssignmentsByModule(Long id, int page, int size, String direction, List<String> sortBy, ModuleAssignmentFilterRequest filters) {
         Pageable pageable = PageRequest.of(page, size, SortUtil.buildSort(direction, sortBy, List.of("created_date")));
         return moduleAssignmentQueryService.getAssignmentsByModule(id, filters, pageable);
+    }
+
+    @Override
+    public List<StudentModuleResponse> getStudentModulesByBatch(Long batchId) {
+        return moduleRepository.findAllStudentModulesByBatchId(batchId).stream().map(ModuleMapper::toStudentModuleResponse).toList();
+    }
+
+    @Override
+    public List<StudentModuleResponse> getStudentModulesByBatch(Long batchId, List<ModuleStatus> status) {
+        List<String> mappedStatus = status.stream().map(Enum::name).toList();
+        return moduleRepository.findAllStudentModulesByBatchIdAndStatus(batchId, mappedStatus).stream().map(ModuleMapper::toStudentModuleResponse).toList();
     }
 
     private boolean isModuleOwner(ModuleEntity entity){

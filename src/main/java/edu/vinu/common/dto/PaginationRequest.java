@@ -25,8 +25,6 @@ public record PaginationRequest(
         page = page != null ? page : 0;
         size = size != null ? size : 10;
         direction = direction != null ? direction : "desc";
-        sortBy = sortBy != null && !sortBy.isEmpty()
-                ? sortBy
-                : List.of("created_date");
+        sortBy = List.of();
     }
 }

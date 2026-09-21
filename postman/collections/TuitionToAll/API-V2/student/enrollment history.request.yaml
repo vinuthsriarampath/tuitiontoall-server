@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:8080/api/v2/students/me/learning/courses/3/enrollment-history
+method: GET
+order: 1486472921883366

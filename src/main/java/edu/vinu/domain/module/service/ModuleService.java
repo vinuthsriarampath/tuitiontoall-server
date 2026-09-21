@@ -17,6 +17,7 @@ import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.assignment.request.module_assignments.ModuleAssignmentFilterRequest;
 import edu.vinu.domain.assignment.response.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.domain.module.entity.ModuleEntity;
+import edu.vinu.domain.module.enums.ModuleStatus;
 import edu.vinu.domain.module.request.ModuleFilterRequest;
 import edu.vinu.domain.module.request.create.ModuleCreateRequest;
 import edu.vinu.domain.module.request.update.ModuleBatchUpdateRequest;
@@ -24,6 +25,7 @@ import edu.vinu.domain.module.request.update.ModuleNameUpdateRequest;
 import edu.vinu.domain.module.request.update.ModuleTeacherUpdateRequest;
 import edu.vinu.domain.module.response.ModuleDetailedResponse;
 import edu.vinu.domain.module.response.ModuleResponse;
+import edu.vinu.domain.module.response.StudentModuleResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -52,4 +54,8 @@ public interface ModuleService {
     ModuleEntity getModuleEntityById(Long id);
 
     PaginatedApiResponse<ModuleAssignmentResponse> getAssignmentsByModule(Long id, int page, int size, String direction, List<String> sortBy, ModuleAssignmentFilterRequest filters);
+
+    List<StudentModuleResponse> getStudentModulesByBatch(Long batchId);
+
+    List<StudentModuleResponse> getStudentModulesByBatch(Long batchId, List<ModuleStatus> status);
 }

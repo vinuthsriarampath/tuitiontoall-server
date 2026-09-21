@@ -71,7 +71,7 @@ public class LectureRecordController {
         return lectureRecordService.streamVideo( fileName, rangeHeader );
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("/stream-token/{fileName:.+}")
     public ResponseEntity<ApiResponse> generateStreamToken(@PathVariable String fileName){
         String token = videoStreamTokenService.generateToken(fileName);

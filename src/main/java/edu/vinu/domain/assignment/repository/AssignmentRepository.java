@@ -15,8 +15,91 @@ package edu.vinu.domain.assignment.repository;
 
 import edu.vinu.domain.assignment.entity.AssignmentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AssignmentRepository extends JpaRepository<AssignmentEntity,Long> {
+
+    @Query(value = """
+        SELECT EXISTS(
+        SELECT 1
+        FROM assignment a
+        WHERE a.id = :assignmentId
+            AND (
+                    (a.type = 'MODULE' AND EXISTS(
+                        SELECT 1
+                        FROM module_assignment ma
+                        INNER JOIN module m ON m.id = ma.module_id
+                        INNER JOIN batch b ON m.batch_id = b.id
+                        INNER JOIN courses cr ON b.course_id = cr.id
+                        WHERE cr.institute_id = :instituteId
+                    ))
+                    OR (a.type = 'CHAPTER' AND EXISTS(
+                        SELECT 1
+                        FROM chapter_assignment ca
+                        INNER JOIN chapter c ON c.id = ca.chapter_id
+                        INNER JOIN module m ON c.module_id = m.id
+                        INNER JOIN batch b ON m.batch_id = b.id
+                        INNER JOIN courses cr ON b.course_id = cr.id
+                        WHERE cr.institute_id = :instituteId
+                    ))
+            )
+        )
+    """, nativeQuery = true)
+    int instituteAccess(Long assignmentId, Long instituteId);
+
+    @Query(value = """
+    SELECT EXISTS(
+            SELECT 1
+            FROM assignment a
+            WHERE
+                a.id = :assignmentId
+                AND (
+                        (a.type = 'MODULE' AND EXISTS(
+                            SELECT 1
+                            FROM module_assignment ma
+                            INNER JOIN module m ON m.id = ma.module_id
+                            INNER JOIN teacher t ON t.id = m.teacher_id
+                            WHERE t.id = :teacherId
+                        ))
+                        OR (a.type = 'CHAPTER' AND EXISTS(
+                            SELECT 1
+                            FROM chapter_assignment ca
+                            INNER JOIN chapter c ON c.id = ca.chapter_id
+                            INNER JOIN module m ON c.module_id = m.id
+                            INNER JOIN teacher t ON t.id = m.teacher_id
+                            WHERE t.id = :teacherId
+                        ))
+                    )
+        )
+    """,nativeQuery = true)
+    int teacherAccess(Long assignmentId, Long teacherId);
+
+    @Query(value = """
+    SELECT EXISTS(
+        SELECT 1
+        FROM assignment a
+        WHERE
+            a.id = :assignmentId
+            AND (
+                (a.type = 'MODULE' AND EXISTS(
+                    SELECT 1
+                    FROM module_assignment ma
+                    INNER JOIN module m ON m.id = ma.module_id = m.id
+                    INNER JOIN student_batch_enrollment sbe ON sbe.batch_id = m.batch_id
+                    WHERE sbe.student_id = :studentId
+                ))
+                OR (a.type = 'CHAPTER' AND EXISTS(
+                    SELECT 1
+                    FROM chapter_assignment ca
+                    INNER JOIN chapter c ON c.id = ca.chapter_id
+                    INNER JOIN module m ON c.module_id = m.id
+                    INNER JOIN student_batch_enrollment sbe ON sbe.batch_id = m.batch_id
+                    WHERE sbe.student_id = :studentId
+                ))
+            )
+    )
+    """,nativeQuery = true)
+    int studentAccess(Long assignmentId, Long studentId);
 }

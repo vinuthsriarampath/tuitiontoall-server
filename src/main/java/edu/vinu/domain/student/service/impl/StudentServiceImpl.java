@@ -15,6 +15,8 @@ package edu.vinu.domain.student.service.impl;
 
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
+import edu.vinu.common.exception.custom.UnauthorizedException;
+import edu.vinu.domain.auth.service.UserAuthenticationService;
 import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;
 import edu.vinu.domain.student.dto.response.Student;
 import edu.vinu.domain.student.entity.StudentEntity;
@@ -37,6 +39,7 @@ import static edu.vinu.domain.user.validator.UserValidator.isValidDob;
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final UserService userService;
+    private final UserAuthenticationService authService;
 
     @Override
     public List<Student> getAllStudents() {
@@ -74,5 +77,17 @@ public class StudentServiceImpl implements StudentService {
 
 
         return StudentMapper.toStudent(studentRepository.save(studentEntity));
+    }
+
+    @Override
+    public StudentEntity getCurrentStudent() {
+        UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
+        if (userEntity == null){
+            throw new NotFoundException("User not found");
+        }else if (!userEntity.getRole().getRole().equals("student")) {
+            throw new UnauthorizedException("User is not a student");
+        }else {
+            return userEntity.getStudent();
+        }
     }
 }

@@ -1,0 +1,4 @@
+$kind: http-request
+url: localhost:8080/api/v2/assignment-submissions/assignment/14/eligibility
+method: GET
+order: 1789621518162

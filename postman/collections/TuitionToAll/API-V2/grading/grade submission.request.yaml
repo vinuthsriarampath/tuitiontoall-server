@@ -1,0 +1,7 @@
+$kind: http-request
+url: localhost:8080/api/v2/gradings/submissions/1
+method: POST
+body:
+  type: json
+  content: "{\r\n    \"marksGained\":70\r\n}"
+order: 1789793559683

@@ -37,6 +37,9 @@ import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.institute.service.InstituteService;
+import edu.vinu.domain.student.entity.StudentEntity;
+import edu.vinu.domain.teacher.entity.TeacherEntity;
+import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -89,10 +92,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     @Transactional
     public AnnouncementResponse updateAnnouncementVisibility(Long announcementId, AnnouncementVisibilityUpdateRequest request) {
-        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(announcementId);
-        if (!isOwner(announcementEntity)) {
+        if (!isOwner(announcementId, instituteService.getCurrentInstitute().getId())) {
             throw new UnauthorizedException("You are not authorized to update this announcement.");
         }
+        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(announcementId);
 
         validateVisibilityChange(announcementEntity, request.getVisibility(), request.getCourseId(), request.getBatchId());
 
@@ -104,24 +107,69 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public Page<AnnouncementResponse> getAllAnnouncements(int page, int size, String direction, List<String> sortBy, AnnouncementFilterRequest filters) {
-
         Pageable pageable = PageRequest.of(page, size, SortUtil.buildSort(direction, sortBy, List.of("published_date")));
 
-        InstituteEntity instituteEntity = instituteService.getCurrentInstitute();
+        UserEntity currentUser = userService.getUserEntityByEmail(userAuthenticationService.getCurrentUserEmail());
+        String roleName = currentUser.getRole().getRole();
 
-        return announcementRepository.findAllByInstituteWithFilters(instituteEntity.getId(), filters.visibility(), filters.status(), filters.courseId(), filters.batchId(), pageable).map(this::mapToAnnouncementResponse);
+        switch (roleName.toLowerCase()){
+            case "institute" -> {
+                InstituteEntity institute = instituteService.getCurrentInstitute();
+                if (institute == null) {
+                    throw new UnauthorizedException("User is not associated with an institute.");
+                }
+                return announcementRepository.findAllForInstitute(
+                        institute.getId(),
+                        filters.visibility(),
+                        filters.status(),
+                        filters.courseId(),
+                        filters.batchId(),
+                        pageable
+                ).map(this::mapToAnnouncementResponse);
+            }
+            case "student" -> {
+                StudentEntity student = currentUser.getStudent();
+                if (student == null) {
+                    throw new UnauthorizedException("User is not associated with a student.");
+                }
+                return announcementRepository.findAllForStudent(
+                        student.getId(),
+                        filters.status(),
+                        filters.courseId(),
+                        filters.batchId(),
+                        pageable
+                ).map(this::mapToAnnouncementResponse);
+            }
+            case "teacher" -> {
+                TeacherEntity teacher = currentUser.getTeacher();
+                if (teacher == null) {
+                    throw new UnauthorizedException("User is not associated with a teacher.");
+                }
+                return announcementRepository.findAllForTeacher(
+                        teacher.getId(),
+                        null,
+                        filters.status(),
+                        filters.courseId(),
+                        filters.batchId(),
+                        pageable
+                ).map(this::mapToAnnouncementResponse);
+            }
+            default -> throw new UnauthorizedException("Access denied for current user role.");
+        }
+
     }
 
     @Override
     @Transactional
     public AnnouncementResponse updateAnnouncement(Long announcementId, AnnouncementUpdateRequest request) {
-        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(announcementId);
 
-        if (!isOwner(announcementEntity)) {
+        if (!isOwner(announcementId, instituteService.getCurrentInstitute().getId())) {
             throw new UnauthorizedException("You are not authorized to update this announcement.");
         }
 
         List<FieldError> errors = new ArrayList<>();
+
+        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(announcementId);
 
         if (!request.title().isBlank()) {
             announcementEntity.setTitle(request.title());
@@ -150,10 +198,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     @Transactional
     public AnnouncementResponse archiveAnnouncementById(Long id) {
-        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
-        if (!isOwner(announcementEntity)) {
+        if (!isOwner(id, instituteService.getCurrentInstitute().getId())) {
             throw new UnauthorizedException("You are not authorized to archive this announcement.");
         }
+
+        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
 
         announcementEntity.setStatus(AnnouncementStatus.ARCHIVED);
         announcementEntity.setPinned(false);
@@ -164,10 +213,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     @Transactional
     public AnnouncementResponse pinAnnouncementById(Long id) {
-        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
-        if (!isOwner(announcementEntity)) {
+        if (!isOwner(id, instituteService.getCurrentInstitute().getId())) {
             throw new UnauthorizedException("You are not authorized to archive this announcement.");
         }
+
+        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
+
         isAnnouncementPinnable(announcementEntity);
         announcementEntity.setPinned(true);
         return mapToAnnouncementResponse(announcementRepository.save(announcementEntity));
@@ -176,10 +227,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     @Transactional
     public AnnouncementResponse unpinAnnouncementById(Long id) {
-        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
-        if (!isOwner(announcementEntity)) {
+        if (!isOwner(id, instituteService.getCurrentInstitute().getId())) {
             throw new UnauthorizedException("You are not authorized to archive this announcement.");
         }
+
+        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
+
         announcementEntity.setPinned(false);
         return mapToAnnouncementResponse(announcementRepository.save(announcementEntity));
     }
@@ -187,10 +240,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     @Transactional
     public AnnouncementResponse publishAnnouncementById(Long id) {
-        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
-        if (!isOwner(announcementEntity)) {
+        if (!isOwner(id, instituteService.getCurrentInstitute().getId())) {
             throw new UnauthorizedException("You are not authorized to archive this announcement.");
         }
+
+        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
+
         announcementEntity.setStatus(AnnouncementStatus.PUBLISHED);
         announcementEntity.setPublishedDate(LocalDateTime.now());
         return mapToAnnouncementResponse(announcementRepository.save(announcementEntity));
@@ -199,10 +254,12 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     @Transactional
     public AnnouncementResponse deleteAnnouncementById(Long id) {
-        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
-        if (!isOwner(announcementEntity)) {
+        if (!isOwner(id, instituteService.getCurrentInstitute().getId())) {
             throw new UnauthorizedException("You are not authorized to archive this announcement.");
         }
+
+        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
+
         announcementEntity.setStatus(AnnouncementStatus.DELETED);
         announcementEntity.setPinned(false);
         announcementEntity.setPublishedDate(null);
@@ -213,11 +270,38 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Override
     @Transactional
     public AnnouncementResponse getAnnouncementById(Long id) {
-        AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
-        if (!isOwner(announcementEntity)) {
-            throw new UnauthorizedException("You are not authorized to archive this announcement.");
+        UserEntity userEntity = userService.getUserEntityByEmail(userAuthenticationService.getCurrentUserEmail());
+        String roleName = userEntity.getRole().getRole();
+
+        final String notAuthorizedMessage = "You are not authorized to View this announcement.";
+        switch (roleName) {
+            case "institute" -> {
+                if (!isOwner(id, userEntity.getInstitute().getId())) {
+                    throw new UnauthorizedException(notAuthorizedMessage);
+                }
+                AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
+                return  mapToAnnouncementResponse(announcementEntity);
+            }
+            case "student" -> {
+                if(announcementRepository.canStudentViewAnnouncement(id, userEntity.getStudent().getId())<=0){
+                    throw new UnauthorizedException(notAuthorizedMessage);
+                }
+                AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
+                return  mapToAnnouncementResponse(announcementEntity);
+            }
+            case "teacher"-> {
+                if(announcementRepository.canStudentViewAnnouncement(id, userEntity.getTeacher().getId())<=0){
+                    throw new UnauthorizedException(notAuthorizedMessage);
+                }
+                AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
+                return  mapToAnnouncementResponse(announcementEntity);
+            }
+            default -> {
+                throw new UnauthorizedException("Invalid role");
+            }
         }
-        return  mapToAnnouncementResponse(announcementEntity);
+
+
     }
 
     private void isAnnouncementPinnable(AnnouncementEntity announcementEntity) {
@@ -304,9 +388,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         }
     }
 
-    private boolean isOwner(AnnouncementEntity entity) {
-        String currentUserEmail = userAuthenticationService.getCurrentUserEmail();
-        return entity.getInstitute() != null && entity.getInstitute().getUser() != null && currentUserEmail.equals(entity.getInstitute().getUser().getEmail());
+    private boolean isOwner(Long announcementId, Long instituteId) {
+        return announcementRepository.isOwnerOfAnnouncement(announcementId, instituteId) > 0;
     }
 
     private AnnouncementResponse mapToAnnouncementResponse(AnnouncementEntity entity) {

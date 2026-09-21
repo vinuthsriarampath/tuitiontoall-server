@@ -20,7 +20,7 @@ import edu.vinu.domain.batch.repository.BatchRepository;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.enums.CourseStatus;
 import edu.vinu.domain.course.repository.CourseRepository;
-import edu.vinu.domain.course.repository.SimpleCourseProjection.SimpleCourseProjection;
+import edu.vinu.domain.course.repository.projections.SimpleCourseProjection;
 import edu.vinu.domain.course.response.CoursePerformanceResponse;
 import edu.vinu.domain.course.response.CourseStatsResponse;
 import edu.vinu.domain.course.service.CourseService;

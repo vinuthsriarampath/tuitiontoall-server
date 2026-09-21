@@ -11,12 +11,16 @@
  *
  */
 
-package edu.vinu.domain.course.repository.SimpleCourseProjection;
+package edu.vinu.domain.student_batch_enrollment.dto.respose;
 
-import java.math.BigDecimal;
+import lombok.Builder;
 
-public interface SimpleCourseProjection {
-    Long getId();
-    String getTitle();
-    BigDecimal getAvgRating();
+import java.util.List;
+
+@Builder
+public record EnrollmentHistoryResponse(
+        Long courseId,
+        String courseTitle,
+        List<EnrollmentHistoryItemResponse> enrollments
+) {
 }

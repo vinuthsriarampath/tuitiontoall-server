@@ -1,8 +1,0 @@
-$kind: http-request
-url: http://localhost:8080/api/v2/greetings/greet/delete/hello
-method: DELETE
-auth:
-  type: bearer
-  credentials:
-    token: "{{JWT_TOKEN}}"
-order: 3000

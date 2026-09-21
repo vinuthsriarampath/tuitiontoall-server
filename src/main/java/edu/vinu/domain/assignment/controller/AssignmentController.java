@@ -45,7 +45,7 @@ public class AssignmentController {
         return ResponseEntity.ok(new ApiResponse("Assignment file updated successfully!",fileName));
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}/detailed")
     public ResponseEntity<ApiResponse> getDetailedAssignmentById(@PathVariable Long id){
         AssignmentDetailedResponse response = assignmentService.getDetailedAssignmentById(id);

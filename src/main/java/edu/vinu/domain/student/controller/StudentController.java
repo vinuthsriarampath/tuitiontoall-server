@@ -14,18 +14,17 @@
 package edu.vinu.domain.student.controller;
 
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.course.service.StudentCourseService;
 import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;
 import edu.vinu.domain.student.dto.response.Student;
+import edu.vinu.domain.student.service.StudentLearningService;
 import edu.vinu.domain.student.service.StudentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -34,11 +33,37 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 public class StudentController {
     private final StudentService studentService;
+    private final StudentLearningService studentLearningService;
+    private final StudentCourseService studentCourseService;
 
     @PreAuthorize("hasAuthority('student')")
     @PatchMapping("/me")
     public ResponseEntity<ApiResponse> updateStudentDetails(@Valid @RequestBody StudentDetailsUpdateRequest studentDetailsUpdateRequest){
         Student updatedStudentDetails = studentService.updateStudentDetails(SecurityContextHolder.getContext().getAuthentication().getName(),studentDetailsUpdateRequest);
         return ResponseEntity.status(OK).body(new ApiResponse("Student Profile Updated!",updatedStudentDetails));
+    }
+
+    @PreAuthorize("hasAuthority('student')")
+    @GetMapping("/validate/role")
+    public ResponseEntity<ApiResponse> validateStudent(){
+        return ResponseEntity.status(OK).body(new ApiResponse("User has student role!", null));
+    }
+
+    @PreAuthorize("hasAuthority('student')")
+    @GetMapping("/me/learning")
+    public ResponseEntity<ApiResponse> getMyLearningDetails(){
+        return ResponseEntity.ok(studentLearningService.getMyLearningDetails());
+    }
+
+    @PreAuthorize("hasAuthority('student')")
+    @GetMapping("/me/learning/courses/{courseId}/enrollment-history")
+    public ResponseEntity<ApiResponse> getEnrollmentHistory(@PathVariable Long courseId) {
+        return ResponseEntity.ok(studentLearningService.getEnrollmentHistory(courseId));
+    }
+
+    @PreAuthorize("hasAuthority('student')")
+    @GetMapping("/me/learning/courses/{courseId}/batches/{batchId}")
+    public ResponseEntity<ApiResponse> getStudentCourseDetails(@PathVariable Long courseId, @PathVariable Long batchId){
+        return ResponseEntity.ok(studentCourseService.getStudentDetailedCourse(courseId, batchId));
     }
 }

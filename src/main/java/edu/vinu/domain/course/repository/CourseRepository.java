@@ -14,7 +14,7 @@
 package edu.vinu.domain.course.repository;
 
 import edu.vinu.domain.course.entity.CourseEntity;
-import edu.vinu.domain.course.repository.SimpleCourseProjection.SimpleCourseProjection;
+import edu.vinu.domain.course.repository.projections.SimpleCourseProjection;
 import edu.vinu.domain.reporting.projection.TrendPointProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
