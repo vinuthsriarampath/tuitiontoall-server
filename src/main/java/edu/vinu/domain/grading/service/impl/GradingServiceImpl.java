@@ -14,6 +14,8 @@
 package edu.vinu.domain.grading.service.impl;
 
 import edu.vinu.common.exception.custom.BadRequestException;
+import edu.vinu.common.exception.custom.InternalServerErrorException;
+import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.assignment.service.AssignmentSecurityService;
@@ -89,7 +91,7 @@ public class GradingServiceImpl implements GradingService {
 
     private void validateMarksGained(int marksGained, int totalMarks) {
         if (marksGained < 0 || marksGained > totalMarks) {
-            throw new IllegalArgumentException("Marks gained must be between 0 and " + totalMarks);
+            throw new InvalidInputException("marksGained","Marks gained must be between 0 and " + totalMarks);
         }
     }
 }
