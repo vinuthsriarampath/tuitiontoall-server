@@ -34,4 +34,11 @@ public class GradingController {
     public ResponseEntity<ApiResponse> gradeSubmissions(@PathVariable Long submissionId, @Valid @RequestBody GradingSubmissionRequest request){
         return ResponseEntity.ok().body(gradingService.gradeSubmission(submissionId, request));
     }
+
+
+    @PreAuthorize("hasAnyAuthority('institute','teacher')")
+    @GetMapping("/submissions/{submissionId}/eligibility")
+    public ResponseEntity<ApiResponse> checkGradingEligibility(@PathVariable Long submissionId){
+        return ResponseEntity.ok().body(gradingService.checkEligibility(submissionId));
+    }
 }
