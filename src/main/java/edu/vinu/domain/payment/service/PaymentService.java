@@ -17,6 +17,7 @@ import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.payment.dto.request.MyPaymentFilterRequest;
+import edu.vinu.domain.payment.dto.request.MyPaymentReceivesFilterRequest;
 import edu.vinu.domain.payment.dto.response.PaymentDetailedResponse;
 import edu.vinu.domain.payment.entity.Payment;
 import edu.vinu.domain.student.entity.StudentEntity;
@@ -27,4 +28,6 @@ public interface PaymentService {
     Payment pay(BigDecimal amount, StudentEntity studentEntity, InstituteEntity instituteEntity);
 
     PaginatedApiResponse<PaymentDetailedResponse> myPayments(PaginationRequest pagination, MyPaymentFilterRequest filters);
+
+    PaginatedApiResponse<PaymentDetailedResponse> myPaymentsReceives(PaginationRequest pagination, MyPaymentReceivesFilterRequest filters);
 }
