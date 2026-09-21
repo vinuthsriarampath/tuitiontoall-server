@@ -18,5 +18,7 @@ import edu.vinu.domain.grading.request.GradingSubmissionRequest;
 import jakarta.validation.Valid;
 
 public interface GradingService {
-    ApiResponse gradeSubmission(Long submissionId, @Valid GradingSubmissionRequest request);
+    ApiResponse gradeSubmission(Long submissionId, GradingSubmissionRequest request);
+
+    ApiResponse checkEligibility(Long submissionId);
 }

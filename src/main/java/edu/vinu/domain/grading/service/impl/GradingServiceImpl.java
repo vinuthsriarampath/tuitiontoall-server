@@ -20,7 +20,9 @@ import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.assignment.service.AssignmentSecurityService;
 import edu.vinu.domain.grading.entity.GradingRangeEntity;
+import edu.vinu.domain.grading.enums.GradingEligibilityReason;
 import edu.vinu.domain.grading.request.GradingSubmissionRequest;
+import edu.vinu.domain.grading.response.GradingEligibilityResponse;
 import edu.vinu.domain.grading.service.GradingRangeService;
 import edu.vinu.domain.grading.service.GradingService;
 import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
@@ -87,6 +89,21 @@ public class GradingServiceImpl implements GradingService {
                         .marksGained(submission.getMarksGained())
                         .build())
                 .build();
+    }
+
+    @Override
+    public ApiResponse checkEligibility(Long submissionId) {
+        StudentAssignmentSubmit submission = assignmentSubmitService.getSubmissionEntityById(submissionId);
+
+        GradingEligibilityResponse response;
+
+        if(submission.getGrade() != null || submission.getStatus() == AssignmentSubmitStatus.GRADED){
+            response = new GradingEligibilityResponse(false, GradingEligibilityReason.ALREADY_GRADED);
+        }else{
+            response = new GradingEligibilityResponse(true, GradingEligibilityReason.ELIGIBLE);
+        }
+
+        return ApiResponse.builder().message("Grading eligibility checked!").data(response).build();
     }
 
     private void validateMarksGained(int marksGained, int totalMarks) {
