@@ -1,0 +1,4 @@
+$kind: http-request
+url: localhost:8080/api/v2/gradings/submissions/2/eligibility
+method: GET
+order: 4416673987999636
