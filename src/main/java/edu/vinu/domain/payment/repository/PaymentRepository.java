@@ -15,7 +15,10 @@ package edu.vinu.domain.payment.repository;
 
 import edu.vinu.domain.payment.entity.Payment;
 import edu.vinu.domain.payment.enums.PaymentStatus;
+import edu.vinu.domain.payment.repository.projections.PaymentDetailsProjection;
 import edu.vinu.domain.reporting.projection.TrendPointProjection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -96,4 +99,58 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     ORDER BY bucket
     """,nativeQuery = true)
     List<TrendPointProjection> getMonthlyPaymentTrendsByInstituteAndStatus(Long instituteId, String paymentStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+
+    @Query(value = """
+    SELECT
+            p.id AS PaymentId,
+            s.id AS StudentId,
+            CONCAT(s.first_name, ' ', s.last_name) AS StudentName,
+            i.id AS InstituteId,
+            i.institute_name AS InstituteName,
+            p.amount AS Amount,
+            p.payment_status AS Status,
+            p.payment_method AS PaymentMethod,
+            p.transaction_ref AS TransactionRef,
+            p.created_date AS CreatedDate,
+            p.last_modified_date AS LastModifiedDate
+    FROM payment p
+    INNER JOIN student s ON s.id = p.student_id
+    INNER JOIN institute i ON i.id = p.institute_id
+    WHERE
+        s.id = :studentId
+        AND (:paymentId IS NULL OR p.id = :paymentId)
+        AND (:instituteId IS NULL OR i.id = :instituteId)
+        AND (:instituteName IS NULL OR i.institute_name LIKE CONCAT('%', :instituteName, '%'))
+        AND (:status IS NULL OR p.payment_status = :status)
+        AND (:paymentMethod IS NULL OR p.payment_method = :paymentMethod)
+        AND (:transactionRef IS NULL OR p.transaction_ref LIKE CONCAT('%', :transactionRef, '%'))
+        AND (:createdDate IS NULL OR p.created_date >= :createdDate)
+    """,
+    countQuery = """
+    SELECT count(p.id)
+    FROM payment p
+    INNER JOIN student s ON s.id = p.student_id
+    INNER JOIN institute i ON i.id = p.institute_id
+    WHERE
+        s.id = :studentId
+        AND (:paymentId IS NULL OR p.id = :paymentId)
+        AND (:instituteId IS NULL OR i.id = :instituteId)
+        AND (:instituteName IS NULL OR i.institute_name LIKE CONCAT('%', :instituteName, '%'))
+        AND (:status IS NULL OR p.payment_status = :status)
+        AND (:paymentMethod IS NULL OR p.payment_method = :paymentMethod)
+        AND (:transactionRef IS NULL OR p.transaction_ref LIKE CONCAT('%', :transactionRef, '%'))
+        AND (:createdDate IS NULL OR p.created_date >= :createdDate)
+    """,nativeQuery = true)
+    Page<PaymentDetailsProjection> getMyPayments(
+            Long studentId,
+            Long paymentId,
+            Long instituteId,
+            String instituteName,
+            String status,
+            String paymentMethod,
+            String transactionRef,
+            LocalDateTime createdDate,
+            Pageable pageable
+    );
 }
