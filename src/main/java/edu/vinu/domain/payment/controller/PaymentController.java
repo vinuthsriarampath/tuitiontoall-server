@@ -16,6 +16,7 @@ package edu.vinu.domain.payment.controller;
 import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.payment.dto.request.MyPaymentFilterRequest;
+import edu.vinu.domain.payment.dto.request.MyPaymentReceivesFilterRequest;
 import edu.vinu.domain.payment.dto.response.PaymentDetailedResponse;
 import edu.vinu.domain.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
@@ -35,5 +36,11 @@ public class PaymentController {
     @GetMapping("my")
     public ResponseEntity<PaginatedApiResponse<PaymentDetailedResponse>> getMyPayments(PaginationRequest pagination, MyPaymentFilterRequest filters){
         return ResponseEntity.ok().body(paymentService.myPayments(pagination,filters));
+    }
+
+    @PreAuthorize("hasAuthority('institute')")
+    @GetMapping("my/receives")
+    public ResponseEntity<PaginatedApiResponse<PaymentDetailedResponse>> getMyReceivedPayments(PaginationRequest pagination, MyPaymentReceivesFilterRequest filters){
+        return ResponseEntity.ok().body(paymentService.myPaymentsReceives(pagination,filters));
     }
 }
