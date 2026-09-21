@@ -13,8 +13,10 @@
 
 package edu.vinu.domain.payment.mapper;
 
+import edu.vinu.domain.payment.dto.response.PaymentDetailedResponse;
 import edu.vinu.domain.payment.dto.response.PaymentResponse;
 import edu.vinu.domain.payment.entity.Payment;
+import edu.vinu.domain.payment.repository.projections.PaymentDetailsProjection;
 
 public class PaymentMapper {
     public static PaymentResponse toPaymentResponse(Payment payment) {
@@ -28,6 +30,22 @@ public class PaymentMapper {
                 .transactionRef(payment.getTransactionRef())
                 .createdDate(payment.getCreatedDate())
                 .lastModifiedDate(payment.getLastModifiedDate())
+                .build();
+    }
+
+    public static PaymentDetailedResponse toPaymentDetailedResponse(PaymentDetailsProjection p){
+        return PaymentDetailedResponse.builder()
+                .id(p.getPaymentId())
+                .studentId(p.getStudentId())
+                .studentName(p.getStudentName())
+                .instituteId(p.getInstituteId())
+                .instituteName(p.getInstituteName())
+                .amount(p.getAmount())
+                .status(p.getStatus())
+                .paymentMethod(p.getPaymentMethod())
+                .transactionRef(p.getTransactionRef())
+                .createdDate(p.getCreatedDate())
+                .lastModifiedDate(p.getLastModifiedDate())
                 .build();
     }
 }
