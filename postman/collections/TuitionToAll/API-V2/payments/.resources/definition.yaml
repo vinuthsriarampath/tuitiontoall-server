@@ -1,0 +1,6 @@
+$kind: collection
+auth:
+  type: bearer
+  credentials:
+    token: "{{JWT_TOKEN}}"
+order: 986263283826687

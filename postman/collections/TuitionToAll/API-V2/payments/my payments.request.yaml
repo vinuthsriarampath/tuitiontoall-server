@@ -1,0 +1,4 @@
+$kind: http-request
+url: localhost:8080/api/v2/payments/my
+method: GET
+order: 1789979593962
