@@ -28,7 +28,7 @@ public class RecentResultsResponse {
     private Long assignmentId;
     private String assignmentTitle;
     private String grade;
-    private int marksGrained;
+    private int marksGained;
     private LocalDateTime submittedAt;
 
 }
