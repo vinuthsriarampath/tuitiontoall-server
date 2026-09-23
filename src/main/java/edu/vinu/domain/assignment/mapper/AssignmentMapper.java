@@ -15,10 +15,12 @@ package edu.vinu.domain.assignment.mapper;
 
 import edu.vinu.domain.assignment.entity.AssignmentEntity;
 import edu.vinu.domain.assignment.enums.AssignmentType;
+import edu.vinu.domain.assignment.repository.projection.UpcomingAssignmentProjection;
 import edu.vinu.domain.assignment.request.AssignmentCreateRequest;
 import edu.vinu.domain.assignment.request.chapter_assignments.ChapterAssignmentCreateRequest;
 import edu.vinu.domain.assignment.request.module_assignments.ModuleAssignmentCreateRequest;
 import edu.vinu.domain.assignment.response.AssignmentDetailedResponse;
+import edu.vinu.domain.assignment.response.UpcomingAssignmentResponse;
 import edu.vinu.domain.grading.response.GradingRageResponse;
 import org.springframework.stereotype.Component;
 
@@ -89,6 +91,19 @@ public class AssignmentMapper {
                 .maxAttempts(request.maxAttempts())
                 .type(AssignmentType.MODULE)
                 .gradingRanges(request.gradingRanges())
+                .build();
+    }
+
+    public static UpcomingAssignmentResponse toUpcomingAssignmentResponse(UpcomingAssignmentProjection p){
+        return UpcomingAssignmentResponse.builder()
+                .assignmentType(p.getAssignmentType())
+                .assignmentId(p.getAssignmentId())
+                .title(p.getTitle())
+                .dueDate(p.getDueDate())
+                .courseId(p.getCourseId())
+                .batchId(p.getBatchId())
+                .moduleId(p.getModuleId())
+                .chapterId(p.getChapterId())
                 .build();
     }
 }
