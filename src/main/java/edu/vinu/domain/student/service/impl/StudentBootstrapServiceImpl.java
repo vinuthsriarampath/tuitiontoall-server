@@ -42,6 +42,9 @@ public class StudentBootstrapServiceImpl implements StudentBootstrapService {
         StudentBootstrapResponse response = new StudentBootstrapResponse();
 
         response.setDashboardStats(getStudentDashboardStats(currentStudent.getId()));
+        response.setUpcomingAssignments(assignmentService.getTop5UpcomingAssignmentsSubmissionsForStudent(currentStudent.getId()));
+        response.setRecentEnrollments(enrollmentService.getRecent5EnrollmentsByStudent(currentStudent.getId()));
+        response.setRecentResults(gradingService.getRecent5Results(currentStudent.getId()));
 
         return ApiResponse.builder()
                 .message("Bootstrap data retrieved successfully")
