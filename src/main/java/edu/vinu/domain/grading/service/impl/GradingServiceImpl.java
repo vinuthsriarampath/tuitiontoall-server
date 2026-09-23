@@ -34,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -106,6 +107,11 @@ public class GradingServiceImpl implements GradingService {
         }
 
         return ApiResponse.builder().message("Grading eligibility checked!").data(response).build();
+    }
+
+    @Override
+    public BigDecimal getAverageMarksOfStudent(Long studentId) {
+        return assignmentSubmitRepository.getAverageMarksOfStudent(studentId);
     }
 
     private void validateMarksGained(int marksGained, int totalMarks) {

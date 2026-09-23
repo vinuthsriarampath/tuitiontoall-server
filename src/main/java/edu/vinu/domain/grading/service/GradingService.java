@@ -17,8 +17,12 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.grading.request.GradingSubmissionRequest;
 import jakarta.validation.Valid;
 
+import java.math.BigDecimal;
+
 public interface GradingService {
     ApiResponse gradeSubmission(Long submissionId, GradingSubmissionRequest request);
 
     ApiResponse checkEligibility(Long submissionId);
+
+    BigDecimal getAverageMarksOfStudent(Long studentId);
 }
