@@ -28,4 +28,9 @@ public class AssignmentStatServiceImpl implements AssignmentStatService {
     public Long getStudentPendingAssignmentCount(Long studentId) {
         return assignmentRepository.countStudentsPendingAssignments(studentId);
     }
+
+    @Override
+    public Long getStudentCompletedAssignmentCount(Long studentId) {
+        return assignmentRepository.countStudentsCompletedAssignments(studentId);
+    }
 }
