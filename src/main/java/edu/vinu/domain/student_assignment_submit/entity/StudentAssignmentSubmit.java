@@ -63,6 +63,9 @@ public class StudentAssignmentSubmit {
     @Column(name = "attempt_no",nullable = false)
     private int attemptNo = 1;
 
+    @Column(name = "graded_at")
+    private LocalDateTime gradedAt;
+
     @CreationTimestamp
     @Column(name = "submitted_at", updatable = false, nullable = false)
     private LocalDateTime submittedAt;
