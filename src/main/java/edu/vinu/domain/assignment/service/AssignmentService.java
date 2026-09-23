@@ -17,9 +17,12 @@ import edu.vinu.domain.assignment.entity.AssignmentEntity;
 import edu.vinu.domain.assignment.request.AssignmentCreateRequest;
 import edu.vinu.domain.assignment.request.AssignmentUpdateRequest;
 import edu.vinu.domain.assignment.response.AssignmentDetailedResponse;
+import edu.vinu.domain.assignment.response.UpcomingAssignmentResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface AssignmentService {
     AssignmentEntity createAssignment(AssignmentCreateRequest request, MultipartFile file);
@@ -35,4 +38,6 @@ public interface AssignmentService {
     ResponseEntity<Resource> downloadFile(String fileName);
 
     AssignmentEntity getAssignmentEntity(Long id);
+
+    List<UpcomingAssignmentResponse> getTop5UpcomingAssignmentsSubmissionsForStudent(Long studentId);
 }
