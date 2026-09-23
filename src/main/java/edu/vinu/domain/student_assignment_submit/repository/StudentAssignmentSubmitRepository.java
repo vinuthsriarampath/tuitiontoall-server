@@ -13,8 +13,10 @@
 
 package edu.vinu.domain.student_assignment_submit.repository;
 
+import edu.vinu.domain.student.dto.response.RecentResultsResponse;
 import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.repository.projections.AssignmentSubmissionDetailedProjection;
+import edu.vinu.domain.student_assignment_submit.repository.projections.RecentResultsProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,6 +24,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Repository
 public interface StudentAssignmentSubmitRepository extends JpaRepository<StudentAssignmentSubmit,Long> {
@@ -99,4 +102,21 @@ public interface StudentAssignmentSubmitRepository extends JpaRepository<Student
         )
     """,nativeQuery = true)
     BigDecimal getAverageMarksOfStudent(Long studentId);
+
+    @Query(value = """
+    SELECT
+        sba.assignment_id AS assignmentId,
+        a.topic AS assignmentTitle,
+        sba.grade AS grade,
+        sba.marks_gained AS marksGained,
+        sba.submitted_at AS submittedAt
+    FROM student_assignment_submit sba
+    INNER JOIN assignment a ON sba.assignment_id = a.id
+    WHERE sba.student_id = :studentId
+    AND sba.status = 'GRADED'
+    AND sba.grade IS NOT NULL
+    ORDER BY sba.graded_at DESC
+    LIMIT :limit
+    """,nativeQuery = true)
+    List<RecentResultsProjection> getRecentResultsByStudent(Long studentId, int limit);
 }
