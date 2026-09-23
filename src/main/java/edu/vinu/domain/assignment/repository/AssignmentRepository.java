@@ -102,4 +102,37 @@ public interface AssignmentRepository extends JpaRepository<AssignmentEntity,Lon
     )
     """,nativeQuery = true)
     int studentAccess(Long assignmentId, Long studentId);
+
+    @Query(value = """
+    SELECT COUNT(DISTINCT a.id)
+    FROM assignment a
+    INNER JOIN (
+        SELECT ma.assignment_id, m.batch_id
+        FROM module_assignment ma
+        INNER JOIN module m ON ma.module_id = m.id
+        INNER JOIN batch b ON m.batch_id = b.id
+        WHERE b.batch_status <> 'COMPLETED'
+
+        UNION ALL
+    
+        SELECT ca.assignment_id, m.batch_id
+        FROM chapter_assignment ca
+        INNER JOIN chapter c ON ca.chapter_id = c.id
+        INNER JOIN module m ON c.module_id = m.id
+        INNER JOIN batch b ON m.batch_id = b.id
+        WHERE b.batch_status <> 'COMPLETED'
+    
+    ) AS target_assignments on target_assignments.assignment_id = a.id
+
+    INNER JOIN student_batch_enrollment sbe ON target_assignments.batch_id = sbe.batch_id
+    
+    WHERE sbe.student_id = :studentId
+      AND NOT EXISTS (
+          SELECT 1
+          FROM student_assignment_submit sas\s
+          WHERE sas.assignment_id = a.id
+            AND sas.student_id = :studentId
+      );
+    """,nativeQuery = true)
+    Long countStudentsPendingAssignments(Long studentId);
 }
