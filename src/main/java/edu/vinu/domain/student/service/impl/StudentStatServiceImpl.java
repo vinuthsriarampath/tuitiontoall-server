@@ -45,8 +45,10 @@ public class StudentStatServiceImpl implements StudentStatService {
 
     @Override
     public DashboardStats getCompletedAssignmentsStats(Long studentId) {
-        // TODO : Implement logic to fetch completed assignments stats for the student
-        return null;
+        return DashboardStats.builder()
+                .value(BigDecimal.valueOf(assignmentStatService.getStudentCompletedAssignmentCount(studentId)))
+                .label("Completed Assignments")
+                .build();
     }
 
     @Override
