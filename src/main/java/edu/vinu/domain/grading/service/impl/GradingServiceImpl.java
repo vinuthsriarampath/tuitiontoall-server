@@ -25,8 +25,10 @@ import edu.vinu.domain.grading.request.GradingSubmissionRequest;
 import edu.vinu.domain.grading.response.GradingEligibilityResponse;
 import edu.vinu.domain.grading.service.GradingRangeService;
 import edu.vinu.domain.grading.service.GradingService;
+import edu.vinu.domain.student.dto.response.RecentResultsResponse;
 import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.enums.AssignmentSubmitStatus;
+import edu.vinu.domain.student_assignment_submit.mapper.AssignmentSubmissionMapper;
 import edu.vinu.domain.student_assignment_submit.repository.StudentAssignmentSubmitRepository;
 import edu.vinu.domain.grading.response.SubmissionGradedResponse;
 import edu.vinu.domain.student_assignment_submit.service.AssignmentSubmitService;
@@ -112,6 +114,11 @@ public class GradingServiceImpl implements GradingService {
     @Override
     public BigDecimal getAverageMarksOfStudent(Long studentId) {
         return assignmentSubmitRepository.getAverageMarksOfStudent(studentId);
+    }
+
+    @Override
+    public List<RecentResultsResponse> getRecent5Results(Long studentId) {
+        return assignmentSubmitRepository.getRecentResultsByStudent(studentId,5).stream().map(AssignmentSubmissionMapper::toRecentResultsResponse).toList();
     }
 
     private void validateMarksGained(int marksGained, int totalMarks) {
