@@ -307,4 +307,13 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
         AND c.id = :courseId
     """, nativeQuery = true)
     Optional<StudentCourseProjection> findStudentCourse(Long courseId, Long batchId, Long studentId);
+
+    @Query(value = """
+    SELECT COUNT(DISTINCT c.id)
+    FROM student_batch_enrollment sbe
+    INNER JOIN batch b ON b.id = sbe.batch_id
+    INNER JOIN courses c ON c.id = b.course_id
+    WHERE sbe.student_id = :studentId
+    """,nativeQuery = true)
+    Long countStudentUniqueCourseEnrollments(Long studentId);
 }
