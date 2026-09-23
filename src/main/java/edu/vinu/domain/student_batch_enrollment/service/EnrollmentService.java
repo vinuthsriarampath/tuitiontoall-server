@@ -19,6 +19,7 @@ import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.reporting.enums.ReportingPeriod;
 import edu.vinu.domain.reporting.response.ReportingPeriodRange;
 import edu.vinu.domain.reporting.response.TrendPoint;
+import edu.vinu.domain.student.dto.response.RecentEnrollmentResponse;
 import edu.vinu.domain.student.dto.response.StudentUserResponse;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentEligibilityCheckRequest;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentRequest;
@@ -48,4 +49,6 @@ public interface EnrollmentService {
     List<TrendPoint> getPeakMonthlyEnrollmentTrendByInstitute(Long instituteId, int limit, ReportingPeriodRange range);
 
     OverallEnrollmentResponse getOverallEnrollmentStatsByInstitute(Long instituteId, LocalDate instituteStartDate);
+
+    List<RecentEnrollmentResponse> getRecent5EnrollmentsByStudent(Long studentId);
 }

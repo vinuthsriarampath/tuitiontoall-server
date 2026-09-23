@@ -39,6 +39,7 @@ import edu.vinu.domain.reporting.response.TrendPoint;
 import edu.vinu.domain.reporting.service.PeriodService;
 import edu.vinu.domain.reporting.utility.DifferenceCalculator;
 import edu.vinu.domain.reporting.utility.TrendBuilder;
+import edu.vinu.domain.student.dto.response.RecentEnrollmentResponse;
 import edu.vinu.domain.student.dto.response.StudentUserResponse;
 import edu.vinu.domain.student.entity.StudentEntity;
 import edu.vinu.domain.student.mapper.StudentMapper;
@@ -51,6 +52,7 @@ import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
 import edu.vinu.domain.student_batch_enrollment.enums.EnrollmentEligibilityReason;
 import edu.vinu.domain.student_batch_enrollment.enums.StudentBatchEnrollmentStatus;
 import edu.vinu.domain.student_batch_enrollment.event.EnrollmentCreatedEvent;
+import edu.vinu.domain.student_batch_enrollment.mapper.StudentBatchEnrollmentMapper;
 import edu.vinu.domain.student_batch_enrollment.repository.StudentBatchEnrollmentRepository;
 import edu.vinu.domain.student_batch_enrollment.repository.projection.EnrollmentDistributionProjection;
 import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
@@ -334,6 +336,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                         )
                 )
                 .build();
+    }
+
+    @Override
+    public List<RecentEnrollmentResponse> getRecent5EnrollmentsByStudent(Long studentId) {
+        return studentBatchEnrollmentRepository.getRecentEnrollmentByStudent(studentId,5).stream().map(StudentBatchEnrollmentMapper::toRecentEnrollmentResponse).toList();
     }
 
     private List<TrendPoint> getHourlyStudentEnrollmentTrend(Long instituteId, LocalDateTime start, LocalDateTime end) {
