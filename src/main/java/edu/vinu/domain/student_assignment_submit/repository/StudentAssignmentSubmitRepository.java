@@ -21,6 +21,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+
 @Repository
 public interface StudentAssignmentSubmitRepository extends JpaRepository<StudentAssignmentSubmit,Long> {
     @Query(value = """
@@ -72,4 +74,29 @@ public interface StudentAssignmentSubmitRepository extends JpaRepository<Student
             Integer maxMarksGained,
             Pageable pageable
     );
+
+    @Query(value = """
+    SELECT ROUND((
+                        SUM(sas.marks_gained) / NULLIF(SUM(a.total_marks), 0)) * 100,
+            2)
+    FROM student_assignment_submit sas
+    INNER JOIN assignment a ON sas.assignment_id = a.id
+    WHERE sas.student_id = :studentId
+    AND sas.status = 'GRADED'
+    AND NOT EXISTS(
+            SELECT 1
+            FROM student_assignment_submit sas2
+            WHERE sas2.student_id = sas.student_id
+            AND sas2.assignment_id = sas.assignment_id
+            AND sas2.status = 'GRADED'
+            AND (
+                    sas2.marks_gained > sas.marks_gained
+                OR (
+                    sas2.marks_gained = sas.marks_gained
+                    AND sas2.attempt_no > sas.attempt_no
+                )
+            )
+        )
+    """,nativeQuery = true)
+    BigDecimal getAverageMarksOfStudent(Long studentId);
 }
