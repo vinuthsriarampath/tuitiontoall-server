@@ -14,8 +14,10 @@
 package edu.vinu.domain.student_batch_enrollment.mapper;
 
 import edu.vinu.domain.payment.entity.Payment;
+import edu.vinu.domain.student.dto.response.RecentEnrollmentResponse;
 import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentResponse;
 import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
+import edu.vinu.domain.student_batch_enrollment.repository.projection.RecentEnrollmentProjection;
 
 public class StudentBatchEnrollmentMapper {
     public static EnrollmentResponse toEnrollmentResponse(StudentBatchEnrollment studentBatchEnrollment, Payment payment) {
@@ -31,6 +33,17 @@ public class StudentBatchEnrollmentMapper {
                 .paymentMethod(payment.getPaymentMethod())
                 .transactionRef(payment.getTransactionRef())
                 .paymentDate(payment.getCreatedDate())
+                .build();
+    }
+
+    public static RecentEnrollmentResponse toRecentEnrollmentResponse(RecentEnrollmentProjection p) {
+        return RecentEnrollmentResponse.builder()
+                .enrollmentId(p.getEnrollmentId())
+                .courseId(p.getCourseId())
+                .courseName(p.getCourseName())
+                .batchId(p.getBatchId())
+                .batchName(p.getBatchName())
+                .enrollmentDate(p.getEnrollmentDate())
                 .build();
     }
 }
