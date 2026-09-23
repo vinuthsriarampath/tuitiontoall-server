@@ -15,6 +15,7 @@ package edu.vinu.domain.student.service.impl;
 
 import edu.vinu.common.response.DashboardStats;
 import edu.vinu.domain.assignment.service.AssignmentStatService;
+import edu.vinu.domain.grading.service.GradingService;
 import edu.vinu.domain.student.service.StudentStatService;
 import edu.vinu.domain.student_batch_enrollment.service.EnrollmentStatService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import java.math.BigDecimal;
 public class StudentStatServiceImpl implements StudentStatService {
     private final EnrollmentStatService enrollmentStatService;
     private final AssignmentStatService assignmentStatService;
+    private final GradingService gradingService;
     @Override
     public DashboardStats getTotalEnrollmentsStats(Long studentId) {
         return DashboardStats.builder()
@@ -53,7 +55,9 @@ public class StudentStatServiceImpl implements StudentStatService {
 
     @Override
     public DashboardStats getAverageMarksStats(Long studentId) {
-        // TODO : Implement logic to fetch average marks stats for the student
-        return null;
+        return DashboardStats.builder()
+                .value(gradingService.getAverageMarksOfStudent(studentId))
+                .label("Average Marks")
+                .build();
     }
 }
