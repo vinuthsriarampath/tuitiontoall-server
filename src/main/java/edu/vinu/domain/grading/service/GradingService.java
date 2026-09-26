@@ -15,10 +15,18 @@ package edu.vinu.domain.grading.service;
 
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.grading.request.GradingSubmissionRequest;
+import edu.vinu.domain.student.dto.response.RecentResultsResponse;
 import jakarta.validation.Valid;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public interface GradingService {
     ApiResponse gradeSubmission(Long submissionId, GradingSubmissionRequest request);
 
     ApiResponse checkEligibility(Long submissionId);
+
+    BigDecimal getAverageMarksOfStudent(Long studentId);
+
+    List<RecentResultsResponse> getRecent5Results(Long studentId);
 }

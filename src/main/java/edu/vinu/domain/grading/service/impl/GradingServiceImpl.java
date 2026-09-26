@@ -25,8 +25,10 @@ import edu.vinu.domain.grading.request.GradingSubmissionRequest;
 import edu.vinu.domain.grading.response.GradingEligibilityResponse;
 import edu.vinu.domain.grading.service.GradingRangeService;
 import edu.vinu.domain.grading.service.GradingService;
+import edu.vinu.domain.student.dto.response.RecentResultsResponse;
 import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.enums.AssignmentSubmitStatus;
+import edu.vinu.domain.student_assignment_submit.mapper.AssignmentSubmissionMapper;
 import edu.vinu.domain.student_assignment_submit.repository.StudentAssignmentSubmitRepository;
 import edu.vinu.domain.grading.response.SubmissionGradedResponse;
 import edu.vinu.domain.student_assignment_submit.service.AssignmentSubmitService;
@@ -34,6 +36,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -71,6 +75,7 @@ public class GradingServiceImpl implements GradingService {
                 submission.setGrade(gradingRange.getDesiredGrade());
                 submission.setMarksGained(request.marksGained());
                 submission.setStatus(AssignmentSubmitStatus.GRADED);
+                submission.setGradedAt(LocalDateTime.now());
                 assignmentSubmitRepository.save(submission);
                 receivedGrade = gradingRange.getDesiredGrade();
                 break;
@@ -104,6 +109,16 @@ public class GradingServiceImpl implements GradingService {
         }
 
         return ApiResponse.builder().message("Grading eligibility checked!").data(response).build();
+    }
+
+    @Override
+    public BigDecimal getAverageMarksOfStudent(Long studentId) {
+        return assignmentSubmitRepository.getAverageMarksOfStudent(studentId);
+    }
+
+    @Override
+    public List<RecentResultsResponse> getRecent5Results(Long studentId) {
+        return assignmentSubmitRepository.getRecentResultsByStudent(studentId,5).stream().map(AssignmentSubmissionMapper::toRecentResultsResponse).toList();
     }
 
     private void validateMarksGained(int marksGained, int totalMarks) {

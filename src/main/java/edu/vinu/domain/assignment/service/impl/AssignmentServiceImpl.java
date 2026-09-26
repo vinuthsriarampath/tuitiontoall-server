@@ -22,6 +22,7 @@ import edu.vinu.domain.assignment.repository.AssignmentRepository;
 import edu.vinu.domain.assignment.request.AssignmentCreateRequest;
 import edu.vinu.domain.assignment.request.AssignmentUpdateRequest;
 import edu.vinu.domain.assignment.response.AssignmentDetailedResponse;
+import edu.vinu.domain.assignment.response.UpcomingAssignmentResponse;
 import edu.vinu.domain.assignment.service.AssignmentSecurityService;
 import edu.vinu.domain.assignment.service.AssignmentService;
 import edu.vinu.domain.assignment.validator.AssignmentValidator;
@@ -170,6 +171,11 @@ public class AssignmentServiceImpl implements AssignmentService {
     @Override
     public AssignmentEntity getAssignmentEntity(Long id){
         return assignmentRepository.findById(id).orElseThrow(()-> new NotFoundException("Assignment not found by id!"));
+    }
+
+    @Override
+    public List<UpcomingAssignmentResponse> getTop5UpcomingAssignmentsSubmissionsForStudent(Long studentId) {
+        return assignmentRepository.getUpcomingAssignmentSubmissionsForStudent(studentId,5).stream().map(AssignmentMapper::toUpcomingAssignmentResponse).toList();
     }
 
     private String saveAssignmentFile(MultipartFile file) {

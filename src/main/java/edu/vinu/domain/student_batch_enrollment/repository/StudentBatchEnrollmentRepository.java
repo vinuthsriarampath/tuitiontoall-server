@@ -20,6 +20,7 @@ import edu.vinu.domain.student.repository.projection.StudentUserProjection;
 import edu.vinu.domain.student_batch_enrollment.entity.StudentBatchEnrollment;
 import edu.vinu.domain.student_batch_enrollment.repository.projection.EnrollmentDistributionProjection;
 import edu.vinu.domain.student_batch_enrollment.repository.projection.EnrollmentHistoryProjection;
+import edu.vinu.domain.student_batch_enrollment.repository.projection.RecentEnrollmentProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -307,4 +308,30 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
         AND c.id = :courseId
     """, nativeQuery = true)
     Optional<StudentCourseProjection> findStudentCourse(Long courseId, Long batchId, Long studentId);
+
+    @Query(value = """
+    SELECT COUNT(DISTINCT c.id)
+    FROM student_batch_enrollment sbe
+    INNER JOIN batch b ON b.id = sbe.batch_id
+    INNER JOIN courses c ON c.id = b.course_id
+    WHERE sbe.student_id = :studentId
+    """,nativeQuery = true)
+    Long countStudentUniqueCourseEnrollments(Long studentId);
+
+    @Query(value = """
+    SELECT
+        sbe.id AS enrollmentId,
+        c.id AS courseId,
+        c.title AS courseName,
+        b.id AS batchId,
+        b.name AS batchName,
+        sbe.created_date AS enrollmentDate
+    FROM student_batch_enrollment sbe
+    INNER JOIN batch b ON b.id = sbe.batch_id
+    INNER JOIN courses c ON c.id = b.course_id
+    WHERE sbe.student_id = :studentId
+    ORDER BY sbe.created_date DESC
+    LIMIT :limit
+    """,nativeQuery = true)
+    List<RecentEnrollmentProjection>  getRecentEnrollmentByStudent(Long studentId, int limit);
 }

@@ -13,13 +13,18 @@
 
 package edu.vinu.domain.student_assignment_submit.repository;
 
+import edu.vinu.domain.student.dto.response.RecentResultsResponse;
 import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.repository.projections.AssignmentSubmissionDetailedProjection;
+import edu.vinu.domain.student_assignment_submit.repository.projections.RecentResultsProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 @Repository
 public interface StudentAssignmentSubmitRepository extends JpaRepository<StudentAssignmentSubmit,Long> {
@@ -72,4 +77,46 @@ public interface StudentAssignmentSubmitRepository extends JpaRepository<Student
             Integer maxMarksGained,
             Pageable pageable
     );
+
+    @Query(value = """
+    SELECT ROUND((
+                        SUM(sas.marks_gained) / NULLIF(SUM(a.total_marks), 0)) * 100,
+            2)
+    FROM student_assignment_submit sas
+    INNER JOIN assignment a ON sas.assignment_id = a.id
+    WHERE sas.student_id = :studentId
+    AND sas.status = 'GRADED'
+    AND NOT EXISTS(
+            SELECT 1
+            FROM student_assignment_submit sas2
+            WHERE sas2.student_id = sas.student_id
+            AND sas2.assignment_id = sas.assignment_id
+            AND sas2.status = 'GRADED'
+            AND (
+                    sas2.marks_gained > sas.marks_gained
+                OR (
+                    sas2.marks_gained = sas.marks_gained
+                    AND sas2.attempt_no > sas.attempt_no
+                )
+            )
+        )
+    """,nativeQuery = true)
+    BigDecimal getAverageMarksOfStudent(Long studentId);
+
+    @Query(value = """
+    SELECT
+        sba.assignment_id AS assignmentId,
+        a.topic AS assignmentTitle,
+        sba.grade AS grade,
+        sba.marks_gained AS marksGained,
+        sba.submitted_at AS submittedAt
+    FROM student_assignment_submit sba
+    INNER JOIN assignment a ON sba.assignment_id = a.id
+    WHERE sba.student_id = :studentId
+    AND sba.status = 'GRADED'
+    AND sba.grade IS NOT NULL
+    ORDER BY sba.graded_at DESC
+    LIMIT :limit
+    """,nativeQuery = true)
+    List<RecentResultsProjection> getRecentResultsByStudent(Long studentId, int limit);
 }

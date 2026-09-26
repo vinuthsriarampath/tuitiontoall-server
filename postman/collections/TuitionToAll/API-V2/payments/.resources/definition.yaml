@@ -3,4 +3,4 @@ auth:
   type: bearer
   credentials:
     token: "{{JWT_TOKEN}}"
-order: 1000
+order: 986263283826687

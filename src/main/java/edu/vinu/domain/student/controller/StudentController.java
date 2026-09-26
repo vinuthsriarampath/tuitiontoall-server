@@ -17,6 +17,7 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.course.service.StudentCourseService;
 import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;
 import edu.vinu.domain.student.dto.response.Student;
+import edu.vinu.domain.student.service.StudentBootstrapService;
 import edu.vinu.domain.student.service.StudentLearningService;
 import edu.vinu.domain.student.service.StudentService;
 import jakarta.validation.Valid;
@@ -35,6 +36,7 @@ public class StudentController {
     private final StudentService studentService;
     private final StudentLearningService studentLearningService;
     private final StudentCourseService studentCourseService;
+    private final StudentBootstrapService studentBootstrapService;
 
     @PreAuthorize("hasAuthority('student')")
     @PatchMapping("/me")
@@ -65,5 +67,11 @@ public class StudentController {
     @GetMapping("/me/learning/courses/{courseId}/batches/{batchId}")
     public ResponseEntity<ApiResponse> getStudentCourseDetails(@PathVariable Long courseId, @PathVariable Long batchId){
         return ResponseEntity.ok(studentCourseService.getStudentDetailedCourse(courseId, batchId));
+    }
+
+    @PreAuthorize("hasAuthority('student')")
+    @GetMapping("/me/bootstrap")
+    public ResponseEntity<ApiResponse> getStudentBootstrapData(){
+        return ResponseEntity.ok(studentBootstrapService.getBootstrapData());
     }
 }
