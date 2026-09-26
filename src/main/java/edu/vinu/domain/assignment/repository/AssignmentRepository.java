@@ -176,7 +176,7 @@ public interface AssignmentRepository extends JpaRepository<AssignmentEntity,Lon
     @Query(value = """
     SELECT
     a.id AS assignmentId,
-    a.type AS assignemntType,
+    a.type AS assignmentType,
     a.topic As title,
     a.due_date AS dueDate,
     target_assignments.course_id AS courseId,
