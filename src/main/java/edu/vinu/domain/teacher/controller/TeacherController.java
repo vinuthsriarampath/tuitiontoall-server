@@ -17,6 +17,7 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.teacher.dtos.request.TeacherDetailsUpdateRequest;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.teacher.service.TeacherService;
+import edu.vinu.domain.teacher.service.TeachingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 public class TeacherController {
     private final TeacherService teacherService;
+    private final TeachingService teachingService;
 
     @PreAuthorize("hasAuthority('teacher')")
     @PatchMapping("/me")
@@ -43,5 +45,11 @@ public class TeacherController {
     @GetMapping("/validate/role")
     public ResponseEntity<ApiResponse> validateTeacher(){
         return ResponseEntity.status(OK).body(new ApiResponse("User has teacher role!", null));
+    }
+
+    @PreAuthorize("hasAuthority('teacher')")
+    @GetMapping("/me/teachings")
+    public ResponseEntity<ApiResponse> getMyTeachingDetails(){
+        return ResponseEntity.ok(teachingService.getMyTeachingDetails());
     }
 }
