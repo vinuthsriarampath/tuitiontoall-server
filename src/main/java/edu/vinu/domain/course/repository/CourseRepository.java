@@ -15,6 +15,7 @@ package edu.vinu.domain.course.repository;
 
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.repository.projections.SimpleCourseProjection;
+import edu.vinu.domain.course.repository.projections.TeacherCourseProjection;
 import edu.vinu.domain.reporting.projection.TrendPointProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -108,4 +109,41 @@ public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
     LIMIT :limitBy
     """,nativeQuery = true)
     List<SimpleCourseProjection> getTopPerformingCoursesByRatingAndInstituteId(Long instituteId, int limitBy);
+
+    @Query(value = """
+    SELECT
+    c.id AS courseId,
+    c.title AS courseTitle,
+    c.description AS courseDescription,
+    c.status AS courseStatus,
+    c.category AS courseCategory,
+    c.level AS courseLevel,
+    c.language AS courseLanguage,
+    c.mode AS courseMode,
+    c.thumbnail AS courseThumbnail,
+    c.duration_in_hours AS courseDurationInHours,
+    c.avg_rating AS courseAvgRating,
+    c.total_no_ratings AS courseTotalRatings,
+    
+    b.id AS batchId,
+    b.name AS batchName,
+    b.batch_status AS batchStatus,
+    b.enrollment_status AS batchEnrollmentStatus,
+    b.start_date AS batchStartDate,
+    b.start_time AS batchStartTime,
+    b.created_date AS batchCreatedDate,
+    b.last_modified_date AS batchLastModifiedDate,
+
+    m.id AS moduleId,
+    m.name AS moduleName,
+    m.status AS moduleStatus,
+    m.created_date AS moduleCreatedDate,
+    m.last_modified_date AS moduleLastModifiedDate
+
+    FROM courses c
+    INNER JOIN batch b ON c.id = b.course_id
+    INNER JOIN module m ON b.id = m.batch_id
+    WHERE c.id = :courseId AND m.teacher_id = :teacherId
+    """,nativeQuery = true)
+    List<TeacherCourseProjection> getTeacherCourse(Long courseId, Long teacherId);
 }
