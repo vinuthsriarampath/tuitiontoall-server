@@ -30,14 +30,14 @@ import org.springframework.web.bind.annotation.*;
 public class ScheduleLectureController {
     private final ScheduleLectureService scheduleLectureService;
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping
     public ResponseEntity<ApiResponse> scheduleLecture(@Valid @RequestBody ScheduleLectureCreateRequest request){
         ScheduleLectureResponse response = scheduleLectureService.scheduleLecture(request);
         return ResponseEntity.ok(new ApiResponse("Lecture Scheduled Successfully!",response));
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse> updateScheduleLecture(@PathVariable Long id, @Valid @RequestBody ScheduleLectureUpdateRequest request) {
         ScheduleLectureResponse response = scheduleLectureService.updateScheduleLecture(id , request);

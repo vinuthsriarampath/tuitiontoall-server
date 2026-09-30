@@ -43,21 +43,21 @@ import java.util.List;
 public class ChapterController {
     private final ChapterService chapterService;
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping
     public ResponseEntity<ApiResponse> createChapter(@Valid @RequestBody ChapterCreateRequest request){
         ChapterResponse response = chapterService.createChapter(request);
         return ResponseEntity.ok(new ApiResponse("Chapter created successfully", response));
     }
 
-    @PreAuthorize("hasAnyAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PatchMapping("{id}/details")
     public ResponseEntity<ApiResponse> updateChapterDetails(@PathVariable("id")Long id,@Valid @RequestBody ChapterDetailsUpdateRequest request){
         ChapterResponse response = chapterService.updateChapterDetailsById(id,request);
         return ResponseEntity.ok(new ApiResponse("Chapter details updated successfully", response));
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PatchMapping("reorder")
     public ResponseEntity<ApiResponse> reorderChapters(@Valid @RequestBody ChapterReorderRequest request) {
         List<ChapterResponse> responses = chapterService.reorderChapters(request);

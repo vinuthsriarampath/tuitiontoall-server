@@ -34,7 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ModuleAssignmentController {
     private final ModuleAssignmentService moduleAssignmentService;
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> createModuleAssignment(@RequestPart("file") MultipartFile file, @Valid @RequestPart("request") ModuleAssignmentCreateRequest request){
         ModuleAssignmentResponse response = moduleAssignmentService.createModuleAssignment(request,file);
