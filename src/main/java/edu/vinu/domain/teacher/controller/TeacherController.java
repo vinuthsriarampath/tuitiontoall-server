@@ -14,6 +14,7 @@
 package edu.vinu.domain.teacher.controller;
 
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.course.service.TeacherCourseService;
 import edu.vinu.domain.teacher.dtos.request.TeacherDetailsUpdateRequest;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.teacher.service.TeacherService;
@@ -33,6 +34,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class TeacherController {
     private final TeacherService teacherService;
     private final TeachingService teachingService;
+    private final TeacherCourseService teacherCourseService;
 
     @PreAuthorize("hasAuthority('teacher')")
     @PatchMapping("/me")
@@ -51,5 +53,11 @@ public class TeacherController {
     @GetMapping("/me/teachings")
     public ResponseEntity<ApiResponse> getMyTeachingDetails(){
         return ResponseEntity.ok(teachingService.getMyTeachingDetails());
+    }
+
+    @PreAuthorize("hasAuthority('teacher')")
+    @GetMapping("/me/teachings/courses/{courseId}")
+    public ResponseEntity<ApiResponse> getTeacherDetailedCourse(@PathVariable Long courseId){
+        return ResponseEntity.ok(teacherCourseService.getTeacherDetailedCourse(courseId));
     }
 }
