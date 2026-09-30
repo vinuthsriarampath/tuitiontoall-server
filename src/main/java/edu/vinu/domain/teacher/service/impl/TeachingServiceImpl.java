@@ -109,7 +109,7 @@ public class TeachingServiceImpl implements TeachingService {
                 .mode(first.getCourseMode())
                 .averageRating(first.getAvgRating())
                 .totalRatings(first.getTotalRatings())
-                .AssignedBatches(assignedBatches)
+                .assignedBatches(assignedBatches)
                 .build();
     }
 

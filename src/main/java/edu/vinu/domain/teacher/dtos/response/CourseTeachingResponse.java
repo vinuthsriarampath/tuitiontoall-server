@@ -36,6 +36,6 @@ public record CourseTeachingResponse (
         BigDecimal averageRating,
         Integer totalRatings,
 
-        List<BatchBasicResponse> AssignedBatches
+        List<BatchBasicResponse> assignedBatches
 ){
 }
