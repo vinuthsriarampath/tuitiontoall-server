@@ -1,0 +1,4 @@
+$kind: http-request
+url: localhost:8080/api/v2/teachers/me/teachings/courses/3
+method: GET
+order: 4132041765818769
