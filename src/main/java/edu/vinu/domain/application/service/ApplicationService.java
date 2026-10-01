@@ -13,9 +13,13 @@
 
 package edu.vinu.domain.application.service;
 
+import edu.vinu.common.dto.PaginationRequest;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.application.dto.Application;
 import edu.vinu.domain.application.entity.ApplicationEntity;
+import edu.vinu.domain.application.request.TeacherApplicationFilterRequest;
 import edu.vinu.domain.application.response.ApplicationDetailsResponse;
+import edu.vinu.domain.application.response.TeacherApplicationResponse;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -32,4 +36,7 @@ public interface ApplicationService {
     void setApplicationStatusSelected(ApplicationEntity applicationEntity);
 
     void setApplicationStatusRejected(ApplicationEntity applicationEntity);
+
+    PaginatedApiResponse<TeacherApplicationResponse> getCurrentTeacherApplications(PaginationRequest pagination, TeacherApplicationFilterRequest filters);
+
 }
