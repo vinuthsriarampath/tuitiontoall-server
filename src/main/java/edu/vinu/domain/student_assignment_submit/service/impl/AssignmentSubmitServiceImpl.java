@@ -33,10 +33,7 @@ import edu.vinu.domain.student_assignment_submit.mapper.AssignmentSubmissionMapp
 import edu.vinu.domain.student_assignment_submit.repository.StudentAssignmentSubmitRepository;
 import edu.vinu.domain.student_assignment_submit.request.AssignmentSubmissionFilterRequest;
 import edu.vinu.domain.student_assignment_submit.request.StudentAssignmentSubmissionFilterRequest;
-import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDetailedResponse;
-import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionEligibilityResponse;
-import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionResponse;
-import edu.vinu.domain.student_assignment_submit.response.StudentAssignmentSubmissionResponse;
+import edu.vinu.domain.student_assignment_submit.response.*;
 import edu.vinu.domain.student_assignment_submit.service.AssignmentSubmitService;
 import edu.vinu.infastructure.service.file_storage.FileService;
 import lombok.RequiredArgsConstructor;
@@ -254,6 +251,11 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
     @Override
     public int countPendingEvaluationsForTeacher(Long teacherId) {
         return  submitRepository.countPendingEvaluationsForTeacher(teacherId);
+    }
+
+    @Override
+    public List<NonGradedSubmissionResponse> getAllNonGradedSubmissionsForTeacher(Long teacherId) {
+        return submitRepository.getNonGradedSubmissionsByTeacher(teacherId).stream().map(AssignmentSubmissionMapper::toNonGradedSubmissionResponse).toList();
     }
 
     private void checkEligibility(AssignmentEntity assignmentEntity, int submissionCount) {

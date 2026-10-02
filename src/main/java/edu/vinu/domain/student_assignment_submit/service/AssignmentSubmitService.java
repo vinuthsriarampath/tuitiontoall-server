@@ -21,10 +21,13 @@ import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.request.AssignmentSubmissionFilterRequest;
 import edu.vinu.domain.student_assignment_submit.request.StudentAssignmentSubmissionFilterRequest;
 import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDetailedResponse;
+import edu.vinu.domain.student_assignment_submit.response.NonGradedSubmissionResponse;
 import edu.vinu.domain.student_assignment_submit.response.StudentAssignmentSubmissionResponse;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface AssignmentSubmitService {
     ApiResponse submit(Long assignmentId, MultipartFile file);
@@ -40,4 +43,8 @@ public interface AssignmentSubmitService {
     StudentAssignmentSubmit getSubmissionEntityById(Long submissionId);
 
     int countPendingEvaluationsForTeacher(Long teacherId);
+
+    List<NonGradedSubmissionResponse> getAllNonGradedSubmissionsForTeacher(Long teacherId);
+
+
 }
