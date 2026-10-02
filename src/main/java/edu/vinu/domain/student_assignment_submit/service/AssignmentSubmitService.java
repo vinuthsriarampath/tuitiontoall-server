@@ -38,4 +38,6 @@ public interface AssignmentSubmitService {
     ResponseEntity<Resource> downloadSubmissionFile(String fileName);
 
     StudentAssignmentSubmit getSubmissionEntityById(Long submissionId);
+
+    int countPendingEvaluationsForTeacher(Long teacherId);
 }

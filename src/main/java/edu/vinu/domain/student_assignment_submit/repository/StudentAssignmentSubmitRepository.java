@@ -119,4 +119,27 @@ public interface StudentAssignmentSubmitRepository extends JpaRepository<Student
     LIMIT :limit
     """,nativeQuery = true)
     List<RecentResultsProjection> getRecentResultsByStudent(Long studentId, int limit);
+
+    @Query(value = """
+    SELECT count(DISTINCT sas.id)
+    FROM student_assignment_submit sas
+    INNER JOIN assignment a ON sas.assignment_id = a.id
+    INNER JOIN (
+            SELECT m.teacher_id AS teacher_id, ma.assignment_id AS assignment_id
+            FROM module_assignment ma
+            INNER JOIN module m ON ma.module_id = m.id
+            WHERE m.teacher_id = :teacherId
+
+            UNION ALL
+
+            SELECT m.teacher_id AS teacher_id, ca.assignment_id AS assignment_id
+            FROM chapter_assignment ca
+            INNER JOIN chapter c ON ca.chapter_id = c.id
+            INNER JOIN module m ON c.module_id = m.id
+            WHERE m.teacher_id = :teacherId
+    ) AS target_assignments ON a.id = target_assignments.assignment_id
+    WHERE target_assignments.teacher_id = :teacherId
+    AND sas.status <> 'GRADED'
+    """,nativeQuery = true)
+    int countPendingEvaluationsForTeacher(Long teacherId);
 }

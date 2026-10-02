@@ -251,6 +251,11 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
         return  submitRepository.findById(submissionId).orElseThrow(() -> new NotFoundException("Submission with ID " + submissionId + " not found."));
     }
 
+    @Override
+    public int countPendingEvaluationsForTeacher(Long teacherId) {
+        return  submitRepository.countPendingEvaluationsForTeacher(teacherId);
+    }
+
     private void checkEligibility(AssignmentEntity assignmentEntity, int submissionCount) {
         if (!validateLateSubmission(assignmentEntity)){
             throw new InvalidInputException("Late submissions are not allowed for this assignment.");
