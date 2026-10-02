@@ -1,0 +1,4 @@
+$kind: http-request
+url: localhost:8080/api/v2/teachers/me/bootstrap
+method: GET
+order: 4448473434431138
