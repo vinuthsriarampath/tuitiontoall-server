@@ -22,6 +22,7 @@ import edu.vinu.domain.application.service.ApplicationService;
 import edu.vinu.domain.course.service.TeacherCourseService;
 import edu.vinu.domain.teacher.dtos.request.TeacherDetailsUpdateRequest;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
+import edu.vinu.domain.teacher.service.TeacherBootstrapService;
 import edu.vinu.domain.teacher.service.TeacherService;
 import edu.vinu.domain.teacher.service.TeachingService;
 import jakarta.validation.Valid;
@@ -39,6 +40,7 @@ import static org.springframework.http.HttpStatus.OK;
 public class TeacherController {
     private final TeacherService teacherService;
     private final TeachingService teachingService;
+    private final TeacherBootstrapService teacherBootstrapService;
     private final TeacherCourseService teacherCourseService;
     private final ApplicationService applicationService;
 
@@ -71,5 +73,11 @@ public class TeacherController {
     @GetMapping("/me/applications")
     public ResponseEntity<PaginatedApiResponse<TeacherApplicationResponse>> getMyApplications(PaginationRequest pagination, TeacherApplicationFilterRequest filters){
         return ResponseEntity.ok(applicationService.getCurrentTeacherApplications(pagination,filters));
+    }
+
+    @PreAuthorize("hasAuthority('teacher')")
+    @GetMapping("/me/bootstrap")
+    public ResponseEntity<ApiResponse> getTeacherBootstrapData(){
+        return ResponseEntity.ok(teacherBootstrapService.getTeacherDashboardStats());
     }
 }
