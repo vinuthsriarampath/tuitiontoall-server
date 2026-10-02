@@ -25,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
 
 @Repository
 public interface ScheduleLectureRepository extends JpaRepository<ScheduleLectureEntity,Long> {
@@ -85,4 +87,16 @@ public interface ScheduleLectureRepository extends JpaRepository<ScheduleLecture
     AND status in (:liveStatus, :scheduledStatus);
 """,nativeQuery = true)
     int completeEndedLectures(@Param("completedStatus") String completedStatus, @Param("liveStatus") String liveStatus, @Param("scheduledStatus") String scheduledStatus);
+
+    @Query(value = """
+    SELECT sl.*
+    FROM schedule_lecture sl
+    JOIN chapter c ON sl.chapter_id = c.id
+    JOIN module m ON c.module_id = m.id
+    WHERE m.teacher_id = :teacherId
+    AND sl.status IN ('SCHEDULED', 'LIVE')
+    AND TIMESTAMP(sl.start_date, sl.end_time) >= CURRENT_TIMESTAMP
+    ORDER BY sl.start_date , sl.start_time
+    """,nativeQuery = true)
+    List<ScheduleLectureEntity> findUpcomingLecturesForTeacher(Long teacherId);
 }

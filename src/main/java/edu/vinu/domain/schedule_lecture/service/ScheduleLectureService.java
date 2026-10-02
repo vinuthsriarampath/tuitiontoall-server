@@ -17,8 +17,12 @@ import edu.vinu.domain.schedule_lecture.request.create.ScheduleLectureCreateRequ
 import edu.vinu.domain.schedule_lecture.request.update.ScheduleLectureUpdateRequest;
 import edu.vinu.domain.schedule_lecture.response.ScheduleLectureResponse;
 
+import java.util.List;
+
 public interface ScheduleLectureService {
     ScheduleLectureResponse scheduleLecture(ScheduleLectureCreateRequest request);
 
     ScheduleLectureResponse updateScheduleLecture(Long id, ScheduleLectureUpdateRequest request);
+
+    List<ScheduleLectureResponse> getUpcomingLecturesForTeacher(Long teacherId);
 }
