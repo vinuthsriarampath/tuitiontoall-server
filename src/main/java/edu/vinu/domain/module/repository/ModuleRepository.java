@@ -104,4 +104,13 @@ public interface ModuleRepository extends JpaRepository<ModuleEntity, Long> {
         AND m.status IN (:status);
     """,nativeQuery = true)
     List<StudentModuleProjection> findAllStudentModulesByBatchIdAndStatus(Long batchId, List<String> status);
+
+    @Query(value = """
+    SELECT COUNT(DISTINCT m.id)
+    FROM module m
+    INNER JOIN batch b ON b.id = m.batch_id
+    WHERE m.teacher_id = :teacherId
+    AND (:batchStatus IS NULL OR b.batch_status = :batchStatus)
+""",nativeQuery = true)
+    int countModulesByTeacherAndBatchStatus(Long teacherId, String batchStatus);
 }
