@@ -16,9 +16,11 @@ package edu.vinu.domain.student_assignment_submit.mapper;
 import edu.vinu.domain.student.dto.response.RecentResultsResponse;
 import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.repository.projections.AssignmentSubmissionDetailedProjection;
+import edu.vinu.domain.student_assignment_submit.repository.projections.NonGradedSubmissionProjection;
 import edu.vinu.domain.student_assignment_submit.repository.projections.RecentResultsProjection;
 import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDetailedResponse;
 import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionResponse;
+import edu.vinu.domain.student_assignment_submit.response.NonGradedSubmissionResponse;
 import edu.vinu.domain.student_assignment_submit.response.StudentAssignmentSubmissionResponse;
 
 public class AssignmentSubmissionMapper {
@@ -74,6 +76,18 @@ public class AssignmentSubmissionMapper {
                 .assignmentTitle(p.getAssignmentTitle())
                 .grade(p.getGrade())
                 .marksGained(p.getMarksGained())
+                .submittedAt(p.getSubmittedAt())
+                .build();
+    }
+
+    public static NonGradedSubmissionResponse toNonGradedSubmissionResponse(NonGradedSubmissionProjection p) {
+        return NonGradedSubmissionResponse.builder()
+                .submissionId(p.getSubmissionId())
+                .studentId(p.getStudentId())
+                .studentName(p.getStudentName())
+                .assignmentId(p.getAssignmentId())
+                .status(p.getStatus())
+                .attemptNo(p.getAttemptNo())
                 .submittedAt(p.getSubmittedAt())
                 .build();
     }
