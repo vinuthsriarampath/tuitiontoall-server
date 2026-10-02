@@ -15,6 +15,7 @@ package edu.vinu.domain.course.repository;
 
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.repository.projections.SimpleCourseProjection;
+import edu.vinu.domain.course.repository.projections.TeacherBasicCourseProjection;
 import edu.vinu.domain.course.repository.projections.TeacherCourseProjection;
 import edu.vinu.domain.reporting.projection.TrendPointProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -146,4 +147,24 @@ public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
     WHERE c.id = :courseId AND m.teacher_id = :teacherId
     """,nativeQuery = true)
     List<TeacherCourseProjection> getTeacherCourse(Long courseId, Long teacherId);
+
+    @Query(value = """
+    SELECT
+    c.id AS courseId,
+    c.title AS courseTitle,
+    i.id AS instituteId,
+    i.institute_name AS instituteName,
+    COUNT(DISTINCT b.id) AS assignedOngoingBatchesCount,
+    COUNT(DISTINCT m.id) AS assignedPublishedModulesCount
+    FROM courses c
+    INNER JOIN institute i ON c.institute_id = i.id
+    INNER JOIN batch b ON c.id = b.course_id
+    INNER JOIN module m ON b.id = m.batch_id
+    WHERE c.status = 'PUBLISHED'
+    AND m.teacher_id = :teacherId
+    AND b.batch_status = 'ONGOING'
+    AND m.status = 'PUBLISHED'
+    GROUP BY c.id, c.title, i.id, i.institute_name
+    """,nativeQuery = true)
+    List<TeacherBasicCourseProjection> findPublishedCoursesByTeacherId(Long teacherId);
 }

@@ -22,10 +22,12 @@ import edu.vinu.domain.course.events.CourseArchivedEvent;
 import edu.vinu.domain.course.events.CourseCreatedEvent;
 import edu.vinu.domain.course.events.CourseDeletedEvent;
 import edu.vinu.domain.course.events.CourseUpdatedEvent;
+import edu.vinu.domain.course.mapper.TeacherCourseMapper;
 import edu.vinu.domain.course.repository.CourseRepository;
 import edu.vinu.domain.course.request.CourseCreateRequest;
 import edu.vinu.domain.course.request.CourseFilterRequest;
 import edu.vinu.domain.course.request.CourseUpdateRequest;
+import edu.vinu.domain.course.response.TeacherBasicCourseResponse;
 import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.institute.repository.InstituteRepository;
@@ -179,6 +181,11 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Boolean isCourseOwner(CourseEntity courseEntity){
         return courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
+    @Override
+    public List<TeacherBasicCourseResponse> getPublishedAssignedCoursesByTeacher(Long teacherId) {
+        return courseRepository.findPublishedCoursesByTeacherId(teacherId).stream().map(TeacherCourseMapper::toTeacherBasicCourseResponse).toList();
     }
 
     private String saveThumbnail(MultipartFile thumbnail, CourseEntity courseEntity, InstituteEntity instituteEntity) {

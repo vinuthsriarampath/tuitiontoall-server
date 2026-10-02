@@ -20,6 +20,7 @@ import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.request.CourseCreateRequest;
 import edu.vinu.domain.course.request.CourseFilterRequest;
 import edu.vinu.domain.course.request.CourseUpdateRequest;
+import edu.vinu.domain.course.response.TeacherBasicCourseResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -92,4 +93,6 @@ public interface CourseService {
     List<Course> getAllCoursesByInstituteId(Long instituteId, CourseFilterRequest filters);
 
     Boolean isCourseOwner(CourseEntity courseEntity);
+
+    List<TeacherBasicCourseResponse> getPublishedAssignedCoursesByTeacher(Long teacherId);
 }
