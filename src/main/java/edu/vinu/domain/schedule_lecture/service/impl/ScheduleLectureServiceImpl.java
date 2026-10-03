@@ -79,6 +79,11 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
         return ScheduleLectureMapper.toScheduleLectureResponse(scheduleLectureRepository.save(entity));
     }
 
+    @Override
+    public List<ScheduleLectureResponse> getUpcomingLecturesForTeacher(Long teacherId) {
+        return scheduleLectureRepository.findUpcomingLecturesForTeacher(teacherId).stream().map(ScheduleLectureMapper::toScheduleLectureResponse).toList();
+    }
+
     private ScheduleLectureEntity getScheduleLectureEntity(Long id){
         return scheduleLectureRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Schedule lecture with id " + id + " not found!"));

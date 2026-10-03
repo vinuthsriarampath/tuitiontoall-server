@@ -16,6 +16,7 @@ package edu.vinu.domain.student_assignment_submit.repository;
 import edu.vinu.domain.student.dto.response.RecentResultsResponse;
 import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.repository.projections.AssignmentSubmissionDetailedProjection;
+import edu.vinu.domain.student_assignment_submit.repository.projections.NonGradedSubmissionProjection;
 import edu.vinu.domain.student_assignment_submit.repository.projections.RecentResultsProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -119,4 +120,61 @@ public interface StudentAssignmentSubmitRepository extends JpaRepository<Student
     LIMIT :limit
     """,nativeQuery = true)
     List<RecentResultsProjection> getRecentResultsByStudent(Long studentId, int limit);
+
+    @Query(value = """
+    SELECT count(DISTINCT sas.id)
+    FROM student_assignment_submit sas
+    INNER JOIN assignment a ON sas.assignment_id = a.id
+    INNER JOIN (
+            SELECT m.teacher_id AS teacher_id, ma.assignment_id AS assignment_id
+            FROM module_assignment ma
+            INNER JOIN module m ON ma.module_id = m.id
+            WHERE m.teacher_id = :teacherId
+
+            UNION ALL
+
+            SELECT m.teacher_id AS teacher_id, ca.assignment_id AS assignment_id
+            FROM chapter_assignment ca
+            INNER JOIN chapter c ON ca.chapter_id = c.id
+            INNER JOIN module m ON c.module_id = m.id
+            WHERE m.teacher_id = :teacherId
+    ) AS target_assignments ON a.id = target_assignments.assignment_id
+    WHERE target_assignments.teacher_id = :teacherId
+    AND sas.status <> 'GRADED'
+    """,nativeQuery = true)
+    int countPendingEvaluationsForTeacher(Long teacherId);
+
+
+    @Query(value = """
+    SELECT
+    sas.id AS submissionId,
+    sas.student_id AS studentId,
+    CONCAT(s.first_name, ' ', s.last_name) AS studentName,
+    sas.assignment_id AS assignmentId,
+    sas.status AS status,
+    sas.attempt_no AS attemptNo,
+    sas.submitted_at AS submittedAt
+    FROM student_assignment_submit sas
+    INNER JOIN student s ON s.id = sas.student_id
+    INNER JOIN assignment a ON sas.assignment_id = a.id
+    INNER JOIN (
+        SELECT m.teacher_id AS teacher_id, ma.assignment_id AS assignment_id
+        FROM module_assignment ma
+        INNER JOIN module m ON ma.module_id = m.id
+        WHERE m.teacher_id = :teacherId
+
+        UNION ALL
+
+        SELECT m.teacher_id AS teacher_id, ca.assignment_id AS assignment_id
+        FROM chapter_assignment ca
+        INNER JOIN chapter c ON ca.chapter_id = c.id
+        INNER JOIN module m ON c.module_id = m.id
+        WHERE m.teacher_id = :teacherId
+    ) AS target_assignments ON a.id = target_assignments.assignment_id
+    WHERE sas.status <> 'GRADED'
+    AND sas.grade IS NULL
+    AND sas.graded_at IS NULL
+    AND target_assignments.teacher_id = :teacherId
+    """,nativeQuery = true)
+    List<NonGradedSubmissionProjection> getNonGradedSubmissionsByTeacher(Long teacherId);
 }

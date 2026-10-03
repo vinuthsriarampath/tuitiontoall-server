@@ -13,16 +13,23 @@
 
 package edu.vinu.domain.application.service.impl;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.exception.custom.BadRequestException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.common.util.SortUtil;
 import edu.vinu.domain.application.dto.Application;
 import edu.vinu.domain.application.entity.ApplicationEntity;
 import edu.vinu.domain.application.enums.ApplicationStatus;
+import edu.vinu.domain.application.mappers.ApplicationMapper;
 import edu.vinu.domain.application.repository.ApplicationRepository;
+import edu.vinu.domain.application.request.TeacherApplicationFilterRequest;
 import edu.vinu.domain.application.response.ApplicationDetailsResponse;
+import edu.vinu.domain.application.response.TeacherApplicationResponse;
 import edu.vinu.domain.application.service.ApplicationService;
 import edu.vinu.domain.teacher.dtos.response.TeacherUserResponse;
+import edu.vinu.domain.teacher.entity.TeacherEntity;
 import edu.vinu.domain.teacher.service.TeacherService;
 import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
 import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
@@ -140,6 +147,35 @@ public class ApplicationServiceImpl implements ApplicationService {
     public void setApplicationStatusRejected(ApplicationEntity applicationEntity) {
         applicationEntity.setStatus(ApplicationStatus.REJECTED);
         applicationRepository.save(applicationEntity);
+    }
+
+    @Override
+    public PaginatedApiResponse<TeacherApplicationResponse> getCurrentTeacherApplications(PaginationRequest pagination, TeacherApplicationFilterRequest filters) {
+        TeacherEntity currentTeacher = teacherService.getCurrentTeacher();
+
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(),pagination.sortBy(),List.of("applied_date")));
+
+
+        Page<TeacherApplicationResponse> pageData = applicationRepository.getApplicationsByTeacher(
+                currentTeacher.getId(),
+                filters.applicationId(),
+                filters.vacancyId(),
+                filters.vacancyTitle(),
+                filters.instituteId(),
+                filters.instituteName(),
+                filters.status() != null ? filters.status().name() : null,
+                filters.appliedDate(),
+                pageable).map(ApplicationMapper::toTeacherApplicationResponse);
+
+        return PaginatedApiResponse.<TeacherApplicationResponse>builder()
+                .message("Current teacher applications retrieved successfully")
+                .data(pageData.getContent())
+                .page(pageData.getNumber())
+                .size(pageData.getSize())
+                .totalElements(pageData.getTotalElements())
+                .totalPages(pageData.getTotalPages())
+                .last(pageData.isLast())
+                .build();
     }
 
     private Application mapToDto(ApplicationEntity a){

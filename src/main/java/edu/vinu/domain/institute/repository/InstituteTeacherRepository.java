@@ -18,6 +18,7 @@ import edu.vinu.domain.institute.repository.projection.InstituteTeacherProjectio
 import edu.vinu.domain.institute.repository.projection.InstituteTeacherStatsProjection;
 import edu.vinu.domain.reporting.projection.TrendPointProjection;
 import edu.vinu.domain.teacher.repository.projection.TeacherProjection;
+import edu.vinu.domain.teacher.repository.projection.TeachingProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -150,4 +151,37 @@ public interface InstituteTeacherRepository extends JpaRepository<InstituteTeach
     ORDER BY bucket
     """,nativeQuery = true)
     List<TrendPointProjection> getMonthlyInstituteTeachersTrendByInstituteAndStatus(Long instituteId, String status, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    @Query(value = """
+    SELECT
+    i.id AS instituteId,
+    i.institute_name AS instituteName,
+    
+    c.id AS courseId,
+    c.title AS courseTitle,
+    c.description AS courseDescription,
+    c.category AS courseCategory,
+    c.status AS courseStatus,
+    c.language AS courseLanguage,
+    c.level AS courseLevel,
+    c.mode AS courseMode,
+    c.thumbnail AS thumbnail,
+    c.avg_rating AS averageRating,
+    c.total_no_ratings AS totalRatings,
+    
+    b.id AS batchId,
+    b.name AS batchName,
+    b.batch_status AS batchStatus,
+    b.enrollment_status AS batchEnrollmentStatus,
+    b.start_date AS batchStartDate,
+    b.created_date AS batchCreatedDate,
+    b.last_modified_date AS batchLastModifiedDate
+    FROM institute_teacher it
+    INNER JOIN institute i ON it.institute_id = i.id
+    INNER JOIN module m ON m.teacher_id = it.teacher_id
+    INNER JOIN batch b ON m.batch_id = b.id
+    INNER JOIN courses c ON b.course_id = c.id AND c.institute_id = i.id
+    WHERE it.teacher_id = :teacherId
+    """,nativeQuery = true)
+    List<TeachingProjection> getTeachingByTeacherId(Long teacherId);
 }

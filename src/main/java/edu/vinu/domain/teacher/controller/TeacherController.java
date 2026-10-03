@@ -13,10 +13,18 @@
 
 package edu.vinu.domain.teacher.controller;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.application.request.TeacherApplicationFilterRequest;
+import edu.vinu.domain.application.response.TeacherApplicationResponse;
+import edu.vinu.domain.application.service.ApplicationService;
+import edu.vinu.domain.course.service.TeacherCourseService;
 import edu.vinu.domain.teacher.dtos.request.TeacherDetailsUpdateRequest;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
+import edu.vinu.domain.teacher.service.TeacherBootstrapService;
 import edu.vinu.domain.teacher.service.TeacherService;
+import edu.vinu.domain.teacher.service.TeachingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +39,10 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 public class TeacherController {
     private final TeacherService teacherService;
+    private final TeachingService teachingService;
+    private final TeacherBootstrapService teacherBootstrapService;
+    private final TeacherCourseService teacherCourseService;
+    private final ApplicationService applicationService;
 
     @PreAuthorize("hasAuthority('teacher')")
     @PatchMapping("/me")
@@ -43,5 +55,29 @@ public class TeacherController {
     @GetMapping("/validate/role")
     public ResponseEntity<ApiResponse> validateTeacher(){
         return ResponseEntity.status(OK).body(new ApiResponse("User has teacher role!", null));
+    }
+
+    @PreAuthorize("hasAuthority('teacher')")
+    @GetMapping("/me/teachings")
+    public ResponseEntity<ApiResponse> getMyTeachingDetails(){
+        return ResponseEntity.ok(teachingService.getMyTeachingDetails());
+    }
+
+    @PreAuthorize("hasAuthority('teacher')")
+    @GetMapping("/me/teachings/courses/{courseId}")
+    public ResponseEntity<ApiResponse> getTeacherDetailedCourse(@PathVariable Long courseId){
+        return ResponseEntity.ok(teacherCourseService.getTeacherDetailedCourse(courseId));
+    }
+
+    @PreAuthorize("hasAuthority('teacher')")
+    @GetMapping("/me/applications")
+    public ResponseEntity<PaginatedApiResponse<TeacherApplicationResponse>> getMyApplications(PaginationRequest pagination, TeacherApplicationFilterRequest filters){
+        return ResponseEntity.ok(applicationService.getCurrentTeacherApplications(pagination,filters));
+    }
+
+    @PreAuthorize("hasAuthority('teacher')")
+    @GetMapping("/me/bootstrap")
+    public ResponseEntity<ApiResponse> getTeacherBootstrapData(){
+        return ResponseEntity.ok(teacherBootstrapService.getTeacherDashboardStats());
     }
 }

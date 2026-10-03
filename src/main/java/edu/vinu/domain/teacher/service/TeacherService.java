@@ -13,8 +13,10 @@
 
 package edu.vinu.domain.teacher.service;
 
+import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.teacher.dtos.request.TeacherDetailsUpdateRequest;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
+import edu.vinu.domain.teacher.entity.TeacherEntity;
 import edu.vinu.domain.user.dto.User;
 
 import java.util.List;
@@ -27,4 +29,6 @@ public interface TeacherService {
     List<User> getAllTeachersByFirstName(String lastName);
 
     Teacher updateTeacherDetails(String email, TeacherDetailsUpdateRequest teacherDetailsUpdateRequest);
+
+    TeacherEntity getCurrentTeacher();
 }

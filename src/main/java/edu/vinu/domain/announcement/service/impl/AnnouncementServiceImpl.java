@@ -290,7 +290,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 return  mapToAnnouncementResponse(announcementEntity);
             }
             case "teacher"-> {
-                if(announcementRepository.canStudentViewAnnouncement(id, userEntity.getTeacher().getId())<=0){
+                if(announcementRepository.canTeacherViewAnnouncement(id, userEntity.getTeacher().getId())<=0){
                     throw new UnauthorizedException(notAuthorizedMessage);
                 }
                 AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);

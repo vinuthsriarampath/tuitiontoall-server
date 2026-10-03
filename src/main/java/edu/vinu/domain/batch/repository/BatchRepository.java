@@ -14,6 +14,7 @@
 package edu.vinu.domain.batch.repository;
 
 import edu.vinu.domain.batch.entity.BatchEntity;
+import edu.vinu.domain.batch.enums.BatchStatus;
 import edu.vinu.domain.batch.repository.projection.BatchDetailedProjection;
 import edu.vinu.domain.batch.repository.projection.BatchProjection;
 import edu.vinu.domain.reporting.projection.TrendPointProjection;
@@ -205,4 +206,13 @@ ORDER BY b.start_date DESC
     """
     ,nativeQuery = true)
    Page<BatchDetailedProjection> getBatches(Long id, String batchName, String batchStatus, String enrollmentStatus,Long courseId, Long instituteId, Pageable pageable);
+
+    @Query(value = """
+    SELECT COUNT(DISTINCT b.id)
+    FROM batch b
+    INNER JOIN module m ON b.id = m.batch_id
+    WHERE m.teacher_id = :teacherId
+    AND (:batchStatus IS NULL OR b.batch_status = :batchStatus)
+    """,nativeQuery = true)
+    int countBatchesByTeacherIdAndStatus(Long teacherId, String batchStatus);
 }

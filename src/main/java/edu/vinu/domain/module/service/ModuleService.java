@@ -16,6 +16,7 @@ package edu.vinu.domain.module.service;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.assignment.request.module_assignments.ModuleAssignmentFilterRequest;
 import edu.vinu.domain.assignment.response.module_assignment.ModuleAssignmentResponse;
+import edu.vinu.domain.batch.enums.BatchStatus;
 import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.domain.module.enums.ModuleStatus;
 import edu.vinu.domain.module.request.ModuleFilterRequest;
@@ -58,4 +59,6 @@ public interface ModuleService {
     List<StudentModuleResponse> getStudentModulesByBatch(Long batchId);
 
     List<StudentModuleResponse> getStudentModulesByBatch(Long batchId, List<ModuleStatus> status);
+
+    int countAssignedModulesToTeacher(Long teacherId, BatchStatus batchStatus);
 }

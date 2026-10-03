@@ -34,7 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ChapterAssignmentController {
     private final ChapterAssignmentService chapterAssignmentService;
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> createChapterAssignment(@RequestPart("file")MultipartFile file, @Valid @RequestPart("request")ChapterAssignmentCreateRequest request){
         ChapterAssignmentResponse response = chapterAssignmentService.createChapterAssignment(request,file);

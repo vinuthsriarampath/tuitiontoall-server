@@ -34,13 +34,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class ResourceController {
     private final ResourceService resourceService;
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping("/upload/init")
     public ResponseEntity<ApiResponse> initializeUpload(@Valid @RequestBody ResourceInitRequest request) {
         ResourceInitResponse response = resourceService.initializeUpload(request);
         return ResponseEntity.ok(new ApiResponse("Upload initialized successfully", response));
     }
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping("/upload/chunk")
     public ResponseEntity<ApiResponse> uploadChunk(
             @RequestParam String uploadId,
@@ -51,7 +51,7 @@ public class ResourceController {
         return ResponseEntity.ok(new ApiResponse("Chunk uploaded successfully", response));
     }
 
-    @PreAuthorize("hasAuthority('institute')")
+    @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping("/upload/complete/{uploadId}")
     public ResponseEntity<ApiResponse> completeUpload(@PathVariable("uploadId") String uploadId){
         ResourceResponse response = resourceService.completeUpload(uploadId);
@@ -68,6 +68,7 @@ public class ResourceController {
         return resourceService.downloadFile(fileName);
     }
 
+    @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @DeleteMapping("/{resourceId}")
     public ResponseEntity<ApiResponse> deleteResource(@PathVariable Long resourceId){
         resourceService.deleteResource(resourceId);

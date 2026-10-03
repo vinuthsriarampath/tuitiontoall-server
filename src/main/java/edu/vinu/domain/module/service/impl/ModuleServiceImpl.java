@@ -23,6 +23,7 @@ import edu.vinu.domain.assignment.request.module_assignments.ModuleAssignmentFil
 import edu.vinu.domain.assignment.response.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.domain.assignment.service.ModuleAssignmentQueryService;
 import edu.vinu.domain.batch.entity.BatchEntity;
+import edu.vinu.domain.batch.enums.BatchStatus;
 import edu.vinu.domain.batch.response.BatchBasicResponse;
 import edu.vinu.domain.batch.service.BatchService;
 import edu.vinu.domain.institute.service.InstituteTeacherService;
@@ -253,6 +254,11 @@ public class ModuleServiceImpl implements ModuleService {
     public List<StudentModuleResponse> getStudentModulesByBatch(Long batchId, List<ModuleStatus> status) {
         List<String> mappedStatus = status.stream().map(Enum::name).toList();
         return moduleRepository.findAllStudentModulesByBatchIdAndStatus(batchId, mappedStatus).stream().map(ModuleMapper::toStudentModuleResponse).toList();
+    }
+
+    @Override
+    public int countAssignedModulesToTeacher(Long teacherId, BatchStatus batchStatus) {
+        return moduleRepository.countModulesByTeacherAndBatchStatus(teacherId,batchStatus != null ? batchStatus.name() : null);
     }
 
     private boolean isModuleOwner(ModuleEntity entity){

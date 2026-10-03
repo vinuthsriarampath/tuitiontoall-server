@@ -18,6 +18,7 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.batch.dto.Batch;
 import edu.vinu.domain.batch.entity.BatchEntity;
+import edu.vinu.domain.batch.enums.BatchStatus;
 import edu.vinu.domain.batch.request.BatchCreateRequest;
 import edu.vinu.domain.batch.request.BatchFilterRequest;
 import edu.vinu.domain.batch.request.BatchUpdateRequest;
@@ -45,4 +46,6 @@ public interface BatchService {
     ApiResponse getAllEnrollableBatchesOfCourse(Long courseId);
 
     PaginatedApiResponse<BatchDetailedResponse> getAllBatches(PaginationRequest pagination, BatchFilterRequest filters);
+
+    int countAssignedBatchesToTeacher(Long teacherId, BatchStatus batchStatus);
 }

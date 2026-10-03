@@ -15,6 +15,8 @@ package edu.vinu.domain.teacher.service.impl;
 
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
+import edu.vinu.common.exception.custom.UnauthorizedException;
+import edu.vinu.domain.auth.service.UserAuthenticationService;
 import edu.vinu.domain.teacher.dtos.request.TeacherDetailsUpdateRequest;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.teacher.entity.TeacherEntity;
@@ -38,6 +40,7 @@ import static edu.vinu.domain.user.validator.UserValidator.isValidDob;
 public class TeacherServiceImpl implements TeacherService {
     private final UserService userService;
     private final TeacherRepository teacherRepository;
+    private final UserAuthenticationService authService;
 
     @Override
     public List<Teacher> getAllTeachers() {
@@ -79,5 +82,17 @@ public class TeacherServiceImpl implements TeacherService {
         teacherEntity.setDob(teacherDetailsUpdateRequest.getDob());
 
         return TeacherMapper.toTeacher(teacherRepository.save(teacherEntity));
+    }
+
+    @Override
+    public TeacherEntity getCurrentTeacher() {
+        UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
+        if(userEntity == null){
+            throw new NotFoundException("User not found !");
+        }else if(!userEntity.getRole().getRole().equalsIgnoreCase("teacher")) {
+            throw new UnauthorizedException("User is not associated with teacher role!");
+        }else {
+            return userEntity.getTeacher();
+        }
     }
 }
