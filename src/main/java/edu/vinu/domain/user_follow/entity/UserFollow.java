@@ -41,12 +41,12 @@ public class UserFollow {
     Long id;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name = "following_id",nullable = false)
-    UserEntity followingId;
+    @JoinColumn(name = "follower_id",nullable = false)
+    UserEntity follower;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name = "follower_id",nullable = false)
-    UserEntity followerId;
+    @JoinColumn(name = "following_id",nullable = false)
+    UserEntity followingUser;
 
     @Builder.Default
     @Column(name = "followed_on", nullable = false)
