@@ -15,8 +15,18 @@ package edu.vinu.domain.user_follow.repository;
 
 import edu.vinu.domain.user_follow.entity.UserFollow;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
+
+    @Query(value = """
+    SELECT EXISTS(
+        SELECT 1
+        FROM user_follow uf
+        WHERE uf.follower_id = :followerId AND uf.following_id = :followingId
+    )
+    """,nativeQuery = true)
+    int existsByFollowerIdAndFollowingId(Long followerId, Long followingId);
 }
