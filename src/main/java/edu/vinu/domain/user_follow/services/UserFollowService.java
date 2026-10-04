@@ -13,5 +13,8 @@
 
 package edu.vinu.domain.user_follow.services;
 
+import edu.vinu.common.response.ApiResponse;
+
 public interface UserFollowService {
+    ApiResponse followUser(Long followingId);
 }

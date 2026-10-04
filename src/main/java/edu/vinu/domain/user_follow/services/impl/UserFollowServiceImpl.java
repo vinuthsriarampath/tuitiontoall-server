@@ -13,6 +13,14 @@
 
 package edu.vinu.domain.user_follow.services.impl;
 
+import edu.vinu.common.exception.custom.BadRequestException;
+import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.auth.service.UserAuthenticationService;
+import edu.vinu.domain.user.entity.UserEntity;
+import edu.vinu.domain.user.service.UserService;
+import edu.vinu.domain.user_follow.entity.UserFollow;
+import edu.vinu.domain.user_follow.mapper.UserFollowMapper;
+import edu.vinu.domain.user_follow.repository.UserFollowRepository;
 import edu.vinu.domain.user_follow.services.UserFollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,4 +28,35 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserFollowServiceImpl implements UserFollowService {
+
+    private final UserAuthenticationService authService;
+    private final UserService userService;
+    private final UserFollowRepository userFollowRepository;
+
+    @Override
+    public ApiResponse followUser(Long followingId) {
+
+        UserEntity followerUser = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
+        UserEntity followingUser = userService.getUserEntityById(followingId);
+
+        if(followerUser.getId().equals(followingUser.getId())) {
+            throw new BadRequestException("You cannot follow yourself");
+        }
+
+        if(userFollowRepository.existsByFollowerIdAndFollowingId(followerUser.getId(), followingUser.getId()) > 0) {
+            throw new BadRequestException("You are already following this user");
+        }
+
+        UserFollow userFollow = UserFollow.builder()
+                .follower(followerUser)
+                .followingUser(followingUser)
+                .build();
+
+        UserFollow saved = userFollowRepository.save(userFollow);
+
+        return ApiResponse.builder()
+                .message("User followed successfully")
+                .data(UserFollowMapper.toResponse(saved))
+                .build();
+    }
 }
