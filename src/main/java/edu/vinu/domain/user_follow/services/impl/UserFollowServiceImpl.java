@@ -14,10 +14,12 @@
 package edu.vinu.domain.user_follow.services.impl;
 
 import edu.vinu.common.exception.custom.BadRequestException;
+import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.auth.service.UserAuthenticationService;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
+import edu.vinu.domain.user_follow.dtos.response.UserUnfollowResponse;
 import edu.vinu.domain.user_follow.entity.UserFollow;
 import edu.vinu.domain.user_follow.mapper.UserFollowMapper;
 import edu.vinu.domain.user_follow.repository.UserFollowRepository;
@@ -57,6 +59,28 @@ public class UserFollowServiceImpl implements UserFollowService {
         return ApiResponse.builder()
                 .message("User followed successfully")
                 .data(UserFollowMapper.toResponse(saved))
+                .build();
+    }
+
+    @Override
+    public ApiResponse unfollowUser(Long followingId) {
+
+        UserEntity followerUser = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
+        UserEntity followingUser = userService.getUserEntityById(followingId);
+
+        UserFollow userFollow = userFollowRepository.getByFollowerAndFollowingId(followerUser.getId(), followingUser.getId())
+                .orElseThrow(() -> new NotFoundException("You are not following the user!"));
+
+        userFollowRepository.delete(userFollow);
+
+        UserUnfollowResponse response = UserUnfollowResponse.builder()
+                .id(userFollow.getId())
+                .followingId(userFollow.getFollowingUser().getId())
+                .build();
+
+        return ApiResponse.builder()
+                .message("User Unfollowed Successfully!")
+                .data(response)
                 .build();
     }
 }

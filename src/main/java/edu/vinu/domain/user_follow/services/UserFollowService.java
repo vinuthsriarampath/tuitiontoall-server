@@ -17,4 +17,6 @@ import edu.vinu.common.response.ApiResponse;
 
 public interface UserFollowService {
     ApiResponse followUser(Long followingId);
+
+    ApiResponse unfollowUser(Long followingId);
 }
