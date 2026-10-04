@@ -18,6 +18,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
 
@@ -29,4 +31,11 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
     )
     """,nativeQuery = true)
     int existsByFollowerIdAndFollowingId(Long followerId, Long followingId);
+
+    @Query(value = """
+    SELECT *
+    FROM user_follow uf
+    WHERE uf.follower_id = :followerId AND uf.following_id = :followingId
+    """,nativeQuery = true)
+    Optional<UserFollow> getByFollowerAndFollowingId(Long followerId, Long followingId);
 }
