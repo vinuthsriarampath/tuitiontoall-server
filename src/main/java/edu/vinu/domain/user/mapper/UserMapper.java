@@ -16,7 +16,9 @@ package edu.vinu.domain.user.mapper;
 import edu.vinu.domain.role.dto.RoleDetails;
 import edu.vinu.domain.role.mapper.RoleMapper;
 import edu.vinu.domain.user.dto.User;
+import edu.vinu.domain.user.dto.UserBasicResponse;
 import edu.vinu.domain.user.entity.UserEntity;
+import edu.vinu.domain.user.repository.projection.UserBasicProjection;
 
 public class UserMapper {
     public static User toUser(UserEntity userEntity) {
@@ -39,5 +41,16 @@ public class UserMapper {
         User user = toUser(userEntity);
         user.setDetails(details);
         return user;
+    }
+
+    public static UserBasicResponse toUserBasicResponse(UserBasicProjection p){
+        return UserBasicResponse.builder()
+                .id(p.getId())
+                .displayName(p.getDisplayName())
+                .email(p.getEmail())
+                .dp(p.getDp())
+                .userSlug(p.getUserSlug())
+                .role(p.getRole())
+                .build();
     }
 }
