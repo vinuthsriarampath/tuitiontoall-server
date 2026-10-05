@@ -38,4 +38,18 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
     WHERE uf.follower_id = :followerId AND uf.following_id = :followingId
     """,nativeQuery = true)
     Optional<UserFollow> getByFollowerAndFollowingId(Long followerId, Long followingId);
+
+    @Query(value = """
+    SELECT COUNT(*)
+    FROM user_follow uf
+    WHERE uf.following_id = :userId
+    """,nativeQuery = true)
+    long countFollowersByUserId(Long userId);
+
+    @Query(value = """
+    SELECT COUNT(*)
+    FROM user_follow uf
+    WHERE uf.follower_id = :userId
+    """,nativeQuery = true)
+    long countFollowingByUserId(Long userId);
 }
