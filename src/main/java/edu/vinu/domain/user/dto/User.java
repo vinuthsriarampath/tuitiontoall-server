@@ -42,5 +42,8 @@ public class User{
     private LocalDateTime creationTimeStamp;
     private LocalDateTime updatedAt;
 
+    @JsonProperty("isFollowing")
+    private boolean isFollowing;
+
     private RoleDetails details;
 }

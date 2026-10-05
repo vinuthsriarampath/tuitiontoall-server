@@ -33,9 +33,11 @@ import edu.vinu.domain.user.mapper.UserMapper;
 import edu.vinu.domain.user.repository.UserRepository;
 import edu.vinu.domain.user.request.update.UserDetailsUpdateRequest;
 import edu.vinu.domain.user.service.UserService;
+import edu.vinu.domain.user_follow.repository.UserFollowRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -51,6 +53,7 @@ public class UserServiceImpl implements UserService {
     private final InstituteRepository instituteRepository;
     private final TeacherRepository teacherRepository;
     private final StudentRepository studentRepository;
+    private final UserFollowRepository followRepository;
 
     @Override
     public User getUserByEmail(String email) {
@@ -146,26 +149,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUserSlug(String userSlug) {
-        return  Optional.ofNullable(userRepository.findByUserSlug(userSlug))
-                .map(userEntity -> {
-                    if (isUserDisabled(userEntity)) {
-                        throw new DisabledException("User is disabled");
-                    }
-                    User user = mapper.map(userEntity, User.class);
-                    switch (user.getRole().getRole()){
-                        case "student":
-                            user.setDetails(mapper.map(userEntity.getStudent(), Student.class));
-                            break;
-                        case "teacher":
-                            user.setDetails(mapper.map(userEntity.getTeacher(), Teacher.class));
-                            break;
-                        case "institute":
-                        user.setDetails(mapper.map(userEntity.getInstitute(), Institute.class));
-                        break;
-                    }
-                    return user;
-                })
-                .orElseThrow(()-> new NotFoundException("No user found by "+userSlug));
+        UserEntity targetUserEntity = Optional.ofNullable(userRepository.findByUserSlug(userSlug))
+                .orElseThrow(() -> new NotFoundException("No user found by " + userSlug));
+
+        if (isUserDisabled(targetUserEntity)) {
+            throw new DisabledException("User is disabled");
+        }
+
+        User user = mapper.map(targetUserEntity, User.class);
+
+        // Set Role Details
+        switch (user.getRole().getRole()) {
+            case "student" -> user.setDetails(mapper.map(targetUserEntity.getStudent(), Student.class));
+            case "teacher" -> user.setDetails(mapper.map(targetUserEntity.getTeacher(), Teacher.class));
+            case "institute" -> user.setDetails(mapper.map(targetUserEntity.getInstitute(), Institute.class));
+        }
+
+        // Resolve relationship context for the current viewing user
+        UserEntity currentUser = (getCurrentUser()); // Helper to extract user from SecurityContext
+        if (currentUser != null && !currentUser.getId().equals(targetUserEntity.getId())) {
+            boolean isFollowing = followRepository.existsByFollowerIdAndFollowingId(currentUser.getId(), targetUserEntity.getId()) > 0;
+            user.setFollowing(isFollowing);
+        } else {
+            user.setFollowing(false);
+        }
+
+        return user;
+    }
+
+    @Override
+    public UserEntity getCurrentUser() {
+        return getUserEntityByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
     public Institute convertToInstituteModel(InstituteEntity instituteEntity){
@@ -191,4 +205,6 @@ public class UserServiceImpl implements UserService {
             throw new InternalServerErrorException(e.getMessage());
         }
     }
+
+
 }
