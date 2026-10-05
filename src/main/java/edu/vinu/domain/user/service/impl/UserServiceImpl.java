@@ -174,6 +174,9 @@ public class UserServiceImpl implements UserService {
             user.setFollowing(false);
         }
 
+        user.setFollowersCount(followRepository.countFollowersByUserId(targetUserEntity.getId()));
+        user.setFollowingCount(followRepository.countFollowingByUserId(targetUserEntity.getId()));
+
         return user;
     }
 
