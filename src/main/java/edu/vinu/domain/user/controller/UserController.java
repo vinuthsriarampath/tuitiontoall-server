@@ -13,9 +13,14 @@
 
 package edu.vinu.domain.user.controller;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.user.dto.User;
+import edu.vinu.domain.user.dto.UserBasicResponse;
+import edu.vinu.domain.user.request.UserBasicFilterRequest;
 import edu.vinu.domain.user.service.UserService;
+import edu.vinu.domain.user_follow.services.UserFollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +33,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final UserFollowService userFollowService;
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse> getUserDetails(){
@@ -45,6 +51,16 @@ public class UserController {
     public ResponseEntity<ApiResponse> getUserByUserSlug(@PathVariable String userSlug){
         User user = userService.getUserByUserSlug(userSlug);
         return ResponseEntity.status(OK).body(new ApiResponse("User Found By "+userSlug,user));
+    }
+
+    @GetMapping("me/followers")
+    public ResponseEntity<PaginatedApiResponse<UserBasicResponse>> getMyFollowers(PaginationRequest pagination, UserBasicFilterRequest filters){
+        return ResponseEntity.ok(userFollowService.getMyFollowers(pagination,filters));
+    }
+
+    @GetMapping("me/followings")
+    public ResponseEntity<PaginatedApiResponse<UserBasicResponse>> getMyFollowings(PaginationRequest pagination, UserBasicFilterRequest filters){
+        return ResponseEntity.ok(userFollowService.getMyFollowings(pagination,filters));
     }
 
 }
