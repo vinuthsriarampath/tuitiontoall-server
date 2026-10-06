@@ -53,6 +53,7 @@ file:
     resource-path: uploads/chapter-resources/resources
   assignment-path: uploads/assignments
   assignment-submission-path: uploads/assignments/submissions
+  post-path: uploads/posts
 
 app:
   jwt:
