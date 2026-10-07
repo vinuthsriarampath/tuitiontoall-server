@@ -28,7 +28,7 @@ public interface PostMediaRepository extends JpaRepository<PostMedia, Long> {
     WHERE pm.post_id = :postId
     ORDER BY pm.file_order
     """,nativeQuery = true)
-    List<PostMedia> findByPostId(Long postId);
+    List<PostMedia> findAllByPostId(Long postId);
 
 
     @Modifying
