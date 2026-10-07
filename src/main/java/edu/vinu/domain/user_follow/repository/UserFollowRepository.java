@@ -177,4 +177,11 @@ public interface UserFollowRepository extends JpaRepository<UserFollow, Long> {
     ORDER BY uf.followed_on desc
     """, nativeQuery = true)
     Page<UserBasicProjection> getFollowingsByFollowerId(Long followerId, Long userId, String displayName, String email,String userSlug, String role, Pageable pageable);
+
+    @Query(value = """
+    SELECT IF(COUNT(*) > 0, true, false)
+    FROM user_follow uf
+    WHERE uf.follower_id = :followerUserId AND uf.following_id = :targetUserId
+    """,nativeQuery = true)
+    int isFollowing(long targetUserId, long followerUserId);
 }
