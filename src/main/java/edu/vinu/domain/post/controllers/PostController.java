@@ -53,4 +53,9 @@ public class PostController {
     public ResponseEntity<PaginatedApiResponse<UserPostResponse>> getMyPosts(PaginationRequest paginationRequest, MyPostsFilterRequests filters){
         return ResponseEntity.ok(userPostService.getMyPosts(paginationRequest,filters));
     }
+
+    @GetMapping("/user/{targetUserId}")
+    public ResponseEntity<PaginatedApiResponse<UserPostResponse>> getUserPosts(@PathVariable Long targetUserId, PaginationRequest pagination) {
+        return ResponseEntity.ok(userPostService.getUserPosts(targetUserId, pagination));
+    }
 }
