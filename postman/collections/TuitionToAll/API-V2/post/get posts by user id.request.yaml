@@ -1,4 +1,4 @@
 $kind: http-request
-url: ""
+url: localhost:8080/api/v2/posts/user/101
 method: GET
 order: 4207176692790337
