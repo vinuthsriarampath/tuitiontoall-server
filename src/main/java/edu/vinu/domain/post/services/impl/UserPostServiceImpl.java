@@ -26,6 +26,7 @@ import edu.vinu.domain.post.services.PostMediaService;
 import edu.vinu.domain.post.services.UserPostService;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
+import edu.vinu.domain.user_follow.repository.UserFollowRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +43,7 @@ public class UserPostServiceImpl implements UserPostService {
     private final PostRepository postRepository;
     private final UserService userService;
     private final PostMediaService postMediaService;
+    private final UserFollowRepository userFollowRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -59,6 +61,32 @@ public class UserPostServiceImpl implements UserPostService {
 
         return PaginatedApiResponse.<UserPostResponse>builder()
                 .message("Fetched my posts successfully")
+                .data(postsPage.getContent())
+                .page(postsPage.getNumber())
+                .size(postsPage.getSize())
+                .totalElements(postsPage.getTotalElements())
+                .totalPages(postsPage.getTotalPages())
+                .last(postsPage.isLast())
+                .build();
+    }
+
+    @Override
+    public PaginatedApiResponse<UserPostResponse> getUserPosts(Long targetUserId, PaginationRequest pagination) {
+        UserEntity currentUser = userService.getCurrentUser();
+
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("published_date", "created_date")));
+
+        boolean isFollowing = false;
+        if (currentUser != null && !currentUser.getId().equals(targetUserId)) {
+            isFollowing = userFollowRepository.isFollowing(targetUserId, currentUser.getId()) > 0;
+        } else if (currentUser != null) {
+            return getMyPosts(pagination, new MyPostsFilterRequests(null, null));
+        }
+
+        Page<UserPostResponse> postsPage = postRepository.findTargetUserPosts(targetUserId, isFollowing, pageable).map(post -> PostMapper.toUserPostResponse(post,postMediaService.getPostMediaByPostId(post.getId())));
+
+        return PaginatedApiResponse.<UserPostResponse>builder()
+                .message("Fetched User's posts successfully")
                 .data(postsPage.getContent())
                 .page(postsPage.getNumber())
                 .size(postsPage.getSize())
