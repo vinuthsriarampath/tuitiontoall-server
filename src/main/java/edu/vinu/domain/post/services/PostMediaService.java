@@ -14,9 +14,12 @@
 package edu.vinu.domain.post.services;
 
 import edu.vinu.domain.post.dto.response.PostMediaResponse;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface PostMediaService {
     List<PostMediaResponse> getPostMediaByPostId(Long postId);
+
+    ResponseEntity<?> loadMediaResource(String fileName, String rangeHeader);
 }
