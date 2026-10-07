@@ -14,6 +14,7 @@
 package edu.vinu.domain.post.repository;
 
 import edu.vinu.domain.post.entity.Post;
+import edu.vinu.domain.post.repository.projections.UserPostProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,19 +25,29 @@ import org.springframework.stereotype.Repository;
 public interface PostRepository extends JpaRepository<Post,Long> {
 
     @Query(value = """
-    SELECT p.*
+    SELECT
+    p.id AS id,
+    p.caption AS caption,
+    p.status AS status,
+    p.visibility AS visibility,
+    p.created_date AS createdDate,
+    p.updated_date AS updatedDate,
+    p.published_date AS publishedDate,
+    0 As likesCount,
+    0 As commentsCount,
+    0 AS isLikedByUser
     FROM post p
-    WHERE (:userId IS NULL OR p.user_id = :userId)
+    WHERE p.user_id = :userId
     AND (:status IS NULL OR p.status = :status)
     AND (:visibility IS NULL OR p.visibility = :visibility)
     """,
-            countQuery = """
+    countQuery = """
     SELECT COUNT(*) FROM post p
-    WHERE (:userId IS NULL OR p.user_id = :userId)
+    WHERE p.user_id = :userId
     AND (:status IS NULL OR p.status = :status)
     AND (:visibility IS NULL OR p.visibility = :visibility)
     """,nativeQuery = true)
-    Page<Post> findAllWithFilters(Long userId, String status, String visibility, Pageable pageable);
+    Page<UserPostProjection> findAllByOwner(Long userId, String status, String visibility, Pageable pageable);
 
     @Query(value = """
     SELECT IF(COUNT(*) > 0, true, false)
