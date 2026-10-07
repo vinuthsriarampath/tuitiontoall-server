@@ -13,11 +13,14 @@
 
 package edu.vinu.domain.post.controllers;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.post.dto.request.MyPostsFilterRequests;
 import edu.vinu.domain.post.dto.request.PostCreateRequest;
-import edu.vinu.domain.post.dto.response.PostResponse;
-import edu.vinu.domain.post.enums.PostMediaType;
+import edu.vinu.domain.post.dto.response.UserPostResponse;
 import edu.vinu.domain.post.services.PostService;
+import edu.vinu.domain.post.services.UserPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +34,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final UserPostService userPostService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> createPost(
@@ -43,5 +47,10 @@ public class PostController {
     @PatchMapping("/{postId}/publish")
     public ResponseEntity<ApiResponse> publishDraftPost(@PathVariable Long postId) {
         return ResponseEntity.ok(postService.publishDraftPost(postId));
+    }
+
+    @GetMapping("me")
+    public ResponseEntity<PaginatedApiResponse<UserPostResponse>> getMyPosts(PaginationRequest paginationRequest, MyPostsFilterRequests filters){
+        return ResponseEntity.ok(userPostService.getMyPosts(paginationRequest,filters));
     }
 }
