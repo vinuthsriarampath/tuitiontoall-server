@@ -16,11 +16,12 @@ package edu.vinu.domain.post.mapper;
 import edu.vinu.domain.post.dto.request.PostCreateRequest;
 import edu.vinu.domain.post.dto.request.enums.PostCreateStatus;
 import edu.vinu.domain.post.dto.response.PostMediaResponse;
+import edu.vinu.domain.post.dto.response.UserPostResponse;
 import edu.vinu.domain.post.dto.response.PostResponse;
 import edu.vinu.domain.post.entity.Post;
-import edu.vinu.domain.post.entity.PostMedia;
 import edu.vinu.domain.post.enums.PostStatus;
 import edu.vinu.domain.post.enums.PostVisibility;
+import edu.vinu.domain.post.repository.projections.UserPostProjection;
 import edu.vinu.domain.user.entity.UserEntity;
 
 import java.time.LocalDateTime;
@@ -39,31 +40,34 @@ public class PostMapper {
                 .build();
     }
 
-    public static PostMediaResponse toPostMediaResponse(PostMedia media) {
-        return new PostMediaResponse(
-                media.getId(),
-                media.getMediaUrl(),
-                media.getMediaType(),
-                media.getFileOrder()
-        );
+    public static PostResponse toPostResponse(Post post) {
+        return PostResponse.builder()
+                .id(post.getId())
+                .userId(post.getUser().getId())
+                .caption(post.getCaption())
+                .visibility(post.getVisibility())
+                .status(post.getStatus())
+                .createdDate(post.getCreatedDate())
+                .publishedDate(post.getPublishedDate())
+                .lastModifiedDate(post.getUpdatedDate())
+                .mediaList(post.getMediaList().stream().map(PostMediaMapper::toPostMediaResponse).toList())
+                .build();
     }
 
-    public static PostResponse toPostResponse(Post post) {
-        List<PostMediaResponse> mediaResponses = post.getMediaList() != null ?
-                post.getMediaList().stream().map(PostMapper::toPostMediaResponse).toList()
-                : List.of();
-
-        return new PostResponse(
-                post.getId(),
-                post.getUser().getId(),
-                post.getCaption(),
-                post.getVisibility(),
-                post.getStatus(),
-                post.getCreatedDate(),
-                post.getPublishedDate(),
-                post.getUpdatedDate(),
-                mediaResponses
-        );
+    public static UserPostResponse toUserPostResponse(UserPostProjection p, List<PostMediaResponse> mediaList){
+        return UserPostResponse.builder()
+                .id(p.getId())
+                .caption(p.getCaption())
+                .visibility(p.getVisibility())
+                .status(p.getStatus())
+                .createdDate(p.getCreatedDate())
+                .publishedDate(p.getPublishedDate())
+                .lastModifiedDate(p.getUpdatedDate())
+                .mediaList(mediaList)
+                .likesCount(p.getLikesCount())
+                .commentsCount(p.getCommentsCount())
+                .isLiked(p.getIsLikedByUser() > 0)
+                .build();
     }
 
     private static PostStatus toPostStatus(PostCreateStatus createStatus) {
