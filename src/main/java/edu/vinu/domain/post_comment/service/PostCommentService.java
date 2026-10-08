@@ -13,9 +13,15 @@
 
 package edu.vinu.domain.post_comment.service;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.post_comment.dtos.request.PostCommentRequest;
+import edu.vinu.domain.post_comment.dtos.request.PostCommentsFilterRequest;
+import edu.vinu.domain.post_comment.dtos.response.PostCommentDetailedResponse;
 
 public interface PostCommentService {
     ApiResponse comment(Long postId,PostCommentRequest request);
+
+    PaginatedApiResponse<PostCommentDetailedResponse> getPostComments(Long postId, PaginationRequest pagination, PostCommentsFilterRequest filters);
 }

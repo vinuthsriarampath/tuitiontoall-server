@@ -13,10 +13,15 @@
 
 package edu.vinu.domain.post_comment.service.impl;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.common.util.SortUtil;
 import edu.vinu.domain.post.entity.Post;
 import edu.vinu.domain.post.services.PostService;
 import edu.vinu.domain.post_comment.dtos.request.PostCommentRequest;
+import edu.vinu.domain.post_comment.dtos.request.PostCommentsFilterRequest;
+import edu.vinu.domain.post_comment.dtos.response.PostCommentDetailedResponse;
 import edu.vinu.domain.post_comment.entity.PostComment;
 import edu.vinu.domain.post_comment.mapper.PostCommentMapper;
 import edu.vinu.domain.post_comment.repository.PostCommentRepository;
@@ -24,7 +29,12 @@ import edu.vinu.domain.post_comment.service.PostCommentService;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +59,28 @@ public class PostCommentServiceImpl implements PostCommentService {
         return ApiResponse.builder()
                 .message("Comment added successfully")
                 .data(PostCommentMapper.toPostCommentResponse(save))
+                .build();
+    }
+
+    @Override
+    public PaginatedApiResponse<PostCommentDetailedResponse> getPostComments(Long postId, PaginationRequest pagination, PostCommentsFilterRequest filters) {
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));
+
+        Page<PostCommentDetailedResponse> page = commentRepository.findAllByPostId(
+                postId,
+                filters.userId(),
+                filters.userName(),
+                pageable
+        ).map(PostCommentMapper::toPostCommentDetailedResponse);
+
+        return PaginatedApiResponse.<PostCommentDetailedResponse>builder()
+                .message("Comments retrieved successfully")
+                .data(page.getContent())
+                .page(page.getNumber())
+                .size(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .last(page.isLast())
                 .build();
     }
 }
