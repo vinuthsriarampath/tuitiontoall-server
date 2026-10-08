@@ -18,6 +18,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
 
@@ -28,4 +30,12 @@ public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
     LIMIT 1
     """,nativeQuery = true)
     int isLikedByUser(Long postId, Long userId);
+
+    @Query(value = """
+    SELECT *
+    FROM post_like pl
+    WHERE pl.post_id = :postId AND pl.user_id = :id
+    LIMIT 1
+    """,nativeQuery = true)
+    Optional<PostLike> findByPostIdAndUserId(Long postId, Long id);
 }
