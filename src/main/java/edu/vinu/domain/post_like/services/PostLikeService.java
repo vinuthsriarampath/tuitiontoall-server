@@ -16,4 +16,6 @@ package edu.vinu.domain.post_like.services;
 public interface PostLikeService {
 
     void likePost(Long postId);
+
+    void dislikePost(Long postId);
 }

@@ -47,4 +47,15 @@ public class PostLikeServiceImpl implements PostLikeService {
 
         likeRepository.save(build);
     }
+
+    @Override
+    public void dislikePost(Long postId) {
+        UserEntity currentUser = userService.getCurrentUser();
+
+        if(!postRepository.existsById(postId)) throw new NotFoundException("Post not found by id!");
+
+        PostLike postLike = likeRepository.findByPostIdAndUserId(postId, currentUser.getId()).orElseThrow(() -> new NotFoundException("User haven't liked for the post!"));
+
+        likeRepository.delete(postLike);
+    }
 }
