@@ -21,7 +21,10 @@ import edu.vinu.domain.post.dto.request.PostCreateRequest;
 import edu.vinu.domain.post.dto.response.UserPostResponse;
 import edu.vinu.domain.post.services.PostService;
 import edu.vinu.domain.post.services.UserPostService;
+import edu.vinu.domain.post_comment.dtos.request.PostCommentRequest;
+import edu.vinu.domain.post_comment.service.PostCommentService;
 import edu.vinu.domain.post_like.services.PostLikeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +40,7 @@ public class PostController {
     private final PostService postService;
     private final UserPostService userPostService;
     private final PostLikeService postLikeService;
+    private final PostCommentService postCommentService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> createPost(
@@ -71,5 +75,10 @@ public class PostController {
     public ResponseEntity<ApiResponse> dislikePost(@PathVariable Long postId) {
         postLikeService.dislikePost(postId);
         return ResponseEntity.ok(new ApiResponse("Post disliked successfully.",null));
+    }
+
+    @PostMapping("/{postId}/comment")
+    public ResponseEntity<ApiResponse> commentPost(@PathVariable Long postId, @Valid @RequestBody PostCommentRequest request) {
+        return ResponseEntity.ok(postCommentService.comment(postId, request));
     }
 }
