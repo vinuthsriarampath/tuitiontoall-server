@@ -21,6 +21,7 @@ import edu.vinu.domain.post.dto.request.PostCreateRequest;
 import edu.vinu.domain.post.dto.response.UserPostResponse;
 import edu.vinu.domain.post.services.PostService;
 import edu.vinu.domain.post.services.UserPostService;
+import edu.vinu.domain.post_like.services.PostLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,7 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
     private final UserPostService userPostService;
+    private final PostLikeService postLikeService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> createPost(
@@ -57,5 +59,11 @@ public class PostController {
     @GetMapping("/user/{targetUserId}")
     public ResponseEntity<PaginatedApiResponse<UserPostResponse>> getUserPosts(@PathVariable Long targetUserId, PaginationRequest pagination) {
         return ResponseEntity.ok(userPostService.getUserPosts(targetUserId, pagination));
+    }
+
+    @PostMapping("/{postId}/like")
+    public ResponseEntity<ApiResponse> likePost(@PathVariable Long postId) {
+        postLikeService.likePost(postId);
+        return ResponseEntity.ok(new ApiResponse("Post liked successfully.",null));
     }
 }
