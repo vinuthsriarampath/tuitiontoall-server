@@ -15,8 +15,17 @@ package edu.vinu.domain.post_like.repository;
 
 import edu.vinu.domain.post_like.entity.PostLike;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
+
+    @Query(value = """
+    SELECT IF(COUNT(*) > 0, true, false)
+    FROM post_like pl
+    WHERE pl.post_id = :postId AND pl.user_id = :userId
+    LIMIT 1
+    """,nativeQuery = true)
+    int isLikedByUser(Long postId, Long userId);
 }
