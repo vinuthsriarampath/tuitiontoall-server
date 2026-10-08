@@ -35,7 +35,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     p.updated_date AS updatedDate,
     p.published_date AS publishedDate,
     ( SELECT COUNT(*) FROM post_like pl WHERE pl.post_id = p.id ) AS likesCount,
-    0 As commentsCount,
+    ( SELECT COUNT(*) FROM post_comments pc WHERE pc.post_id = P.id) AS commentsCount,
     IF( EXISTS( SELECT 1 FROM post_like pl WHERE pl.post_id = p.id AND pl.user_id = :userId ), 1, 0) AS isLikedByUser
     FROM post p
     WHERE p.user_id = :userId
@@ -66,9 +66,9 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     p.created_date AS createdDate,
     p.updated_date AS updatedDate,
     p.published_date AS publishedDate,
-    0 As likesCount,
-    0 As commentsCount,
-    0 AS isLikedByUser
+    ( SELECT COUNT(*) FROM post_like pl WHERE pl.post_id = p.id ) AS likesCount,
+    ( SELECT COUNT(*) FROM post_comments pc WHERE pc.post_id = P.id) AS commentsCount,
+    IF( EXISTS( SELECT 1 FROM post_like pl WHERE pl.post_id = p.id AND pl.user_id = :currentUserId ), 1, 0) AS isLikedByUser
     FROM post p
     WHERE p.user_id = :targetUserId
     AND p.status = 'PUBLISHED'
@@ -86,5 +86,5 @@ public interface PostRepository extends JpaRepository<Post,Long> {
         OR (:isFollowing = true AND p.visibility = 'FOLLOWERS_ONLY')
     )
     """, nativeQuery = true)
-    Page<UserPostProjection> findTargetUserPosts(Long targetUserId, boolean isFollowing, Pageable pageable);
+    Page<UserPostProjection> findTargetUserPosts(Long targetUserId,Long currentUserId, boolean isFollowing, Pageable pageable);
 }

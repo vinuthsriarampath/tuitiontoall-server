@@ -76,14 +76,13 @@ public class UserPostServiceImpl implements UserPostService {
 
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("published_date", "created_date")));
 
-        boolean isFollowing = false;
+        Page<UserPostResponse> postsPage = Page.empty(pageable);
         if (currentUser != null && !currentUser.getId().equals(targetUserId)) {
-            isFollowing = userFollowRepository.isFollowing(targetUserId, currentUser.getId()) > 0;
+            boolean isFollowing = userFollowRepository.isFollowing(targetUserId, currentUser.getId()) > 0;
+            postsPage = postRepository.findTargetUserPosts(targetUserId,currentUser.getId(), isFollowing, pageable).map(post -> PostMapper.toUserPostResponse(post,postMediaService.getPostMediaByPostId(post.getId())));
         } else if (currentUser != null) {
             return getMyPosts(pagination, new MyPostsFilterRequests(null, null));
         }
-
-        Page<UserPostResponse> postsPage = postRepository.findTargetUserPosts(targetUserId, isFollowing, pageable).map(post -> PostMapper.toUserPostResponse(post,postMediaService.getPostMediaByPostId(post.getId())));
 
         return PaginatedApiResponse.<UserPostResponse>builder()
                 .message("Fetched User's posts successfully")
