@@ -13,8 +13,10 @@
 
 package edu.vinu.domain.post_comment.mapper;
 
+import edu.vinu.domain.post_comment.dtos.response.PostCommentDetailedResponse;
 import edu.vinu.domain.post_comment.dtos.response.PostCommentResponse;
 import edu.vinu.domain.post_comment.entity.PostComment;
+import edu.vinu.domain.post_comment.repository.projection.PostCommentDetailedProjection;
 
 public class PostCommentMapper{
     public static PostCommentResponse toPostCommentResponse(PostComment comment) {
@@ -24,6 +26,19 @@ public class PostCommentMapper{
                 .userId(comment.getUser().getId())
                 .postId(comment.getPost().getId())
                 .createdDate(comment.getCreatedDate())
+                .build();
+    }
+
+    public static PostCommentDetailedResponse toPostCommentDetailedResponse(PostCommentDetailedProjection p) {
+        return PostCommentDetailedResponse.builder()
+                .id(p.getId())
+                .userId(p.getUserId())
+                .displayName(p.getDisplayName())
+                .dp(p.getDp())
+                .userSlug(p.getUserSlug())
+                .message(p.getMessage())
+                .createdDate(p.getCreatedDate())
+                .updatedDate(p.getUpdatedDate())
                 .build();
     }
 }
