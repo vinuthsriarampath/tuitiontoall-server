@@ -21,7 +21,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post,Long> {
@@ -35,9 +34,9 @@ public interface PostRepository extends JpaRepository<Post,Long> {
     p.created_date AS createdDate,
     p.updated_date AS updatedDate,
     p.published_date AS publishedDate,
-    0 As likesCount,
+    ( SELECT COUNT(*) FROM post_like pl WHERE pl.post_id = p.id ) AS likesCount,
     0 As commentsCount,
-    0 AS isLikedByUser
+    IF( EXISTS( SELECT 1 FROM post_like pl WHERE pl.post_id = p.id AND pl.user_id = :userId ), 1, 0) AS isLikedByUser
     FROM post p
     WHERE p.user_id = :userId
     AND (:status IS NULL OR p.status = :status)
