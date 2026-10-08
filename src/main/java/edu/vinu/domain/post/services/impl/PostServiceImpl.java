@@ -123,6 +123,11 @@ public class PostServiceImpl implements PostService {
                 .build();
     }
 
+    @Override
+    public Post getPostById(Long postId) {
+        return postRepository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found with id: " + postId));
+    }
+
     private void validateFileOrders(List<PostMediaItemRequest> mediaItems, int totalFiles) {
         Set<Integer> orderSet = new HashSet<>();
 
