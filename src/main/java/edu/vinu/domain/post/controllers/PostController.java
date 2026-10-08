@@ -66,4 +66,10 @@ public class PostController {
         postLikeService.likePost(postId);
         return ResponseEntity.ok(new ApiResponse("Post liked successfully.",null));
     }
+
+    @DeleteMapping("/{postId}/dislike")
+    public ResponseEntity<ApiResponse> dislikePost(@PathVariable Long postId) {
+        postLikeService.dislikePost(postId);
+        return ResponseEntity.ok(new ApiResponse("Post disliked successfully.",null));
+    }
 }
