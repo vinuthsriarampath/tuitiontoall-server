@@ -22,6 +22,8 @@ import edu.vinu.domain.post.dto.response.UserPostResponse;
 import edu.vinu.domain.post.services.PostService;
 import edu.vinu.domain.post.services.UserPostService;
 import edu.vinu.domain.post_comment.dtos.request.PostCommentRequest;
+import edu.vinu.domain.post_comment.dtos.request.PostCommentsFilterRequest;
+import edu.vinu.domain.post_comment.dtos.response.PostCommentDetailedResponse;
 import edu.vinu.domain.post_comment.service.PostCommentService;
 import edu.vinu.domain.post_like.services.PostLikeService;
 import jakarta.validation.Valid;
@@ -80,5 +82,10 @@ public class PostController {
     @PostMapping("/{postId}/comment")
     public ResponseEntity<ApiResponse> commentPost(@PathVariable Long postId, @Valid @RequestBody PostCommentRequest request) {
         return ResponseEntity.ok(postCommentService.comment(postId, request));
+    }
+
+    @GetMapping("/{postId}/comments")
+    public ResponseEntity<PaginatedApiResponse<PostCommentDetailedResponse>> getPostComments(@PathVariable Long postId, PaginationRequest pagination, PostCommentsFilterRequest filters){
+        return ResponseEntity.ok(postCommentService.getPostComments(postId, pagination, filters));
     }
 }
