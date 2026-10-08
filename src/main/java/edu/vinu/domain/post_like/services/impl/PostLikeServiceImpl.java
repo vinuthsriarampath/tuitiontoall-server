@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.post_like.services.impl;
 
+import edu.vinu.common.exception.custom.BadRequestException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.domain.post.repository.PostRepository;
 import edu.vinu.domain.post_like.entity.PostLike;
@@ -34,6 +35,10 @@ public class PostLikeServiceImpl implements PostLikeService {
     @Override
     public void likePost(Long postId) {
         UserEntity currentUser = userService.getCurrentUser();
+
+        if(likeRepository.isLikedByUser(postId, currentUser.getId()) > 0) {
+            throw new BadRequestException("Post already liked by user!");
+        }
 
         PostLike build = PostLike.builder()
                 .post(postRepository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found by id!")))
