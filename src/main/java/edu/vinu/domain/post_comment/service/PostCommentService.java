@@ -13,5 +13,9 @@
 
 package edu.vinu.domain.post_comment.service;
 
+import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.post_comment.dtos.request.PostCommentRequest;
+
 public interface PostCommentService {
+    ApiResponse comment(Long postId,PostCommentRequest request);
 }
