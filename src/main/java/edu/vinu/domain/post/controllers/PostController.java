@@ -18,6 +18,7 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.post.dto.request.MyPostsFilterRequests;
 import edu.vinu.domain.post.dto.request.PostCreateRequest;
+import edu.vinu.domain.post.dto.response.FeedPostResponse;
 import edu.vinu.domain.post.dto.response.UserPostResponse;
 import edu.vinu.domain.post.services.PostService;
 import edu.vinu.domain.post.services.UserPostService;
@@ -65,6 +66,11 @@ public class PostController {
     @GetMapping("/user/{targetUserId}")
     public ResponseEntity<PaginatedApiResponse<UserPostResponse>> getUserPosts(@PathVariable Long targetUserId, PaginationRequest pagination) {
         return ResponseEntity.ok(userPostService.getUserPosts(targetUserId, pagination));
+    }
+
+    @GetMapping("/feed")
+    public ResponseEntity<PaginatedApiResponse<FeedPostResponse>> getFeedPosts(PaginationRequest paginationRequest) {
+        return ResponseEntity.ok(userPostService.getFeedPosts(paginationRequest));
     }
 
     @PostMapping("/{postId}/like")
