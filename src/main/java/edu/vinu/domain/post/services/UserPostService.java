@@ -16,10 +16,13 @@ package edu.vinu.domain.post.services;
 import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.post.dto.request.MyPostsFilterRequests;
+import edu.vinu.domain.post.dto.response.FeedPostResponse;
 import edu.vinu.domain.post.dto.response.UserPostResponse;
 
 public interface UserPostService {
     PaginatedApiResponse<UserPostResponse> getMyPosts(PaginationRequest pagination, MyPostsFilterRequests filters);
 
     PaginatedApiResponse<UserPostResponse> getUserPosts(Long targetUserId, PaginationRequest pagination);
+
+    PaginatedApiResponse<FeedPostResponse> getFeedPosts(PaginationRequest pagination);
 }

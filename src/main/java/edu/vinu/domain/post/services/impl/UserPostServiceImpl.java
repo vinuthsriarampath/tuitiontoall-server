@@ -17,9 +17,8 @@ import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.common.util.SortUtil;
 import edu.vinu.domain.post.dto.request.MyPostsFilterRequests;
-import edu.vinu.domain.post.dto.response.PostResponse;
+import edu.vinu.domain.post.dto.response.FeedPostResponse;
 import edu.vinu.domain.post.dto.response.UserPostResponse;
-import edu.vinu.domain.post.entity.Post;
 import edu.vinu.domain.post.mapper.PostMapper;
 import edu.vinu.domain.post.repository.PostRepository;
 import edu.vinu.domain.post.services.PostMediaService;
@@ -92,6 +91,31 @@ public class UserPostServiceImpl implements UserPostService {
                 .totalElements(postsPage.getTotalElements())
                 .totalPages(postsPage.getTotalPages())
                 .last(postsPage.isLast())
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public PaginatedApiResponse<FeedPostResponse> getFeedPosts(PaginationRequest pagination) {
+        UserEntity currentUser = userService.getCurrentUser();
+
+        Pageable pageable = PageRequest.of(
+                pagination.page(),
+                pagination.size(),
+                SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("published_date", "created_date"))
+        );
+
+        Page<FeedPostResponse> feedPage = postRepository.findFeedPosts(currentUser.getId(), pageable)
+                .map(p -> PostMapper.toFeedPostResponse(p, postMediaService.getPostMediaByPostId(p.getId())));
+
+        return PaginatedApiResponse.<FeedPostResponse>builder()
+                .message("Feed posts fetched successfully")
+                .data(feedPage.getContent())
+                .page(feedPage.getNumber())
+                .size(feedPage.getSize())
+                .totalElements(feedPage.getTotalElements())
+                .totalPages(feedPage.getTotalPages())
+                .last(feedPage.isLast())
                 .build();
     }
 }
