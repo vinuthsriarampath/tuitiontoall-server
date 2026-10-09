@@ -15,12 +15,14 @@ package edu.vinu.domain.post.mapper;
 
 import edu.vinu.domain.post.dto.request.PostCreateRequest;
 import edu.vinu.domain.post.dto.request.enums.PostCreateStatus;
+import edu.vinu.domain.post.dto.response.FeedPostResponse;
 import edu.vinu.domain.post.dto.response.PostMediaResponse;
 import edu.vinu.domain.post.dto.response.UserPostResponse;
 import edu.vinu.domain.post.dto.response.PostResponse;
 import edu.vinu.domain.post.entity.Post;
 import edu.vinu.domain.post.enums.PostStatus;
 import edu.vinu.domain.post.enums.PostVisibility;
+import edu.vinu.domain.post.repository.projections.FeedPostProjection;
 import edu.vinu.domain.post.repository.projections.UserPostProjection;
 import edu.vinu.domain.user.entity.UserEntity;
 
@@ -78,5 +80,27 @@ public class PostMapper {
             case DRAFT -> PostStatus.DRAFT;
             case PUBLISHED -> PostStatus.PUBLISHED;
         };
+    }
+
+    public static FeedPostResponse toFeedPostResponse(FeedPostProjection p, List<PostMediaResponse> mediaList) {
+        return FeedPostResponse.builder()
+                .id(p.getId())
+                .caption(p.getCaption())
+                .visibility(p.getVisibility())
+                .status(p.getStatus())
+                .createdDate(p.getCreatedDate())
+                .publishedDate(p.getPublishedDate())
+                .lastModifiedDate(p.getUpdatedDate())
+                .authorId(p.getAuthorId())
+                .authorName(p.getAuthorName())
+                .authorSlug(p.getAuthorSlug())
+                .authorDp(p.getAuthorDp())
+                .authorRole(p.getAuthorRole())
+                .isFollowingAuthor(p.getIsFollowingAuthor() > 0)
+                .mediaList(mediaList)
+                .likesCount(p.getLikesCount() != null ? p.getLikesCount() : 0)
+                .commentsCount(p.getCommentsCount() != null ? p.getCommentsCount() : 0)
+                .isLiked(p.getIsLikedByUser() > 0)
+                .build();
     }
 }
