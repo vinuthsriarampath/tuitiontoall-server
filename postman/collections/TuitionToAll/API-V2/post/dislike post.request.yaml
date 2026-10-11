@@ -1,0 +1,4 @@
+$kind: http-request
+url: localhost:8080/api/v2/posts/1/dislike
+method: DELETE
+order: 4473000275963754

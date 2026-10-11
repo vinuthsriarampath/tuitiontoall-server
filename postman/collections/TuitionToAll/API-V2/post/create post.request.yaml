@@ -1,0 +1,40 @@
+$kind: http-request
+url: localhost:8080/api/v2/posts
+method: POST
+body:
+  type: formdata
+  content:
+    - type: text
+      key: request
+      value: |-
+        {
+          "caption": "Physics revision materials and diagrams for unit test preparation.",
+          "visibility": "PUBLIC",
+          "status": "PUBLISHED",
+          "mediaItems": [
+            {
+              "mediaType": "IMAGE",
+              "fileOrder": 1
+            },
+            {
+              "mediaType": "IMAGE",
+              "fileOrder": 2
+            },
+            {
+              "mediaType": "DOCUMENT",
+              "fileOrder": 3
+            }
+          ]
+        }
+      contentType: application/json
+      description: ""
+      disabled: false
+    - type: file
+      key: files
+      src:
+        - /C:/Users/vinut/OneDrive/Pictures/desktop.png
+        - /C:/Users/vinut/OneDrive/Pictures/no-less-18.jpeg
+        - /C:/Users/vinut/OneDrive/Documents/gta chapters.txt
+      description: ""
+      disabled: false
+order: 1791268870551

@@ -39,4 +39,6 @@ public interface UserService {
     boolean isUserDisabled(UserEntity userEntity);
 
     User getUserByUserSlug(String userSlug);
+
+    UserEntity getCurrentUser();
 }

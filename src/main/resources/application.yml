@@ -1,7 +1,7 @@
 spring:
   application:
     name: TuitionToAll
-    version: 2.7.0
+    version: 2.8.0
 
   profiles:
     active: ${SPRING_PROFILE}
@@ -53,6 +53,7 @@ file:
     resource-path: uploads/chapter-resources/resources
   assignment-path: uploads/assignments
   assignment-submission-path: uploads/assignments/submissions
+  post-path: uploads/posts
 
 app:
   jwt:
