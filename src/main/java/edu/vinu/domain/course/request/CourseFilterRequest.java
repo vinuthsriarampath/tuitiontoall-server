@@ -13,10 +13,13 @@
 
 package edu.vinu.domain.course.request;
 
+import edu.vinu.domain.course.enums.*;
+
 public record CourseFilterRequest(
-        String category,
-        String level,
-        String language,
-        String mode,
-        String status
+        String title,
+        CourseCategory category,
+        CourseLevel level,
+        CourseLanguage language,
+        CourseMode mode,
+        CourseStatus status
 ) {}

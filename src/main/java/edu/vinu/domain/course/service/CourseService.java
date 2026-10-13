@@ -13,8 +13,10 @@
 
 package edu.vinu.domain.course.service;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.course.dto.Course;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.request.CourseCreateRequest;
@@ -75,7 +77,7 @@ public interface CourseService {
      * Retrieves all courses associated with the currently authenticated institute.
      * @return a list of Course objects
      */
-    List<Course> getAllCoursesForInstitute();
+    PaginatedApiResponse<Course> getPaginatedCoursesForCurrentInstitute(PaginationRequest pagination, CourseFilterRequest filters);
 
     /**
      * Retrieves the thumbnail based on filename

@@ -13,7 +13,9 @@
 
 package edu.vinu.domain.course.controller;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.course.dto.Course;
 import edu.vinu.domain.course.request.CourseCreateRequest;
 import edu.vinu.domain.course.request.CourseFilterRequest;
@@ -98,9 +100,9 @@ public class CourseController {
     }
 
     @PreAuthorize("hasAuthority('institute')")
-    @GetMapping("/institute/all")
-    public ResponseEntity<ApiResponse> getAllCoursesForInstitute(){
-        return ResponseEntity.status(200).body(new ApiResponse("All courses for the institute", courseService.getAllCoursesForInstitute()));
+    @GetMapping("/institute")
+    public ResponseEntity<PaginatedApiResponse<Course>> getPaginatedCoursesForCurrentInstitute(PaginationRequest pagination, CourseFilterRequest filters){
+        return ResponseEntity.ok(courseService.getPaginatedCoursesForCurrentInstitute(pagination ,filters));
     }
 
     @GetMapping("/thumbnail/{filename:.+}")
@@ -117,9 +119,8 @@ public class CourseController {
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType)).body(fileBytes);
     }
 
-    @GetMapping("/{instituteId}/all")
-    public ResponseEntity<ApiResponse> getAllCoursesByInstituteId(@PathVariable Long instituteId,CourseFilterRequest filters
-    ){
+    @GetMapping("institute/{instituteId}")
+    public ResponseEntity<ApiResponse> getAllCoursesByInstituteId(@PathVariable Long instituteId,CourseFilterRequest filters){
         List<Course> courses = courseService.getAllCoursesByInstituteId(instituteId,filters);
         return ResponseEntity.status(200).body(new ApiResponse("Courses for the institute", courses));
     }

@@ -18,6 +18,8 @@ import edu.vinu.domain.course.repository.projections.SimpleCourseProjection;
 import edu.vinu.domain.course.repository.projections.TeacherBasicCourseProjection;
 import edu.vinu.domain.course.repository.projections.TeacherCourseProjection;
 import edu.vinu.domain.reporting.projection.TrendPointProjection;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,19 +30,58 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
-    List<CourseEntity> findAllByInstituteId(Long id);
+    @Query(value = """
+    SELECT *
+    FROM courses c
+    WHERE c.institute_id = :instituteId
+        AND (:title IS NULL OR LOWER(c.title) LIKE LOWER(CONCAT('%', :title, '%')))
+        AND (:category IS NULL OR c.category = :category)
+        AND (:level IS NULL OR c.level = :level)
+        AND (:language IS NULL OR c.language = :language)
+        AND (:mode IS NULL OR c.mode = :mode)
+        AND (:status IS NULL OR c.status = :status)
+    """, countQuery = """
+    SELECT COUNT(*)
+    FROM courses c
+    WHERE c.institute_id = :instituteId
+        AND (:title IS NULL OR LOWER(c.title) LIKE LOWER(CONCAT('%', :title, '%')))
+        AND (:category IS NULL OR c.category = :category)
+        AND (:level IS NULL OR c.level = :level)
+        AND (:language IS NULL OR c.language = :language)
+        AND (:mode IS NULL OR c.mode = :mode)
+        AND (:status IS NULL OR c.status = :status)
+    """, nativeQuery = true)
+    Page<CourseEntity> findAllByInstituteIdWithFilters(
+            Long instituteId,
+            String title,
+            String category,
+            String level,
+            String language,
+            String mode,
+            String status,
+            Pageable pageable
+    );
 
     @Query(value = """
-                    SELECT *
-                    FROM courses c
-                    WHERE c.institute_id = :instituteId
-                    AND (:category IS NULL OR c.category = :category)
-                    AND (:level IS NULL OR c.level = :level)
-                    AND (:language IS NULL OR c.language = :language)
-                    AND (:mode IS NULL OR c.mode = :mode)
-                    AND (:status IS NULL OR c.status = :status);
-            """, nativeQuery = true)
-    List<CourseEntity> findAllByInstituteIdWithFilters(@Param("instituteId") Long instituteId, @Param("category") String category, @Param("level") String level, @Param("language") String language, @Param("mode") String mode, @Param("status") String status);
+    SELECT *
+    FROM courses c
+    WHERE c.institute_id = :instituteId
+        AND (:title IS NULL OR LOWER(c.title) LIKE LOWER(CONCAT('%', :title, '%')))
+        AND (:category IS NULL OR c.category = :category)
+        AND (:level IS NULL OR c.level = :level)
+        AND (:language IS NULL OR c.language = :language)
+        AND (:mode IS NULL OR c.mode = :mode)
+        AND (:status IS NULL OR c.status = :status)
+    """, nativeQuery = true)
+    List<CourseEntity> findAllByInstituteIdWithFilters(
+            Long instituteId,
+            String title,
+            String category,
+            String level,
+            String language,
+            String mode,
+            String status
+    );
 
     @Query(value = """
     SELECT COUNT(*)
