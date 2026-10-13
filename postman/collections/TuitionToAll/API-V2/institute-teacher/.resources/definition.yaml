@@ -1,7 +1,0 @@
-$kind: collection
-name: institute-teacher
-auth:
-  type: bearer
-  credentials:
-    token: "{{JWT_TOKEN}}"
-order: 271553416658943

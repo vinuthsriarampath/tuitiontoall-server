@@ -1,7 +1,0 @@
-$kind: collection
-name: student
-auth:
-  type: bearer
-  credentials:
-    token: "{{JWT_TOKEN}}"
-order: 2462445571407871

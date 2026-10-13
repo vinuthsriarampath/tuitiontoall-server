@@ -1,5 +1,0 @@
-$kind: collection
-variables:
-  JWT_TOKEN: ""
-  RESET_TOKEN: ""
-  STREAM_TOKEN: ""

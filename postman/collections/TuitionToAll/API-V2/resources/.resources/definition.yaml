@@ -1,7 +1,0 @@
-$kind: collection
-name: resources
-auth:
-  type: bearer
-  credentials:
-    token: "{{JWT_TOKEN}}"
-order: 4273480105197567
