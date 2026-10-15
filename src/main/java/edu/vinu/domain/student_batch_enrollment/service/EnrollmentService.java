@@ -16,6 +16,7 @@ package edu.vinu.domain.student_batch_enrollment.service;
 import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.domain.batch.request.BatchStudentFilterRequest;
 import edu.vinu.domain.reporting.enums.ReportingPeriod;
 import edu.vinu.domain.reporting.response.ReportingPeriodRange;
 import edu.vinu.domain.reporting.response.TrendPoint;
@@ -36,7 +37,7 @@ public interface EnrollmentService {
 
     ApiResponse checkEnrollmentEligibility(EnrollmentEligibilityCheckRequest request);
 
-    PaginatedApiResponse<StudentUserResponse> getStudentsByBatch(Long batchId, PaginationRequest pagination);
+    PaginatedApiResponse<StudentUserResponse> getStudentsByBatch(Long batchId, PaginationRequest pagination, BatchStudentFilterRequest filters);
 
     BigDecimal countActiveStudentsByInstitute(Long instituteId);
 

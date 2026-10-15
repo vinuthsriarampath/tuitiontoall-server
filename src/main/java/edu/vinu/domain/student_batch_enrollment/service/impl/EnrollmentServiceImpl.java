@@ -23,6 +23,7 @@ import edu.vinu.common.util.SortUtil;
 import edu.vinu.domain.auth.service.UserAuthenticationService;
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.batch.enums.BatchEnrollmentStatus;
+import edu.vinu.domain.batch.request.BatchStudentFilterRequest;
 import edu.vinu.domain.batch.service.BatchService;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.service.CourseService;
@@ -237,9 +238,15 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public PaginatedApiResponse<StudentUserResponse> getStudentsByBatch(Long batchId, PaginationRequest pagination) {
+    public PaginatedApiResponse<StudentUserResponse> getStudentsByBatch(Long batchId, PaginationRequest pagination, BatchStudentFilterRequest filters) {
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));;
-        Page<StudentUserResponse> pageDate = studentBatchEnrollmentRepository.findAllStudentsByBatchId(batchId, pageable).map(StudentMapper::toStudentUserResponse);
+        Page<StudentUserResponse> pageDate = studentBatchEnrollmentRepository.findAllStudentsByBatchId(
+                batchId,
+                filters.name(),
+                filters.email(),
+                filters.enrolledDate(),
+                filters.enrollmentStatus() != null ? filters.enrollmentStatus().name() : null,
+                pageable).map(StudentMapper::toStudentUserResponse);
         return PaginatedApiResponse.<StudentUserResponse>builder()
                 .message("Students fetched successfully")
                 .data(pageDate.getContent())

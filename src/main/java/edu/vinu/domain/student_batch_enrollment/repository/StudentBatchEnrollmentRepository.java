@@ -30,6 +30,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -78,8 +79,15 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
     INNER JOIN student s ON s.id = sbe.student_id
     INNER JOIN users u ON u.id = s.user_id
     WHERE sbe.batch_id = :batchId
+    AND (
+            (:name IS NULL OR CONCAT(s.first_name, ' ', s.last_name) LIKE LOWER(CONCAT('%', :name, '%')))
+            OR
+            (:email IS NULL OR u.email LIKE LOWER(CONCAT('%', :email, '%')))
+    )
+    AND (:enrolledDate IS NULL OR DATE(sbe.created_date) = :enrolledDate)
+    AND (:enrollmentStatus IS NULL OR sbe.status = :enrollmentStatus)
     """,nativeQuery = true)
-    Page<StudentUserProjection> findAllStudentsByBatchId(Long batchId, Pageable pageable);
+    Page<StudentUserProjection> findAllStudentsByBatchId(Long batchId, String name, String email, LocalDate enrolledDate, String enrollmentStatus, Pageable pageable);
 
     @Query(value = """
     SELECT EXISTS (
