@@ -31,6 +31,7 @@ import edu.vinu.domain.institute.service.InstituteTeacherService;
 import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.domain.module.enums.ModuleStatus;
 import edu.vinu.domain.module.mapper.ModuleMapper;
+import edu.vinu.domain.module.mapper.ModuleStatusMapper;
 import edu.vinu.domain.module.repository.ModuleRepository;
 import edu.vinu.domain.module.request.ModuleFilterRequest;
 import edu.vinu.domain.module.request.create.ModuleCreateRequest;
@@ -90,7 +91,7 @@ public class ModuleServiceImpl implements ModuleService {
                 .name(request.getName())
                 .batch(batchEntity)
                 .teacher(teacherEntity)
-                .status(mapToModuleStatus(request.getStatus()))
+                .status(ModuleStatusMapper.toModuleStatus(request.getStatus()))
                 .build();
 
         return ModuleMapper.toModuleResponse(moduleRepository.save(moduleEntity));
@@ -268,20 +269,5 @@ public class ModuleServiceImpl implements ModuleService {
 
     private boolean isModuleExists(String name, Long batchId){
         return moduleRepository.existsByNameAndBatchId(name,batchId);
-    }
-
-    private ModuleStatus mapToModuleStatus(ModuleCreateStatus status){
-        switch (status){
-            case DRAFT -> {
-                return ModuleStatus.DRAFT;
-            }
-            case PUBLISHED -> {
-                return ModuleStatus.PUBLISHED;
-            }
-            case LOCKED -> {
-                return ModuleStatus.LOCKED;
-            }
-            default -> throw new IllegalArgumentException("Invalid module status: " + status);
-        }
     }
 }
