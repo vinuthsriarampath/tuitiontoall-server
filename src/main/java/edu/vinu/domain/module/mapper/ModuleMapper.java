@@ -13,7 +13,9 @@
 
 package edu.vinu.domain.module.mapper;
 
+import edu.vinu.domain.module.entity.ModuleEntity;
 import edu.vinu.domain.module.repository.projection.StudentModuleProjection;
+import edu.vinu.domain.module.response.ModuleResponse;
 import edu.vinu.domain.module.response.StudentModuleResponse;
 
 public class ModuleMapper {
@@ -23,6 +25,18 @@ public class ModuleMapper {
                 .name(p.getName())
                 .status(p.getStatus())
                 .batchId(p.getBatchId())
+                .build();
+    }
+
+    public static ModuleResponse toModuleResponse(ModuleEntity entity){
+        return ModuleResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .status(entity.getStatus())
+                .batchId(entity.getBatch().getId())
+                .teacherId(entity.getTeacher().getId())
+                .createdDate(entity.getCreatedAt())
+                .lastModifiedDate(entity.getLastModifiedDate())
                 .build();
     }
 }

@@ -92,7 +92,7 @@ public class ModuleServiceImpl implements ModuleService {
                 .status(mapToModuleStatus(request.getStatus()))
                 .build();
 
-        return mapToAnnouncementResponse(moduleRepository.save(moduleEntity));
+        return ModuleMapper.toModuleResponse(moduleRepository.save(moduleEntity));
     }
 
     @Override
@@ -109,28 +109,27 @@ public class ModuleServiceImpl implements ModuleService {
 
         moduleEntity.setName(request.getName());
 
-        return mapToAnnouncementResponse(moduleRepository.save(moduleEntity));
+        return ModuleMapper.toModuleResponse(moduleRepository.save(moduleEntity));
     }
 
     @Override
     public ModuleResponse publishModule(Long id) {
         ModuleEntity moduleEntity = getModuleEntityById(id);
-
-        return mapToAnnouncementResponse(updateStatus(moduleEntity, ModuleStatus.PUBLISHED));
+        return ModuleMapper.toModuleResponse(updateStatus(moduleEntity, ModuleStatus.PUBLISHED));
     }
 
     @Override
     public ModuleResponse lockModule(Long id) {
         ModuleEntity moduleEntity = getModuleEntityById(id);
 
-        return mapToAnnouncementResponse(updateStatus(moduleEntity, ModuleStatus.LOCKED));
+        return ModuleMapper.toModuleResponse(updateStatus(moduleEntity, ModuleStatus.LOCKED));
     }
 
     @Override
     public ModuleResponse archiveModule(Long id) {
         ModuleEntity moduleEntity = getModuleEntityById(id);
 
-        return mapToAnnouncementResponse(updateStatus(moduleEntity, ModuleStatus.ARCHIVED));
+        return ModuleMapper.toModuleResponse(updateStatus(moduleEntity, ModuleStatus.ARCHIVED));
     }
 
     @Override
@@ -152,7 +151,7 @@ public class ModuleServiceImpl implements ModuleService {
         try {
             TeacherEntity teacherEntity = instituteTeacherService.getCurrentInstituteRelatedTeacherEntityById(request.teacherId());
             moduleEntity.setTeacher(teacherEntity);
-            return mapToAnnouncementResponse(moduleRepository.save(moduleEntity));
+            return ModuleMapper.toModuleResponse(moduleRepository.save(moduleEntity));
         } catch (Exception e) {
             throw new InvalidInputException("teacherId", e.getMessage());
         }
@@ -177,7 +176,7 @@ public class ModuleServiceImpl implements ModuleService {
         }
 
         moduleEntity.setBatch(batchEntity);
-        return mapToAnnouncementResponse(moduleRepository.save(moduleEntity));
+        return ModuleMapper.toModuleResponse(moduleRepository.save(moduleEntity));
 
     }
 
@@ -220,7 +219,7 @@ public class ModuleServiceImpl implements ModuleService {
     @Override
     public ModuleResponse getModuleById(Long id) {
         return moduleRepository.findById(id)
-                .map(this::mapToAnnouncementResponse)
+                .map(ModuleMapper::toModuleResponse)
                 .orElseThrow(() -> new NotFoundException("Module with id " + id + " not found"));
     }
 
@@ -282,17 +281,5 @@ public class ModuleServiceImpl implements ModuleService {
             }
             default -> throw new IllegalArgumentException("Invalid module status: " + status);
         }
-    }
-
-    private ModuleResponse mapToAnnouncementResponse(ModuleEntity entity){
-        return ModuleResponse.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .status(entity.getStatus())
-                .batchId(entity.getBatch().getId())
-                .teacherId(entity.getTeacher().getId())
-                .createdDate(entity.getCreatedAt())
-                .lastModifiedDate(entity.getLastModifiedDate())
-                .build();
     }
 }
