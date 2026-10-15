@@ -34,11 +34,23 @@ import java.util.List;
 public interface BatchRepository extends JpaRepository<BatchEntity, Long> {
     Boolean existsByNameAndCourseId(String name, Long courseId);
     @Query(value = """
-            SELECT *
-            FROM batch b
-            WHERE b.course_id = :courseId
-    """,nativeQuery = true)
-    List<BatchEntity> getAllBatchesByCourseId(@Param("courseId") Long courseId);
+    SELECT *
+    FROM batch b
+    WHERE b.course_id = :courseId
+    AND (:id IS NULL OR b.id = :id)
+    AND (:batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%'))
+    AND (:batchStatus IS NULL OR b.batch_status = :batchStatus)
+    AND (:batchEnrollmentStatus IS NULL OR b.enrollment_status = :batchEnrollmentStatus)
+    """,countQuery = """
+    SELECT COUNT(*)
+    FROM batch b
+    WHERE b.course_id = :courseId
+    AND (:id IS NULL OR b.id = :id)
+    AND (:batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%'))
+    AND (:batchStatus IS NULL OR b.batch_status = :batchStatus)
+    AND (:batchEnrollmentStatus IS NULL OR b.enrollment_status = :batchEnrollmentStatus)
+    """, nativeQuery = true)
+    Page<BatchEntity> getAllBatchesByCourseId(Long courseId, Long id, String batchName, String batchStatus, String batchEnrollmentStatus, Pageable pageable);
 
 
     @Modifying
