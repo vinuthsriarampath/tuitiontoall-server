@@ -25,7 +25,6 @@ import edu.vinu.domain.assignment.response.module_assignment.ModuleAssignmentRes
 import edu.vinu.domain.assignment.service.ModuleAssignmentQueryService;
 import edu.vinu.domain.batch.entity.BatchEntity;
 import edu.vinu.domain.batch.enums.BatchStatus;
-import edu.vinu.domain.batch.response.BatchBasicResponse;
 import edu.vinu.domain.batch.service.BatchService;
 import edu.vinu.domain.institute.service.InstituteTeacherService;
 import edu.vinu.domain.module.entity.ModuleEntity;
@@ -35,7 +34,6 @@ import edu.vinu.domain.module.mapper.ModuleStatusMapper;
 import edu.vinu.domain.module.repository.ModuleRepository;
 import edu.vinu.domain.module.request.ModuleFilterRequest;
 import edu.vinu.domain.module.request.create.ModuleCreateRequest;
-import edu.vinu.domain.module.request.create.enums.ModuleCreateStatus;
 import edu.vinu.domain.module.request.update.ModuleBatchUpdateRequest;
 import edu.vinu.domain.module.request.update.ModuleNameUpdateRequest;
 import edu.vinu.domain.module.request.update.ModuleTeacherUpdateRequest;
@@ -43,7 +41,6 @@ import edu.vinu.domain.module.response.ModuleDetailedResponse;
 import edu.vinu.domain.module.response.ModuleResponse;
 import edu.vinu.domain.module.response.StudentModuleResponse;
 import edu.vinu.domain.module.service.ModuleService;
-import edu.vinu.domain.teacher.dtos.response.TeacherBasicResponse;
 import edu.vinu.domain.teacher.entity.TeacherEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -62,37 +59,33 @@ public class ModuleServiceImpl implements ModuleService {
     private final BatchService batchService;
     private final InstituteTeacherService instituteTeacherService;
     private final ModuleAssignmentQueryService moduleAssignmentQueryService;
+
     @Override
     public ModuleResponse createModule(ModuleCreateRequest request) {
         BatchEntity batchEntity = batchService.getBatchEntityById(request.getBatchId());
 
-        if(!batchService.isBatchOwner(batchEntity)){
+        if (!batchService.isBatchOwner(batchEntity)) {
             throw new InvalidInputException("You are not authorized to create module for this batch");
         }
 
         List<FieldError> errors = new ArrayList<>();
 
-        if(isModuleExists(request.getName(), request.getBatchId())){
-            errors.add(new FieldError("name","same module name already exists in the batch"));
+        if (isModuleExists(request.getName(), request.getBatchId())) {
+            errors.add(new FieldError("name", "same module name already exists in the batch"));
         }
 
         TeacherEntity teacherEntity = null;
         try {
             teacherEntity = instituteTeacherService.getCurrentInstituteRelatedTeacherEntityById(request.getTeacherId());
         } catch (NotFoundException e) {
-            errors.add(new FieldError("teacherId",e.getMessage()));
+            errors.add(new FieldError("teacherId", e.getMessage()));
         }
 
         if (!errors.isEmpty()) {
             throw new InvalidInputException(errors);
         }
 
-        ModuleEntity moduleEntity = ModuleEntity.builder()
-                .name(request.getName())
-                .batch(batchEntity)
-                .teacher(teacherEntity)
-                .status(ModuleStatusMapper.toModuleStatus(request.getStatus()))
-                .build();
+        ModuleEntity moduleEntity = ModuleEntity.builder().name(request.getName()).batch(batchEntity).teacher(teacherEntity).status(ModuleStatusMapper.toModuleStatus(request.getStatus())).build();
 
         return ModuleMapper.toModuleResponse(moduleRepository.save(moduleEntity));
     }
@@ -139,8 +132,7 @@ public class ModuleServiceImpl implements ModuleService {
 
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));
 
-        return moduleRepository.findByBatchId(batchId, filter.name(), filter.status() != null ? filter.status().name() : null, pageable)
-                .map(ModuleMapper::toModuleResponse);
+        return moduleRepository.findByBatchId(batchId, filter.name(), filter.status() != null ? filter.status().name() : null, pageable).map(ModuleMapper::toModuleResponse);
     }
 
     @Override
@@ -174,7 +166,7 @@ public class ModuleServiceImpl implements ModuleService {
         } catch (Exception e) {
             throw new NotFoundException("Batch with id " + request.batchId() + " not found");
         }
-        if(!batchService.isBatchOwner(batchEntity)){
+        if (!batchService.isBatchOwner(batchEntity)) {
             throw new UnauthorizedException("You are not authorized to move module to this batch");
         }
 
@@ -185,16 +177,12 @@ public class ModuleServiceImpl implements ModuleService {
 
     @Override
     public ModuleDetailedResponse getDetailedModuleById(Long id) {
-        return moduleRepository.getDetailedModuleById(id)
-                .map(ModuleMapper::toModuleDetailedResponse)
-                .orElseThrow(() -> new NotFoundException("Module with id " + id + " not found"));
+        return moduleRepository.getDetailedModuleById(id).map(ModuleMapper::toModuleDetailedResponse).orElseThrow(() -> new NotFoundException("Module with id " + id + " not found"));
     }
 
     @Override
     public ModuleResponse getModuleById(Long id) {
-        return moduleRepository.findById(id)
-                .map(ModuleMapper::toModuleResponse)
-                .orElseThrow(() -> new NotFoundException("Module with id " + id + " not found"));
+        return moduleRepository.findById(id).map(ModuleMapper::toModuleResponse).orElseThrow(() -> new NotFoundException("Module with id " + id + " not found"));
     }
 
     private ModuleEntity updateStatus(ModuleEntity moduleEntity, ModuleStatus status) {
@@ -207,9 +195,8 @@ public class ModuleServiceImpl implements ModuleService {
     }
 
     @Override
-    public ModuleEntity getModuleEntityById(Long id){
-        return moduleRepository.findById(id)
-                .orElseThrow(() -> new InvalidInputException("Module with id " + id + " not found"));
+    public ModuleEntity getModuleEntityById(Long id) {
+        return moduleRepository.findById(id).orElseThrow(() -> new InvalidInputException("Module with id " + id + " not found"));
     }
 
     @Override
@@ -231,14 +218,14 @@ public class ModuleServiceImpl implements ModuleService {
 
     @Override
     public int countAssignedModulesToTeacher(Long teacherId, BatchStatus batchStatus) {
-        return moduleRepository.countModulesByTeacherAndBatchStatus(teacherId,batchStatus != null ? batchStatus.name() : null);
+        return moduleRepository.countModulesByTeacherAndBatchStatus(teacherId, batchStatus != null ? batchStatus.name() : null);
     }
 
-    private boolean isModuleOwner(ModuleEntity entity){
-       return entity.getBatch().getCourse().getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName());
+    private boolean isModuleOwner(ModuleEntity entity) {
+        return entity.getBatch().getCourse().getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
-    private boolean isModuleExists(String name, Long batchId){
-        return moduleRepository.existsByNameAndBatchId(name,batchId);
+    private boolean isModuleExists(String name, Long batchId) {
+        return moduleRepository.existsByNameAndBatchId(name, batchId);
     }
 }
