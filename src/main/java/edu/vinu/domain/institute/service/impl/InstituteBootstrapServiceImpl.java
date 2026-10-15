@@ -72,7 +72,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
         response.setCoursePerformance(courseStatsService.getTopPerformingCoursesByRatingAndInstituteId(currentInstitute.getId(), 5));
         response.setEnrollmentDistribution(enrollmentService.getEnrollmentDistributionByInstitute(currentInstitute.getId()));
         response.setOverallEnrollment(enrollmentService.getOverallEnrollmentStatsByInstitute(currentInstitute.getId(),currentInstitute.getUser().getCreationTimeStamp().toLocalDate()));
-        response.setActiveBatches(batchService.getAllBatches(new PaginationRequest(0,5,null,  List.of("created_date")), new BatchFilterRequest(null, null, null, currentInstitute.getId(), BatchStatus.ONGOING, null)));
+        response.setActiveBatches(batchService.getAllBatches(new PaginationRequest(0,5,"desc",  List.of("created_date")), new BatchFilterRequest(null, null, BatchStatus.ONGOING, null)));
 
         return ApiResponse.builder()
                 .message("Bootstrap data retrieved successfully")
