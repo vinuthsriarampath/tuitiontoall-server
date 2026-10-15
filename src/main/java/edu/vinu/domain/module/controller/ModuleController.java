@@ -107,30 +107,6 @@ public class ModuleController {
         return ResponseEntity.ok(new ApiResponse("Module fetched successfully", response));
     }
 
-    @PreAuthorize("hasAuthority('institute')")
-    @GetMapping
-    public ResponseEntity<PaginatedApiResponse<ModuleResponse>> getAllModules(
-            @RequestParam(value = "page",defaultValue = "0")int page,
-            @RequestParam(value = "size",defaultValue = "10") int size,
-            @RequestParam(value = "direction",defaultValue = "desc") String direction,
-            @RequestParam(value = "sortBy",defaultValue = "created_date")List<String> sortBy,
-            ModuleFilterRequest filter
-            ){
-
-        Page<ModuleResponse> pageData = moduleService.getAllFilteredModules(page, size, direction, sortBy, filter);
-        PaginatedApiResponse<ModuleResponse> response = PaginatedApiResponse.<ModuleResponse>builder()
-                .message("Modules retrieved successfully")
-                .data(pageData.getContent())
-                .page(pageData.getNumber())
-                .size(pageData.getSize())
-                .totalPages(pageData.getTotalPages())
-                .totalElements(pageData.getTotalElements())
-                .last(pageData.isLast())
-                .build();
-
-        return ResponseEntity.status(200).body(response);
-    }
-
     @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("/{id}/chapters/all")
     public ResponseEntity<ApiResponse> getChaptersByModuleId(@PathVariable("id") Long id){
