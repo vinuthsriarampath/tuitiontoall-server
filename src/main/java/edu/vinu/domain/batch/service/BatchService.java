@@ -31,7 +31,7 @@ public interface BatchService {
     Batch createBatch(BatchCreateRequest request);
     Batch createBatch(CourseEntity course,BatchCreateRequest request);
 
-    List<Batch> getAllBatchesByCourseId(Long courseId);
+    PaginatedApiResponse<Batch> getAllBatchesByCourseId(Long courseId, PaginationRequest pagination, BatchFilterRequest filters);
 
     Batch getBatchById(Long batchId);
 
