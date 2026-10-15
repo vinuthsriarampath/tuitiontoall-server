@@ -51,10 +51,9 @@ public class BatchController {
     }
 
     @PreAuthorize("hasAuthority('institute')")
-    @GetMapping("/{courseId}/all")
-    public ResponseEntity<ApiResponse> getAllBatchesOfCourse(@PathVariable Long courseId){
-        List<Batch> batches = batchService.getAllBatchesByCourseId(courseId);
-        return ResponseEntity.status(200).body(new ApiResponse("All Batches Related to Course ID",batches));
+    @GetMapping("/course/{courseId}")
+    public ResponseEntity<PaginatedApiResponse<Batch>> getAllBatchesOfCourse(@PathVariable Long courseId, PaginationRequest pagination, BatchFilterRequest filters){
+        return ResponseEntity.ok(batchService.getAllBatchesByCourseId(courseId, pagination, filters));
     }
 
     @PreAuthorize("hasAuthority('institute')")
