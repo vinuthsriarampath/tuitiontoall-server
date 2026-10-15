@@ -35,6 +35,7 @@ import edu.vinu.domain.batch.response.BatchDetailedResponse;
 import edu.vinu.domain.batch.service.BatchService;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.service.CourseService;
+import edu.vinu.domain.institute.service.InstituteService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -55,6 +56,7 @@ public class BatchServiceImpl implements BatchService {
 
     private final BatchRepository batchRepository;
     private final CourseService courseService;
+    private final InstituteService instituteService;
     private final ModelMapper mapper;
     private final ApplicationEventPublisher eventPublisher;
 
@@ -209,8 +211,7 @@ public class BatchServiceImpl implements BatchService {
                 filters.getBatchName(),
                 filters.getStatus() != null ? filters.getStatus().name() : null,
                 filters.getEnrollmentStatus() != null ? filters.getEnrollmentStatus().name() : null,
-                filters.getCourseId(),
-                filters.getInstituteId(),
+                instituteService.getCurrentInstitute().getId(),
                 pageable
         ).map(BatchMapper::toBatchDetailedResponse);
 

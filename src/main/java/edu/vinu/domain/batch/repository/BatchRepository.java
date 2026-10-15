@@ -177,7 +177,6 @@ ORDER BY b.start_date DESC
     AND ( :batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%') )
     AND ( :batchStatus IS NULL OR b.batch_status = :batchStatus )
     AND ( :enrollmentStatus IS NULL OR b.enrollment_status = :enrollmentStatus )
-    AND ( :courseId IS NULL OR b.course_id = :courseId )
     AND ( :instituteId IS NULL OR c.institute_id = :instituteId )
     GROUP BY
     b.id,
@@ -201,11 +200,10 @@ ORDER BY b.start_date DESC
     AND ( :batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%') )
     AND ( :batchStatus IS NULL OR b.batch_status = :batchStatus )
     AND ( :enrollmentStatus IS NULL OR b.enrollment_status = :enrollmentStatus )
-    AND ( :courseId IS NULL OR b.course_id = :courseId )
     AND ( :instituteId IS NULL OR c.institute_id = :instituteId )
     """
     ,nativeQuery = true)
-   Page<BatchDetailedProjection> getBatches(Long id, String batchName, String batchStatus, String enrollmentStatus,Long courseId, Long instituteId, Pageable pageable);
+   Page<BatchDetailedProjection> getBatches(Long id, String batchName, String batchStatus, String enrollmentStatus, Long instituteId, Pageable pageable);
 
     @Query(value = """
     SELECT COUNT(DISTINCT b.id)
