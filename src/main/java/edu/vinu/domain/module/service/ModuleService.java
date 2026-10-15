@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.module.service;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.assignment.request.module_assignments.ModuleAssignmentFilterRequest;
 import edu.vinu.domain.assignment.response.module_assignment.ModuleAssignmentResponse;
@@ -42,7 +43,7 @@ public interface ModuleService {
 
     ModuleResponse archiveModule(Long id);
 
-    Page<ModuleResponse> getAllFilteredModules(int page, int size, String direction, List<String> sortBy, ModuleFilterRequest filter);
+    Page<ModuleResponse> getModulesByBatch(Long batchId, PaginationRequest pagination, ModuleFilterRequest filter);
 
     ModuleResponse updateModuleTeacher(Long id, ModuleTeacherUpdateRequest request);
 

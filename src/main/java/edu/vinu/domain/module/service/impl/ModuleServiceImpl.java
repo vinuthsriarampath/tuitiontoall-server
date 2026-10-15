@@ -14,6 +14,7 @@
 package edu.vinu.domain.module.service.impl;
 
 import edu.vinu.common.dto.FieldError;
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
@@ -133,11 +134,12 @@ public class ModuleServiceImpl implements ModuleService {
     }
 
     @Override
-    public Page<ModuleResponse> getAllFilteredModules(int page, int size, String direction, List<String> sortBy, ModuleFilterRequest filter) {
+    public Page<ModuleResponse> getModulesByBatch(Long batchId, PaginationRequest pagination, ModuleFilterRequest filter) {
 
-        Pageable pageable = PageRequest.of(page, size, SortUtil.buildSort(direction, sortBy, List.of("created_date")));
-        return moduleRepository.getAllModules(pageable,filter.status(), filter.batchId())
-                .map(this::mapToAnnouncementResponse);
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));
+
+        return moduleRepository.findByBatchId(batchId, filter.name(), filter.status() != null ? filter.status().name() : null, pageable)
+                .map(ModuleMapper::toModuleResponse);
     }
 
     @Override
