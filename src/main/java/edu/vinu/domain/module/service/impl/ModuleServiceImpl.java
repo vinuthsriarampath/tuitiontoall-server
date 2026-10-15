@@ -186,36 +186,7 @@ public class ModuleServiceImpl implements ModuleService {
     @Override
     public ModuleDetailedResponse getDetailedModuleById(Long id) {
         return moduleRepository.getDetailedModuleById(id)
-                .map(dmp -> ModuleDetailedResponse.builder()
-                        .id(dmp.getId())
-                        .name(dmp.getName())
-                        .status(dmp.getStatus())
-                        .createdDate(dmp.getCreatedDate())
-                        .lastModifiedDate(dmp.getLastModifiedDate())
-                        .batch(
-                                BatchBasicResponse.builder()
-                                        .id(dmp.getBatchId())
-                                        .courseId(dmp.getCourseId())
-                                        .name(dmp.getBatchName())
-                                        .status(dmp.getBatchStatus())
-                                        .enrollmentStatus(dmp.getBatchEnrollmentStatus())
-                                        .createdDate(dmp.getBatchCreatedDate())
-                                        .lastModifiedDate(dmp.getBatchLastModifiedDate())
-                                        .build()
-                        )
-                        .teacher(
-                                TeacherBasicResponse.builder()
-                                        .id(dmp.getTeacherId())
-                                        .firstName(dmp.getTeacherFirstName())
-                                        .lastName(dmp.getTeacherLastName())
-                                        .email(dmp.getUserEmail())
-                                        .contact(dmp.getUserContact())
-                                        .dp(dmp.getUserDp())
-                                        .userslug(dmp.getUserSlug())
-                                        .build()
-                        )
-                        .build()
-                )
+                .map(ModuleMapper::toModuleDetailedResponse)
                 .orElseThrow(() -> new NotFoundException("Module with id " + id + " not found"));
     }
 
