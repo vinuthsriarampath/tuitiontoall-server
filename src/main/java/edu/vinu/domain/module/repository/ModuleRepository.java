@@ -31,22 +31,21 @@ import java.util.Optional;
 public interface ModuleRepository extends JpaRepository<ModuleEntity, Long> {
     boolean existsByNameAndBatchId(String name, Long batchId);
 
-    @Query(
-            value = """
-                    SELECT *
-                    FROM module m
-                    WHERE(:status IS NULL OR m.status = :status)
-                    AND (:batchId IS NULL OR m.batch_id = :batchId)
-            """,
-            countQuery = """
-                    SELECT COUNT(*)
-                    FROM module m
-                    WHERE(:status IS NULL OR m.status = :status)
-                    AND (:batchId IS NULL OR m.batch_id = :batchId)
-            """,
-            nativeQuery = true
-    )
-    Page<ModuleEntity> getAllModules(Pageable pageable, @Param("status") String status, @Param("batchId") Long batchId);
+    @Query(value = """
+    SELECT *
+    FROM module m
+    WHERE m.batch_id = :batchId
+    AND (:status IS NULL OR m.status = :status)
+    AND (:moduleName IS NULL OR m.name LIKE LOWER(CONCAT('%', :moduleName, '%')))
+    """,
+    countQuery = """
+    SELECT COUNT(*)
+    FROM module m
+    WHERE m.batch_id = :batchId
+    AND (:status IS NULL OR m.status = :status)
+    AND (:moduleName IS NULL OR m.name LIKE LOWER(CONCAT('%', :moduleName, '%')))
+    """, nativeQuery = true)
+    Page<ModuleEntity> findByBatchId(Long batchId,String moduleName, String status, Pageable pageable);
 
 
     @Query(value = """
