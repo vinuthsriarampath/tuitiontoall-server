@@ -13,8 +13,10 @@
 
 package edu.vinu.domain.module.request;
 
+import edu.vinu.domain.module.enums.ModuleStatus;
+
 public record ModuleFilterRequest(
-        String status,
-        Long batchId
+        String name,
+        ModuleStatus status
 ) {
 }
