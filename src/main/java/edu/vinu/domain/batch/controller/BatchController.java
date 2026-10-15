@@ -22,8 +22,9 @@ import edu.vinu.domain.batch.request.BatchFilterRequest;
 import edu.vinu.domain.batch.request.BatchUpdateRequest;
 import edu.vinu.domain.batch.response.BatchDetailedResponse;
 import edu.vinu.domain.batch.service.BatchService;
+import edu.vinu.domain.module.request.ModuleFilterRequest;
 import edu.vinu.domain.module.response.ModuleResponse;
-import edu.vinu.domain.module.service.ModuleQueryService;
+import edu.vinu.domain.module.service.ModuleService;
 import edu.vinu.domain.student.dto.response.StudentUserResponse;
 import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
 import jakarta.validation.Valid;
@@ -33,14 +34,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v2/batches")
 @RequiredArgsConstructor
 public class BatchController {
     private final BatchService batchService;
-    private final ModuleQueryService moduleQueryService;
+    private final ModuleService moduleService;
     private final EnrollmentService enrollmentService;
 
     @PreAuthorize("hasAuthority('institute')")
@@ -71,15 +70,13 @@ public class BatchController {
     }
 
     @PreAuthorize("hasAuthority('institute')")
-    @GetMapping("/{id}/modules")
-    public ResponseEntity<PaginatedApiResponse<ModuleResponse>> getBatchFullDetailsById(
-            @PathVariable Long id,
-            @RequestParam(value = "page",defaultValue = "0") int page,
-            @RequestParam(value = "size",defaultValue = "10") int size,
-            @RequestParam(value = "direction",defaultValue = "desc") String direction,
-            @RequestParam(value = "sortBy",defaultValue = "created_date") List<String> sortBy
+    @GetMapping("/{batchId}/modules")
+    public ResponseEntity<PaginatedApiResponse<ModuleResponse>> getModulesByBatch(
+            @PathVariable Long batchId,
+            PaginationRequest pagination,
+            ModuleFilterRequest filters
     ){
-        Page<ModuleResponse> pageData = moduleQueryService.getAllModulesByBatch(id,page,size,direction,sortBy);
+        Page<ModuleResponse> pageData = moduleService.getModulesByBatch(batchId,pagination,filters);
         PaginatedApiResponse<ModuleResponse> response = PaginatedApiResponse.<ModuleResponse>builder()
                 .message("Modules related to batch fetched successfully!")
                 .data(pageData.getContent())
