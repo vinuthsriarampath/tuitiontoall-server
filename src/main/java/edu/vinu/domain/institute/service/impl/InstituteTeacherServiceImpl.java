@@ -13,7 +13,10 @@
 
 package edu.vinu.domain.institute.service.impl;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.exception.custom.NotFoundException;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.common.util.SortUtil;
 import edu.vinu.domain.application.entity.ApplicationEntity;
 import edu.vinu.domain.application.enums.ApplicationStatus;
 import edu.vinu.domain.application.request.ApplicationRejectionRequest;
@@ -24,8 +27,10 @@ import edu.vinu.domain.application.service.ApplicationService;
 import edu.vinu.domain.institute.entity.InstituteTeacherEntity;
 import edu.vinu.domain.institute.enums.InstituteTeacherStatus;
 import edu.vinu.domain.institute.event.TeacherOnboardedEvent;
+import edu.vinu.domain.institute.mapper.InstituteTeacherMapper;
 import edu.vinu.domain.institute.repository.InstituteTeacherRepository;
 import edu.vinu.domain.institute.repository.projection.InstituteTeacherStatsProjection;
+import edu.vinu.domain.institute.request.InstituteTeacherFilterRequest;
 import edu.vinu.domain.institute.response.InstituteTeacherResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherStatsResponse;
 import edu.vinu.domain.institute.service.InstituteService;
@@ -172,32 +177,29 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
     }
 
     @Override
-    public Page<InstituteTeacherResponse> getAllTeachersByInstitute(int page, int size, String direction, String sortBy) {
+    public PaginatedApiResponse<InstituteTeacherResponse> getAllTeachersByInstitute(PaginationRequest pagination, InstituteTeacherFilterRequest filters) {
         UserEntity user = userService.getUserEntityByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         Long instituteId = user.getInstitute().getId();
 
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Pageable pageable = PageRequest.of(page,size, Sort.by(sortDirection,sortBy));
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("joined_date")));
 
-        return instituteTeacherRepository.getAllByInstituteId(instituteId,pageable).map(itp -> InstituteTeacherResponse.builder()
-                .id(itp.getId())
-                .status(itp.getStatus())
-                .instituteId(itp.getInstituteId())
-                .joinedDate(itp.getJoinedDate())
-                .lastModifiedDate(itp.getLastModifiedDate())
-                .teacher(
-                        TeacherUserResponse.builder()
-                                .userId(itp.getUserId())
-                                .email(itp.getEmail())
-                                .contact(itp.getContact())
-                                .dp(itp.getDp())
-                                .address(itp.getAddress())
-                                .firstName(itp.getFirstName())
-                                .lastName(itp.getLastName())
-                                .dob(itp.getDob())
-                                .build()
-                )
-                .build());
+        Page<InstituteTeacherResponse> page = instituteTeacherRepository.getAllByInstituteId(
+                instituteId,
+                filters.name(),
+                filters.email(),
+                filters.userSlug(),
+                filters.status() != null ? filters.status().name() : null,
+                pageable
+                ).map(InstituteTeacherMapper::toInstituteTeacherResponse);
+
+        return PaginatedApiResponse.<InstituteTeacherResponse>builder()
+                .message("Teachers retrieved successfully")
+                .data(page.getContent())
+                .page(page.getNumber())
+                .size(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .last(page.isLast()).build();
     }
 
     @Override

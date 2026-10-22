@@ -56,15 +56,29 @@ public interface InstituteTeacherRepository extends JpaRepository<InstituteTeach
             JOIN teacher t ON ti.teacher_id = t.id
             JOIN users u ON t.user_id = u.id
             WHERE ti.institute_id = :instituteId
-            
+            AND (
+                            (:name IS NOT NULL AND CONCAT(t.first_name, ' ', t.last_name) LIKE LOWER(CONCAT('%', :name, '%')))
+                            OR (:email IS NOT NULL AND u.email LIKE LOWER(CONCAT('%', :email, '%')))
+                            OR (:userSlug IS NOT NULL AND u.user_slug LIKE LOWER(CONCAT('%', :userSlug, '%')))
+                            OR (:name IS NULL AND :email IS NULL AND :userSlug IS NULL)
+                )
+            AND (:status IS NULL OR ti.status = :status)
             """,
             countQuery = """
-                    SELECT COUNT(*)
-                    FROM institute_teacher ti
-                    WHERE ti.institute_id = :instituteId
-                    """,
-            nativeQuery = true)
-    Page<InstituteTeacherProjection> getAllByInstituteId(@Param("instituteId") Long instituteId, Pageable pageable);
+            SELECT COUNT(*)
+            FROM institute_teacher ti
+            JOIN teacher t ON ti.teacher_id = t.id
+            JOIN users u ON t.user_id = u.id
+            WHERE ti.institute_id = :instituteId
+            AND (
+                            (:name IS NOT NULL AND CONCAT(t.first_name, ' ', t.last_name) LIKE LOWER(CONCAT('%', :name, '%')))
+                            OR (:email IS NOT NULL AND u.email LIKE LOWER(CONCAT('%', :email, '%')))
+                            OR (:userSlug IS NOT NULL AND u.user_slug LIKE LOWER(CONCAT('%', :userSlug, '%')))
+                            OR (:name IS NULL AND :email IS NULL AND :userSlug IS NULL)
+                )
+            AND (:status IS NULL OR ti.status = :status)
+            """, nativeQuery = true)
+    Page<InstituteTeacherProjection> getAllByInstituteId(@Param("instituteId") Long instituteId,String name, String email, String userSlug, String status, Pageable pageable);
 
     @Query(value = """
                 SELECT

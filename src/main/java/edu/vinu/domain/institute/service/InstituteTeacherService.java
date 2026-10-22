@@ -13,10 +13,13 @@
 
 package edu.vinu.domain.institute.service;
 
+import edu.vinu.common.dto.PaginationRequest;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.application.request.ApplicationRejectionRequest;
 import edu.vinu.domain.application.request.ApplicationSelectionRequest;
 import edu.vinu.domain.application.response.ApplicationRejectionResponse;
 import edu.vinu.domain.application.response.ApplicationSelectionResponse;
+import edu.vinu.domain.institute.request.InstituteTeacherFilterRequest;
 import edu.vinu.domain.institute.response.InstituteTeacherResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherStatsResponse;
 import edu.vinu.domain.teacher.dtos.response.TeacherBasicResponse;
@@ -30,7 +33,7 @@ public interface InstituteTeacherService {
 
     ApplicationRejectionResponse rejectApplications(ApplicationRejectionRequest request);
 
-    Page<InstituteTeacherResponse> getAllTeachersByInstitute(int page, int size, String direction, String sortBy);
+    PaginatedApiResponse<InstituteTeacherResponse> getAllTeachersByInstitute(PaginationRequest pagination, InstituteTeacherFilterRequest filters);
 
     InstituteTeacherStatsResponse getInstituteTeacherStats();
 

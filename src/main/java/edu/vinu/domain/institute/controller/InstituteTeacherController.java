@@ -13,12 +13,14 @@
 
 package edu.vinu.domain.institute.controller;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.application.request.ApplicationRejectionRequest;
 import edu.vinu.domain.application.request.ApplicationSelectionRequest;
 import edu.vinu.domain.application.response.ApplicationRejectionResponse;
 import edu.vinu.domain.application.response.ApplicationSelectionResponse;
+import edu.vinu.domain.institute.request.InstituteTeacherFilterRequest;
 import edu.vinu.domain.institute.response.InstituteTeacherResponse;
 import edu.vinu.domain.institute.response.InstituteTeacherStatsResponse;
 import edu.vinu.domain.institute.service.InstituteTeacherService;
@@ -55,25 +57,8 @@ public class InstituteTeacherController {
 
     @PreAuthorize(("hasAuthority('institute')"))
     @GetMapping
-    public ResponseEntity<PaginatedApiResponse<InstituteTeacherResponse>> getAllTeacherByInstitute(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "desc") String direction,
-            @RequestParam(defaultValue = "joinedDate") String sortBy
-    ){
-
-        Page<InstituteTeacherResponse> instituteTeacherResponse = instituteTeacherService.getAllTeachersByInstitute(page, size, direction, sortBy);
-        return ResponseEntity.status(200).body(
-                PaginatedApiResponse.<InstituteTeacherResponse>builder()
-                        .message("Teachers related to the institute fetched successfully!")
-                        .data(instituteTeacherResponse.getContent())
-                        .page(instituteTeacherResponse.getNumber())
-                        .size(instituteTeacherResponse.getSize())
-                        .totalPages(instituteTeacherResponse.getTotalPages())
-                        .totalElements(instituteTeacherResponse.getTotalElements())
-                        .last(instituteTeacherResponse.isLast())
-                        .build()
-        );
+    public ResponseEntity<PaginatedApiResponse<InstituteTeacherResponse>> getAllTeacherByInstitute(PaginationRequest pagination, InstituteTeacherFilterRequest filters){
+        return ResponseEntity.ok(instituteTeacherService.getAllTeachersByInstitute(pagination, filters));
     }
 
     @PreAuthorize(("hasAuthority('institute')"))
