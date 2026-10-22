@@ -80,9 +80,10 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
     INNER JOIN users u ON u.id = s.user_id
     WHERE sbe.batch_id = :batchId
     AND (
-            (:name IS NULL OR CONCAT(s.first_name, ' ', s.last_name) LIKE LOWER(CONCAT('%', :name, '%')))
+            (:name IS NOT NULL AND CONCAT(s.first_name, ' ', s.last_name) LIKE LOWER(CONCAT('%', :name, '%')))
             OR
-            (:email IS NULL OR u.email LIKE LOWER(CONCAT('%', :email, '%')))
+            (:email IS NOT NULL AND u.email LIKE LOWER(CONCAT('%', :email, '%')))
+            OR (:name IS NULL AND :email IS NULL)
     )
     AND (:enrolledDate IS NULL OR DATE(sbe.created_date) = :enrolledDate)
     AND (:enrollmentStatus IS NULL OR sbe.status = :enrollmentStatus)
