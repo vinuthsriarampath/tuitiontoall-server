@@ -14,7 +14,10 @@
 package edu.vinu.domain.teacher_vacancy.service.impl;
 
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.exception.custom.NotFoundException;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.common.util.SortUtil;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.teacher_vacancy.dto.TeacherVacancy;
@@ -23,6 +26,7 @@ import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import edu.vinu.domain.teacher_vacancy.mapper.TeacherVacancyMapper;
 import edu.vinu.domain.teacher_vacancy.repository.TeacherVacancyRepository;
 import edu.vinu.domain.teacher_vacancy.request.CreateVacancyRequest;
+import edu.vinu.domain.teacher_vacancy.request.TeacherVacancyFilterRequest;
 import edu.vinu.domain.teacher_vacancy.request.UpdateVacancyRequest;
 import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
 import lombok.RequiredArgsConstructor;
@@ -85,13 +89,22 @@ public class TeacherVacancyServiceImpl implements TeacherVacancyService {
     }
 
     @Override
-    public Page<TeacherVacancy> getAllByInstitute(int page, int size, String sortBy, String direction) {
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+    public PaginatedApiResponse<TeacherVacancy> getAllByInstitute(PaginationRequest pagination, TeacherVacancyFilterRequest filters) {
+        InstituteEntity institute = instituteService.getCurrentInstitute();
 
-        InstituteEntity institute = instituteRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
-                .orElseThrow(() -> new NotFoundException("Institute not found"));
-        return vacancyRepository.findByInstituteId(institute.getId(), pageable).map(this::mapToDTO);
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));
+
+        Page<TeacherVacancy> page = vacancyRepository.findByInstituteId(institute.getId(), filters.title(), filters.status() != null ? filters.status().name() : null, pageable).map(TeacherVacancyMapper::toTeacherVacancy);
+
+        return PaginatedApiResponse.<TeacherVacancy>builder()
+                .message("All vacancies retrieved successfully.")
+                .data(page.getContent())
+                .page(page.getNumber())
+                .size(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .last(page.isLast())
+                .build();
     }
 
     @Override

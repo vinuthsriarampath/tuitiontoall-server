@@ -13,11 +13,13 @@
 
 package edu.vinu.domain.teacher_vacancy.controller;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.teacher_vacancy.dto.TeacherVacancy;
 import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import edu.vinu.domain.teacher_vacancy.request.CreateVacancyRequest;
+import edu.vinu.domain.teacher_vacancy.request.TeacherVacancyFilterRequest;
 import edu.vinu.domain.teacher_vacancy.request.UpdateVacancyRequest;
 import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
 import jakarta.validation.Valid;
@@ -57,19 +59,8 @@ public class TeacherVacancyController {
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("/my")
-    public ResponseEntity<PaginatedApiResponse<TeacherVacancy>> getByInstitute(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "createdDate") String sortBy, @RequestParam(defaultValue = "desc") String direction) {
-        Page<TeacherVacancy> pageData  = vacancyService.getAllByInstitute(page, size, sortBy, direction);
-
-        PaginatedApiResponse<TeacherVacancy> response = PaginatedApiResponse.<TeacherVacancy>builder()
-                .message("Vacancies By Institute!")
-                .data(pageData.getContent())
-                .page(pageData.getNumber())
-                .size(pageData.getSize())
-                .totalElements(pageData.getTotalElements())
-                .totalPages(pageData.getTotalPages())
-                .last(pageData.isLast())
-                .build();
-        return ResponseEntity.status(200).body(response);
+    public ResponseEntity<PaginatedApiResponse<TeacherVacancy>> getByInstitute(PaginationRequest pagination, TeacherVacancyFilterRequest filters) {
+        return ResponseEntity.ok(vacancyService.getAllByInstitute(pagination, filters));
     }
 
     @GetMapping("/{vacancyId}")
