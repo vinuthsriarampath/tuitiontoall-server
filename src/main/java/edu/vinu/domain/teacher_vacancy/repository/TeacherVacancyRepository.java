@@ -29,7 +29,21 @@ import java.util.Optional;
 
 @Repository
 public interface TeacherVacancyRepository extends JpaRepository<TeacherVacancyEntity, Long> {
-    Page<TeacherVacancyEntity> findByInstituteId(Long instituteId, Pageable pageable);
+
+    @Query(value = """
+    SELECT *
+    FROM teacher_vacancy tv
+    WHERE tv.institute_id = :instituteId
+    AND (:title IS NULL OR tv.title LIKE LOWER(CONCAT('%', :title, '%')))
+    AND (:status IS NULL OR tv.status = :status)
+    """,countQuery = """
+    SELECT COUNT(*)
+    FROM teacher_vacancy tv
+    WHERE tv.institute_id = :instituteId
+    AND (:title IS NULL OR tv.title LIKE LOWER(CONCAT('%', :title, '%')))
+    AND (:status IS NULL OR tv.status = :status)
+    """, nativeQuery = true)
+    Page<TeacherVacancyEntity> findByInstituteId(Long instituteId,String title, String status, Pageable pageable);
 
     List<TeacherVacancyEntity> findByStatusAndInstituteId(TeacherVacancyStatus status, Long instituteId);
 
