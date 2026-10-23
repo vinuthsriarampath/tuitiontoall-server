@@ -16,10 +16,11 @@ package edu.vinu.domain.teacher_vacancy.service.impl;
 
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.domain.institute.entity.InstituteEntity;
-import edu.vinu.domain.institute.repository.InstituteRepository;
+import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.teacher_vacancy.dto.TeacherVacancy;
 import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
 import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
+import edu.vinu.domain.teacher_vacancy.mapper.TeacherVacancyMapper;
 import edu.vinu.domain.teacher_vacancy.repository.TeacherVacancyRepository;
 import edu.vinu.domain.teacher_vacancy.request.CreateVacancyRequest;
 import edu.vinu.domain.teacher_vacancy.request.UpdateVacancyRequest;
@@ -28,8 +29,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,13 +38,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeacherVacancyServiceImpl implements TeacherVacancyService {
     private final TeacherVacancyRepository vacancyRepository;
-    private final InstituteRepository instituteRepository;
+    private final InstituteService instituteService;
 
     @Override
     public TeacherVacancy createVacancy(CreateVacancyRequest request) {
 
-        InstituteEntity institute = instituteRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
-                .orElseThrow(() -> new NotFoundException("Institute not found"));
+        InstituteEntity institute = instituteService.getCurrentInstitute();
 
         TeacherVacancyEntity vacancy = TeacherVacancyEntity.builder()
                 .title(request.getTitle())
@@ -56,7 +54,7 @@ public class TeacherVacancyServiceImpl implements TeacherVacancyService {
                 .institute(institute)
                 .build();
 
-        return mapToDTO(vacancyRepository.save(vacancy));
+        return TeacherVacancyMapper.toTeacherVacancy(vacancyRepository.save(vacancy));
     }
 
     @Override
@@ -73,7 +71,7 @@ public class TeacherVacancyServiceImpl implements TeacherVacancyService {
 
         vacancy.setLastModifiedDate(LocalDateTime.now());
 
-        return mapToDTO(vacancyRepository.save(vacancy));
+        return TeacherVacancyMapper.toTeacherVacancy(vacancyRepository.save(vacancy));
     }
 
     @Override
@@ -83,7 +81,7 @@ public class TeacherVacancyServiceImpl implements TeacherVacancyService {
 
     @Override
     public TeacherVacancy getById(Long vacancyId) {
-        return mapToDTO(this.getEntityById(vacancyId));
+        return TeacherVacancyMapper.toTeacherVacancy(this.getEntityById(vacancyId));
     }
 
     @Override
@@ -99,7 +97,7 @@ public class TeacherVacancyServiceImpl implements TeacherVacancyService {
     @Override
     public List<TeacherVacancy> getAllByInstituteIdAndStatus(Long instituteId, String status) {
         return vacancyRepository.findByStatusAndInstituteId(TeacherVacancyStatus.valueOf(status),instituteId)
-                .stream().map(this::mapToDTO).toList();
+                .stream().map(TeacherVacancyMapper::toTeacherVacancy).toList();
     }
 
     @Override
@@ -120,18 +118,7 @@ public class TeacherVacancyServiceImpl implements TeacherVacancyService {
     @Override
     public TeacherVacancy getByVacancyIdAndStatus(Long vacancyId, TeacherVacancyStatus status) {
         this.vacancyRepository.findByIdAndStatus(vacancyId,status).orElseThrow(() -> new NotFoundException("Vacancy not found with the given Id/Status"));
-        return mapToDTO(this.getEntityById(vacancyId));
+        return TeacherVacancyMapper.toTeacherVacancy(this.getEntityById(vacancyId));
     }
 
-    private TeacherVacancy mapToDTO(TeacherVacancyEntity v) {
-        return TeacherVacancy.builder()
-                .id(v.getId())
-                .title(v.getTitle())
-                .requiredExperienceYears(v.getRequiredExperienceYears())
-                .jobDescription(v.getJobDescription())
-                .status(v.getStatus())
-                .vacancyClosingDate(v.getVacancyClosingDate())
-                .instituteId(v.getInstitute().getId())
-                .build();
-    }
 }
