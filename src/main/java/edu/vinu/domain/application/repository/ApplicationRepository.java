@@ -39,33 +39,36 @@ public interface ApplicationRepository extends JpaRepository<ApplicationEntity, 
 
 
     @Query(value = """ 
-            SELECT
-                                    a.id AS id,
-                                    a.teacher_vacancy_id AS teacherVacancyId,
-                                    a.status AS status,
-                                    a.applied_date AS appliedDate,
-                                    a.last_modified_date AS lastModifiedDate,
-                                    u.id AS userId,
-                                    u.email AS email,
-                                    u.contact AS contact,
-                                    u.dp AS dp,
-                                    u.address AS address,
-                                    t.first_name AS firstName,
-                                    t.last_name AS lastName,
-                                    t.dob AS dob
-                                    FROM applications a
-                                    JOIN teacher t ON a.teacher_id = t.id
-                                    JOIN users u ON t.user_id = u.id
-                                    WHERE a.teacher_vacancy_id = :vacancyId
-            """,
-            countQuery = """
-                    SELECT COUNT(*)
-                    FROM applications a
-                    WHERE a.teacher_vacancy_id = :vacancyId
-                    """,
-            nativeQuery = true
-    )
-    Page<ApplicationProjection> findAllByTeacherVacancy_Id(@Param("vacancyId") Long teacherVacancyId, Pageable pageable);
+    SELECT
+    a.id AS id,
+    a.teacher_vacancy_id AS teacherVacancyId,
+    a.status AS status,
+    a.applied_date AS appliedDate,
+    a.last_modified_date AS lastModifiedDate,
+    
+    u.id AS userId,
+    u.email AS email,
+    u.contact AS contact,
+    u.dp AS dp,
+    u.address AS address,
+    
+    t.first_name AS firstName,
+    t.last_name AS lastName,
+    t.dob AS dob
+    FROM applications a
+    JOIN teacher t ON a.teacher_id = t.id
+    JOIN users u ON t.user_id = u.id
+    WHERE a.teacher_vacancy_id = :vacancyId
+    AND (:status IS NULL OR a.status = :status)
+    AND (:teacherName IS NULL OR (LOWER(CONCAT(t.first_name, ' ', t.last_name)) LIKE LOWER(CONCAT('%', :teacherName, '%'))))
+    """,countQuery = """
+    SELECT COUNT(*)
+    FROM applications a
+    WHERE a.teacher_vacancy_id = :vacancyId
+    AND (:status IS NULL OR a.status = :status)
+    AND (:teacherName IS NULL OR (LOWER(CONCAT(t.first_name, ' ', t.last_name)) LIKE LOWER(CONCAT('%', :teacherName, '%'))))
+    """, nativeQuery = true)
+    Page<ApplicationProjection> findAllByTeacherVacancy_Id(@Param("vacancyId") Long teacherVacancyId,String status,String teacherName, Pageable pageable);
 
     @Query(value = """
     SELECT

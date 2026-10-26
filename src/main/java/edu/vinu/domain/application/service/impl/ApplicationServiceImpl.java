@@ -24,6 +24,7 @@ import edu.vinu.domain.application.entity.ApplicationEntity;
 import edu.vinu.domain.application.enums.ApplicationStatus;
 import edu.vinu.domain.application.mappers.ApplicationMapper;
 import edu.vinu.domain.application.repository.ApplicationRepository;
+import edu.vinu.domain.application.request.ApplicationFilterRequest;
 import edu.vinu.domain.application.request.TeacherApplicationFilterRequest;
 import edu.vinu.domain.application.response.ApplicationDetailsResponse;
 import edu.vinu.domain.application.response.TeacherApplicationResponse;
@@ -103,30 +104,24 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public Page<ApplicationDetailsResponse> getApplicationsByVacancy(Long vacancyId, int page, int size, String direction, String sortBy) {
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
-
+    public PaginatedApiResponse<ApplicationDetailsResponse> getApplicationsByVacancy(Long vacancyId, PaginationRequest pagination, ApplicationFilterRequest filters) {
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("applied_date")));
         if (teacherVacancyService.existsById(vacancyId)){
-            return applicationRepository.findAllByTeacherVacancy_Id(vacancyId, pageable).map(ap -> ApplicationDetailsResponse.builder()
-                    .id(ap.getId())
-                    .teacherVacancyId(ap.getTeacherVacancyId())
-                    .status(ApplicationStatus.valueOf(ap.getStatus()))
-                    .appliedDate(ap.getAppliedDate())
-                    .lastModifiedDate(ap.getLastModifiedDate())
-                    .teacher(
-                            TeacherUserResponse.builder()
-                                    .userId(ap.getUserId())
-                                    .email(ap.getEmail())
-                                    .contact(ap.getContact())
-                                    .dp(ap.getDp())
-                                    .address(ap.getAddress())
-                                    .firstName(ap.getFirstName())
-                                    .lastName(ap.getLastName())
-                                    .dob(ap.getDob())
-                                    .build()
-                    )
-                    .build());
+            Page<ApplicationDetailsResponse> page = applicationRepository.findAllByTeacherVacancy_Id(
+                    vacancyId,
+                    filters.status() != null ? filters.status().name() : null,
+                    filters.teacherName(),
+                    pageable).map(ApplicationMapper::toApplicationDetailsResponse);
+
+            return PaginatedApiResponse.<ApplicationDetailsResponse>builder()
+                    .message("Applications retrieved successfully")
+                    .data(page.getContent())
+                    .page(page.getNumber())
+                    .size(page.getSize())
+                    .totalElements(page.getTotalElements())
+                    .totalPages(page.getTotalPages())
+                    .last(page.isLast())
+                    .build();
         }else {
             throw new NotFoundException("Vacancy not found!");
         }

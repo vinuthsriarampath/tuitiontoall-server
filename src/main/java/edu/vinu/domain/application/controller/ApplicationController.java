@@ -13,9 +13,11 @@
 
 package edu.vinu.domain.application.controller;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.application.dto.Application;
+import edu.vinu.domain.application.request.ApplicationFilterRequest;
 import edu.vinu.domain.application.response.ApplicationDetailsResponse;
 import edu.vinu.domain.application.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -47,24 +49,7 @@ public class ApplicationController {
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("vacancies/{vacancyId}")
-    public ResponseEntity<PaginatedApiResponse<ApplicationDetailsResponse>> getAllApplicationsByVacancy(
-            @PathVariable("vacancyId") Long vacancyId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "desc") String direction,
-            @RequestParam(defaultValue = "appliedDate") String sortBy){
-        Page<ApplicationDetailsResponse> pageData = applicationService.getApplicationsByVacancy(vacancyId,page,size,direction,sortBy);
-
-        PaginatedApiResponse<ApplicationDetailsResponse> response =  PaginatedApiResponse.<ApplicationDetailsResponse>builder()
-                .message("Applications By Vacancy!")
-                .data(pageData.getContent())
-                .page(pageData.getNumber())
-                .size(pageData.getSize())
-                .totalElements(pageData.getTotalElements())
-                .totalPages(pageData.getTotalPages())
-                .last(pageData.isLast())
-                .build();
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<PaginatedApiResponse<ApplicationDetailsResponse>> getAllApplicationsByVacancy(@PathVariable("vacancyId") Long vacancyId, PaginationRequest pagination, ApplicationFilterRequest filters){
+        return ResponseEntity.ok(applicationService.getApplicationsByVacancy(vacancyId,pagination, filters));
     }
 }
