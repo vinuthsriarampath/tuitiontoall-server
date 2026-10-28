@@ -21,7 +21,6 @@ import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import edu.vinu.domain.teacher_vacancy.request.CreateVacancyRequest;
 import edu.vinu.domain.teacher_vacancy.request.TeacherVacancyFilterRequest;
 import edu.vinu.domain.teacher_vacancy.request.UpdateVacancyRequest;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 

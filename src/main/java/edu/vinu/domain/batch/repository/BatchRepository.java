@@ -14,7 +14,6 @@
 package edu.vinu.domain.batch.repository;
 
 import edu.vinu.domain.batch.entity.BatchEntity;
-import edu.vinu.domain.batch.enums.BatchStatus;
 import edu.vinu.domain.batch.repository.projection.BatchDetailedProjection;
 import edu.vinu.domain.batch.repository.projection.BatchProjection;
 import edu.vinu.domain.reporting.projection.TrendPointProjection;

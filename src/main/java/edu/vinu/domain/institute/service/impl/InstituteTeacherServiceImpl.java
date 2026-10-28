@@ -36,7 +36,6 @@ import edu.vinu.domain.institute.response.InstituteTeacherStatsResponse;
 import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.institute.service.InstituteTeacherService;
 import edu.vinu.domain.teacher.dtos.response.TeacherBasicResponse;
-import edu.vinu.domain.teacher.dtos.response.TeacherUserResponse;
 import edu.vinu.domain.teacher.entity.TeacherEntity;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
@@ -46,7 +45,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 

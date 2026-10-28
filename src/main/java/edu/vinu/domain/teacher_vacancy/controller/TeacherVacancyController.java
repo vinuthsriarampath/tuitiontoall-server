@@ -24,7 +24,6 @@ import edu.vinu.domain.teacher_vacancy.request.UpdateVacancyRequest;
 import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

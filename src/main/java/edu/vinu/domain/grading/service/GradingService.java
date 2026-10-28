@@ -18,7 +18,6 @@ import edu.vinu.domain.grading.request.GradingSubmissionRequest;
 import edu.vinu.domain.grading.response.GradingEligibilityResponse;
 import edu.vinu.domain.grading.response.SubmissionGradedResponse;
 import edu.vinu.domain.student.dto.response.RecentResultsResponse;
-import jakarta.validation.Valid;
 
 import java.math.BigDecimal;
 import java.util.List;

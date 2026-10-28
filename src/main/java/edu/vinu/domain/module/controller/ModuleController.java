@@ -19,7 +19,6 @@ import edu.vinu.domain.assignment.request.module_assignments.ModuleAssignmentFil
 import edu.vinu.domain.assignment.response.module_assignment.ModuleAssignmentResponse;
 import edu.vinu.domain.chapter.response.ChapterResponse;
 import edu.vinu.domain.chapter.service.ChapterQueryService;
-import edu.vinu.domain.module.request.ModuleFilterRequest;
 import edu.vinu.domain.module.request.create.ModuleCreateRequest;
 import edu.vinu.domain.module.request.update.ModuleBatchUpdateRequest;
 import edu.vinu.domain.module.request.update.ModuleNameUpdateRequest;
@@ -29,7 +28,6 @@ import edu.vinu.domain.module.response.ModuleResponse;
 import edu.vinu.domain.module.service.ModuleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

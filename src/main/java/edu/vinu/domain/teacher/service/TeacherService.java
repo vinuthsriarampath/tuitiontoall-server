@@ -13,7 +13,6 @@
 
 package edu.vinu.domain.teacher.service;
 
-import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.teacher.dtos.request.TeacherDetailsUpdateRequest;
 import edu.vinu.domain.teacher.dtos.response.Teacher;
 import edu.vinu.domain.teacher.entity.TeacherEntity;

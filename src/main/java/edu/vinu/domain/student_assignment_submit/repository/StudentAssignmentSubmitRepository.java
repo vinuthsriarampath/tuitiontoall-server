@@ -13,7 +13,6 @@
 
 package edu.vinu.domain.student_assignment_submit.repository;
 
-import edu.vinu.domain.student.dto.response.RecentResultsResponse;
 import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.repository.projections.AssignmentSubmissionDetailedProjection;
 import edu.vinu.domain.student_assignment_submit.repository.projections.NonGradedSubmissionProjection;

@@ -14,7 +14,6 @@
 package edu.vinu.domain.grading.service.impl;
 
 import edu.vinu.common.exception.custom.BadRequestException;
-import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.response.ApiResponse;
@@ -23,6 +22,7 @@ import edu.vinu.domain.grading.entity.GradingRangeEntity;
 import edu.vinu.domain.grading.enums.GradingEligibilityReason;
 import edu.vinu.domain.grading.request.GradingSubmissionRequest;
 import edu.vinu.domain.grading.response.GradingEligibilityResponse;
+import edu.vinu.domain.grading.response.SubmissionGradedResponse;
 import edu.vinu.domain.grading.service.GradingRangeService;
 import edu.vinu.domain.grading.service.GradingService;
 import edu.vinu.domain.student.dto.response.RecentResultsResponse;
@@ -30,7 +30,6 @@ import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.enums.AssignmentSubmitStatus;
 import edu.vinu.domain.student_assignment_submit.mapper.AssignmentSubmissionMapper;
 import edu.vinu.domain.student_assignment_submit.repository.StudentAssignmentSubmitRepository;
-import edu.vinu.domain.grading.response.SubmissionGradedResponse;
 import edu.vinu.domain.student_assignment_submit.service.AssignmentSubmitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

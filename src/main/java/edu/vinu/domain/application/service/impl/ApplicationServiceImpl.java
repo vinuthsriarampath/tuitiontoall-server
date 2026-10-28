@@ -29,7 +29,6 @@ import edu.vinu.domain.application.request.TeacherApplicationFilterRequest;
 import edu.vinu.domain.application.response.ApplicationDetailsResponse;
 import edu.vinu.domain.application.response.TeacherApplicationResponse;
 import edu.vinu.domain.application.service.ApplicationService;
-import edu.vinu.domain.teacher.dtos.response.TeacherUserResponse;
 import edu.vinu.domain.teacher.entity.TeacherEntity;
 import edu.vinu.domain.teacher.service.TeacherService;
 import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
@@ -42,7 +41,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 

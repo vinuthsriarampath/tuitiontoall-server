@@ -21,7 +21,6 @@ import edu.vinu.domain.application.request.ApplicationFilterRequest;
 import edu.vinu.domain.application.request.TeacherApplicationFilterRequest;
 import edu.vinu.domain.application.response.ApplicationDetailsResponse;
 import edu.vinu.domain.application.response.TeacherApplicationResponse;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 

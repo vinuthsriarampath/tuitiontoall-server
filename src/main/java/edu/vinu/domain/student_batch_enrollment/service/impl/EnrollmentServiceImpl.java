@@ -27,7 +27,6 @@ import edu.vinu.domain.batch.request.BatchStudentFilterRequest;
 import edu.vinu.domain.batch.service.BatchService;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.service.CourseService;
-import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.domain.openPdf.service.InvoicePdfGeneratorService;
 import edu.vinu.domain.payment.entity.Payment;
 import edu.vinu.domain.payment.service.PaymentService;

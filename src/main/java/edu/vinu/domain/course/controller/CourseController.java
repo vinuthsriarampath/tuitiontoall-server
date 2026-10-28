@@ -28,20 +28,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static edu.vinu.common.util.ResponseUtil.createApiResponse;
-import static edu.vinu.domain.user.validator.UserValidator.USER_VALIDATION_FAILED_ERROR;
 
 @RestController
 @RequestMapping("api/v2/courses")

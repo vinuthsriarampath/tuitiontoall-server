@@ -26,15 +26,9 @@ import edu.vinu.domain.teacher.dtos.response.Teacher;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static edu.vinu.common.util.ResponseUtil.createApiResponse;
-import static edu.vinu.domain.user.validator.UserValidator.USER_VALIDATION_FAILED_ERROR;
 
 @CrossOrigin
 @RestController
