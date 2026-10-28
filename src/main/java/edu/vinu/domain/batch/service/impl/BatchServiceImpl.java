@@ -50,6 +50,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class BatchServiceImpl implements BatchService {
@@ -207,16 +209,13 @@ public class BatchServiceImpl implements BatchService {
     }
 
     @Override
-    public ApiResponse getAllEnrollableBatchesOfCourse(Long courseId) {
+    public ApiResponse<List<Batch>> getAllEnrollableBatchesOfCourse(Long courseId) {
 
         List<Batch> batches = batchRepository.getAllEnrollableBatchesByCourse(courseId).stream()
                 .map(BatchMapper::toBatch)
                 .toList();
 
-        return ApiResponse.builder()
-                .message("All Enrollable Batches Related to Course ID")
-                .data(batches)
-                .build();
+        return createApiResponse("All Enrollable Batches Related to Course ID!", batches);
     }
 
     @Override

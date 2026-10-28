@@ -20,6 +20,7 @@ import edu.vinu.domain.course.dto.Course;
 import edu.vinu.domain.course.request.CourseCreateRequest;
 import edu.vinu.domain.course.request.CourseFilterRequest;
 import edu.vinu.domain.course.request.CourseUpdateRequest;
+import edu.vinu.domain.course.response.CourseStatsResponse;
 import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.course.service.CourseStatsService;
 import jakarta.validation.Valid;
@@ -39,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
 import static edu.vinu.domain.user.validator.UserValidator.USER_VALIDATION_FAILED_ERROR;
 
 @RestController
@@ -52,51 +54,33 @@ public class CourseController {
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping(value = "/create", consumes = {"multipart/form-data"})
-    public ResponseEntity<ApiResponse> createCourse(@RequestPart("course") @Valid CourseCreateRequest course, BindingResult bindingResult, @RequestPart(value = "thumbnail",required = false)MultipartFile thumbnail){
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(new ApiResponse(USER_VALIDATION_FAILED_ERROR, errors));
-        }
-        Course createdCourse = courseService.createCourse(course,thumbnail);
-        return ResponseEntity.status(201).body(new ApiResponse("Course created successfully", createdCourse ));
+    public ResponseEntity<ApiResponse<Course>> createCourse(@RequestPart("course") @Valid CourseCreateRequest course, @RequestPart(value = "thumbnail",required = false)MultipartFile thumbnail){
+        return ResponseEntity.status(201).body(createApiResponse("Course created successfully", courseService.createCourse(course,thumbnail)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping(value = "/update/{courseId}", consumes = {"multipart/form-data"})
-    public ResponseEntity<ApiResponse> updateCourse(@PathVariable Long courseId,@Valid @RequestPart("course") CourseUpdateRequest updatedCourseDetails, @RequestPart(value = "thumbnail",required = false)MultipartFile thumbnail, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(new ApiResponse(USER_VALIDATION_FAILED_ERROR, errors));
-        }
-        Course updatedCourse = courseService.updateCourse(courseId, updatedCourseDetails, thumbnail);
-        return ResponseEntity.status(200).body(new ApiResponse("Course updated successfully", updatedCourse ));
+    public ResponseEntity<ApiResponse<Course>> updateCourse(@PathVariable Long courseId,@Valid @RequestPart("course") CourseUpdateRequest updatedCourseDetails, @RequestPart(value = "thumbnail",required = false)MultipartFile thumbnail){
+        return ResponseEntity.status(200).body(createApiResponse("Course updated successfully", courseService.updateCourse(courseId, updatedCourseDetails, thumbnail) ));
     }
 
     @PreAuthorize(("hasAuthority('institute')"))
     @DeleteMapping("/delete/{courseId}")
-    public ResponseEntity<ApiResponse> deleteCourse(@PathVariable Long courseId){
+    public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable Long courseId){
         courseService.deleteCourse(courseId);
-        return ResponseEntity.status(200).body(new ApiResponse("Course deleted successfully", null ));
+        return ResponseEntity.status(200).body(createApiResponse("Course deleted successfully", null ));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/archive/{courseId}")
-    public ResponseEntity<ApiResponse> archiveCourse(@PathVariable Long courseId){
-        Course archivedCourse=courseService.archiveCourse(courseId);
-        return ResponseEntity.status(200).body(new ApiResponse("Course archived successfully", archivedCourse ));
+    public ResponseEntity<ApiResponse<Course>> archiveCourse(@PathVariable Long courseId){
+        return ResponseEntity.status(200).body(createApiResponse("Course archived successfully", courseService.archiveCourse(courseId)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student')")
     @GetMapping("/get/{courseId}")
-    public ResponseEntity<ApiResponse> getCourseById(@PathVariable Long courseId){
-        Course course = courseService.getCourseById(courseId);
-        return ResponseEntity.status(200).body(new ApiResponse("Course Found!",course));
+    public ResponseEntity<ApiResponse<Course>> getCourseById(@PathVariable Long courseId){
+        return ResponseEntity.status(200).body(createApiResponse("Course Found!",courseService.getCourseById(courseId)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
@@ -120,13 +104,12 @@ public class CourseController {
     }
 
     @GetMapping("institute/{instituteId}")
-    public ResponseEntity<ApiResponse> getAllCoursesByInstituteId(@PathVariable Long instituteId,CourseFilterRequest filters){
-        List<Course> courses = courseService.getAllCoursesByInstituteId(instituteId,filters);
-        return ResponseEntity.status(200).body(new ApiResponse("Courses for the institute", courses));
+    public ResponseEntity<ApiResponse<List<Course>>> getAllCoursesByInstituteId(@PathVariable Long instituteId,CourseFilterRequest filters){
+        return ResponseEntity.status(200).body(createApiResponse("Courses for the institute", courseService.getAllCoursesByInstituteId(instituteId,filters)));
     }
 
     @GetMapping("{courseId}/stats")
-    public ResponseEntity<ApiResponse> getCourseStats(@PathVariable Long courseId){
+    public ResponseEntity<ApiResponse<CourseStatsResponse>> getCourseStats(@PathVariable Long courseId){
         return ResponseEntity.ok(courseStatsService.getCourseStats(courseId));
     }
 

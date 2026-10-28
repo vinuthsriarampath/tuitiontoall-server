@@ -36,6 +36,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @RestController
 @RequestMapping("/api/v2/modules")
 @RequiredArgsConstructor
@@ -46,72 +48,62 @@ public class ModuleController {
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping
-    public ResponseEntity<ApiResponse> createModule(@Valid @RequestBody ModuleCreateRequest request){
-        ModuleResponse response = moduleService.createModule(request);
-        return ResponseEntity.ok(new ApiResponse("Module created successfully", response));
+    public ResponseEntity<ApiResponse<ModuleResponse>> createModule(@Valid @RequestBody ModuleCreateRequest request){
+        return ResponseEntity.ok(createApiResponse("Module created successfully", moduleService.createModule(request)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("{id}")
-    public ResponseEntity<ApiResponse> updateModuleName(@PathVariable("id") Long id, @Valid @RequestBody ModuleNameUpdateRequest request){
-        ModuleResponse response = moduleService.updateModuleName(id,request);
-        return ResponseEntity.ok(new ApiResponse("Module updated successfully", response));
+    public ResponseEntity<ApiResponse<ModuleResponse>> updateModuleName(@PathVariable("id") Long id, @Valid @RequestBody ModuleNameUpdateRequest request){
+        return ResponseEntity.ok(createApiResponse("Module updated successfully", moduleService.updateModuleName(id,request)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("{id}/publish")
-    public ResponseEntity<ApiResponse> publishModule(@PathVariable("id") Long id){
-        ModuleResponse response = moduleService.publishModule(id);
-        return ResponseEntity.ok(new ApiResponse("Module published successfully", response));
+    public ResponseEntity<ApiResponse<ModuleResponse>> publishModule(@PathVariable("id") Long id){
+        return ResponseEntity.ok(createApiResponse("Module published successfully", moduleService.publishModule(id)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("{id}/lock")
-    public ResponseEntity<ApiResponse> lockModule(@PathVariable("id") Long id){
-        ModuleResponse response = moduleService.lockModule(id);
-        return ResponseEntity.ok(new ApiResponse("Module locked successfully", response));
+    public ResponseEntity<ApiResponse<ModuleResponse>> lockModule(@PathVariable("id") Long id){
+        return ResponseEntity.ok(createApiResponse("Module locked successfully", moduleService.lockModule(id)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("{id}/archive")
-    public ResponseEntity<ApiResponse> archiveModule(@PathVariable("id") Long id){
-        ModuleResponse response = moduleService.archiveModule(id);
-        return ResponseEntity.ok(new ApiResponse("Module archived successfully", response));
+    public ResponseEntity<ApiResponse<ModuleResponse>> archiveModule(@PathVariable("id") Long id){
+        return ResponseEntity.ok(createApiResponse("Module archived successfully", moduleService.archiveModule(id)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("{id}/teacher")
-    public ResponseEntity<ApiResponse> updateModuleTeacher(@PathVariable("id") Long id,@Valid @RequestBody ModuleTeacherUpdateRequest request){
-        ModuleResponse response = moduleService.updateModuleTeacher(id, request);
-        return ResponseEntity.ok(new ApiResponse("Module teacher updated successfully", response));
+    public ResponseEntity<ApiResponse<ModuleResponse>> updateModuleTeacher(@PathVariable("id") Long id,@Valid @RequestBody ModuleTeacherUpdateRequest request){
+        return ResponseEntity.ok(createApiResponse("Module teacher updated successfully", moduleService.updateModuleTeacher(id, request)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("{id}/batch")
-    public ResponseEntity<ApiResponse> updateModuleBatch(@PathVariable("id") Long id,@Valid @RequestBody ModuleBatchUpdateRequest request){
-        ModuleResponse response = moduleService.updateModuleBatch(id, request);
-        return ResponseEntity.ok(new ApiResponse("Module batch updated successfully", response));
+    public ResponseEntity<ApiResponse<ModuleResponse>> updateModuleBatch(@PathVariable("id") Long id,@Valid @RequestBody ModuleBatchUpdateRequest request){
+        return ResponseEntity.ok(createApiResponse("Module batch updated successfully", moduleService.updateModuleBatch(id, request)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}")
-    public ResponseEntity<ApiResponse> getModuleById(@PathVariable("id") Long id){
-        ModuleResponse response = moduleService.getModuleById(id);
-        return ResponseEntity.ok(new ApiResponse("Module fetched successfully", response));
+    public ResponseEntity<ApiResponse<ModuleResponse>> getModuleById(@PathVariable("id") Long id){
+        return ResponseEntity.ok(createApiResponse("Module fetched successfully", moduleService.getModuleById(id)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("/{id}/detailed")
-    public ResponseEntity<ApiResponse> getDetailedModuleById(@PathVariable("id") Long id){
-        ModuleDetailedResponse response = moduleService.getDetailedModuleById(id);
-        return ResponseEntity.ok(new ApiResponse("Module fetched successfully", response));
+    public ResponseEntity<ApiResponse<ModuleDetailedResponse>> getDetailedModuleById(@PathVariable("id") Long id){
+        return ResponseEntity.ok(createApiResponse("Module fetched successfully", moduleService.getDetailedModuleById(id)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("/{id}/chapters/all")
-    public ResponseEntity<ApiResponse> getChaptersByModuleId(@PathVariable("id") Long id){
-        List<ChapterResponse> responses = chapterQueryService.getAllChaptersByModuleId(id);
-        return ResponseEntity.ok(new ApiResponse("Chapters fetched successfully", responses));
+    public ResponseEntity<ApiResponse<List<ChapterResponse>>> getChaptersByModuleId(@PathVariable("id") Long id){
+        return ResponseEntity.ok(createApiResponse("Chapters fetched successfully", chapterQueryService.getAllChaptersByModuleId(id)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student','teacher')")

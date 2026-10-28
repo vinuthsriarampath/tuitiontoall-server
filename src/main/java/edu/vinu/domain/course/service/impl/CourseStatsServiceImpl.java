@@ -43,6 +43,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class CourseStatsServiceImpl implements CourseStatsService {
@@ -53,7 +55,7 @@ public class CourseStatsServiceImpl implements CourseStatsService {
     private final CourseRepository courseRepository;
 
     @Override
-    public ApiResponse getCourseStats(Long courseId) {
+    public ApiResponse<CourseStatsResponse> getCourseStats(Long courseId) {
 
         CourseEntity courseEntity = courseService.getCourseEntityById(courseId);
 
@@ -72,10 +74,7 @@ public class CourseStatsServiceImpl implements CourseStatsService {
             throw new UnauthorizedException("User is not authorized to view stats for this course");
         }
 
-        return ApiResponse.builder()
-                .message("Course stats retrieved successfully")
-                .data(stats)
-                .build();
+        return createApiResponse("Course stats retrieved successfully", stats);
     }
 
     @Override

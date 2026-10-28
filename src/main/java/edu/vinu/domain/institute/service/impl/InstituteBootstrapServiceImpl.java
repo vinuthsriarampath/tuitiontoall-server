@@ -45,6 +45,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class InstituteBootstrapServiceImpl implements InstituteBootstrapService {
@@ -55,7 +57,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
     private final InstituteDashboardKpiService instituteDashboardKpiService;
 
     @Override
-    public ApiResponse getCurrentInstituteBootstrapData() {
+    public ApiResponse<InstituteBootstrapResponse> getCurrentInstituteBootstrapData() {
         InstituteEntity currentInstitute = instituteService.getCurrentInstitute();
 
         InstituteBootstrapResponse response = new InstituteBootstrapResponse();
@@ -74,10 +76,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
         response.setOverallEnrollment(enrollmentService.getOverallEnrollmentStatsByInstitute(currentInstitute.getId(),currentInstitute.getUser().getCreationTimeStamp().toLocalDate()));
         response.setActiveBatches(batchService.getAllBatches(new PaginationRequest(0,5,"desc",  List.of("created_date")), new BatchFilterRequest(null, null, BatchStatus.ONGOING, null)));
 
-        return ApiResponse.builder()
-                .message("Bootstrap data retrieved successfully")
-                .data(response)
-                .build();
+        return createApiResponse("Bootstrap data retrieved successfully", response);
     }
 
 }

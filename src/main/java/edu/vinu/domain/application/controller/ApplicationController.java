@@ -26,6 +26,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @RestController
 @RequestMapping("/api/v2/applications")
 @RequiredArgsConstructor
@@ -35,16 +37,16 @@ public class ApplicationController {
 
     @PreAuthorize("hasAuthority('teacher')")
     @PostMapping("/vacancies/{vacancyId}/apply")
-    public ResponseEntity<ApiResponse> createApplication(@PathVariable Long vacancyId){
+    public ResponseEntity<ApiResponse<Application>> createApplication(@PathVariable Long vacancyId){
         Application application = applicationService.createApplication(vacancyId);
-        return ResponseEntity.status(201).body(new ApiResponse("Application created successfully", application));
+        return ResponseEntity.status(201).body(createApiResponse("Application created successfully", application));
     }
 
     @PreAuthorize("hasAuthority('teacher')")
     @GetMapping("/check")
-    public ResponseEntity<ApiResponse> checkIfUserAlreadyApplied(@RequestParam("teacherId") Long userId,@RequestParam("vacancyId") Long vacancyId){
+    public ResponseEntity<ApiResponse<Boolean>> checkIfUserAlreadyApplied(@RequestParam("teacherId") Long userId,@RequestParam("vacancyId") Long vacancyId){
         boolean userAlreadyApplied = applicationService.isUserAlreadyApplied(userId, vacancyId);
-        return ResponseEntity.status(200).body(new ApiResponse("Success", userAlreadyApplied));
+        return ResponseEntity.status(200).body(createApiResponse("Success", userAlreadyApplied));
     }
 
     @PreAuthorize("hasAuthority('institute')")

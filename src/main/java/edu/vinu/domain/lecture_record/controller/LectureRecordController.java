@@ -31,6 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v2/lecture-records")
@@ -40,29 +42,24 @@ public class LectureRecordController {
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping("/upload/init")
-    public ResponseEntity<ApiResponse> initializeUpload(@Valid @RequestBody LectureRecordUploadInitRequest request){
-        LectureRecordUploadInitResponse response = lectureRecordService.initializeUpload(request);
-
-        return ResponseEntity.ok(new ApiResponse("Upload initialized successfully", response));
+    public ResponseEntity<ApiResponse<LectureRecordUploadInitResponse>> initializeUpload(@Valid @RequestBody LectureRecordUploadInitRequest request){
+        return ResponseEntity.ok(createApiResponse("Upload initialized successfully", lectureRecordService.initializeUpload(request)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping("/upload/chunk")
-    public ResponseEntity<ApiResponse> uploadChunk(
+    public ResponseEntity<ApiResponse<LectureRecordChunkUploadResponse>> uploadChunk(
             @RequestParam String uploadId,
             @RequestParam Integer chunkIndex,
             @RequestParam MultipartFile chunk
     ){
-        LectureRecordChunkUploadResponse response = lectureRecordService.uploadChunk(uploadId, chunkIndex, chunk);
-        return ResponseEntity.ok(new ApiResponse("Upload chunk successfully", response));
+        return ResponseEntity.ok(createApiResponse("Upload chunk successfully", lectureRecordService.uploadChunk(uploadId, chunkIndex, chunk)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping("/upload/complete/{uploadId}")
-    public ResponseEntity<ApiResponse> completeUpload(@PathVariable String uploadId) {
-
-        LectureRecordResponse response = lectureRecordService.completeUpload(uploadId);
-        return ResponseEntity.ok(new ApiResponse("Upload completed successfully", response));
+    public ResponseEntity<ApiResponse<LectureRecordResponse>> completeUpload(@PathVariable String uploadId) {
+        return ResponseEntity.ok(createApiResponse("Upload completed successfully", lectureRecordService.completeUpload(uploadId)));
     }
 
     @GetMapping("/stream/{fileName:.+}")
@@ -73,15 +70,13 @@ public class LectureRecordController {
 
     @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("/stream-token/{fileName:.+}")
-    public ResponseEntity<ApiResponse> generateStreamToken(@PathVariable String fileName){
-        String token = videoStreamTokenService.generateToken(fileName);
-        return ResponseEntity.ok(new ApiResponse("Stream token generated for file name: "+fileName, token));
+    public ResponseEntity<ApiResponse<String>> generateStreamToken(@PathVariable String fileName){
+        return ResponseEntity.ok(createApiResponse("Stream token generated for file name: "+fileName, videoStreamTokenService.generateToken(fileName)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PutMapping("{id}/details")
-    public ResponseEntity<ApiResponse> updateLectureRecordDetails(@PathVariable Long id, @Valid @RequestBody LectureRecordDetailsUpdateRequest request){
-        LectureRecordResponse response = lectureRecordService.updateLectureRecordDetails(id,request);
-        return ResponseEntity.ok(new ApiResponse("Lecture record details updated successfully", response));
+    public ResponseEntity<ApiResponse<LectureRecordResponse>> updateLectureRecordDetails(@PathVariable Long id, @Valid @RequestBody LectureRecordDetailsUpdateRequest request){
+        return ResponseEntity.ok(createApiResponse("Lecture record details updated successfully", lectureRecordService.updateLectureRecordDetails(id,request)));
     }
 }

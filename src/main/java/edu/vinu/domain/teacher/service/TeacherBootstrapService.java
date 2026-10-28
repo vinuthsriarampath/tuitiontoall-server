@@ -14,7 +14,8 @@
 package edu.vinu.domain.teacher.service;
 
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.teacher.dtos.response.TeacherBootstrapResponse;
 
 public interface TeacherBootstrapService {
-    ApiResponse getTeacherDashboardStats();
+    ApiResponse<TeacherBootstrapResponse> getTeacherDashboardStats();
 }

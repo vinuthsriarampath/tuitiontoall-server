@@ -14,12 +14,16 @@
 package edu.vinu.domain.student.controller;
 
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.course.response.StudentCourseViewResponse;
 import edu.vinu.domain.course.service.StudentCourseService;
 import edu.vinu.domain.student.dto.request.StudentDetailsUpdateRequest;
 import edu.vinu.domain.student.dto.response.Student;
+import edu.vinu.domain.student.dto.response.StudentBootstrapResponse;
+import edu.vinu.domain.student.dto.response.StudentLearningResponse;
 import edu.vinu.domain.student.service.StudentBootstrapService;
 import edu.vinu.domain.student.service.StudentLearningService;
 import edu.vinu.domain.student.service.StudentService;
+import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentHistoryResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +31,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -40,38 +47,38 @@ public class StudentController {
 
     @PreAuthorize("hasAuthority('student')")
     @PatchMapping("/me")
-    public ResponseEntity<ApiResponse> updateStudentDetails(@Valid @RequestBody StudentDetailsUpdateRequest studentDetailsUpdateRequest){
+    public ResponseEntity<ApiResponse<Student>> updateStudentDetails(@Valid @RequestBody StudentDetailsUpdateRequest studentDetailsUpdateRequest){
         Student updatedStudentDetails = studentService.updateStudentDetails(SecurityContextHolder.getContext().getAuthentication().getName(),studentDetailsUpdateRequest);
-        return ResponseEntity.status(OK).body(new ApiResponse("Student Profile Updated!",updatedStudentDetails));
+        return ResponseEntity.status(OK).body(createApiResponse("Student Profile Updated!",updatedStudentDetails));
     }
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("/validate/role")
-    public ResponseEntity<ApiResponse> validateStudent(){
-        return ResponseEntity.status(OK).body(new ApiResponse("User has student role!", null));
+    public ResponseEntity<ApiResponse<Void>> validateStudent(){
+        return ResponseEntity.status(OK).body(createApiResponse("User has student role!", null));
     }
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("/me/learning")
-    public ResponseEntity<ApiResponse> getMyLearningDetails(){
+    public ResponseEntity<ApiResponse<List<StudentLearningResponse>>> getMyLearningDetails(){
         return ResponseEntity.ok(studentLearningService.getMyLearningDetails());
     }
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("/me/learning/courses/{courseId}/enrollment-history")
-    public ResponseEntity<ApiResponse> getEnrollmentHistory(@PathVariable Long courseId) {
+    public ResponseEntity<ApiResponse<EnrollmentHistoryResponse>> getEnrollmentHistory(@PathVariable Long courseId) {
         return ResponseEntity.ok(studentLearningService.getEnrollmentHistory(courseId));
     }
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("/me/learning/courses/{courseId}/batches/{batchId}")
-    public ResponseEntity<ApiResponse> getStudentCourseDetails(@PathVariable Long courseId, @PathVariable Long batchId){
+    public ResponseEntity<ApiResponse<StudentCourseViewResponse>> getStudentCourseDetails(@PathVariable Long courseId, @PathVariable Long batchId){
         return ResponseEntity.ok(studentCourseService.getStudentDetailedCourse(courseId, batchId));
     }
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("/me/bootstrap")
-    public ResponseEntity<ApiResponse> getStudentBootstrapData(){
+    public ResponseEntity<ApiResponse<StudentBootstrapResponse>> getStudentBootstrapData(){
         return ResponseEntity.ok(studentBootstrapService.getBootstrapData());
     }
 }

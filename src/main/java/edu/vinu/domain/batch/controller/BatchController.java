@@ -35,6 +35,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+import static edu.vinu.common.util.ResponseUtil.createPaginatedApiResponse;
+
 @RestController
 @RequestMapping("/api/v2/batches")
 @RequiredArgsConstructor
@@ -45,9 +50,8 @@ public class BatchController {
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createBatch(@Valid @RequestBody BatchCreateRequest request){
-        Batch batch = batchService.createBatch(request);
-        return ResponseEntity.status(201).body(new ApiResponse("Batch created successfully", batch));
+    public ResponseEntity<ApiResponse<Batch>> createBatch(@Valid @RequestBody BatchCreateRequest request){
+        return ResponseEntity.status(201).body(createApiResponse("Batch created successfully", batchService.createBatch(request)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
@@ -58,16 +62,14 @@ public class BatchController {
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("/find/batch/{batchId}")
-    public ResponseEntity<ApiResponse> getBatchById(@PathVariable Long batchId){
-        Batch batch= batchService.getBatchById(batchId);
-        return ResponseEntity.status(200).body(new ApiResponse("Batch By Batch Id",batch));
+    public ResponseEntity<ApiResponse<Batch>> getBatchById(@PathVariable Long batchId){
+        return ResponseEntity.status(200).body(createApiResponse("Batch By Batch Id",batchService.getBatchById(batchId)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/{batchId}/update")
-    public ResponseEntity<ApiResponse> updateBatchById(@PathVariable Long batchId, @Valid @RequestBody BatchUpdateRequest request){
-        Batch  batch = batchService.updateBatchById(batchId,request);
-        return ResponseEntity.status(200).body(new ApiResponse("Batch Updated Successfully",batch));
+    public ResponseEntity<ApiResponse<Batch>> updateBatchById(@PathVariable Long batchId, @Valid @RequestBody BatchUpdateRequest request){
+        return ResponseEntity.status(200).body(createApiResponse("Batch Updated Successfully",batchService.updateBatchById(batchId,request)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
@@ -77,24 +79,13 @@ public class BatchController {
             PaginationRequest pagination,
             ModuleFilterRequest filters
     ){
-        Page<ModuleResponse> pageData = moduleService.getModulesByBatch(batchId,pagination,filters);
-        PaginatedApiResponse<ModuleResponse> response = PaginatedApiResponse.<ModuleResponse>builder()
-                .message("Modules related to batch fetched successfully!")
-                .data(pageData.getContent())
-                .page(pageData.getNumber())
-                .size(pageData.getSize())
-                .totalElements(pageData.getTotalElements())
-                .totalPages(pageData.getTotalPages())
-                .last(pageData.isLast())
-                .build();
-        return ResponseEntity.status(200).body(response);
+        return ResponseEntity.status(200).body(createPaginatedApiResponse("Modules related to batch fetched successfully!", moduleService.getModulesByBatch(batchId,pagination,filters)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student')")
     @GetMapping("{courseId}/enrollables")
-    public ResponseEntity<ApiResponse> getAllEnrollableBatchesOfCourse(@PathVariable Long courseId){
-        ApiResponse response = batchService.getAllEnrollableBatchesOfCourse(courseId);
-        return ResponseEntity.status(200).body(response);
+    public ResponseEntity<ApiResponse<List<Batch>>> getAllEnrollableBatchesOfCourse(@PathVariable Long courseId){
+        return ResponseEntity.status(200).body(batchService.getAllEnrollableBatchesOfCourse(courseId));
     }
 
     @PreAuthorize("hasAuthority('institute')")

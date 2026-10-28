@@ -14,6 +14,7 @@
 package edu.vinu.domain.user_follow.controller;
 
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.user_follow.dtos.response.UserFollowResponse;
 import edu.vinu.domain.user_follow.services.UserFollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class UserFollowController {
     private final UserFollowService userFollowService;
 
     @PostMapping("/user/{followingId}")
-    public ResponseEntity<ApiResponse> followUser(@PathVariable Long followingId){
+    public ResponseEntity<ApiResponse<UserFollowResponse>> followUser(@PathVariable Long followingId){
         return ResponseEntity.ok(userFollowService.followUser(followingId));
     }
 }

@@ -34,7 +34,7 @@ public class FeedbackController {
 
     @PreAuthorize("hasAuthority('student')")
     @PostMapping
-    public ResponseEntity<ApiResponse> submitFeedback(@Valid @RequestBody FeedbackCreateRequest request){
+    public ResponseEntity<ApiResponse<FeedbackResponse>> submitFeedback(@Valid @RequestBody FeedbackCreateRequest request){
          return ResponseEntity.ok(feedbackService.submitFeedback(request));
     }
 

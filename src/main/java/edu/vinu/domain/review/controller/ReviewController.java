@@ -34,7 +34,7 @@ public class ReviewController {
 
     @PreAuthorize("hasAuthority('student')")
     @PostMapping
-    public ResponseEntity<ApiResponse> createReview(@Valid @RequestBody ReviewCreateRequest request){
+    public ResponseEntity<ApiResponse<Void>> createReview(@Valid @RequestBody ReviewCreateRequest request){
         return ResponseEntity.ok(reviewService.createReview(request));
     }
 

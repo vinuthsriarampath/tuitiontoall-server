@@ -19,12 +19,14 @@ import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.post.dto.request.MyPostsFilterRequests;
 import edu.vinu.domain.post.dto.request.PostCreateRequest;
 import edu.vinu.domain.post.dto.response.FeedPostResponse;
+import edu.vinu.domain.post.dto.response.PostResponse;
 import edu.vinu.domain.post.dto.response.UserPostResponse;
 import edu.vinu.domain.post.services.PostService;
 import edu.vinu.domain.post.services.UserPostService;
 import edu.vinu.domain.post_comment.dtos.request.PostCommentRequest;
 import edu.vinu.domain.post_comment.dtos.request.PostCommentsFilterRequest;
 import edu.vinu.domain.post_comment.dtos.response.PostCommentDetailedResponse;
+import edu.vinu.domain.post_comment.dtos.response.PostCommentResponse;
 import edu.vinu.domain.post_comment.service.PostCommentService;
 import edu.vinu.domain.post_like.services.PostLikeService;
 import jakarta.validation.Valid;
@@ -36,6 +38,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @RestController
 @RequestMapping("/api/v2/posts")
 @RequiredArgsConstructor
@@ -46,7 +50,7 @@ public class PostController {
     private final PostCommentService postCommentService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse> createPost(
+    public ResponseEntity<ApiResponse<PostResponse>> createPost(
             @RequestPart("request") PostCreateRequest request,
             @RequestPart(value = "files", required = false) List<MultipartFile> files) {
 
@@ -54,7 +58,7 @@ public class PostController {
     }
 
     @PatchMapping("/{postId}/publish")
-    public ResponseEntity<ApiResponse> publishDraftPost(@PathVariable Long postId) {
+    public ResponseEntity<ApiResponse<PostResponse>> publishDraftPost(@PathVariable Long postId) {
         return ResponseEntity.ok(postService.publishDraftPost(postId));
     }
 
@@ -74,19 +78,19 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/like")
-    public ResponseEntity<ApiResponse> likePost(@PathVariable Long postId) {
+    public ResponseEntity<ApiResponse<Void>> likePost(@PathVariable Long postId) {
         postLikeService.likePost(postId);
-        return ResponseEntity.ok(new ApiResponse("Post liked successfully.",null));
+        return ResponseEntity.ok(createApiResponse("Post liked successfully.",null));
     }
 
     @DeleteMapping("/{postId}/dislike")
-    public ResponseEntity<ApiResponse> dislikePost(@PathVariable Long postId) {
+    public ResponseEntity<ApiResponse<Void>> dislikePost(@PathVariable Long postId) {
         postLikeService.dislikePost(postId);
-        return ResponseEntity.ok(new ApiResponse("Post disliked successfully.",null));
+        return ResponseEntity.ok(createApiResponse("Post disliked successfully.",null));
     }
 
     @PostMapping("/{postId}/comment")
-    public ResponseEntity<ApiResponse> commentPost(@PathVariable Long postId, @Valid @RequestBody PostCommentRequest request) {
+    public ResponseEntity<ApiResponse<PostCommentResponse>> commentPost(@PathVariable Long postId, @Valid @RequestBody PostCommentRequest request) {
         return ResponseEntity.ok(postCommentService.comment(postId, request));
     }
 

@@ -14,7 +14,8 @@
 package edu.vinu.domain.institute.service;
 
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.institute.response.InstituteBootstrapResponse;
 
 public interface InstituteBootstrapService {
-    ApiResponse getCurrentInstituteBootstrapData();
+    ApiResponse<InstituteBootstrapResponse> getCurrentInstituteBootstrapData();
 }

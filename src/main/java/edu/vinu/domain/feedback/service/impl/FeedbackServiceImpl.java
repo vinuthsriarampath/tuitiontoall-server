@@ -40,6 +40,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class FeedbackServiceImpl implements FeedbackService {
@@ -51,7 +53,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     private final StudentBatchEnrollmentRepository enrollmentRepository;
 
     @Override
-    public ApiResponse submitFeedback(FeedbackCreateRequest request) {
+    public ApiResponse<FeedbackResponse> submitFeedback(FeedbackCreateRequest request) {
         UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
         CourseEntity courseEntity = courseService.getCourseEntityById(request.courseId());
 
@@ -66,10 +68,8 @@ public class FeedbackServiceImpl implements FeedbackService {
                 .build();
 
         Feedback save = feedbackRepository.save(feedbackEntity);
-        return ApiResponse.builder()
-                .message("Feedback submitted successfully")
-                .data(FeedbackMapper.toFeedbackResponse(save))
-                .build();
+
+        return createApiResponse("Feedback submitted successfully", FeedbackMapper.toFeedbackResponse(save));
     }
 
     @Override

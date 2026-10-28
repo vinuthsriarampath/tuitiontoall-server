@@ -19,6 +19,7 @@ import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.post.dto.request.PostCreateRequest;
 import edu.vinu.domain.post.dto.request.PostMediaItemRequest;
+import edu.vinu.domain.post.dto.response.PostResponse;
 import edu.vinu.domain.post.entity.Post;
 import edu.vinu.domain.post.entity.PostMedia;
 import edu.vinu.domain.post.enums.PostStatus;
@@ -38,6 +39,8 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
@@ -50,7 +53,7 @@ public class PostServiceImpl implements PostService {
     private String postPath;
 
     @Override
-    public ApiResponse createPost(PostCreateRequest request, List<MultipartFile> files) {
+    public ApiResponse<PostResponse> createPost(PostCreateRequest request, List<MultipartFile> files) {
 
         UserEntity currentUser = userService.getCurrentUser();
 
@@ -88,10 +91,7 @@ public class PostServiceImpl implements PostService {
 
         try {
             Post savedPost = postRepository.save(post);
-            return ApiResponse.builder()
-                    .message("Post created successfully")
-                    .data(PostMapper.toPostResponse(savedPost))
-                    .build();
+            return createApiResponse("Post created successfully", PostMapper.toPostResponse(savedPost));
         } catch (Exception e) {
             savedFileNames.forEach(this::deletePostFile);
             throw new InternalServerErrorException("Failed to save post. Uploaded files reverted.");
@@ -99,7 +99,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public ApiResponse publishDraftPost(Long postId) {
+    public ApiResponse<PostResponse> publishDraftPost(Long postId) {
         UserEntity currentUser = userService.getCurrentUser();
 
         if (postRepository.isPostOwner(postId, currentUser.getId()) == 0) {
@@ -117,10 +117,7 @@ public class PostServiceImpl implements PostService {
         post.setPublishedDate(LocalDateTime.now());
 
         Post updatedPost = postRepository.save(post);
-        return ApiResponse.builder()
-                .message("Post published successfully")
-                .data(PostMapper.toPostResponse(updatedPost))
-                .build();
+        return createApiResponse("Post published successfully", PostMapper.toPostResponse(updatedPost));
     }
 
     @Override

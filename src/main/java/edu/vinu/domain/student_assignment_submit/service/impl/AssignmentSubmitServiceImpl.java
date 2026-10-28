@@ -56,6 +56,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
@@ -69,7 +71,7 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
     private String submissionPath;
 
     @Override
-    public ApiResponse submit(Long assignmentId, MultipartFile file) {
+    public ApiResponse<AssignmentSubmissionResponse> submit(Long assignmentId, MultipartFile file) {
 
         StudentEntity currentStudent = studentService.getCurrentStudent();
 
@@ -112,7 +114,7 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
 
         try {
             StudentAssignmentSubmit save = submitRepository.save(submission);
-            return ApiResponse.builder().message("Assignment submitted successfully.").data(AssignmentSubmissionMapper.toAssignmentSubmissionResponse(save)).build();
+            return createApiResponse("Assignment submitted successfully.", AssignmentSubmissionMapper.toAssignmentSubmissionResponse(save));
         } catch (Exception e) {
             fileService.delete(getSubmissionPath(fileName));
             throw new InternalServerErrorException("Failed to save the submission record. Please try again.");
@@ -120,7 +122,7 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
     }
 
     @Override
-    public ApiResponse checkEligibility(Long assignmentId) {
+    public ApiResponse<AssignmentSubmissionEligibilityResponse> checkEligibility(Long assignmentId) {
 
         assignmentSecurityService.validateAssignmentAccess(assignmentId);
 
@@ -144,7 +146,7 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
             response.setReason(SubmissionEligibilityReason.ELIGIBLE);
         }
 
-        return ApiResponse.builder().message("Assignment submission eligibility checked.").data(response).build();
+        return createApiResponse("Assignment submission eligibility checked.", response);
     }
 
     @Override

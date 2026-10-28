@@ -18,11 +18,13 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.user.dto.UserBasicResponse;
 import edu.vinu.domain.user.request.UserBasicFilterRequest;
+import edu.vinu.domain.user_follow.dtos.response.UserFollowResponse;
+import edu.vinu.domain.user_follow.dtos.response.UserUnfollowResponse;
 
 public interface UserFollowService {
-    ApiResponse followUser(Long followingId);
+    ApiResponse<UserFollowResponse> followUser(Long followingId);
 
-    ApiResponse unfollowUser(Long followingId);
+    ApiResponse<UserUnfollowResponse> unfollowUser(Long followingId);
 
     PaginatedApiResponse<UserBasicResponse> getMyFollowers(PaginationRequest pagination, UserBasicFilterRequest filters);
 

@@ -75,6 +75,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+import static edu.vinu.common.util.ResponseUtil.createPaginatedApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class EnrollmentServiceImpl implements EnrollmentService {
@@ -150,7 +153,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
-    public ApiResponse checkEnrollmentEligibility(EnrollmentEligibilityCheckRequest request) {
+    public ApiResponse<EnrollmentEligibilityResponse> checkEnrollmentEligibility(EnrollmentEligibilityCheckRequest request) {
         CourseEntity course = courseService.getCourseEntityById(request.courseId());
         BatchEntity batch = batchService.getBatchEntityById(request.batchId());
 
@@ -160,51 +163,35 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         if(userEntity.getRole().getRole().equals("student")){
             studentEntity = userEntity.getStudent();
             if (!Objects.equals(batch.getCourse().getId(), course.getId())) {
-                return ApiResponse.builder()
-                        .message("The selected batch does not belong to this course")
-                        .data(
-                                EnrollmentEligibilityResponse.builder()
-                                .canEnroll(false)
-                                .reason(EnrollmentEligibilityReason.INVALID_BATCH)
-                                .build()
-                        )
+                EnrollmentEligibilityResponse response = EnrollmentEligibilityResponse.builder()
+                        .canEnroll(false)
+                        .reason(EnrollmentEligibilityReason.INVALID_BATCH)
                         .build();
+                return createApiResponse("The selected batch does not belong to this course",response);
             }
 
             if (batch.getEnrollment_status() != BatchEnrollmentStatus.OPEN) {
-                return ApiResponse.builder()
-                        .message("Enrollment for this batch is currently closed")
-                        .data(
-                                EnrollmentEligibilityResponse.builder()
-                                        .canEnroll(false)
-                                        .reason(EnrollmentEligibilityReason.ENROLLMENT_CLOSED)
-                                        .build()
-                        )
+                EnrollmentEligibilityResponse response = EnrollmentEligibilityResponse.builder()
+                        .canEnroll(false)
+                        .reason(EnrollmentEligibilityReason.ENROLLMENT_CLOSED)
                         .build();
+                return createApiResponse("Enrollment for this batch is currently closed", response);
             }
 
             if (studentBatchEnrollmentRepository.countByStudentIdAndBatchId(studentEntity.getId(), request.batchId()) > 0) {
-                return ApiResponse.builder()
-                        .message("Student is already enrolled in this batch")
-                        .data(
-                                EnrollmentEligibilityResponse.builder()
-                                        .canEnroll(false)
-                                        .reason(EnrollmentEligibilityReason.ALREADY_ENROLLED)
-                                        .build()
-                        )
+                EnrollmentEligibilityResponse response = EnrollmentEligibilityResponse.builder()
+                        .canEnroll(false)
+                        .reason(EnrollmentEligibilityReason.ALREADY_ENROLLED)
                         .build();
+                return createApiResponse("Student is already enrolled in this batch", response);
             }
 
             if (studentBatchEnrollmentRepository.countActiveEnrollmentByStudentAndCourse(studentEntity.getId(), request.courseId()) > 0) {
-                return ApiResponse.builder()
-                        .message("Student is already enrolled in another active batch of this course")
-                        .data(
-                                EnrollmentEligibilityResponse.builder()
-                                        .canEnroll(false)
-                                        .reason(EnrollmentEligibilityReason.ANOTHER_ACTIVE_BATCH)
-                                        .build()
-                        )
+                EnrollmentEligibilityResponse response = EnrollmentEligibilityResponse.builder()
+                        .canEnroll(false)
+                        .reason(EnrollmentEligibilityReason.ANOTHER_ACTIVE_BATCH)
                         .build();
+                return createApiResponse("Student is already enrolled in another active batch of this course", response);
             }
 
             if (Boolean.TRUE.equals(batch.getIs_seat_limited())) {
@@ -212,27 +199,18 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 long enrolledStudents = studentBatchEnrollmentRepository.countEnrollmentsByBatchId(request.batchId());
 
                 if (enrolledStudents >= batch.getMax_seat_limit()) {
-                    return ApiResponse.builder()
-                            .message("This batch has reached its maximum seat capacity")
-                            .data(
-                                    EnrollmentEligibilityResponse.builder()
-                                            .canEnroll(false)
-                                            .reason(EnrollmentEligibilityReason.BATCH_FULL)
-                                            .build()
-                            )
+                    EnrollmentEligibilityResponse response = EnrollmentEligibilityResponse.builder()
+                            .canEnroll(false)
+                            .reason(EnrollmentEligibilityReason.BATCH_FULL)
                             .build();
+                    return createApiResponse("This batch has reached its maximum seat capacity", response);
                 }
             }
-
-            return ApiResponse.builder()
-                    .message("Student can enroll in this batch")
-                    .data(
-                            EnrollmentEligibilityResponse.builder()
-                                    .canEnroll(true)
-                                    .reason(EnrollmentEligibilityReason.ELIGIBLE)
-                                    .build()
-                    )
+            EnrollmentEligibilityResponse response = EnrollmentEligibilityResponse.builder()
+                    .canEnroll(true)
+                    .reason(EnrollmentEligibilityReason.ELIGIBLE)
                     .build();
+            return createApiResponse("Student can enroll in this batch", response);
         }
         throw new UnauthorizedException("Only Students can check enrollment eligibility");
     }
@@ -240,22 +218,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     public PaginatedApiResponse<StudentUserResponse> getStudentsByBatch(Long batchId, PaginationRequest pagination, BatchStudentFilterRequest filters) {
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));;
-        Page<StudentUserResponse> pageDate = studentBatchEnrollmentRepository.findAllStudentsByBatchId(
+        Page<StudentUserResponse> pageData = studentBatchEnrollmentRepository.findAllStudentsByBatchId(
                 batchId,
                 filters.name(),
                 filters.email(),
                 filters.enrolledDate(),
                 filters.enrollmentStatus() != null ? filters.enrollmentStatus().name() : null,
                 pageable).map(StudentMapper::toStudentUserResponse);
-        return PaginatedApiResponse.<StudentUserResponse>builder()
-                .message("Students fetched successfully")
-                .data(pageDate.getContent())
-                .totalElements(pageDate.getTotalElements())
-                .totalPages(pageDate.getTotalPages())
-                .page(pageDate.getNumber())
-                .size(pageDate.getSize())
-                .last(pageDate.isLast())
-                .build();
+        return createPaginatedApiResponse("Students fetched successfully!", pageData);
     }
 
     @Override

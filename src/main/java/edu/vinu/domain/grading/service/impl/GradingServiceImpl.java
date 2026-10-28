@@ -40,6 +40,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class GradingServiceImpl implements GradingService {
@@ -50,7 +52,7 @@ public class GradingServiceImpl implements GradingService {
 
     @Transactional
     @Override
-    public ApiResponse gradeSubmission(Long submissionId, GradingSubmissionRequest request) {
+    public ApiResponse<SubmissionGradedResponse> gradeSubmission(Long submissionId, GradingSubmissionRequest request) {
         StudentAssignmentSubmit submission = assignmentSubmitService.getSubmissionEntityById(submissionId);
 
         if(submission.getGrade() != null || submission.getStatus() == AssignmentSubmitStatus.GRADED){
@@ -86,18 +88,17 @@ public class GradingServiceImpl implements GradingService {
             throw new NotFoundException("No grading range found for the provided marks gained: " + request.marksGained());
         }
 
-        return ApiResponse.builder()
-                .message("Submission graded successfully.")
-                .data(SubmissionGradedResponse.builder()
-                        .submissionId(submission.getId())
-                        .grade(receivedGrade)
-                        .marksGained(submission.getMarksGained())
-                        .build())
+        SubmissionGradedResponse response = SubmissionGradedResponse.builder()
+                .submissionId(submission.getId())
+                .grade(receivedGrade)
+                .marksGained(submission.getMarksGained())
                 .build();
+
+        return createApiResponse("Submission graded successfully.", response);
     }
 
     @Override
-    public ApiResponse checkEligibility(Long submissionId) {
+    public ApiResponse<GradingEligibilityResponse> checkEligibility(Long submissionId) {
         StudentAssignmentSubmit submission = assignmentSubmitService.getSubmissionEntityById(submissionId);
 
         GradingEligibilityResponse response;
@@ -108,7 +109,7 @@ public class GradingServiceImpl implements GradingService {
             response = new GradingEligibilityResponse(true, GradingEligibilityReason.ELIGIBLE);
         }
 
-        return ApiResponse.builder().message("Grading eligibility checked!").data(response).build();
+        return createApiResponse("Grading eligibility checked!", response);
     }
 
     @Override

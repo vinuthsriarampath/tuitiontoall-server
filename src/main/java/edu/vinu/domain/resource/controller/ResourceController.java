@@ -28,6 +28,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @RestController
 @RequestMapping("api/v2/resources")
 @RequiredArgsConstructor
@@ -36,26 +38,23 @@ public class ResourceController {
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping("/upload/init")
-    public ResponseEntity<ApiResponse> initializeUpload(@Valid @RequestBody ResourceInitRequest request) {
-        ResourceInitResponse response = resourceService.initializeUpload(request);
-        return ResponseEntity.ok(new ApiResponse("Upload initialized successfully", response));
+    public ResponseEntity<ApiResponse<ResourceInitResponse>> initializeUpload(@Valid @RequestBody ResourceInitRequest request) {
+        return ResponseEntity.ok(createApiResponse("Upload initialized successfully", resourceService.initializeUpload(request)));
     }
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping("/upload/chunk")
-    public ResponseEntity<ApiResponse> uploadChunk(
+    public ResponseEntity<ApiResponse<ResourceChunkUploadResponse>> uploadChunk(
             @RequestParam String uploadId,
             @RequestParam Integer chunkIndex,
             @RequestParam MultipartFile file
     ){
-        ResourceChunkUploadResponse response = resourceService.uploadChunk(uploadId,chunkIndex, file);
-        return ResponseEntity.ok(new ApiResponse("Chunk uploaded successfully", response));
+        return ResponseEntity.ok(createApiResponse("Chunk uploaded successfully", resourceService.uploadChunk(uploadId,chunkIndex, file)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping("/upload/complete/{uploadId}")
-    public ResponseEntity<ApiResponse> completeUpload(@PathVariable("uploadId") String uploadId){
-        ResourceResponse response = resourceService.completeUpload(uploadId);
-        return ResponseEntity.ok(new ApiResponse("Upload completed successfully",response));
+    public ResponseEntity<ApiResponse<ResourceResponse>> completeUpload(@PathVariable("uploadId") String uploadId){
+        return ResponseEntity.ok(createApiResponse("Upload completed successfully",resourceService.completeUpload(uploadId)));
     }
 
     @GetMapping("/view/{fileName:.+}")
@@ -70,9 +69,9 @@ public class ResourceController {
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @DeleteMapping("/{resourceId}")
-    public ResponseEntity<ApiResponse> deleteResource(@PathVariable Long resourceId){
+    public ResponseEntity<ApiResponse<Void>> deleteResource(@PathVariable Long resourceId){
         resourceService.deleteResource(resourceId);
-        return ResponseEntity.ok(new ApiResponse("Resource deleted successfully", null));
+        return ResponseEntity.ok(createApiResponse("Resource deleted successfully", null));
     }
 
 }

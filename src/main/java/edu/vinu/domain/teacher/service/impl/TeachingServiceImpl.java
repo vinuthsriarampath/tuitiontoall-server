@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class TeachingServiceImpl implements TeachingService {
@@ -38,7 +40,7 @@ public class TeachingServiceImpl implements TeachingService {
     private final InstituteTeacherRepository instituteTeacherRepository;
 
     @Override
-    public ApiResponse getMyTeachingDetails() {
+    public ApiResponse<List<TeachingResponse>> getMyTeachingDetails() {
 
         TeacherEntity currentTeacher = teacherService.getCurrentTeacher();
 
@@ -56,10 +58,7 @@ public class TeachingServiceImpl implements TeachingService {
                 .map(this::buildInstituteResponse)
                 .toList();
 
-        return ApiResponse.builder()
-                .message("Teaching details retrieved successfully")
-                .data(response)
-                .build();
+        return createApiResponse("Teaching details retrieved successfully", response);
     }
 
     private TeachingResponse buildInstituteResponse(List<TeachingProjection> instituteRows){

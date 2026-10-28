@@ -27,6 +27,8 @@ import edu.vinu.domain.teacher.service.TeacherStatsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class TeacherBootstrapServiceImpl implements TeacherBootstrapService {
@@ -38,7 +40,7 @@ public class TeacherBootstrapServiceImpl implements TeacherBootstrapService {
     private final AssignmentSubmitService submissionService;
 
     @Override
-    public ApiResponse getTeacherDashboardStats() {
+    public ApiResponse<TeacherBootstrapResponse> getTeacherDashboardStats() {
 
         TeacherEntity currentTeacher = teacherService.getCurrentTeacher();
 
@@ -48,10 +50,7 @@ public class TeacherBootstrapServiceImpl implements TeacherBootstrapService {
         response.setUpcomingLectureSchedules(scheduleLectureService.getUpcomingLecturesForTeacher(currentTeacher.getId()));
         response.setNonGradedSubmissions(submissionService.getAllNonGradedSubmissionsForTeacher(currentTeacher.getId()));
 
-        return ApiResponse.builder()
-                .message("Teacher dashboard stats retrieved successfully")
-                .data(response)
-                .build();
+        return createApiResponse("Teacher dashboard stats retrieved successfully", response);
     }
 
     private TeacherDashboardStats buildTeacherDashboardStats(Long teacherId) {

@@ -43,7 +43,7 @@ public interface BatchService {
 
     Boolean isBatchBelongToCourse(BatchEntity batchEntity, Long courseId);
 
-    ApiResponse getAllEnrollableBatchesOfCourse(Long courseId);
+    ApiResponse<List<Batch>> getAllEnrollableBatchesOfCourse(Long courseId);
 
     PaginatedApiResponse<BatchDetailedResponse> getAllBatches(PaginationRequest pagination, BatchFilterRequest filters);
 

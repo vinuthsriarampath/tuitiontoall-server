@@ -55,6 +55,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
 import static edu.vinu.domain.user.validator.UserValidator.*;
 
 @Service
@@ -252,7 +253,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
     }
 
     @Override
-    public ApiResponse startForgotPassword(String email) {
+    public ApiResponse<Void> startForgotPassword(String email) {
         try {
             User user = userService.getUserByEmail(email);
             String resetToken = jwtService.generateResetToken(email);
@@ -277,14 +278,14 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             }
             assert emailService != null;
             emailService.SendPasswordResetEmail(email, name, link);
-            return new ApiResponse("Reset token generated successfully Please check your email for the reset link.", null);
+            return createApiResponse("Reset token generated successfully Please check your email for the reset link.", null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public ApiResponse resetPassword(String token, String newPassword) {
+    public ApiResponse<Void> resetPassword(String token, String newPassword) {
         if (!jwtService.validateResetToken(token)) {
             throw new InvalidInputException("Invalid or expired reset token");
         }
@@ -298,7 +299,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
             userEntity.setPassword(new BCryptPasswordEncoder().encode(newPassword));
             userRepository.save(userEntity);
             log.info("Password reset successful for user: {}", email);
-            return new ApiResponse("Password reset successfully", null);
+            return createApiResponse("Password reset successfully", null);
         } else {
             throw new InvalidInputException("Invalid reset token");
         }

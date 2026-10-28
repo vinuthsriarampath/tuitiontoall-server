@@ -31,6 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -41,7 +43,7 @@ public class StudentCourseServiceImpl implements StudentCourseService {
     private final ModuleService moduleService;
 
     @Override
-    public ApiResponse getStudentDetailedCourse(Long courseId, Long batchId) {
+    public ApiResponse<StudentCourseViewResponse> getStudentDetailedCourse(Long courseId, Long batchId) {
         StudentEntity currentStudent = studentService.getCurrentStudent();
 
         StudentCourseProjection studentCourseProjection = enrollmentRepository.findStudentCourse(courseId, batchId, currentStudent.getId()).orElseThrow(
@@ -50,13 +52,12 @@ public class StudentCourseServiceImpl implements StudentCourseService {
 
         List<StudentModuleResponse> modules = moduleService.getStudentModulesByBatch(batchId, List.of(ModuleStatus.PUBLISHED, ModuleStatus.LOCKED));
 
-        return ApiResponse.builder()
-                .message("Student Course Details retrieved successfully!")
-                .data(new StudentCourseViewResponse(
-                        StudentCourseMapper.toStudentCourseResponse(studentCourseProjection),
-                        StudentCourseMapper.toStudentBatchResponse(studentCourseProjection),
-                        modules
-                ))
-                .build();
+        StudentCourseViewResponse response = new StudentCourseViewResponse(
+                StudentCourseMapper.toStudentCourseResponse(studentCourseProjection),
+                StudentCourseMapper.toStudentBatchResponse(studentCourseProjection),
+                modules
+        );
+
+        return createApiResponse("Student Course Details retrieved successfully!",response);
     }
 }

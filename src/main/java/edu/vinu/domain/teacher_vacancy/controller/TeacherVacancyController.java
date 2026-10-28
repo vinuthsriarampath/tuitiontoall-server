@@ -29,6 +29,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @RestController
 @RequestMapping("api/v2/vacancies")
 @RequiredArgsConstructor
@@ -37,24 +39,21 @@ public class TeacherVacancyController {
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping("/")
-    public ResponseEntity<ApiResponse> create(@Valid @RequestBody CreateVacancyRequest request) {
-        return ResponseEntity.status(201).body(new ApiResponse("New Vacancy created Successfully!",vacancyService.createVacancy(request)));
+    public ResponseEntity<ApiResponse<TeacherVacancy>> create(@Valid @RequestBody CreateVacancyRequest request) {
+        return ResponseEntity.status(201).body(createApiResponse("New Vacancy created Successfully!",vacancyService.createVacancy(request)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/{vacancyId}")
-    public ResponseEntity<ApiResponse> update(
-            @PathVariable Long vacancyId,
-            @RequestBody UpdateVacancyRequest request
-    ) {
-        return ResponseEntity.status(200).body(new ApiResponse("Vacancy Updated Successfully!",vacancyService.updateVacancy(vacancyId, request)));
+    public ResponseEntity<ApiResponse<TeacherVacancy>> update(@PathVariable Long vacancyId, @RequestBody UpdateVacancyRequest request) {
+        return ResponseEntity.status(200).body(createApiResponse("Vacancy Updated Successfully!",vacancyService.updateVacancy(vacancyId, request)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @DeleteMapping("/{vacancyId}")
-    public ResponseEntity<ApiResponse> delete(@PathVariable Long vacancyId) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long vacancyId) {
         vacancyService.deleteVacancy(vacancyId);
-        return ResponseEntity.status(200).body(new ApiResponse("Vacancy Deleted Successfully!", null));
+        return ResponseEntity.status(200).body(createApiResponse("Vacancy Deleted Successfully!", null));
     }
 
     @PreAuthorize("hasAuthority('institute')")
@@ -64,10 +63,10 @@ public class TeacherVacancyController {
     }
 
     @GetMapping("/{vacancyId}")
-    public ResponseEntity<ApiResponse> getById(@PathVariable Long vacancyId,@RequestParam(value = "status",required = false) TeacherVacancyStatus status) {
+    public ResponseEntity<ApiResponse<TeacherVacancy>> getById(@PathVariable Long vacancyId,@RequestParam(value = "status",required = false) TeacherVacancyStatus status) {
         if(status != null){
-            return ResponseEntity.status(200).body(new ApiResponse("Found Vacancy By Id and Status",vacancyService.getByVacancyIdAndStatus(vacancyId,status)));
+            return ResponseEntity.status(200).body(createApiResponse("Found Vacancy By Id and Status",vacancyService.getByVacancyIdAndStatus(vacancyId,status)));
         }
-        return ResponseEntity.status(200).body(new ApiResponse("Found Vacancy By Id",vacancyService.getById(vacancyId)));
+        return ResponseEntity.status(200).body(createApiResponse("Found Vacancy By Id",vacancyService.getById(vacancyId)));
     }
 }

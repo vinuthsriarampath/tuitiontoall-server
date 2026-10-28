@@ -19,6 +19,8 @@ import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.student_assignment_submit.request.AssignmentSubmissionFilterRequest;
 import edu.vinu.domain.student_assignment_submit.request.StudentAssignmentSubmissionFilterRequest;
 import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDetailedResponse;
+import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionEligibilityResponse;
+import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionResponse;
 import edu.vinu.domain.student_assignment_submit.response.StudentAssignmentSubmissionResponse;
 import edu.vinu.domain.student_assignment_submit.service.AssignmentSubmitService;
 import lombok.RequiredArgsConstructor;
@@ -38,13 +40,13 @@ public class AssignmentSubmitController {
 
     @PreAuthorize("hasAuthority('student')")
     @PostMapping("/assignment/{assignmentId}")
-    public ResponseEntity<ApiResponse> submit(@PathVariable Long assignmentId, @RequestParam("file")MultipartFile file) {
+    public ResponseEntity<ApiResponse<AssignmentSubmissionResponse>> submit(@PathVariable Long assignmentId, @RequestParam("file")MultipartFile file) {
         return ResponseEntity.ok(submitService.submit(assignmentId, file));
     }
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("/assignment/{assignmentId}/eligibility")
-    public ResponseEntity<ApiResponse> checkEligibility(@PathVariable Long assignmentId) {
+    public ResponseEntity<ApiResponse<AssignmentSubmissionEligibilityResponse>> checkEligibility(@PathVariable Long assignmentId) {
         return ResponseEntity.ok(submitService.checkEligibility(assignmentId));
     }
 
