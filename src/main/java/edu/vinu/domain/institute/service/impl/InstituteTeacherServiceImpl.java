@@ -82,17 +82,17 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
                         Collectors.toMap(ApplicationEntity::getId, applicationEntity -> applicationEntity)
                 );
 
-        for (Long applicationId : request.getApplicationIds()){
+        for (Long applicationId : request.getApplicationIds()) {
             ApplicationEntity applicationEntity = applicationEntityMap.get(applicationId);
 
-            if (applicationEntity == null){
+            if (applicationEntity == null) {
                 failedIds.add(applicationId);
                 continue;
             }
 
-            try{
+            try {
                 Long teacherId = applicationEntity.getTeacher().getId();
-                boolean exists = instituteTeacherRepository.existsByTeacherIdAndInstituteId(teacherId,instituteId);
+                boolean exists = instituteTeacherRepository.existsByTeacherIdAndInstituteId(teacherId, instituteId);
 
                 if (exists) {
                     failedIds.add(applicationId);
@@ -113,11 +113,11 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
 
                 successIds.add(applicationId);
 
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 failedIds.add(applicationId);
             }
         }
-        
+
         eventPublisher.publishEvent(
                 TeacherOnboardedEvent.builder().instituteId(instituteId).build()
         );
@@ -138,23 +138,23 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
 
         List<ApplicationEntity> applicationEntities = applicationService.getAllApplicationEntitiesByIds(request.getApplicationIds());
 
-        Map<Long, ApplicationEntity> applicationEntityMap =  applicationEntities
+        Map<Long, ApplicationEntity> applicationEntityMap = applicationEntities
                 .stream()
                 .collect(
                         Collectors.toMap(ApplicationEntity::getId, applicationEntity -> applicationEntity)
                 );
 
-        for (Long applicationId : request.getApplicationIds()){
+        for (Long applicationId : request.getApplicationIds()) {
             ApplicationEntity applicationEntity = applicationEntityMap.get(applicationId);
 
-            if (applicationEntity == null){
+            if (applicationEntity == null) {
                 failedIds.add(applicationId);
                 continue;
             }
 
-            try{
+            try {
                 Long teacherId = applicationEntity.getTeacher().getId();
-                boolean exists = instituteTeacherRepository.existsByTeacherIdAndInstituteId(teacherId,instituteId);
+                boolean exists = instituteTeacherRepository.existsByTeacherIdAndInstituteId(teacherId, instituteId);
 
                 if (exists) {
                     failedIds.add(applicationId);
@@ -164,7 +164,7 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
                 applicationService.setApplicationStatusRejected(applicationEntity);
                 successIds.add(applicationId);
 
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 failedIds.add(applicationId);
             }
         }
@@ -188,7 +188,7 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
                 filters.userSlug(),
                 filters.status() != null ? filters.status().name() : null,
                 pageable
-                ).map(InstituteTeacherMapper::toInstituteTeacherResponse);
+        ).map(InstituteTeacherMapper::toInstituteTeacherResponse);
 
         return PaginatedApiResponse.<InstituteTeacherResponse>builder()
                 .message("Teachers retrieved successfully")
@@ -231,7 +231,7 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
     @Override
     public TeacherEntity getCurrentInstituteRelatedTeacherEntityById(Long id) {
         Long instituteId = instituteService.getCurrentInstitute().getId();
-        InstituteTeacherEntity entity =instituteTeacherRepository.findByTeacherIdAndInstituteId(id, instituteId).orElseThrow(() -> new NotFoundException("Teacher with id " + id + " not found in the current institute"));
+        InstituteTeacherEntity entity = instituteTeacherRepository.findByTeacherIdAndInstituteId(id, instituteId).orElseThrow(() -> new NotFoundException("Teacher with id " + id + " not found in the current institute"));
         return entity.getTeacher();
     }
 

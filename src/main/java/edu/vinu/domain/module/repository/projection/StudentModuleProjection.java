@@ -17,7 +17,10 @@ import edu.vinu.domain.module.enums.ModuleStatus;
 
 public interface StudentModuleProjection {
     Long getId();
+
     String getName();
+
     ModuleStatus getStatus();
+
     Long getBatchId();
 }

@@ -37,17 +37,17 @@ public class RoleEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     private String role;
 
     @OneToMany(mappedBy = "role")
     private List<UserEntity> users = new ArrayList<>();
 
     @CreationTimestamp
-    @Column(name = "created_date",nullable = false,updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime creationTimeStamp;
 
     @UpdateTimestamp
-    @Column(name = "last_modified_date",insertable = false)
+    @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime updatedAt;
 }

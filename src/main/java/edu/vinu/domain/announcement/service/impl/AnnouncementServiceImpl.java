@@ -112,7 +112,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         UserEntity currentUser = userService.getUserEntityByEmail(userAuthenticationService.getCurrentUserEmail());
         String roleName = currentUser.getRole().getRole();
 
-        switch (roleName.toLowerCase()){
+        switch (roleName.toLowerCase()) {
             case "institute" -> {
                 InstituteEntity institute = instituteService.getCurrentInstitute();
                 if (institute == null) {
@@ -280,21 +280,21 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                     throw new UnauthorizedException(notAuthorizedMessage);
                 }
                 AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
-                return  mapToAnnouncementResponse(announcementEntity);
+                return mapToAnnouncementResponse(announcementEntity);
             }
             case "student" -> {
-                if(announcementRepository.canStudentViewAnnouncement(id, userEntity.getStudent().getId())<=0){
+                if (announcementRepository.canStudentViewAnnouncement(id, userEntity.getStudent().getId()) <= 0) {
                     throw new UnauthorizedException(notAuthorizedMessage);
                 }
                 AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
-                return  mapToAnnouncementResponse(announcementEntity);
+                return mapToAnnouncementResponse(announcementEntity);
             }
-            case "teacher"-> {
-                if(announcementRepository.canTeacherViewAnnouncement(id, userEntity.getTeacher().getId())<=0){
+            case "teacher" -> {
+                if (announcementRepository.canTeacherViewAnnouncement(id, userEntity.getTeacher().getId()) <= 0) {
                     throw new UnauthorizedException(notAuthorizedMessage);
                 }
                 AnnouncementEntity announcementEntity = this.getAnnouncementEntityById(id);
-                return  mapToAnnouncementResponse(announcementEntity);
+                return mapToAnnouncementResponse(announcementEntity);
             }
             default -> {
                 throw new UnauthorizedException("Invalid role");

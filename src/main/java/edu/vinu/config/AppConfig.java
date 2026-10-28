@@ -23,17 +23,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SuppressWarnings("unused")
 public class AppConfig {
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
 
     @Bean
-    public ModelMapper getModelMapper(){
+    public ModelMapper getModelMapper() {
         return new ModelMapper();
     }
 
     @Bean
-    public Faker faker(){
+    public Faker faker() {
         return new Faker();
     }
 

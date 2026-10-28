@@ -27,43 +27,43 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
-public interface StudentAssignmentSubmitRepository extends JpaRepository<StudentAssignmentSubmit,Long> {
+public interface StudentAssignmentSubmitRepository extends JpaRepository<StudentAssignmentSubmit, Long> {
     @Query(value = """
-    SELECT COUNT(sas.id)
-        FROM student_assignment_submit sas
-        WHERE sas.assignment_id = :assignmentId AND sas.student_id = :studentId
-    """,nativeQuery = true)
+            SELECT COUNT(sas.id)
+                FROM student_assignment_submit sas
+                WHERE sas.assignment_id = :assignmentId AND sas.student_id = :studentId
+            """, nativeQuery = true)
     int countSubmitsByAssignmentAndStudent(Long assignmentId, Long studentId);
 
 
     @Query(value = """
-    SELECT 
-        sas.id AS submissionId,
-        sas.student_id AS studentId,
-        s.first_name AS firstName,
-        s.last_name AS lastName,
-        sas.assignment_id AS assignmentId,
-        sas.url AS url,
-        sas.grade AS grade,
-        sas.status AS status,
-        sas.marks_gained AS marksGained,
-        sas.attempt_no AS attemptNo,
-        sas.submitted_at AS submittedAt,
-        sas.last_modified_date AS lastModifiedDate
-    FROM student_assignment_submit sas
-    INNER JOIN assignment a ON sas.assignment_id = a.id
-    INNER JOIN student s ON sas.student_id = s.id
-    WHERE sas.assignment_id = :assignmentId
-    AND (:submissionId IS NULL OR sas.id = :submissionId)
-    AND (:studentId IS NULL OR sas.student_id = :studentId)
-    AND (:studentName IS NULL OR LOWER(CONCAT(s.first_name, ' ', s.last_name)) LIKE LOWER(CONCAT('%', :studentName, '%')))
-    AND (:grade IS NULL OR sas.grade = :grade)
-    AND (:status IS NULL OR sas.status = :status)
-    AND (:attemptNo IS NULL OR sas.attempt_no = :attemptNo)
-    AND (:marksGained IS NULL OR sas.marks_gained = :marksGained)
-    AND (:minMarksGained IS NULL OR sas.marks_gained >= :minMarksGained)
-    AND (:maxMarksGained IS NULL OR sas.marks_gained <= :maxMarksGained)
-    """,nativeQuery = true)
+            SELECT 
+                sas.id AS submissionId,
+                sas.student_id AS studentId,
+                s.first_name AS firstName,
+                s.last_name AS lastName,
+                sas.assignment_id AS assignmentId,
+                sas.url AS url,
+                sas.grade AS grade,
+                sas.status AS status,
+                sas.marks_gained AS marksGained,
+                sas.attempt_no AS attemptNo,
+                sas.submitted_at AS submittedAt,
+                sas.last_modified_date AS lastModifiedDate
+            FROM student_assignment_submit sas
+            INNER JOIN assignment a ON sas.assignment_id = a.id
+            INNER JOIN student s ON sas.student_id = s.id
+            WHERE sas.assignment_id = :assignmentId
+            AND (:submissionId IS NULL OR sas.id = :submissionId)
+            AND (:studentId IS NULL OR sas.student_id = :studentId)
+            AND (:studentName IS NULL OR LOWER(CONCAT(s.first_name, ' ', s.last_name)) LIKE LOWER(CONCAT('%', :studentName, '%')))
+            AND (:grade IS NULL OR sas.grade = :grade)
+            AND (:status IS NULL OR sas.status = :status)
+            AND (:attemptNo IS NULL OR sas.attempt_no = :attemptNo)
+            AND (:marksGained IS NULL OR sas.marks_gained = :marksGained)
+            AND (:minMarksGained IS NULL OR sas.marks_gained >= :minMarksGained)
+            AND (:maxMarksGained IS NULL OR sas.marks_gained <= :maxMarksGained)
+            """, nativeQuery = true)
     Page<AssignmentSubmissionDetailedProjection> getAllByAssignmentWithFilters(
             Long assignmentId,
             Long submissionId,
@@ -79,101 +79,101 @@ public interface StudentAssignmentSubmitRepository extends JpaRepository<Student
     );
 
     @Query(value = """
-    SELECT ROUND((
-                        SUM(sas.marks_gained) / NULLIF(SUM(a.total_marks), 0)) * 100,
-            2)
-    FROM student_assignment_submit sas
-    INNER JOIN assignment a ON sas.assignment_id = a.id
-    WHERE sas.student_id = :studentId
-    AND sas.status = 'GRADED'
-    AND NOT EXISTS(
-            SELECT 1
-            FROM student_assignment_submit sas2
-            WHERE sas2.student_id = sas.student_id
-            AND sas2.assignment_id = sas.assignment_id
-            AND sas2.status = 'GRADED'
-            AND (
-                    sas2.marks_gained > sas.marks_gained
-                OR (
-                    sas2.marks_gained = sas.marks_gained
-                    AND sas2.attempt_no > sas.attempt_no
+            SELECT ROUND((
+                                SUM(sas.marks_gained) / NULLIF(SUM(a.total_marks), 0)) * 100,
+                    2)
+            FROM student_assignment_submit sas
+            INNER JOIN assignment a ON sas.assignment_id = a.id
+            WHERE sas.student_id = :studentId
+            AND sas.status = 'GRADED'
+            AND NOT EXISTS(
+                    SELECT 1
+                    FROM student_assignment_submit sas2
+                    WHERE sas2.student_id = sas.student_id
+                    AND sas2.assignment_id = sas.assignment_id
+                    AND sas2.status = 'GRADED'
+                    AND (
+                            sas2.marks_gained > sas.marks_gained
+                        OR (
+                            sas2.marks_gained = sas.marks_gained
+                            AND sas2.attempt_no > sas.attempt_no
+                        )
+                    )
                 )
-            )
-        )
-    """,nativeQuery = true)
+            """, nativeQuery = true)
     BigDecimal getAverageMarksOfStudent(Long studentId);
 
     @Query(value = """
-    SELECT
-        sba.assignment_id AS assignmentId,
-        a.topic AS assignmentTitle,
-        sba.grade AS grade,
-        sba.marks_gained AS marksGained,
-        sba.submitted_at AS submittedAt
-    FROM student_assignment_submit sba
-    INNER JOIN assignment a ON sba.assignment_id = a.id
-    WHERE sba.student_id = :studentId
-    AND sba.status = 'GRADED'
-    AND sba.grade IS NOT NULL
-    ORDER BY sba.graded_at DESC
-    LIMIT :limit
-    """,nativeQuery = true)
+            SELECT
+                sba.assignment_id AS assignmentId,
+                a.topic AS assignmentTitle,
+                sba.grade AS grade,
+                sba.marks_gained AS marksGained,
+                sba.submitted_at AS submittedAt
+            FROM student_assignment_submit sba
+            INNER JOIN assignment a ON sba.assignment_id = a.id
+            WHERE sba.student_id = :studentId
+            AND sba.status = 'GRADED'
+            AND sba.grade IS NOT NULL
+            ORDER BY sba.graded_at DESC
+            LIMIT :limit
+            """, nativeQuery = true)
     List<RecentResultsProjection> getRecentResultsByStudent(Long studentId, int limit);
 
     @Query(value = """
-    SELECT count(DISTINCT sas.id)
-    FROM student_assignment_submit sas
-    INNER JOIN assignment a ON sas.assignment_id = a.id
-    INNER JOIN (
-            SELECT m.teacher_id AS teacher_id, ma.assignment_id AS assignment_id
-            FROM module_assignment ma
-            INNER JOIN module m ON ma.module_id = m.id
-            WHERE m.teacher_id = :teacherId
-
-            UNION ALL
-
-            SELECT m.teacher_id AS teacher_id, ca.assignment_id AS assignment_id
-            FROM chapter_assignment ca
-            INNER JOIN chapter c ON ca.chapter_id = c.id
-            INNER JOIN module m ON c.module_id = m.id
-            WHERE m.teacher_id = :teacherId
-    ) AS target_assignments ON a.id = target_assignments.assignment_id
-    WHERE target_assignments.teacher_id = :teacherId
-    AND sas.status <> 'GRADED'
-    """,nativeQuery = true)
+            SELECT count(DISTINCT sas.id)
+            FROM student_assignment_submit sas
+            INNER JOIN assignment a ON sas.assignment_id = a.id
+            INNER JOIN (
+                    SELECT m.teacher_id AS teacher_id, ma.assignment_id AS assignment_id
+                    FROM module_assignment ma
+                    INNER JOIN module m ON ma.module_id = m.id
+                    WHERE m.teacher_id = :teacherId
+            
+                    UNION ALL
+            
+                    SELECT m.teacher_id AS teacher_id, ca.assignment_id AS assignment_id
+                    FROM chapter_assignment ca
+                    INNER JOIN chapter c ON ca.chapter_id = c.id
+                    INNER JOIN module m ON c.module_id = m.id
+                    WHERE m.teacher_id = :teacherId
+            ) AS target_assignments ON a.id = target_assignments.assignment_id
+            WHERE target_assignments.teacher_id = :teacherId
+            AND sas.status <> 'GRADED'
+            """, nativeQuery = true)
     int countPendingEvaluationsForTeacher(Long teacherId);
 
 
     @Query(value = """
-    SELECT
-    sas.id AS submissionId,
-    sas.student_id AS studentId,
-    CONCAT(s.first_name, ' ', s.last_name) AS studentName,
-    sas.assignment_id AS assignmentId,
-    sas.status AS status,
-    sas.attempt_no AS attemptNo,
-    sas.submitted_at AS submittedAt
-    FROM student_assignment_submit sas
-    INNER JOIN student s ON s.id = sas.student_id
-    INNER JOIN assignment a ON sas.assignment_id = a.id
-    INNER JOIN (
-        SELECT m.teacher_id AS teacher_id, ma.assignment_id AS assignment_id
-        FROM module_assignment ma
-        INNER JOIN module m ON ma.module_id = m.id
-        WHERE m.teacher_id = :teacherId
-
-        UNION ALL
-
-        SELECT m.teacher_id AS teacher_id, ca.assignment_id AS assignment_id
-        FROM chapter_assignment ca
-        INNER JOIN chapter c ON ca.chapter_id = c.id
-        INNER JOIN module m ON c.module_id = m.id
-        WHERE m.teacher_id = :teacherId
-    ) AS target_assignments ON a.id = target_assignments.assignment_id
-    WHERE sas.status <> 'GRADED'
-    AND sas.grade IS NULL
-    AND sas.graded_at IS NULL
-    AND target_assignments.teacher_id = :teacherId
-    """,nativeQuery = true)
+            SELECT
+            sas.id AS submissionId,
+            sas.student_id AS studentId,
+            CONCAT(s.first_name, ' ', s.last_name) AS studentName,
+            sas.assignment_id AS assignmentId,
+            sas.status AS status,
+            sas.attempt_no AS attemptNo,
+            sas.submitted_at AS submittedAt
+            FROM student_assignment_submit sas
+            INNER JOIN student s ON s.id = sas.student_id
+            INNER JOIN assignment a ON sas.assignment_id = a.id
+            INNER JOIN (
+                SELECT m.teacher_id AS teacher_id, ma.assignment_id AS assignment_id
+                FROM module_assignment ma
+                INNER JOIN module m ON ma.module_id = m.id
+                WHERE m.teacher_id = :teacherId
+            
+                UNION ALL
+            
+                SELECT m.teacher_id AS teacher_id, ca.assignment_id AS assignment_id
+                FROM chapter_assignment ca
+                INNER JOIN chapter c ON ca.chapter_id = c.id
+                INNER JOIN module m ON c.module_id = m.id
+                WHERE m.teacher_id = :teacherId
+            ) AS target_assignments ON a.id = target_assignments.assignment_id
+            WHERE sas.status <> 'GRADED'
+            AND sas.grade IS NULL
+            AND sas.graded_at IS NULL
+            AND target_assignments.teacher_id = :teacherId
+            """, nativeQuery = true)
     List<NonGradedSubmissionProjection> getNonGradedSubmissionsByTeacher(Long teacherId);
 }

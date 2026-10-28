@@ -16,5 +16,5 @@ package edu.vinu.domain.course.events;
 import lombok.Builder;
 
 @Builder
-public record CourseDeletedEvent (Long instituteId) {
+public record CourseDeletedEvent(Long instituteId) {
 }

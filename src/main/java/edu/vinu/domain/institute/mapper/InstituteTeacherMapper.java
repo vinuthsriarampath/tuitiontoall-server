@@ -19,7 +19,7 @@ import edu.vinu.domain.teacher.dtos.response.TeacherUserResponse;
 
 public class InstituteTeacherMapper {
 
-    public static InstituteTeacherResponse toInstituteTeacherResponse(InstituteTeacherProjection p){
+    public static InstituteTeacherResponse toInstituteTeacherResponse(InstituteTeacherProjection p) {
         return InstituteTeacherResponse.builder()
                 .id(p.getId())
                 .instituteId(p.getInstituteId())

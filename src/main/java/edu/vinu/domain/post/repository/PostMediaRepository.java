@@ -24,17 +24,17 @@ import java.util.List;
 @Repository
 public interface PostMediaRepository extends JpaRepository<PostMedia, Long> {
     @Query(value = """
-    SELECT * FROM post_media pm
-    WHERE pm.post_id = :postId
-    ORDER BY pm.file_order
-    """,nativeQuery = true)
+            SELECT * FROM post_media pm
+            WHERE pm.post_id = :postId
+            ORDER BY pm.file_order
+            """, nativeQuery = true)
     List<PostMedia> findAllByPostId(Long postId);
 
 
     @Modifying
     @Query(value = """
-    DELETE FROM post_media pm
-    WHERE pm.post_id = :postId
-    """,nativeQuery = true)
+            DELETE FROM post_media pm
+            WHERE pm.post_id = :postId
+            """, nativeQuery = true)
     void deleteByPostId(Long postId);
 }

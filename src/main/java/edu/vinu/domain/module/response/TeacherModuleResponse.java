@@ -19,11 +19,11 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record TeacherModuleResponse (
+public record TeacherModuleResponse(
         Long moduleId,
         String moduleName,
         ModuleStatus moduleStatus,
         LocalDateTime moduleCreatedDate,
         LocalDateTime moduleLastModifiedDate
-){
+) {
 }

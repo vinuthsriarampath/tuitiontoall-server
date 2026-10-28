@@ -25,6 +25,8 @@ import java.lang.annotation.*;
 @Documented // Indicates that this annotation should be included in Javadoc.
 public @interface ValidScheduleLectureTime {
     String message() default "Invalid Schedule Lecture Time"; // Default validation message (if not provided)
+
     Class<?>[] groups() default {}; // Advanced feature for grouping constraints, not used in this example.
+
     Class<? extends Payload>[] payload() default {}; // Used for metadata security levels
 }

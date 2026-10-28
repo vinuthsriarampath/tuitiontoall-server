@@ -36,19 +36,19 @@ public class InstituteDashboardWebSocketServiceImpl implements InstituteDashboar
 
     @Override
     public void updateTeacherMetrics(Long instituteId, InstituteTeacherMatricsUpdatedResponse response) {
-        String destination = "/topic/institute/"+ instituteId + "/active-teacher-metrics";
+        String destination = "/topic/institute/" + instituteId + "/active-teacher-metrics";
         simpMessagingTemplate.convertAndSend(destination, response);
     }
 
     @Override
     public void updateCourseMetrics(Long instituteId, CourseMetricsUpdatedResponse build) {
-        String destination = "/topic/institute/"+ instituteId + "/course-metrics";
+        String destination = "/topic/institute/" + instituteId + "/course-metrics";
         simpMessagingTemplate.convertAndSend(destination, build);
     }
 
     @Override
     public void updateBatchMetrics(Long instituteId, BatchMetricsUpdatedResponse build) {
-        String destination = "/topic/institute/"+ instituteId + "/batch-metrics";
+        String destination = "/topic/institute/" + instituteId + "/batch-metrics";
         simpMessagingTemplate.convertAndSend(destination, build);
     }
 }

@@ -18,20 +18,20 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record ChapterAssignmentResponse (
-    Long id,
-    Long assignmentId,
-    Long chapterId,
-    String topic,
-    String description,
-    String fileName,
-    Integer totalMarks,
-    LocalDateTime availableOn,
-    LocalDateTime dueDate,
-    boolean lateSubmission,
-    boolean resubmission,
-    Integer maxAttempts,
-    LocalDateTime createdDate,
-    LocalDateTime lastModifiedDate
-){
+public record ChapterAssignmentResponse(
+        Long id,
+        Long assignmentId,
+        Long chapterId,
+        String topic,
+        String description,
+        String fileName,
+        Integer totalMarks,
+        LocalDateTime availableOn,
+        LocalDateTime dueDate,
+        boolean lateSubmission,
+        boolean resubmission,
+        Integer maxAttempts,
+        LocalDateTime createdDate,
+        LocalDateTime lastModifiedDate
+) {
 }

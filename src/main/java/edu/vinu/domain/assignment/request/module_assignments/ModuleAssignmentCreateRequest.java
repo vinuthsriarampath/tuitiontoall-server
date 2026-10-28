@@ -20,7 +20,7 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ModuleAssignmentCreateRequest (
+public record ModuleAssignmentCreateRequest(
         @NotNull(message = "Module ID is mandatory!")
         Long moduleId,
 
@@ -52,5 +52,5 @@ public record ModuleAssignmentCreateRequest (
         @NotNull(message = "Grading ranges list is mandatory!")
         @NotEmpty(message = "At least one grading range is required!")
         List<GradingRangeCreateRequest> gradingRanges
-){
+) {
 }

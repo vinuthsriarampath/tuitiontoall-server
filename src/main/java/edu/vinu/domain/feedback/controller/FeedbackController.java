@@ -34,19 +34,19 @@ public class FeedbackController {
 
     @PreAuthorize("hasAuthority('student')")
     @PostMapping
-    public ResponseEntity<ApiResponse<FeedbackResponse>> submitFeedback(@Valid @RequestBody FeedbackCreateRequest request){
-         return ResponseEntity.ok(feedbackService.submitFeedback(request));
+    public ResponseEntity<ApiResponse<FeedbackResponse>> submitFeedback(@Valid @RequestBody FeedbackCreateRequest request) {
+        return ResponseEntity.ok(feedbackService.submitFeedback(request));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("course/{courseId}")
-    public ResponseEntity<PaginatedApiResponse<FeedbackResponse>> getFeedbacks(@PathVariable Long courseId, PaginationRequest pagination){
+    public ResponseEntity<PaginatedApiResponse<FeedbackResponse>> getFeedbacks(@PathVariable Long courseId, PaginationRequest pagination) {
         return ResponseEntity.ok(feedbackService.getFeedbacksByCourse(courseId, pagination));
     }
 
     @PreAuthorize("hasAnyAuthority('student','institute')")
     @GetMapping("course/{courseId}/eligibility")
-    public ResponseEntity<FeedbackEligibilityResponse> checkFeedbackEligibility(@PathVariable Long courseId){
+    public ResponseEntity<FeedbackEligibilityResponse> checkFeedbackEligibility(@PathVariable Long courseId) {
         return ResponseEntity.ok(feedbackService.checkFeedbackEligibility(courseId));
     }
 }

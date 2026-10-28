@@ -31,84 +31,84 @@ public interface ModuleRepository extends JpaRepository<ModuleEntity, Long> {
     boolean existsByNameAndBatchId(String name, Long batchId);
 
     @Query(value = """
-    SELECT *
-    FROM module m
-    WHERE m.batch_id = :batchId
-    AND (:status IS NULL OR m.status = :status)
-    AND (:moduleName IS NULL OR m.name LIKE LOWER(CONCAT('%', :moduleName, '%')))
-    """,
-    countQuery = """
-    SELECT COUNT(*)
-    FROM module m
-    WHERE m.batch_id = :batchId
-    AND (:status IS NULL OR m.status = :status)
-    AND (:moduleName IS NULL OR m.name LIKE LOWER(CONCAT('%', :moduleName, '%')))
-    """, nativeQuery = true)
-    Page<ModuleEntity> findByBatchId(Long batchId,String moduleName, String status, Pageable pageable);
+            SELECT *
+            FROM module m
+            WHERE m.batch_id = :batchId
+            AND (:status IS NULL OR m.status = :status)
+            AND (:moduleName IS NULL OR m.name LIKE LOWER(CONCAT('%', :moduleName, '%')))
+            """,
+            countQuery = """
+                    SELECT COUNT(*)
+                    FROM module m
+                    WHERE m.batch_id = :batchId
+                    AND (:status IS NULL OR m.status = :status)
+                    AND (:moduleName IS NULL OR m.name LIKE LOWER(CONCAT('%', :moduleName, '%')))
+                    """, nativeQuery = true)
+    Page<ModuleEntity> findByBatchId(Long batchId, String moduleName, String status, Pageable pageable);
 
 
     @Query(value = """
-    SELECT
-    m.id AS id,
-    m.name AS name,
-    m.status AS status,
-    m.created_date AS createdDate,
-    m.last_modified_date AS lastModifiedDate,
-    
-    b.id AS batchId,
-    b.course_id AS courseId,
-    b.name AS batchName,
-    b.batch_status AS batchStatus,
-    b.enrollment_status AS batchEnrollmentStatus,
-    b.created_date AS batchCreatedDate,
-    b.last_modified_date AS batchLastModifiedDate,
-    
-    t.id AS teacherId,
-    t.first_name AS teacherFirstName,
-    t.last_name AS teacherLastName,
-    
-    u.dp AS userDp,
-    u.user_slug AS userSlug,
-    u.email AS userEmail,
-    u.contact AS userContact
-    
-    FROM module m
-    JOIN batch b ON m.batch_id = b.id
-    JOIN teacher t on m.teacher_id = t.id
-    JOIN users u ON t.user_id = u.id
-    WHERE m.id = :id
-""",nativeQuery = true)
+                SELECT
+                m.id AS id,
+                m.name AS name,
+                m.status AS status,
+                m.created_date AS createdDate,
+                m.last_modified_date AS lastModifiedDate,
+            
+                b.id AS batchId,
+                b.course_id AS courseId,
+                b.name AS batchName,
+                b.batch_status AS batchStatus,
+                b.enrollment_status AS batchEnrollmentStatus,
+                b.created_date AS batchCreatedDate,
+                b.last_modified_date AS batchLastModifiedDate,
+            
+                t.id AS teacherId,
+                t.first_name AS teacherFirstName,
+                t.last_name AS teacherLastName,
+            
+                u.dp AS userDp,
+                u.user_slug AS userSlug,
+                u.email AS userEmail,
+                u.contact AS userContact
+            
+                FROM module m
+                JOIN batch b ON m.batch_id = b.id
+                JOIN teacher t on m.teacher_id = t.id
+                JOIN users u ON t.user_id = u.id
+                WHERE m.id = :id
+            """, nativeQuery = true)
     Optional<DetailedModuleProjection> getDetailedModuleById(Long id);
 
     @Query(value = """
-    SELECT
-        m.id AS id,
-        m.name AS name,
-        m.status AS status,
-        m.batch_id AS batchId
-    FROM module m
-    WHERE m.batch_id = :batchId;
-    """,nativeQuery = true)
+            SELECT
+                m.id AS id,
+                m.name AS name,
+                m.status AS status,
+                m.batch_id AS batchId
+            FROM module m
+            WHERE m.batch_id = :batchId;
+            """, nativeQuery = true)
     List<StudentModuleProjection> findAllStudentModulesByBatchId(Long batchId);
 
     @Query(value = """
-    SELECT
-        m.id AS id,
-        m.name AS name,
-        m.status AS status,
-        m.batch_id AS batchId
-    FROM module m
-    WHERE m.batch_id = :batchId
-        AND m.status IN (:status);
-    """,nativeQuery = true)
+            SELECT
+                m.id AS id,
+                m.name AS name,
+                m.status AS status,
+                m.batch_id AS batchId
+            FROM module m
+            WHERE m.batch_id = :batchId
+                AND m.status IN (:status);
+            """, nativeQuery = true)
     List<StudentModuleProjection> findAllStudentModulesByBatchIdAndStatus(Long batchId, List<String> status);
 
     @Query(value = """
-    SELECT COUNT(DISTINCT m.id)
-    FROM module m
-    INNER JOIN batch b ON b.id = m.batch_id
-    WHERE m.teacher_id = :teacherId
-    AND (:batchStatus IS NULL OR b.batch_status = :batchStatus)
-""",nativeQuery = true)
+                SELECT COUNT(DISTINCT m.id)
+                FROM module m
+                INNER JOIN batch b ON b.id = m.batch_id
+                WHERE m.teacher_id = :teacherId
+                AND (:batchStatus IS NULL OR b.batch_status = :batchStatus)
+            """, nativeQuery = true)
     int countModulesByTeacherAndBatchStatus(Long teacherId, String batchStatus);
 }

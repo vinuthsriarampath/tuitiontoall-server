@@ -31,7 +31,7 @@ public class UserFollowController {
     private final UserFollowService userFollowService;
 
     @PostMapping("/user/{followingId}")
-    public ResponseEntity<ApiResponse<UserFollowResponse>> followUser(@PathVariable Long followingId){
+    public ResponseEntity<ApiResponse<UserFollowResponse>> followUser(@PathVariable Long followingId) {
         return ResponseEntity.ok(userFollowService.followUser(followingId));
     }
 }

@@ -20,5 +20,6 @@ import java.time.LocalDate;
 
 public interface PeriodService {
     ReportingPeriodRange getRange(ReportingPeriod period);
+
     ReportingPeriodRange getRange(ReportingPeriod period, LocalDate instituteCreatedDate);
 }

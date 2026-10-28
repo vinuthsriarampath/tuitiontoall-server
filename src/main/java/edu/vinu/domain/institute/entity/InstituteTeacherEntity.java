@@ -36,20 +36,20 @@ public class InstituteTeacherEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "instituteId",nullable = false)
+    @JoinColumn(name = "instituteId", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private InstituteEntity institute;
 
-    @JoinColumn(name = "teacherId",nullable = false)
+    @JoinColumn(name = "teacherId", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private TeacherEntity teacher;
 
     @Enumerated(EnumType.STRING)
-    @JoinColumn(name = "status",nullable = false)
+    @JoinColumn(name = "status", nullable = false)
     private InstituteTeacherStatus status;
 
     @CreationTimestamp
-    @JoinColumn(name = "joined_date",nullable = false)
+    @JoinColumn(name = "joined_date", nullable = false)
     private LocalDateTime joinedDate;
 
     @UpdateTimestamp

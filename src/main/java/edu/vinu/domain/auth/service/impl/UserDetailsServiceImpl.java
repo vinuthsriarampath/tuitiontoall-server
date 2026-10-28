@@ -31,11 +31,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity= userDetailsRepository.findByEmail(username);
+        UserEntity userEntity = userDetailsRepository.findByEmail(username);
 
-        if (userEntity == null){
+        if (userEntity == null) {
             log.error("{} not found", username);
-            throw new UsernameNotFoundException(username+"not found!");
+            throw new UsernameNotFoundException(username + "not found!");
         }
         return new UserPrinciple(userEntity);
     }

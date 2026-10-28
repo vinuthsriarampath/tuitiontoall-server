@@ -25,7 +25,7 @@ import edu.vinu.domain.student_assignment_submit.response.StudentAssignmentSubmi
 
 public class AssignmentSubmissionMapper {
 
-    public static AssignmentSubmissionResponse toAssignmentSubmissionResponse(StudentAssignmentSubmit e){
+    public static AssignmentSubmissionResponse toAssignmentSubmissionResponse(StudentAssignmentSubmit e) {
         return AssignmentSubmissionResponse.builder()
                 .submissionId(e.getId())
                 .studentId(e.getStudent().getId())
@@ -44,7 +44,7 @@ public class AssignmentSubmissionMapper {
         return AssignmentSubmissionDetailedResponse.builder()
                 .submissionId(p.getSubmissionId())
                 .studentId(p.getStudentId())
-                .studentName(p.getFirstName()+ " " + p.getLastName())
+                .studentName(p.getFirstName() + " " + p.getLastName())
                 .assignmentId(p.getAssignmentId())
                 .url(p.getUrl())
                 .grade(p.getGrade())

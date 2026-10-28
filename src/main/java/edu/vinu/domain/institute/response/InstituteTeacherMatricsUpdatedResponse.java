@@ -17,7 +17,7 @@ import edu.vinu.common.response.DashboardKpi;
 import lombok.Builder;
 
 @Builder
-public record InstituteTeacherMatricsUpdatedResponse (
+public record InstituteTeacherMatricsUpdatedResponse(
         DashboardKpi activeTeachers
 ) {
 

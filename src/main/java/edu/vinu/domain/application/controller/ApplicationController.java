@@ -36,21 +36,21 @@ public class ApplicationController {
 
     @PreAuthorize("hasAuthority('teacher')")
     @PostMapping("/vacancies/{vacancyId}/apply")
-    public ResponseEntity<ApiResponse<Application>> createApplication(@PathVariable Long vacancyId){
+    public ResponseEntity<ApiResponse<Application>> createApplication(@PathVariable Long vacancyId) {
         Application application = applicationService.createApplication(vacancyId);
         return ResponseEntity.status(201).body(createApiResponse("Application created successfully", application));
     }
 
     @PreAuthorize("hasAuthority('teacher')")
     @GetMapping("/check")
-    public ResponseEntity<ApiResponse<Boolean>> checkIfUserAlreadyApplied(@RequestParam("teacherId") Long userId,@RequestParam("vacancyId") Long vacancyId){
+    public ResponseEntity<ApiResponse<Boolean>> checkIfUserAlreadyApplied(@RequestParam("teacherId") Long userId, @RequestParam("vacancyId") Long vacancyId) {
         boolean userAlreadyApplied = applicationService.isUserAlreadyApplied(userId, vacancyId);
         return ResponseEntity.status(200).body(createApiResponse("Success", userAlreadyApplied));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("vacancies/{vacancyId}")
-    public ResponseEntity<PaginatedApiResponse<ApplicationDetailsResponse>> getAllApplicationsByVacancy(@PathVariable("vacancyId") Long vacancyId, PaginationRequest pagination, ApplicationFilterRequest filters){
-        return ResponseEntity.ok(applicationService.getApplicationsByVacancy(vacancyId,pagination, filters));
+    public ResponseEntity<PaginatedApiResponse<ApplicationDetailsResponse>> getAllApplicationsByVacancy(@PathVariable("vacancyId") Long vacancyId, PaginationRequest pagination, ApplicationFilterRequest filters) {
+        return ResponseEntity.ok(applicationService.getApplicationsByVacancy(vacancyId, pagination, filters));
     }
 }

@@ -24,10 +24,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class TeacherBasicCourseResponse {
-        Long courseId;
-        String courseTitle;
-        Long instituteId;
-        String instituteName;
-        Long assignedOngoingBatchesCount;
-        Long assignedPublishedModulesCount;
+    Long courseId;
+    String courseTitle;
+    Long instituteId;
+    String instituteName;
+    Long assignedOngoingBatchesCount;
+    Long assignedPublishedModulesCount;
 }

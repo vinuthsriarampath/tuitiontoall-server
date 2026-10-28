@@ -18,8 +18,8 @@ import edu.vinu.domain.module.request.create.enums.ModuleCreateStatus;
 
 public class ModuleStatusMapper {
 
-    public static ModuleStatus toModuleStatus(ModuleCreateStatus status){
-        switch (status){
+    public static ModuleStatus toModuleStatus(ModuleCreateStatus status) {
+        switch (status) {
             case DRAFT -> {
                 return ModuleStatus.DRAFT;
             }

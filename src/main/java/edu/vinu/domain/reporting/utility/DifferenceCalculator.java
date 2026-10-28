@@ -31,7 +31,7 @@ public class DifferenceCalculator {
         if (previous.compareTo(BigDecimal.ZERO) == 0) {
             if (current.compareTo(BigDecimal.ZERO) > 0) {
                 return BigDecimal.valueOf(100);
-            }else {
+            } else {
                 return BigDecimal.ZERO;
             }
         }

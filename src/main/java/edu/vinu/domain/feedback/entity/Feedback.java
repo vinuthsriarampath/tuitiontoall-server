@@ -41,11 +41,11 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "feedback", nullable = false ,  columnDefinition = "TEXT")
+    @Column(name = "feedback", nullable = false, columnDefinition = "TEXT")
     private String feedback;
 
     @CreationTimestamp
-    @Column(name = "created_date",nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp

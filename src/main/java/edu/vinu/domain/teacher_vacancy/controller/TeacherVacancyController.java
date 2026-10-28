@@ -39,13 +39,13 @@ public class TeacherVacancyController {
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping("/")
     public ResponseEntity<ApiResponse<TeacherVacancy>> create(@Valid @RequestBody CreateVacancyRequest request) {
-        return ResponseEntity.status(201).body(createApiResponse("New Vacancy created Successfully!",vacancyService.createVacancy(request)));
+        return ResponseEntity.status(201).body(createApiResponse("New Vacancy created Successfully!", vacancyService.createVacancy(request)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/{vacancyId}")
     public ResponseEntity<ApiResponse<TeacherVacancy>> update(@PathVariable Long vacancyId, @RequestBody UpdateVacancyRequest request) {
-        return ResponseEntity.status(200).body(createApiResponse("Vacancy Updated Successfully!",vacancyService.updateVacancy(vacancyId, request)));
+        return ResponseEntity.status(200).body(createApiResponse("Vacancy Updated Successfully!", vacancyService.updateVacancy(vacancyId, request)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
@@ -62,10 +62,10 @@ public class TeacherVacancyController {
     }
 
     @GetMapping("/{vacancyId}")
-    public ResponseEntity<ApiResponse<TeacherVacancy>> getById(@PathVariable Long vacancyId,@RequestParam(value = "status",required = false) TeacherVacancyStatus status) {
-        if(status != null){
-            return ResponseEntity.status(200).body(createApiResponse("Found Vacancy By Id and Status",vacancyService.getByVacancyIdAndStatus(vacancyId,status)));
+    public ResponseEntity<ApiResponse<TeacherVacancy>> getById(@PathVariable Long vacancyId, @RequestParam(value = "status", required = false) TeacherVacancyStatus status) {
+        if (status != null) {
+            return ResponseEntity.status(200).body(createApiResponse("Found Vacancy By Id and Status", vacancyService.getByVacancyIdAndStatus(vacancyId, status)));
         }
-        return ResponseEntity.status(200).body(createApiResponse("Found Vacancy By Id",vacancyService.getById(vacancyId)));
+        return ResponseEntity.status(200).body(createApiResponse("Found Vacancy By Id", vacancyService.getById(vacancyId)));
     }
 }

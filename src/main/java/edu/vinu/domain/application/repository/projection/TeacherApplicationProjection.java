@@ -19,12 +19,20 @@ import java.time.LocalDateTime;
 
 public interface TeacherApplicationProjection {
     Long getApplicationId();
+
     Long getVacancyId();
+
     String getVacancyTitle();
+
     Long getInstituteId();
+
     String getInstituteName();
+
     String getInstituteUserSlug();
+
     ApplicationStatus getApplicationStatus();
+
     LocalDateTime getAppliedDate();
+
     LocalDateTime getLastModifiedDate();
 }

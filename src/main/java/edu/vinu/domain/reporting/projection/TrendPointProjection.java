@@ -17,5 +17,6 @@ import java.math.BigDecimal;
 
 public interface TrendPointProjection {
     String getBucket();
+
     BigDecimal getValue();
 }

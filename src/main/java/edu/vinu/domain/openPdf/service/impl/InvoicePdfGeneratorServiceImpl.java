@@ -135,7 +135,7 @@ public class InvoicePdfGeneratorServiceImpl implements InvoicePdfGeneratorServic
             paymentInfoTable.setWidthPercentage(100);
 
             paymentInfoTable.addCell(createLabelCell("Amount"));
-            paymentInfoTable.addCell(createValueCell("LKR : "+payment.getAmount().toString()));
+            paymentInfoTable.addCell(createValueCell("LKR : " + payment.getAmount().toString()));
             paymentInfoTable.addCell(createLabelCell("Method"));
             paymentInfoTable.addCell(createValueCell(payment.getPaymentMethod().toString()));
             paymentInfoTable.addCell(createLabelCell("Status"));

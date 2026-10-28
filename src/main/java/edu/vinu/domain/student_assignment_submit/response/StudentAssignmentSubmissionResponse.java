@@ -19,14 +19,15 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record StudentAssignmentSubmissionResponse (
-    Long submissionId,
-    Long assignmentId,
-    String url,
-    String grade,
-    int marksGained,
-    AssignmentSubmitStatus status,
-    int attemptNo,
-    LocalDateTime submittedAt,
-    LocalDateTime lastModifiedDate
-){}
+public record StudentAssignmentSubmissionResponse(
+        Long submissionId,
+        Long assignmentId,
+        String url,
+        String grade,
+        int marksGained,
+        AssignmentSubmitStatus status,
+        int attemptNo,
+        LocalDateTime submittedAt,
+        LocalDateTime lastModifiedDate
+) {
+}

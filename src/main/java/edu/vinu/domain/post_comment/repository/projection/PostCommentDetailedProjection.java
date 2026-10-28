@@ -17,11 +17,18 @@ import java.time.LocalDateTime;
 
 public interface PostCommentDetailedProjection {
     Long getId();
+
     Long getUserId();
+
     String getDisplayName();
+
     String getDp();
+
     String getUserSlug();
+
     String getMessage();
+
     LocalDateTime getCreatedDate();
+
     LocalDateTime getUpdatedDate();
 }

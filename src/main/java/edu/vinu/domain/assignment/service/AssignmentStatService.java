@@ -15,5 +15,6 @@ package edu.vinu.domain.assignment.service;
 
 public interface AssignmentStatService {
     Long getStudentPendingAssignmentCount(Long studentId);
+
     Long getStudentCompletedAssignmentCount(Long studentId);
 }

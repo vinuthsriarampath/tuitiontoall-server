@@ -50,11 +50,11 @@ public class ModuleAssignmentServiceImpl implements ModuleAssignmentService {
             AssignmentValidator.validateCreate(request.totalMarks(), request.availableOn(), request.dueDate(), request.resubmission(), request.maxAttempts());
             GradingRangeValidator.validate(request.gradingRanges(), request.totalMarks());
 
-            assignmentEntity = assignmentService.createAssignment(AssignmentMapper.toAssignmentCreateRequest(request),file);
+            assignmentEntity = assignmentService.createAssignment(AssignmentMapper.toAssignmentCreateRequest(request), file);
 
             ModuleEntity moduleEntity = moduleService.getModuleEntityById(request.moduleId());
 
-            if(chapterAssignmentQueryService.existsByAssignmentId(assignmentEntity.getId())){
+            if (chapterAssignmentQueryService.existsByAssignmentId(assignmentEntity.getId())) {
                 throw new InvalidInputException("Assignment is already exists with chapter");
             }
 

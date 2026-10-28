@@ -15,7 +15,10 @@ package edu.vinu.domain.chapter.repository.projection;
 
 public interface ChapterStatCountProjection {
     Long getResourceCount();
+
     Long getLectureRecordingCount();
+
     Long getUpcomingScheduleLectureCount();
+
     Long getActiveAssignmentsCount();
 }

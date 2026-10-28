@@ -27,7 +27,7 @@ import java.util.List;
 public interface ApplicationService {
     Application createApplication(Long vacancyId);
 
-    boolean isUserAlreadyApplied(Long userId,Long vacancyId);
+    boolean isUserAlreadyApplied(Long userId, Long vacancyId);
 
     PaginatedApiResponse<ApplicationDetailsResponse> getApplicationsByVacancy(Long vacancyId, PaginationRequest pagination, ApplicationFilterRequest filters);
 

@@ -35,15 +35,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InstituteServiceImpl implements InstituteService {
 
-    private final UserAuthenticationService  authenticationService;
+    private final UserAuthenticationService authenticationService;
     private final InstituteRepository instituteRepository;
     private final UserServiceImpl userService;
 
     @Override
     public InstituteEntity getCurrentInstitute() {
         UserEntity userEntity = userService.getUserEntityByEmail(authenticationService.getCurrentUserEmail());
-        InstituteEntity instituteEntity =  userEntity.getInstitute();
-        if(instituteEntity == null){
+        InstituteEntity instituteEntity = userEntity.getInstitute();
+        if (instituteEntity == null) {
             throw new UnauthorizedException("You are not associated with any institute.");
         }
         return instituteEntity;
@@ -51,12 +51,12 @@ public class InstituteServiceImpl implements InstituteService {
 
     @Override
     public List<Institute> getAllInstitutes() {
-        List<Institute> instituteList =  instituteRepository.getAllInstitutes()
+        List<Institute> instituteList = instituteRepository.getAllInstitutes()
                 .stream()
                 .map(InstituteMapper::toInstitute)
                 .toList();
 
-        if (instituteList.isEmpty()){
+        if (instituteList.isEmpty()) {
             throw new NotFoundException("No Institutes Found!");
         }
         return instituteList;

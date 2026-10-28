@@ -31,7 +31,7 @@ public record UserPostResponse(
         LocalDateTime publishedDate,
         LocalDateTime lastModifiedDate,
 
-        List<PostMediaResponse>mediaList,
+        List<PostMediaResponse> mediaList,
 
         long likesCount,
         long commentsCount,

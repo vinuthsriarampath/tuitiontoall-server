@@ -26,5 +26,5 @@ public record MyPaymentReceivesFilterRequest(
         PaymentMethod paymentMethod,
         String transactionRef,
         LocalDateTime createdDate
-){
+) {
 }

@@ -15,9 +15,14 @@ package edu.vinu.domain.course.repository.projections;
 
 public interface TeacherBasicCourseProjection {
     Long getCourseId();
+
     String getCourseTitle();
+
     Long getInstituteId();
+
     String getInstituteName();
+
     Long getAssignedOngoingBatchesCount();
+
     Long getAssignedPublishedModulesCount();
 }

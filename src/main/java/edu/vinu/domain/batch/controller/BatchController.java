@@ -49,26 +49,26 @@ public class BatchController {
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Batch>> createBatch(@Valid @RequestBody BatchCreateRequest request){
+    public ResponseEntity<ApiResponse<Batch>> createBatch(@Valid @RequestBody BatchCreateRequest request) {
         return ResponseEntity.status(201).body(createApiResponse("Batch created successfully", batchService.createBatch(request)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("/course/{courseId}")
-    public ResponseEntity<PaginatedApiResponse<Batch>> getAllBatchesOfCourse(@PathVariable Long courseId, PaginationRequest pagination, BatchFilterRequest filters){
+    public ResponseEntity<PaginatedApiResponse<Batch>> getAllBatchesOfCourse(@PathVariable Long courseId, PaginationRequest pagination, BatchFilterRequest filters) {
         return ResponseEntity.ok(batchService.getAllBatchesByCourseId(courseId, pagination, filters));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("/find/batch/{batchId}")
-    public ResponseEntity<ApiResponse<Batch>> getBatchById(@PathVariable Long batchId){
-        return ResponseEntity.status(200).body(createApiResponse("Batch By Batch Id",batchService.getBatchById(batchId)));
+    public ResponseEntity<ApiResponse<Batch>> getBatchById(@PathVariable Long batchId) {
+        return ResponseEntity.status(200).body(createApiResponse("Batch By Batch Id", batchService.getBatchById(batchId)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/{batchId}/update")
-    public ResponseEntity<ApiResponse<Batch>> updateBatchById(@PathVariable Long batchId, @Valid @RequestBody BatchUpdateRequest request){
-        return ResponseEntity.status(200).body(createApiResponse("Batch Updated Successfully",batchService.updateBatchById(batchId,request)));
+    public ResponseEntity<ApiResponse<Batch>> updateBatchById(@PathVariable Long batchId, @Valid @RequestBody BatchUpdateRequest request) {
+        return ResponseEntity.status(200).body(createApiResponse("Batch Updated Successfully", batchService.updateBatchById(batchId, request)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
@@ -77,26 +77,26 @@ public class BatchController {
             @PathVariable Long batchId,
             PaginationRequest pagination,
             ModuleFilterRequest filters
-    ){
-        return ResponseEntity.status(200).body(createPaginatedApiResponse("Modules related to batch fetched successfully!", moduleService.getModulesByBatch(batchId,pagination,filters)));
+    ) {
+        return ResponseEntity.status(200).body(createPaginatedApiResponse("Modules related to batch fetched successfully!", moduleService.getModulesByBatch(batchId, pagination, filters)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student')")
     @GetMapping("{courseId}/enrollables")
-    public ResponseEntity<ApiResponse<List<Batch>>> getAllEnrollableBatchesOfCourse(@PathVariable Long courseId){
+    public ResponseEntity<ApiResponse<List<Batch>>> getAllEnrollableBatchesOfCourse(@PathVariable Long courseId) {
         return ResponseEntity.status(200).body(batchService.getAllEnrollableBatchesOfCourse(courseId));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("{batchId}/students")
-    public ResponseEntity<PaginatedApiResponse<StudentUserResponse>> getStudentsByBatch(@PathVariable Long batchId, PaginationRequest pagination, BatchStudentFilterRequest filters){
+    public ResponseEntity<PaginatedApiResponse<StudentUserResponse>> getStudentsByBatch(@PathVariable Long batchId, PaginationRequest pagination, BatchStudentFilterRequest filters) {
         PaginatedApiResponse<StudentUserResponse> response = enrollmentService.getStudentsByBatch(batchId, pagination, filters);
         return ResponseEntity.status(200).body(response);
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("detailed")
-    public ResponseEntity<PaginatedApiResponse<BatchDetailedResponse>> getDetailedBatches(PaginationRequest pagination, BatchFilterRequest filters){
-        return ResponseEntity.ok(batchService.getAllBatches(pagination,filters));
+    public ResponseEntity<PaginatedApiResponse<BatchDetailedResponse>> getDetailedBatches(PaginationRequest pagination, BatchFilterRequest filters) {
+        return ResponseEntity.ok(batchService.getAllBatches(pagination, filters));
     }
 }

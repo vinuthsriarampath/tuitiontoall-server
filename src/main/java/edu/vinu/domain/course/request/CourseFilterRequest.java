@@ -22,4 +22,5 @@ public record CourseFilterRequest(
         CourseLanguage language,
         CourseMode mode,
         CourseStatus status
-) {}
+) {
+}

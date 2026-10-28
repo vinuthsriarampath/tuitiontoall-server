@@ -23,25 +23,42 @@ import java.time.LocalDateTime;
 
 public interface TeachingProjection {
     Long getBatchId();
+
     String getBatchName();
+
     BatchStatus getBatchStatus();
+
     BatchEnrollmentStatus getBatchEnrollmentStatus();
+
     LocalDate getBatchStartDate();
+
     LocalDateTime getBatchCreatedDate();
+
     LocalDateTime getBatchLastModifiedDate();
 
     Long getCourseId();
+
     String getCourseTitle();
+
     String getCourseDescription();
+
     CourseCategory getCourseCategory();
+
     CourseStatus getCourseStatus();
+
     CourseLanguage getCourseLanguage();
+
     CourseLevel getCourseLevel();
+
     CourseMode getCourseMode();
+
     String getThumbnail();
+
     BigDecimal getAvgRating();
+
     Integer getTotalRatings();
 
     Long getInstituteId();
+
     String getInstituteName();
 }

@@ -62,16 +62,16 @@ public class PostServiceImpl implements PostService {
 
         List<PostMediaItemRequest> mediaItems = request.mediaItems();
 
-        if(files != null && !files.isEmpty() ){
-            if(mediaItems == null || mediaItems.size() != files.size()){
+        if (files != null && !files.isEmpty()) {
+            if (mediaItems == null || mediaItems.size() != files.size()) {
                 throw new InvalidInputException("Media types must match the number of uploaded files.");
             }
 
             validateFileOrders(mediaItems, files.size());
 
-            for(int i=0; i<files.size(); i++){
+            for (int i = 0; i < files.size(); i++) {
                 MultipartFile file = files.get(i);
-                if(file.isEmpty()) continue;
+                if (file.isEmpty()) continue;
 
                 String savedFileName = savePostFile(file);
                 savedFileNames.add(savedFileName);
@@ -82,7 +82,7 @@ public class PostServiceImpl implements PostService {
                         .post(post)
                         .mediaUrl(savedFileName)
                         .mediaType(mediaType.mediaType())
-                        .fileOrder(mediaType.fileOrder() != null ? mediaType.fileOrder() : i+1)
+                        .fileOrder(mediaType.fileOrder() != null ? mediaType.fileOrder() : i + 1)
                         .build();
 
                 post.getMediaList().add(media);
@@ -143,7 +143,7 @@ public class PostServiceImpl implements PostService {
     }
 
 
-    private String savePostFile(MultipartFile file){
+    private String savePostFile(MultipartFile file) {
         String originalFileName = file.getOriginalFilename();
         String extension = fileService.extractExtension(originalFileName);
         if (!extension.startsWith(".")) {

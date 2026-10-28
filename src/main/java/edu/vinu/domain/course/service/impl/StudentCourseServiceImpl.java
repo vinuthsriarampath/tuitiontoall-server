@@ -58,6 +58,6 @@ public class StudentCourseServiceImpl implements StudentCourseService {
                 modules
         );
 
-        return createApiResponse("Student Course Details retrieved successfully!",response);
+        return createApiResponse("Student Course Details retrieved successfully!", response);
     }
 }

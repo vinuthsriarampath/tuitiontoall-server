@@ -40,8 +40,8 @@ public class PeriodServiceImpl implements PeriodService {
     }
 
     @Override
-    public ReportingPeriodRange getRange(ReportingPeriod period, LocalDate instituteCreatedAt){
-        if(period == ReportingPeriod.OVERALL){
+    public ReportingPeriodRange getRange(ReportingPeriod period, LocalDate instituteCreatedAt) {
+        if (period == ReportingPeriod.OVERALL) {
             LocalDate today = LocalDate.now(clock);
             LocalDateTime start = instituteCreatedAt.withDayOfYear(1).atStartOfDay();
             LocalDateTime end = today.plusMonths(1).withDayOfMonth(1).atStartOfDay();
@@ -59,7 +59,7 @@ public class PeriodServiceImpl implements PeriodService {
         LocalDateTime previousStart = today.minusDays(1).atStartOfDay();
         LocalDateTime previousEnd = today.atStartOfDay();
 
-        return  new ReportingPeriodRange(currentStart, currentEnd, previousStart, previousEnd);
+        return new ReportingPeriodRange(currentStart, currentEnd, previousStart, previousEnd);
     }
 
     private ReportingPeriodRange getCurrentWeekRange(LocalDate today) {

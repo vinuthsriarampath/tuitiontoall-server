@@ -56,7 +56,7 @@ public class PostMapper {
                 .build();
     }
 
-    public static UserPostResponse toUserPostResponse(UserPostProjection p, List<PostMediaResponse> mediaList){
+    public static UserPostResponse toUserPostResponse(UserPostProjection p, List<PostMediaResponse> mediaList) {
         return UserPostResponse.builder()
                 .id(p.getId())
                 .caption(p.getCaption())

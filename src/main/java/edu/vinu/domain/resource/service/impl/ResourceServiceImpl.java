@@ -50,23 +50,20 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ResourceServiceImpl implements ResourceService {
+    private static final long CHUNK_SIZE = 1024 * 1024;
     private final ResourceRepository resourceRepository;
     private final ResourceUploadRepository resourceUploadRepository;
     private final ChapterService chapterService;
     private final FileService fileService;
-
     @Value("${file.chapter-resource.temp-path}")
     private String tempResourcePath;
-
     @Value("${file.chapter-resource.resource-path}")
     private String resourcePath;
-
-    private static final long CHUNK_SIZE = 1024 * 1024;
 
     @Override
     public ResourceInitResponse initializeUpload(ResourceInitRequest request) {
         if (alreadyExistsByNameAndChapterInResourceUpload(request.name(), request.chapterId()) && alreadyExistsByNameAndChapterInResource(request.name(), request.chapterId())) {
-            throw new InvalidInputException("name","A resource with the same name already exists for this chapter.");
+            throw new InvalidInputException("name", "A resource with the same name already exists for this chapter.");
         }
 
         ChapterEntity chapterEntity = chapterService.getChapterEntityById(request.chapterId());
@@ -85,7 +82,7 @@ public class ResourceServiceImpl implements ResourceService {
 
         ResourceUploadEntity save = resourceUploadRepository.save(resourceUploadEntity);
 
-        fileService.createDirectory(Path.of(tempResourcePath,uploadId));
+        fileService.createDirectory(Path.of(tempResourcePath, uploadId));
 
         return ResourceInitResponse.builder()
                 .uploadId(save.getUploadId())
@@ -96,11 +93,11 @@ public class ResourceServiceImpl implements ResourceService {
     public ResourceChunkUploadResponse uploadChunk(String uploadId, Integer chunkIndex, MultipartFile file) {
         ResourceUploadEntity uploadEntity = getResourceUploadEntity(uploadId);
 
-        if(uploadEntity.isCompleted()) throw new InvalidInputException("Upload has already been completed.");
+        if (uploadEntity.isCompleted()) throw new InvalidInputException("Upload has already been completed.");
 
-        Path directoryPath = Path.of(tempResourcePath,uploadEntity.getUploadId());
+        Path directoryPath = Path.of(tempResourcePath, uploadEntity.getUploadId());
 
-        String chunkFileName = "chunk_"+chunkIndex+".part";
+        String chunkFileName = "chunk_" + chunkIndex + ".part";
 
         fileService.saveFile(file, directoryPath, chunkFileName, StandardCopyOption.REPLACE_EXISTING);
 
@@ -117,9 +114,10 @@ public class ResourceServiceImpl implements ResourceService {
     public ResourceResponse completeUpload(String uploadId) {
         ResourceUploadEntity uploadEntity = getResourceUploadEntity(uploadId);
 
-        if(uploadEntity.isCompleted()) throw new InvalidInputException("Upload has already been completed.");
+        if (uploadEntity.isCompleted()) throw new InvalidInputException("Upload has already been completed.");
 
-        if(!uploadEntity.getUploadedChunks().equals(uploadEntity.getTotalChunks())) throw new InvalidInputException("All the chunks haven't uploaded!");
+        if (!uploadEntity.getUploadedChunks().equals(uploadEntity.getTotalChunks()))
+            throw new InvalidInputException("All the chunks haven't uploaded!");
 
         String extension = fileService.extractExtension(uploadEntity.getOriginalFileName());
 
@@ -202,35 +200,37 @@ public class ResourceServiceImpl implements ResourceService {
     public void deleteResource(Long resourceId) {
         ResourceEntity resourceEntity = resourceRepository.findById(resourceId).orElseThrow(() -> new NotFoundException("Resource not found."));
         fileService.delete(getResourceFilePath(resourceEntity.getFileName()));
-        if(deleteResourceUploadEntity(resourceId)){
+        if (deleteResourceUploadEntity(resourceId)) {
             resourceRepository.delete(resourceEntity);
-        }else{
+        } else {
             throw new InternalServerErrorException("Resource Deletion Failed.");
         }
     }
 
     private Path getResourceFilePath(String fileName) {
-        Path path = Path.of(resourcePath,fileName);
-        if(!Files.exists(path)) throw new NotFoundException("Resource not found.");
+        Path path = Path.of(resourcePath, fileName);
+        if (!Files.exists(path)) throw new NotFoundException("Resource not found.");
         return path;
     }
 
     private ResourceUploadEntity getResourceUploadEntity(String uploadId) {
-        return resourceUploadRepository.findById(uploadId).orElseThrow(()-> new NotFoundException("Resource upload initialization not found."));
+        return resourceUploadRepository.findById(uploadId).orElseThrow(() -> new NotFoundException("Resource upload initialization not found."));
     }
 
-    private boolean alreadyExistsByNameAndChapterInResource(String name, Long chapterId){
+    private boolean alreadyExistsByNameAndChapterInResource(String name, Long chapterId) {
         return resourceRepository.existsByNameAndChapterId(name, chapterId);
     }
 
-    private boolean alreadyExistsByNameAndChapterInResourceUpload(String name, Long chapterId){
+    private boolean alreadyExistsByNameAndChapterInResourceUpload(String name, Long chapterId) {
         return resourceUploadRepository.existsByNameAndChapterId(name, chapterId);
     }
 
-    private boolean deleteResourceUploadEntity(Long uploadId){
+    private boolean deleteResourceUploadEntity(Long uploadId) {
         resourceUploadRepository.findByResourceId(uploadId).ifPresentOrElse(
                 resourceUploadRepository::delete,
-                () -> { throw new NotFoundException("Resource upload initialization not found."); }
+                () -> {
+                    throw new NotFoundException("Resource upload initialization not found.");
+                }
         );
         return true;
     }

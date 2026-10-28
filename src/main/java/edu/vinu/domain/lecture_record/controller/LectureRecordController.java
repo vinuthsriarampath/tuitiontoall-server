@@ -42,7 +42,7 @@ public class LectureRecordController {
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping("/upload/init")
-    public ResponseEntity<ApiResponse<LectureRecordUploadInitResponse>> initializeUpload(@Valid @RequestBody LectureRecordUploadInitRequest request){
+    public ResponseEntity<ApiResponse<LectureRecordUploadInitResponse>> initializeUpload(@Valid @RequestBody LectureRecordUploadInitRequest request) {
         return ResponseEntity.ok(createApiResponse("Upload initialized successfully", lectureRecordService.initializeUpload(request)));
     }
 
@@ -52,7 +52,7 @@ public class LectureRecordController {
             @RequestParam String uploadId,
             @RequestParam Integer chunkIndex,
             @RequestParam MultipartFile chunk
-    ){
+    ) {
         return ResponseEntity.ok(createApiResponse("Upload chunk successfully", lectureRecordService.uploadChunk(uploadId, chunkIndex, chunk)));
     }
 
@@ -65,18 +65,18 @@ public class LectureRecordController {
     @GetMapping("/stream/{fileName:.+}")
     public ResponseEntity<ResourceRegion> streamVideo(@PathVariable String fileName, @RequestParam String token, @RequestHeader(value = "Range", required = false) String rangeHeader) throws IOException {
         videoStreamTokenService.validateToken(token);
-        return lectureRecordService.streamVideo( fileName, rangeHeader );
+        return lectureRecordService.streamVideo(fileName, rangeHeader);
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("/stream-token/{fileName:.+}")
-    public ResponseEntity<ApiResponse<String>> generateStreamToken(@PathVariable String fileName){
-        return ResponseEntity.ok(createApiResponse("Stream token generated for file name: "+fileName, videoStreamTokenService.generateToken(fileName)));
+    public ResponseEntity<ApiResponse<String>> generateStreamToken(@PathVariable String fileName) {
+        return ResponseEntity.ok(createApiResponse("Stream token generated for file name: " + fileName, videoStreamTokenService.generateToken(fileName)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PutMapping("{id}/details")
-    public ResponseEntity<ApiResponse<LectureRecordResponse>> updateLectureRecordDetails(@PathVariable Long id, @Valid @RequestBody LectureRecordDetailsUpdateRequest request){
-        return ResponseEntity.ok(createApiResponse("Lecture record details updated successfully", lectureRecordService.updateLectureRecordDetails(id,request)));
+    public ResponseEntity<ApiResponse<LectureRecordResponse>> updateLectureRecordDetails(@PathVariable Long id, @Valid @RequestBody LectureRecordDetailsUpdateRequest request) {
+        return ResponseEntity.ok(createApiResponse("Lecture record details updated successfully", lectureRecordService.updateLectureRecordDetails(id, request)));
     }
 }

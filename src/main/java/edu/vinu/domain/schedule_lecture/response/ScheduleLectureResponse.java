@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Builder
-public record ScheduleLectureResponse (
+public record ScheduleLectureResponse(
         Long id,
         Long chapterId,
         String topic,
@@ -33,5 +33,5 @@ public record ScheduleLectureResponse (
         ScheduleLectureStatus status,
         LocalDateTime createdDate,
         LocalDateTime lastModifiedDate
-){
+) {
 }

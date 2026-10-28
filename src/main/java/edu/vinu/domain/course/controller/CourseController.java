@@ -49,46 +49,46 @@ public class CourseController {
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping(value = "/create", consumes = {"multipart/form-data"})
-    public ResponseEntity<ApiResponse<Course>> createCourse(@RequestPart("course") @Valid CourseCreateRequest course, @RequestPart(value = "thumbnail",required = false)MultipartFile thumbnail){
-        return ResponseEntity.status(201).body(createApiResponse("Course created successfully", courseService.createCourse(course,thumbnail)));
+    public ResponseEntity<ApiResponse<Course>> createCourse(@RequestPart("course") @Valid CourseCreateRequest course, @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) {
+        return ResponseEntity.status(201).body(createApiResponse("Course created successfully", courseService.createCourse(course, thumbnail)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping(value = "/update/{courseId}", consumes = {"multipart/form-data"})
-    public ResponseEntity<ApiResponse<Course>> updateCourse(@PathVariable Long courseId,@Valid @RequestPart("course") CourseUpdateRequest updatedCourseDetails, @RequestPart(value = "thumbnail",required = false)MultipartFile thumbnail){
-        return ResponseEntity.status(200).body(createApiResponse("Course updated successfully", courseService.updateCourse(courseId, updatedCourseDetails, thumbnail) ));
+    public ResponseEntity<ApiResponse<Course>> updateCourse(@PathVariable Long courseId, @Valid @RequestPart("course") CourseUpdateRequest updatedCourseDetails, @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail) {
+        return ResponseEntity.status(200).body(createApiResponse("Course updated successfully", courseService.updateCourse(courseId, updatedCourseDetails, thumbnail)));
     }
 
     @PreAuthorize(("hasAuthority('institute')"))
     @DeleteMapping("/delete/{courseId}")
-    public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable Long courseId){
+    public ResponseEntity<ApiResponse<Void>> deleteCourse(@PathVariable Long courseId) {
         courseService.deleteCourse(courseId);
-        return ResponseEntity.status(200).body(createApiResponse("Course deleted successfully", null ));
+        return ResponseEntity.status(200).body(createApiResponse("Course deleted successfully", null));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/archive/{courseId}")
-    public ResponseEntity<ApiResponse<Course>> archiveCourse(@PathVariable Long courseId){
+    public ResponseEntity<ApiResponse<Course>> archiveCourse(@PathVariable Long courseId) {
         return ResponseEntity.status(200).body(createApiResponse("Course archived successfully", courseService.archiveCourse(courseId)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student')")
     @GetMapping("/get/{courseId}")
-    public ResponseEntity<ApiResponse<Course>> getCourseById(@PathVariable Long courseId){
-        return ResponseEntity.status(200).body(createApiResponse("Course Found!",courseService.getCourseById(courseId)));
+    public ResponseEntity<ApiResponse<Course>> getCourseById(@PathVariable Long courseId) {
+        return ResponseEntity.status(200).body(createApiResponse("Course Found!", courseService.getCourseById(courseId)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("/institute")
-    public ResponseEntity<PaginatedApiResponse<Course>> getPaginatedCoursesForCurrentInstitute(PaginationRequest pagination, CourseFilterRequest filters){
-        return ResponseEntity.ok(courseService.getPaginatedCoursesForCurrentInstitute(pagination ,filters));
+    public ResponseEntity<PaginatedApiResponse<Course>> getPaginatedCoursesForCurrentInstitute(PaginationRequest pagination, CourseFilterRequest filters) {
+        return ResponseEntity.ok(courseService.getPaginatedCoursesForCurrentInstitute(pagination, filters));
     }
 
     @GetMapping("/thumbnail/{filename:.+}")
     public ResponseEntity<byte[]> loadThumbnail(@PathVariable("filename") String filename) throws IOException {
         File thumbnail = courseService.loadThumbnail(filename);
 
-        if(!thumbnail.exists() || !thumbnail.isFile()){
+        if (!thumbnail.exists() || !thumbnail.isFile()) {
             return ResponseEntity.notFound().build();
         }
 
@@ -99,12 +99,12 @@ public class CourseController {
     }
 
     @GetMapping("institute/{instituteId}")
-    public ResponseEntity<ApiResponse<List<Course>>> getAllCoursesByInstituteId(@PathVariable Long instituteId,CourseFilterRequest filters){
-        return ResponseEntity.status(200).body(createApiResponse("Courses for the institute", courseService.getAllCoursesByInstituteId(instituteId,filters)));
+    public ResponseEntity<ApiResponse<List<Course>>> getAllCoursesByInstituteId(@PathVariable Long instituteId, CourseFilterRequest filters) {
+        return ResponseEntity.status(200).body(createApiResponse("Courses for the institute", courseService.getAllCoursesByInstituteId(instituteId, filters)));
     }
 
     @GetMapping("{courseId}/stats")
-    public ResponseEntity<ApiResponse<CourseStatsResponse>> getCourseStats(@PathVariable Long courseId){
+    public ResponseEntity<ApiResponse<CourseStatsResponse>> getCourseStats(@PathVariable Long courseId) {
         return ResponseEntity.ok(courseStatsService.getCourseStats(courseId));
     }
 

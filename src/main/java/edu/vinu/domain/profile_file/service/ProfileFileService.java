@@ -19,5 +19,6 @@ import java.io.File;
 
 public interface ProfileFileService {
     String uploadFile(MultipartFile file, String type);
+
     File loadFile(String type, String fileName);
 }

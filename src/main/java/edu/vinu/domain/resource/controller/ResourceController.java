@@ -41,35 +41,36 @@ public class ResourceController {
     public ResponseEntity<ApiResponse<ResourceInitResponse>> initializeUpload(@Valid @RequestBody ResourceInitRequest request) {
         return ResponseEntity.ok(createApiResponse("Upload initialized successfully", resourceService.initializeUpload(request)));
     }
+
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping("/upload/chunk")
     public ResponseEntity<ApiResponse<ResourceChunkUploadResponse>> uploadChunk(
             @RequestParam String uploadId,
             @RequestParam Integer chunkIndex,
             @RequestParam MultipartFile file
-    ){
-        return ResponseEntity.ok(createApiResponse("Chunk uploaded successfully", resourceService.uploadChunk(uploadId,chunkIndex, file)));
+    ) {
+        return ResponseEntity.ok(createApiResponse("Chunk uploaded successfully", resourceService.uploadChunk(uploadId, chunkIndex, file)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping("/upload/complete/{uploadId}")
-    public ResponseEntity<ApiResponse<ResourceResponse>> completeUpload(@PathVariable("uploadId") String uploadId){
-        return ResponseEntity.ok(createApiResponse("Upload completed successfully",resourceService.completeUpload(uploadId)));
+    public ResponseEntity<ApiResponse<ResourceResponse>> completeUpload(@PathVariable("uploadId") String uploadId) {
+        return ResponseEntity.ok(createApiResponse("Upload completed successfully", resourceService.completeUpload(uploadId)));
     }
 
     @GetMapping("/view/{fileName:.+}")
-    public ResponseEntity<ResourceRegion> viewResource(@PathVariable String fileName, @RequestHeader(value = "Range", required = false) String range){
-        return resourceService.viewResource(fileName,range);
+    public ResponseEntity<ResourceRegion> viewResource(@PathVariable String fileName, @RequestHeader(value = "Range", required = false) String range) {
+        return resourceService.viewResource(fileName, range);
     }
 
     @GetMapping("/download/{fileName:.+}")
-    public ResponseEntity<Resource> downloadResource(@PathVariable String fileName){
+    public ResponseEntity<Resource> downloadResource(@PathVariable String fileName) {
         return resourceService.downloadFile(fileName);
     }
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @DeleteMapping("/{resourceId}")
-    public ResponseEntity<ApiResponse<Void>> deleteResource(@PathVariable Long resourceId){
+    public ResponseEntity<ApiResponse<Void>> deleteResource(@PathVariable Long resourceId) {
         resourceService.deleteResource(resourceId);
         return ResponseEntity.ok(createApiResponse("Resource deleted successfully", null));
     }

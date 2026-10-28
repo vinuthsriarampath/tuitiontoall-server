@@ -19,10 +19,16 @@ import java.time.LocalDateTime;
 
 public interface NonGradedSubmissionProjection {
     Long getSubmissionId();
+
     Long getStudentId();
+
     String getStudentName();
+
     Long getAssignmentId();
+
     AssignmentSubmitStatus getStatus();
+
     int getAttemptNo();
+
     LocalDateTime getSubmittedAt();
 }

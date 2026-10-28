@@ -13,5 +13,5 @@
 
 package edu.vinu.domain.batch.events;
 
-public record BatchUpdateEvent (Long instituteId) {
+public record BatchUpdateEvent(Long instituteId) {
 }

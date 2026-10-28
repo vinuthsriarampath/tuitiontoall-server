@@ -34,13 +34,13 @@ public class ScheduleLectureController {
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping
-    public ResponseEntity<ApiResponse<ScheduleLectureResponse>> scheduleLecture(@Valid @RequestBody ScheduleLectureCreateRequest request){
-        return ResponseEntity.ok(createApiResponse("Lecture Scheduled Successfully!",scheduleLectureService.scheduleLecture(request)));
+    public ResponseEntity<ApiResponse<ScheduleLectureResponse>> scheduleLecture(@Valid @RequestBody ScheduleLectureCreateRequest request) {
+        return ResponseEntity.ok(createApiResponse("Lecture Scheduled Successfully!", scheduleLectureService.scheduleLecture(request)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<ScheduleLectureResponse>> updateScheduleLecture(@PathVariable Long id, @Valid @RequestBody ScheduleLectureUpdateRequest request) {
-        return ResponseEntity.ok(createApiResponse("Lecture Updated Successfully!", scheduleLectureService.updateScheduleLecture(id , request)));
+        return ResponseEntity.ok(createApiResponse("Lecture Updated Successfully!", scheduleLectureService.updateScheduleLecture(id, request)));
     }
 }

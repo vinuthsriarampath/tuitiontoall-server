@@ -48,7 +48,7 @@ public class InstituteDashboardKpiServiceImpl implements InstituteDashboardKpiSe
     private final PeriodService periodService;
 
     @Override
-    public DashboardKpi buildStudentKpi(Long instituteId){
+    public DashboardKpi buildStudentKpi(Long instituteId) {
 
         ReportingPeriodRange periodRange = periodService.getRange(ReportingPeriod.CURRENT_MONTH);
 
@@ -71,7 +71,7 @@ public class InstituteDashboardKpiServiceImpl implements InstituteDashboardKpiSe
     }
 
     @Override
-    public DashboardKpi buildCourseKpi(Long instituteId){
+    public DashboardKpi buildCourseKpi(Long instituteId) {
         ReportingPeriodRange periodRange = periodService.getRange(ReportingPeriod.CURRENT_MONTH);
 
         BigDecimal totalPublishedCourses = courseStatsService.countCoursesByStatusAndInstituteId(instituteId, CourseStatus.PUBLISHED);
@@ -93,7 +93,7 @@ public class InstituteDashboardKpiServiceImpl implements InstituteDashboardKpiSe
     }
 
     @Override
-    public DashboardKpi buildBatchKpi(Long instituteId){
+    public DashboardKpi buildBatchKpi(Long instituteId) {
         ReportingPeriodRange periodRange = periodService.getRange(ReportingPeriod.CURRENT_MONTH);
 
         BigDecimal totalBatches = batchStatService.countBatchesByInstituteAndBatchStatus(instituteId, BatchStatus.ONGOING);
@@ -115,7 +115,7 @@ public class InstituteDashboardKpiServiceImpl implements InstituteDashboardKpiSe
     }
 
     @Override
-    public DashboardKpi buildTeacherKpi(Long instituteId){
+    public DashboardKpi buildTeacherKpi(Long instituteId) {
         ReportingPeriodRange periodRange = periodService.getRange(ReportingPeriod.CURRENT_MONTH);
 
         BigDecimal totalTeachers = instituteTeacherStatService.countInstituteTeachersByInstituteAndStatus(instituteId, InstituteTeacherStatus.ACTIVE);
@@ -137,7 +137,7 @@ public class InstituteDashboardKpiServiceImpl implements InstituteDashboardKpiSe
     }
 
     @Override
-    public DashboardKpi buildRevenueKpi(Long instituteId){
+    public DashboardKpi buildRevenueKpi(Long instituteId) {
         ReportingPeriodRange periodRange = periodService.getRange(ReportingPeriod.CURRENT_MONTH);
 
         BigDecimal totalRevenue = paymentStatService.sumPaymentsByInstituteIdAndPaymentStatus(instituteId, PaymentStatus.PAID);

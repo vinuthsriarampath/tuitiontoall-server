@@ -19,15 +19,26 @@ import java.time.LocalDateTime;
 
 public interface AssignmentSubmissionDetailedProjection {
     Long getSubmissionId();
+
     Long getStudentId();
+
     String getFirstName();
+
     String getLastName();
+
     Long getAssignmentId();
+
     String getUrl();
+
     String getGrade();
+
     int getMarksGained();
+
     AssignmentSubmitStatus getStatus();
+
     int getAttemptNo();
+
     LocalDateTime getSubmittedAt();
+
     LocalDateTime getLastModifiedDate();
 }

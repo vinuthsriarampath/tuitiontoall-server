@@ -57,7 +57,7 @@ public class FeedbackServiceImpl implements FeedbackService {
         UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
         CourseEntity courseEntity = courseService.getCourseEntityById(request.courseId());
 
-        if(feedbackRepository.countUserFeedbacksByCourseId(courseEntity.getId(), userEntity.getId()) > 0) {
+        if (feedbackRepository.countUserFeedbacksByCourseId(courseEntity.getId(), userEntity.getId()) > 0) {
             throw new BadRequestException("User has already given a feedback for this course");
         }
 
@@ -75,7 +75,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public PaginatedApiResponse<FeedbackResponse> getFeedbacksByCourse(Long courseId, PaginationRequest pagination) {
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));
-        Page<FeedbackResponse> pageData = feedbackRepository.getFeedbacksByCourse(courseId,pageable).map(FeedbackMapper::toFeedbackResponse);
+        Page<FeedbackResponse> pageData = feedbackRepository.getFeedbacksByCourse(courseId, pageable).map(FeedbackMapper::toFeedbackResponse);
 
         return PaginatedApiResponse.<FeedbackResponse>builder()
                 .message("Feedbacks fetched successfully")
@@ -101,7 +101,7 @@ public class FeedbackServiceImpl implements FeedbackService {
                     .build();
         }
 
-        if(!userEntity.getRole().getRole().equals("student")){
+        if (!userEntity.getRole().getRole().equals("student")) {
             return FeedbackEligibilityResponse.builder()
                     .canFeedback(false)
                     .reason(FeedbackEligibilityReason.NOT_STUDENT)
@@ -115,7 +115,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         }
 
-        if(feedbackRepository.countUserFeedbacksByCourseId(courseEntity.getId(), userEntity.getId()) > 0) {
+        if (feedbackRepository.countUserFeedbacksByCourseId(courseEntity.getId(), userEntity.getId()) > 0) {
             return FeedbackEligibilityResponse.builder()
                     .canFeedback(false)
                     .reason(FeedbackEligibilityReason.ALREADY_SUBMITTED)

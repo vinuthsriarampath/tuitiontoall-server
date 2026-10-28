@@ -55,11 +55,11 @@ public class UserFollowServiceImpl implements UserFollowService {
         UserEntity followerUser = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
         UserEntity followingUser = userService.getUserEntityById(followingId);
 
-        if(followerUser.getId().equals(followingUser.getId())) {
+        if (followerUser.getId().equals(followingUser.getId())) {
             throw new BadRequestException("You cannot follow yourself");
         }
 
-        if(userFollowRepository.existsByFollowerIdAndFollowingId(followerUser.getId(), followingUser.getId()) > 0) {
+        if (userFollowRepository.existsByFollowerIdAndFollowingId(followerUser.getId(), followingUser.getId()) > 0) {
             throw new BadRequestException("You are already following this user");
         }
 
@@ -98,7 +98,7 @@ public class UserFollowServiceImpl implements UserFollowService {
 
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("followed_on")));
 
-        Page<UserBasicResponse> page =userFollowRepository.getFollowersByFollowingId(
+        Page<UserBasicResponse> page = userFollowRepository.getFollowersByFollowingId(
                 userEntity.getId(),
                 filters.id(),
                 filters.displayName(),
@@ -125,7 +125,7 @@ public class UserFollowServiceImpl implements UserFollowService {
 
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("followed_on")));
 
-        Page<UserBasicResponse> page =userFollowRepository.getFollowingsByFollowerId(
+        Page<UserBasicResponse> page = userFollowRepository.getFollowingsByFollowerId(
                 userEntity.getId(),
                 filters.id(),
                 filters.displayName(),

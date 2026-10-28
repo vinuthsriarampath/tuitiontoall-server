@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Builder
-public record CourseTeachingResponse (
+public record CourseTeachingResponse(
         Long id,
         String title,
         String description,
@@ -37,5 +37,5 @@ public record CourseTeachingResponse (
         Integer totalRatings,
 
         List<BatchBasicResponse> assignedBatches
-){
+) {
 }

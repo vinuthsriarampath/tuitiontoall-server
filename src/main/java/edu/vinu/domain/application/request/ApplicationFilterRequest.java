@@ -16,7 +16,7 @@ package edu.vinu.domain.application.request;
 import edu.vinu.domain.application.enums.ApplicationStatus;
 
 public record ApplicationFilterRequest(
-    String teacherName,
-    ApplicationStatus status
+        String teacherName,
+        ApplicationStatus status
 ) {
 }

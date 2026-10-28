@@ -29,6 +29,7 @@ public class StudentStatServiceImpl implements StudentStatService {
     private final EnrollmentStatService enrollmentStatService;
     private final AssignmentStatService assignmentStatService;
     private final GradingService gradingService;
+
     @Override
     public DashboardStats getTotalEnrollmentsStats(Long studentId) {
         return DashboardStats.builder()

@@ -18,7 +18,7 @@ import edu.vinu.domain.resource.response.ResourceResponse;
 
 public class ResourceMapper {
 
-    public static ResourceResponse toResourceResponse(ResourceEntity entity){
+    public static ResourceResponse toResourceResponse(ResourceEntity entity) {
         return ResourceResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())

@@ -18,8 +18,12 @@ import edu.vinu.domain.batch.enums.BatchStatus;
 
 public interface TeacherStatsService {
     DashboardStats getAssignedBatchesCount(Long teacherId);
+
     DashboardStats getAssignedBatchesCount(Long teacherId, BatchStatus batchStatus);
+
     DashboardStats getAssignedModulesCount(Long teacherId);
+
     DashboardStats getAssignedModulesCount(Long teacherId, BatchStatus batchStatus);
+
     DashboardStats getPendingEvaluationCount(Long teacherId);
 }

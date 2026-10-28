@@ -22,11 +22,11 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 public class GradingRangeValidator {
-    public static void validate(List<? extends GradingRangeRequest> ranges, Integer totalMarks){
+    public static void validate(List<? extends GradingRangeRequest> ranges, Integer totalMarks) {
         ArrayList<FieldError> errors = new ArrayList<>();
         Set<String> grades = new HashSet<>();
 
-        if(ranges == null || ranges.isEmpty()){
+        if (ranges == null || ranges.isEmpty()) {
             throw new InvalidInputException("At least one grading range is required!");
         }
 
@@ -39,19 +39,19 @@ public class GradingRangeValidator {
                         .toList();
 
         IndexedGradingRange first = sortedRanges.get(0);
-        IndexedGradingRange last = sortedRanges.get(sortedRanges.size()-1);
+        IndexedGradingRange last = sortedRanges.get(sortedRanges.size() - 1);
 
-        if(first.range().minMarks() != 0){
+        if (first.range().minMarks() != 0) {
             errors.add(new FieldError(
-                    "gradingRanges["+first.originalIndex()+"].minMarks",
+                    "gradingRanges[" + first.originalIndex() + "].minMarks",
                     "Minimum mark of the first grading range should be 0!"
             ));
         }
 
-        if(!last.range().maxMarks().equals(totalMarks)){
+        if (!last.range().maxMarks().equals(totalMarks)) {
             errors.add(new FieldError(
-                    "gradingRanges["+last.originalIndex()+"].maxMarks",
-                    "Maximum mark of the last grading range should be "+totalMarks+"!"
+                    "gradingRanges[" + last.originalIndex() + "].maxMarks",
+                    "Maximum mark of the last grading range should be " + totalMarks + "!"
             ));
         }
 
@@ -74,7 +74,7 @@ public class GradingRangeValidator {
                 ));
             }
 
-            if(!grades.add(currentGradingRange.desiredGrade())){
+            if (!grades.add(currentGradingRange.desiredGrade())) {
                 errors.add(new FieldError(
                         "gradingRanges[" + currentIndexedGradingRange.originalIndex() + "].desiredGrade",
                         "Cannot have duplicated grades!"
@@ -91,7 +91,7 @@ public class GradingRangeValidator {
                     ));
                 }
 
-                if(currentGradingRange.minMarks()-previousIndexedGradingRange.range().maxMarks() > 1){
+                if (currentGradingRange.minMarks() - previousIndexedGradingRange.range().maxMarks() > 1) {
                     errors.add(new FieldError(
                             "gradingRanges[" + currentIndexedGradingRange.originalIndex() + "].minMarks",
                             "There is a gap between previous max marks and current min marks!"

@@ -18,7 +18,7 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record PostCommentDetailedResponse (
+public record PostCommentDetailedResponse(
         Long id,
         Long userId,
         String displayName,
@@ -27,5 +27,5 @@ public record PostCommentDetailedResponse (
         String message,
         LocalDateTime createdDate,
         LocalDateTime updatedDate
-){
+) {
 }

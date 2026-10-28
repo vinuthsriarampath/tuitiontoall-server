@@ -23,14 +23,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface InstituteRepository extends JpaRepository<InstituteEntity,Long> {
+public interface InstituteRepository extends JpaRepository<InstituteEntity, Long> {
 
-    @Query(value = "SELECT i.* FROM institute i JOIN users u ON i.user_id = u.id WHERE u.is_disabled = false",nativeQuery = true)
+    @Query(value = "SELECT i.* FROM institute i JOIN users u ON i.user_id = u.id WHERE u.is_disabled = false", nativeQuery = true)
     List<InstituteEntity> getAllInstitutes();
 
-    @Query(value = "SELECT i.* FROM institute i join users u on i.user_id = u.id WHERE LOWER(i.institute_name) LIKE LOWER(CONCAT('%', :instituteName, '%')) AND u.is_disabled = false",nativeQuery = true)
+    @Query(value = "SELECT i.* FROM institute i join users u on i.user_id = u.id WHERE LOWER(i.institute_name) LIKE LOWER(CONCAT('%', :instituteName, '%')) AND u.is_disabled = false", nativeQuery = true)
     List<InstituteEntity> findByInstituteName(@Param("instituteName") String instituteName);
 
-    @Query(value = "SELECT i.* FROM institute i JOIN users u on u.id = i.user_id WHERE U.email = :email AND u.is_disabled = false",nativeQuery = true)
+    @Query(value = "SELECT i.* FROM institute i JOIN users u on u.id = i.user_id WHERE U.email = :email AND u.is_disabled = false", nativeQuery = true)
     Optional<InstituteEntity> findInstituteByEmail(@Param("email") String email);
 }

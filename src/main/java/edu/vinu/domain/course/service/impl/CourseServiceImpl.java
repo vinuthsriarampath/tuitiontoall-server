@@ -162,15 +162,15 @@ public class CourseServiceImpl implements CourseService {
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));
 
         Page<Course> page = courseRepository.findAllByInstituteIdWithFilters(
-                        institute.getId(),
-                        filters.title(),
-                        filters.category() != null ? filters.category().name() : null,
-                        filters.level() != null ? filters.level().name() : null,
-                        filters.language() != null ? filters.language().name() : null,
-                        filters.mode() != null ? filters.mode().name() : null,
-                        filters.status() != null ? filters.status().name() : null,
-                        pageable
-                ).map(courseEntity -> mapper.map(courseEntity, Course.class));
+                institute.getId(),
+                filters.title(),
+                filters.category() != null ? filters.category().name() : null,
+                filters.level() != null ? filters.level().name() : null,
+                filters.language() != null ? filters.language().name() : null,
+                filters.mode() != null ? filters.mode().name() : null,
+                filters.status() != null ? filters.status().name() : null,
+                pageable
+        ).map(courseEntity -> mapper.map(courseEntity, Course.class));
 
         return PaginatedApiResponse.<Course>builder()
                 .message("Courses retrieved successfully")
@@ -193,20 +193,20 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> getAllCoursesByInstituteId(Long instituteId, CourseFilterRequest filters) {
 
         return courseRepository.findAllByInstituteIdWithFilters(
-                instituteId,
+                        instituteId,
                         filters.title(),
                         filters.category() != null ? filters.category().name() : null,
                         filters.level() != null ? filters.level().name() : null,
                         filters.language() != null ? filters.language().name() : null,
                         filters.mode() != null ? filters.mode().name() : null,
                         filters.status() != null ? filters.status().name() : null
-        ).stream()
+                ).stream()
                 .map(courseEntity -> mapper.map(courseEntity, Course.class))
                 .toList();
     }
 
     @Override
-    public Boolean isCourseOwner(CourseEntity courseEntity){
+    public Boolean isCourseOwner(CourseEntity courseEntity) {
         return courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 

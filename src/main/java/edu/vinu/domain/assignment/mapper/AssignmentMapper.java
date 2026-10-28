@@ -78,7 +78,7 @@ public class AssignmentMapper {
                 .build();
     }
 
-    public static AssignmentCreateRequest toAssignmentCreateRequest(ModuleAssignmentCreateRequest request){
+    public static AssignmentCreateRequest toAssignmentCreateRequest(ModuleAssignmentCreateRequest request) {
         return AssignmentCreateRequest.builder()
                 .topic(request.topic())
                 .description(request.description())
@@ -94,7 +94,7 @@ public class AssignmentMapper {
                 .build();
     }
 
-    public static UpcomingAssignmentResponse toUpcomingAssignmentResponse(UpcomingAssignmentProjection p){
+    public static UpcomingAssignmentResponse toUpcomingAssignmentResponse(UpcomingAssignmentProjection p) {
         return UpcomingAssignmentResponse.builder()
                 .assignmentType(p.getAssignmentType())
                 .assignmentId(p.getAssignmentId())

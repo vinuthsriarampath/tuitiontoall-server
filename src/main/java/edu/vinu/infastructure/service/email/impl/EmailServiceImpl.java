@@ -44,10 +44,10 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendEmail(String to, String subject, String templateName, Map<String, Object> templateVariables) throws MessagingException {
-        Context context =  new Context();
+        Context context = new Context();
         context.setVariables(templateVariables);
 
-        String htmlContent = templateEngine.process(templateName,context);
+        String htmlContent = templateEngine.process(templateName, context);
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -57,25 +57,25 @@ public class EmailServiceImpl implements EmailService {
         helper.setSubject(subject);
         helper.setText(htmlContent, true);
 
-        try{
+        try {
             javaMailSender.send(message);
             log.info("Email sent to {}", to);
-        }catch (MailException ex){
-            log.error("Failed to send email",ex);
+        } catch (MailException ex) {
+            log.error("Failed to send email", ex);
         }
 
     }
 
     @Override
     public void SendRegistrationSuccessEmail(String email, String name, String role) {
-        try{
+        try {
 
             Map<String, Object> templateVariables = new HashMap<>();
-            templateVariables.put("name",name);
+            templateVariables.put("name", name);
             templateVariables.put("role", role);
 
-            sendEmail(email,"Welcome To TuitionToAll","registration-success",templateVariables);
-        }catch (MessagingException ex){
+            sendEmail(email, "Welcome To TuitionToAll", "registration-success", templateVariables);
+        } catch (MessagingException ex) {
             log.error("Error sending registration success email to {}: {}", email, ex.getMessage());
             throw new RuntimeException("Failed to send registration success email", ex);
         }
@@ -84,7 +84,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void SendPasswordResetEmail(String email, String name, String Link) {
         try {
-            Map<String,Object> templateVariables = new HashMap<>();
+            Map<String, Object> templateVariables = new HashMap<>();
             templateVariables.put("name", name);
             templateVariables.put("link", Link);
 
@@ -97,13 +97,13 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void SendApplicationSuccessEmail(String email, String name, String link) {
-        try{
-            Map<String,Object> templateVariables = new HashMap<>();
+        try {
+            Map<String, Object> templateVariables = new HashMap<>();
             templateVariables.put("name", name);
             templateVariables.put("link", link);
 
-            sendEmail(email, "Application Submitted",  "application-success", templateVariables);
-        }catch (Exception ex){
+            sendEmail(email, "Application Submitted", "application-success", templateVariables);
+        } catch (Exception ex) {
             log.error("Error sending application success email to {}: {}", email, ex.getMessage());
             throw new RuntimeException("Failed to send application success email", ex);
         }

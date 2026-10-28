@@ -23,13 +23,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TeacherRepository extends JpaRepository<TeacherEntity,Long> {
-    @Query(value = "SELECT t.* FROM teacher t JOIN users u ON u.id = t.user_id WHERE u.is_disabled = false",nativeQuery = true)
+public interface TeacherRepository extends JpaRepository<TeacherEntity, Long> {
+    @Query(value = "SELECT t.* FROM teacher t JOIN users u ON u.id = t.user_id WHERE u.is_disabled = false", nativeQuery = true)
     List<TeacherEntity> getAllTeachers();
 
-    @Query(value = "SELECT t.* FROM teacher t JOIN users u ON u.id = t.user_id WHERE LOWER(t.first_name) LIKE LOWER(CONCAT(:firstName, '%')) AND u.is_disabled = false",nativeQuery = true)
+    @Query(value = "SELECT t.* FROM teacher t JOIN users u ON u.id = t.user_id WHERE LOWER(t.first_name) LIKE LOWER(CONCAT(:firstName, '%')) AND u.is_disabled = false", nativeQuery = true)
     List<TeacherEntity> getTeachersByFirstNameLike(@Param("firstName") String firstName);
 
-    @Query(value = "SELECT t.* FROM teacher t JOIN users u ON u.id = t.user_id WHERE u.email = :email AND u.is_disabled = false",nativeQuery = true)
+    @Query(value = "SELECT t.* FROM teacher t JOIN users u ON u.id = t.user_id WHERE u.email = :email AND u.is_disabled = false", nativeQuery = true)
     Optional<TeacherEntity> findTeacherByEmail(@Param("email") String email);
 }

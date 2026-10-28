@@ -114,7 +114,7 @@ public class GradingRangeServiceImpl implements GradingRangeService {
                     .map(GradingRangeMapper::toGradingRageResponse)
                     .toList();
 
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new InvalidInputException("Grading range with the same minMarks and maxMarks already exists for this assignment!");
         } catch (Exception e) {
             throw new InternalServerErrorException(e.getMessage());

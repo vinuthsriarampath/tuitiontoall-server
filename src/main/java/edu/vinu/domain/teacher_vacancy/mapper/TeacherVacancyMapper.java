@@ -17,7 +17,7 @@ import edu.vinu.domain.teacher_vacancy.dto.TeacherVacancy;
 import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
 
 public class TeacherVacancyMapper {
-    public static TeacherVacancy toTeacherVacancy(TeacherVacancyEntity e){
+    public static TeacherVacancy toTeacherVacancy(TeacherVacancyEntity e) {
         return TeacherVacancy.builder()
                 .id(e.getId())
                 .title(e.getTitle())

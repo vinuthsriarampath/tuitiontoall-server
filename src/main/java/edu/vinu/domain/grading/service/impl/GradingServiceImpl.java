@@ -54,7 +54,7 @@ public class GradingServiceImpl implements GradingService {
     public ApiResponse<SubmissionGradedResponse> gradeSubmission(Long submissionId, GradingSubmissionRequest request) {
         StudentAssignmentSubmit submission = assignmentSubmitService.getSubmissionEntityById(submissionId);
 
-        if(submission.getGrade() != null || submission.getStatus() == AssignmentSubmitStatus.GRADED){
+        if (submission.getGrade() != null || submission.getStatus() == AssignmentSubmitStatus.GRADED) {
             throw new BadRequestException("Submission has already been graded.");
         }
 
@@ -83,7 +83,7 @@ public class GradingServiceImpl implements GradingService {
             }
         }
 
-        if(receivedGrade == null){
+        if (receivedGrade == null) {
             throw new NotFoundException("No grading range found for the provided marks gained: " + request.marksGained());
         }
 
@@ -102,9 +102,9 @@ public class GradingServiceImpl implements GradingService {
 
         GradingEligibilityResponse response;
 
-        if(submission.getGrade() != null || submission.getStatus() == AssignmentSubmitStatus.GRADED){
+        if (submission.getGrade() != null || submission.getStatus() == AssignmentSubmitStatus.GRADED) {
             response = new GradingEligibilityResponse(false, GradingEligibilityReason.ALREADY_GRADED);
-        }else{
+        } else {
             response = new GradingEligibilityResponse(true, GradingEligibilityReason.ELIGIBLE);
         }
 
@@ -118,12 +118,12 @@ public class GradingServiceImpl implements GradingService {
 
     @Override
     public List<RecentResultsResponse> getRecent5Results(Long studentId) {
-        return assignmentSubmitRepository.getRecentResultsByStudent(studentId,5).stream().map(AssignmentSubmissionMapper::toRecentResultsResponse).toList();
+        return assignmentSubmitRepository.getRecentResultsByStudent(studentId, 5).stream().map(AssignmentSubmissionMapper::toRecentResultsResponse).toList();
     }
 
     private void validateMarksGained(int marksGained, int totalMarks) {
         if (marksGained < 0 || marksGained > totalMarks) {
-            throw new InvalidInputException("marksGained","Marks gained must be between 0 and " + totalMarks);
+            throw new InvalidInputException("marksGained", "Marks gained must be between 0 and " + totalMarks);
         }
     }
 }

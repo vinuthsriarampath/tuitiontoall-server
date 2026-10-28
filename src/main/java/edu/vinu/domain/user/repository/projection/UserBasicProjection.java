@@ -15,9 +15,14 @@ package edu.vinu.domain.user.repository.projection;
 
 public interface UserBasicProjection {
     Long getId();
+
     String getDisplayName();
+
     String getEmail();
+
     String getDp();
+
     String getUserSlug();
+
     String getRole();
 }

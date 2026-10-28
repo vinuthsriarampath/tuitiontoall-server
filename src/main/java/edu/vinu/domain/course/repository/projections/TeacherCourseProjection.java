@@ -26,30 +26,52 @@ import java.time.LocalTime;
 public interface TeacherCourseProjection {
 
     Long getCourseId();
+
     String getCourseTitle();
+
     String getCourseDescription();
+
     CourseCategory getCourseCategory();
+
     CourseStatus getCourseStatus();
+
     CourseLanguage getCourseLanguage();
+
     CourseLevel getCourseLevel();
+
     CourseMode getCourseMode();
+
     String getCourseThumbnail();
+
     Integer getCourseDurationInHours();
+
     BigDecimal getCourseAvgRating();
+
     Integer getCourseTotalRatings();
 
     Long getBatchId();
+
     String getBatchName();
+
     BatchStatus getBatchStatus();
+
     BatchEnrollmentStatus getBatchEnrollmentStatus();
+
     LocalDate getBatchStartDate();
+
     LocalTime getBatchStartTime();
+
     LocalDateTime getBatchCreatedDate();
+
     LocalDateTime getBatchLastModifiedDate();
 
     Long getModuleId();
+
     String getModuleName();
+
     ModuleStatus getModuleStatus();
+
     LocalDateTime getModuleCreatedDate();
+
     LocalDateTime getModuleLastModifiedDate();
 }

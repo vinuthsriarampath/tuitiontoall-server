@@ -49,14 +49,14 @@ public class UserPostServiceImpl implements UserPostService {
     public PaginatedApiResponse<UserPostResponse> getMyPosts(PaginationRequest pagination, MyPostsFilterRequests filters) {
         UserEntity currentUser = userService.getCurrentUser();
 
-        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(),SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("published_date")));
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("published_date")));
 
         Page<UserPostResponse> postsPage = postRepository.findAllByOwner(
                 currentUser.getId(),
                 filters.status() != null ? filters.status().name() : null,
                 filters.visibility() != null ? filters.visibility().name() : null,
                 pageable
-        ).map(post -> PostMapper.toUserPostResponse(post,postMediaService.getPostMediaByPostId(post.getId())));
+        ).map(post -> PostMapper.toUserPostResponse(post, postMediaService.getPostMediaByPostId(post.getId())));
 
         return PaginatedApiResponse.<UserPostResponse>builder()
                 .message("Fetched my posts successfully")
@@ -78,7 +78,7 @@ public class UserPostServiceImpl implements UserPostService {
         Page<UserPostResponse> postsPage = Page.empty(pageable);
         if (currentUser != null && !currentUser.getId().equals(targetUserId)) {
             boolean isFollowing = userFollowRepository.isFollowing(targetUserId, currentUser.getId()) > 0;
-            postsPage = postRepository.findTargetUserPosts(targetUserId,currentUser.getId(), isFollowing, pageable).map(post -> PostMapper.toUserPostResponse(post,postMediaService.getPostMediaByPostId(post.getId())));
+            postsPage = postRepository.findTargetUserPosts(targetUserId, currentUser.getId(), isFollowing, pageable).map(post -> PostMapper.toUserPostResponse(post, postMediaService.getPostMediaByPostId(post.getId())));
         } else if (currentUser != null) {
             return getMyPosts(pagination, new MyPostsFilterRequests(null, null));
         }

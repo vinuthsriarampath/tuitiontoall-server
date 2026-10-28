@@ -18,22 +18,30 @@ import edu.vinu.domain.institute.enums.InstituteTeacherStatus;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public interface InstituteTeacherProjection{
+public interface InstituteTeacherProjection {
     Long getId();
+
     InstituteTeacherStatus getStatus();
 
     Long getInstituteId();
 
     Long getUserId();
+
     String getEmail();
+
     String getContact();
+
     String getDp();
+
     String getAddress();
 
     String getFirstName();
+
     String getLastName();
+
     LocalDate getDob();
 
     LocalDateTime getJoinedDate();
+
     LocalDateTime getLastModifiedDate();
 }

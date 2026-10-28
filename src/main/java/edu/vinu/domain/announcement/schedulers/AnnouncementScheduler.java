@@ -30,11 +30,11 @@ public class AnnouncementScheduler {
     private final AnnouncementRepository announcementRepository;
 
     @Scheduled(cron = "0 */5 * * * *", zone = "Asia/Colombo")
-    private void expiredAnnouncementForTheTime(){
+    private void expiredAnnouncementForTheTime() {
         int updated = announcementRepository.expireAnnouncementsByExpireAt(
                 AnnouncementStatus.EXPIRED.name(),
                 AnnouncementStatus.PUBLISHED.name()
         );
-        log.atInfo().log("{} Announcements got EXPIRED! at {}",updated, LocalDateTime.now());
+        log.atInfo().log("{} Announcements got EXPIRED! at {}", updated, LocalDateTime.now());
     }
 }

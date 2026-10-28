@@ -37,18 +37,18 @@ public class ModuleAssignmentEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "module_id",nullable = false)
+    @JoinColumn(name = "module_id", nullable = false)
     private ModuleEntity module;
 
     @OneToOne
-    @JoinColumn(name = "assignment_id",unique = true, nullable = false)
+    @JoinColumn(name = "assignment_id", unique = true, nullable = false)
     private AssignmentEntity assignment;
 
     @CreationTimestamp
-    @Column(name = "created_date",nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    @Column(name = "last_modified_date",insertable = false)
+    @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime lastModifiedDate;
 }

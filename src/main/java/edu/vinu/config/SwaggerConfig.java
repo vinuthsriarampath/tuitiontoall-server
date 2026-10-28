@@ -24,7 +24,7 @@ import org.springframework.context.annotation.Configuration;
 @SuppressWarnings("unused")
 public class SwaggerConfig {
     @Bean
-    public OpenAPI customApiConfig(){
+    public OpenAPI customApiConfig() {
         return new OpenAPI()
                 .info(new Info()
                         .title("TuitionToAll API")

@@ -33,26 +33,26 @@ public class InstituteDashboardCourseKpiListener {
     private final InstituteDashboardKpiService kpiService;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handle(CourseCreatedEvent event){
+    public void handle(CourseCreatedEvent event) {
         updateCourseMetrics(event.course().getInstitute().getId());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handle(CourseUpdatedEvent event){
+    public void handle(CourseUpdatedEvent event) {
         updateCourseMetrics(event.instituteId());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handle(CourseDeletedEvent event){
+    public void handle(CourseDeletedEvent event) {
         updateCourseMetrics(event.instituteId());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handle(CourseArchivedEvent event){
+    public void handle(CourseArchivedEvent event) {
         updateCourseMetrics(event.instituteId());
     }
 
-    private void updateCourseMetrics(Long instituteId){
+    private void updateCourseMetrics(Long instituteId) {
         instituteDashboardWebSocketService.updateCourseMetrics(
                 instituteId,
                 CourseMetricsUpdatedResponse.builder()

@@ -50,7 +50,7 @@ public class LectureRecordUploadEntity {
     @JoinColumn(name = "chapter_id", nullable = false)
     private ChapterEntity chapter;
 
-    @Column(nullable = false,name = "original_file_name")
+    @Column(nullable = false, name = "original_file_name")
     private String originalFileName;
 
     @Column(nullable = false, name = "total_size")
@@ -59,7 +59,7 @@ public class LectureRecordUploadEntity {
     @Column(nullable = false, name = "total_chunks")
     private Integer totalChunks;
 
-    @Column(nullable = false,name = "uploaded_chunks")
+    @Column(nullable = false, name = "uploaded_chunks")
     private Integer uploadedChunks;
 
     @Column(nullable = false, name = "completed")
@@ -74,6 +74,6 @@ public class LectureRecordUploadEntity {
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    @Column(name = "last_modified_date",insertable = false)
+    @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime lastModifiedDate;
 }

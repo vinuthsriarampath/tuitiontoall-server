@@ -37,4 +37,5 @@ public record CourseLearningResponse(
         CurrentEnrollmentResponse currentEnrollment,
 
         boolean enrollmentHistoryAvailable
-) { }
+) {
+}

@@ -45,25 +45,25 @@ public class InstituteController {
 
     @GetMapping("/{instituteId}/vacancies")
     public ResponseEntity<ApiResponse<List<TeacherVacancy>>> getVacanciesByStatusAndInstituteId(@PathVariable(name = "instituteId") Long instituteId, @RequestParam(defaultValue = "OPEN") String status) {
-        return ResponseEntity.status(200).body(createApiResponse("All Vacancies By provided status",vacancyService.getAllByInstituteIdAndStatus(instituteId,status)));
+        return ResponseEntity.status(200).body(createApiResponse("All Vacancies By provided status", vacancyService.getAllByInstituteIdAndStatus(instituteId, status)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/me")
-    public ResponseEntity<ApiResponse<Institute>> updateInstituteDetails(@Valid @RequestBody InstituteDetailsUpdateRequest instituteDetailsUpdateRequest){
-        Institute updateInstituteDetails = instituteService.updateInstituteDetails(SecurityContextHolder.getContext().getAuthentication().getName(),instituteDetailsUpdateRequest);
-        return ResponseEntity.status(OK).body(createApiResponse("Profile Updated",updateInstituteDetails));
+    public ResponseEntity<ApiResponse<Institute>> updateInstituteDetails(@Valid @RequestBody InstituteDetailsUpdateRequest instituteDetailsUpdateRequest) {
+        Institute updateInstituteDetails = instituteService.updateInstituteDetails(SecurityContextHolder.getContext().getAuthentication().getName(), instituteDetailsUpdateRequest);
+        return ResponseEntity.status(OK).body(createApiResponse("Profile Updated", updateInstituteDetails));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("validate/role")
-    public ResponseEntity<ApiResponse<Void>> validateInstituteRole(){
-        return ResponseEntity.status(OK).body(createApiResponse("User has institute role!",null));
+    public ResponseEntity<ApiResponse<Void>> validateInstituteRole() {
+        return ResponseEntity.status(OK).body(createApiResponse("User has institute role!", null));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("/me/bootstrap")
-    public ResponseEntity<ApiResponse<InstituteBootstrapResponse>> getInstituteBootstrapData(){
+    public ResponseEntity<ApiResponse<InstituteBootstrapResponse>> getInstituteBootstrapData() {
         return ResponseEntity.ok(instituteBootstrapService.getCurrentInstituteBootstrapData());
     }
 }

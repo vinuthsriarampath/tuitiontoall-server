@@ -31,117 +31,117 @@ import java.util.List;
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     @Query(value = """
-    SELECT COALESCE(SUM(p.amount), 0)
-        FROM payment p
-            INNER JOIN student_batch_enrollment sbe ON sbe.payment_id = p.id
-            INNER JOIN batch b ON sbe.batch_id = b.id
-        WHERE b.course_id = :courseId
-        AND p.payment_status =:paymentStatus
-    """, nativeQuery = true)
+            SELECT COALESCE(SUM(p.amount), 0)
+                FROM payment p
+                    INNER JOIN student_batch_enrollment sbe ON sbe.payment_id = p.id
+                    INNER JOIN batch b ON sbe.batch_id = b.id
+                WHERE b.course_id = :courseId
+                AND p.payment_status =:paymentStatus
+            """, nativeQuery = true)
     BigDecimal sumRevenueByCourseId(Long courseId, PaymentStatus paymentStatus);
 
     @Query(value = """
-    SELECT COALESCE(SUM(p.amount), 0)
-    FROM payment p
-    WHERE p.institute_id = :instituteId
-    AND p.payment_status =:paymentStatus
-    """,nativeQuery = true)
+            SELECT COALESCE(SUM(p.amount), 0)
+            FROM payment p
+            WHERE p.institute_id = :instituteId
+            AND p.payment_status =:paymentStatus
+            """, nativeQuery = true)
     BigDecimal sumRevenueByInstituteAndStatus(Long instituteId, String paymentStatus);
 
     @Query(value = """
-    SELECT COALESCE(SUM(p.amount), 0)
-    FROM payment p
-    WHERE p.institute_id = :instituteId
-    AND p.payment_status =:paymentStatus
-    AND p.created_date >= :startDateTime
-    AND p.created_date < :endDateTime
-    """,nativeQuery = true)
+            SELECT COALESCE(SUM(p.amount), 0)
+            FROM payment p
+            WHERE p.institute_id = :instituteId
+            AND p.payment_status =:paymentStatus
+            AND p.created_date >= :startDateTime
+            AND p.created_date < :endDateTime
+            """, nativeQuery = true)
     BigDecimal sumRevenueByInstituteAndStatusBetween(Long instituteId, String paymentStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-    DATE_FORMAT(P.created_date, '%Y-%m-%d %H:00:00') AS bucket,
-    COALESCE(SUM(P.amount), 0) AS value
-    FROM payment P
-    WHERE P.institute_id = :instituteId
-    AND P.payment_status = :paymentStatus
-    AND P.created_date >= :startDateTime
-    AND P.created_date < :endDateTime
-    GROUP BY DATE_FORMAT(P.created_date, '%Y-%m-%d %H')
-    ORDER BY bucket
-    """,nativeQuery = true)
+            SELECT
+            DATE_FORMAT(P.created_date, '%Y-%m-%d %H:00:00') AS bucket,
+            COALESCE(SUM(P.amount), 0) AS value
+            FROM payment P
+            WHERE P.institute_id = :instituteId
+            AND P.payment_status = :paymentStatus
+            AND P.created_date >= :startDateTime
+            AND P.created_date < :endDateTime
+            GROUP BY DATE_FORMAT(P.created_date, '%Y-%m-%d %H')
+            ORDER BY bucket
+            """, nativeQuery = true)
     List<TrendPointProjection> getHourlyPaymentTrendsByInstituteAndStatus(Long instituteId, String paymentStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-    DATE_FORMAT(P.created_date, '%Y-%m-%d 00:00:00') AS bucket,
-    COALESCE(SUM(P.amount), 0) AS value
-    FROM payment P
-    WHERE P.institute_id = :instituteId
-    AND P.payment_status = :paymentStatus
-    AND P.created_date >= :startDateTime
-    AND P.created_date < :endDateTime
-    GROUP BY DATE(P.created_date)
-    ORDER BY bucket
-    """,nativeQuery = true)
+            SELECT
+            DATE_FORMAT(P.created_date, '%Y-%m-%d 00:00:00') AS bucket,
+            COALESCE(SUM(P.amount), 0) AS value
+            FROM payment P
+            WHERE P.institute_id = :instituteId
+            AND P.payment_status = :paymentStatus
+            AND P.created_date >= :startDateTime
+            AND P.created_date < :endDateTime
+            GROUP BY DATE(P.created_date)
+            ORDER BY bucket
+            """, nativeQuery = true)
     List<TrendPointProjection> getDailyPaymentTrendsByInstituteAndStatus(Long instituteId, String paymentStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-    DATE_FORMAT(P.created_date, '%Y-%m-01 00:00:00') AS bucket,
-    COALESCE(SUM(P.amount), 0) AS value
-    FROM payment P
-    WHERE P.institute_id = :instituteId
-    AND P.payment_status = :paymentStatus
-    AND P.created_date >= :startDateTime
-    AND P.created_date < :endDateTime
-    GROUP BY YEAR(P.created_date), MONTH(P.created_date)
-    ORDER BY bucket
-    """,nativeQuery = true)
+            SELECT
+            DATE_FORMAT(P.created_date, '%Y-%m-01 00:00:00') AS bucket,
+            COALESCE(SUM(P.amount), 0) AS value
+            FROM payment P
+            WHERE P.institute_id = :instituteId
+            AND P.payment_status = :paymentStatus
+            AND P.created_date >= :startDateTime
+            AND P.created_date < :endDateTime
+            GROUP BY YEAR(P.created_date), MONTH(P.created_date)
+            ORDER BY bucket
+            """, nativeQuery = true)
     List<TrendPointProjection> getMonthlyPaymentTrendsByInstituteAndStatus(Long instituteId, String paymentStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
 
     @Query(value = """
-    SELECT
-            p.id AS PaymentId,
-            s.id AS StudentId,
-            CONCAT(s.first_name, ' ', s.last_name) AS StudentName,
-            i.id AS InstituteId,
-            i.institute_name AS InstituteName,
-            p.amount AS Amount,
-            p.payment_status AS Status,
-            p.payment_method AS PaymentMethod,
-            p.transaction_ref AS TransactionRef,
-            p.created_date AS CreatedDate,
-            p.last_modified_date AS LastModifiedDate
-    FROM payment p
-    INNER JOIN student s ON s.id = p.student_id
-    INNER JOIN institute i ON i.id = p.institute_id
-    WHERE
-        p.student_id = :studentId
-        AND (:paymentId IS NULL OR p.id = :paymentId)
-        AND (:instituteId IS NULL OR p.institute_id = :instituteId)
-        AND (:instituteName IS NULL OR i.institute_name LIKE CONCAT('%', :instituteName, '%'))
-        AND (:status IS NULL OR p.payment_status = :status)
-        AND (:paymentMethod IS NULL OR p.payment_method = :paymentMethod)
-        AND (:transactionRef IS NULL OR p.transaction_ref LIKE CONCAT('%', :transactionRef, '%'))
-        AND (:createdDate IS NULL OR p.created_date >= :createdDate)
-    """,
-    countQuery = """
-    SELECT count(p.id)
-    FROM payment p
-    INNER JOIN student s ON s.id = p.student_id
-    INNER JOIN institute i ON i.id = p.institute_id
-    WHERE
-        p.student_id = :studentId
-        AND (:paymentId IS NULL OR p.id = :paymentId)
-        AND (:instituteId IS NULL OR p.institute_id = :instituteId)
-        AND (:instituteName IS NULL OR i.institute_name LIKE CONCAT('%', :instituteName, '%'))
-        AND (:status IS NULL OR p.payment_status = :status)
-        AND (:paymentMethod IS NULL OR p.payment_method = :paymentMethod)
-        AND (:transactionRef IS NULL OR p.transaction_ref LIKE CONCAT('%', :transactionRef, '%'))
-        AND (:createdDate IS NULL OR p.created_date >= :createdDate)
-    """,nativeQuery = true)
+            SELECT
+                    p.id AS PaymentId,
+                    s.id AS StudentId,
+                    CONCAT(s.first_name, ' ', s.last_name) AS StudentName,
+                    i.id AS InstituteId,
+                    i.institute_name AS InstituteName,
+                    p.amount AS Amount,
+                    p.payment_status AS Status,
+                    p.payment_method AS PaymentMethod,
+                    p.transaction_ref AS TransactionRef,
+                    p.created_date AS CreatedDate,
+                    p.last_modified_date AS LastModifiedDate
+            FROM payment p
+            INNER JOIN student s ON s.id = p.student_id
+            INNER JOIN institute i ON i.id = p.institute_id
+            WHERE
+                p.student_id = :studentId
+                AND (:paymentId IS NULL OR p.id = :paymentId)
+                AND (:instituteId IS NULL OR p.institute_id = :instituteId)
+                AND (:instituteName IS NULL OR i.institute_name LIKE CONCAT('%', :instituteName, '%'))
+                AND (:status IS NULL OR p.payment_status = :status)
+                AND (:paymentMethod IS NULL OR p.payment_method = :paymentMethod)
+                AND (:transactionRef IS NULL OR p.transaction_ref LIKE CONCAT('%', :transactionRef, '%'))
+                AND (:createdDate IS NULL OR p.created_date >= :createdDate)
+            """,
+            countQuery = """
+                    SELECT count(p.id)
+                    FROM payment p
+                    INNER JOIN student s ON s.id = p.student_id
+                    INNER JOIN institute i ON i.id = p.institute_id
+                    WHERE
+                        p.student_id = :studentId
+                        AND (:paymentId IS NULL OR p.id = :paymentId)
+                        AND (:instituteId IS NULL OR p.institute_id = :instituteId)
+                        AND (:instituteName IS NULL OR i.institute_name LIKE CONCAT('%', :instituteName, '%'))
+                        AND (:status IS NULL OR p.payment_status = :status)
+                        AND (:paymentMethod IS NULL OR p.payment_method = :paymentMethod)
+                        AND (:transactionRef IS NULL OR p.transaction_ref LIKE CONCAT('%', :transactionRef, '%'))
+                        AND (:createdDate IS NULL OR p.created_date >= :createdDate)
+                    """, nativeQuery = true)
     Page<PaymentDetailsProjection> getMyPayments(
             Long studentId,
             Long paymentId,
@@ -155,46 +155,46 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     );
 
     @Query(value = """
-    SELECT
-            p.id AS PaymentId,
-            s.id AS StudentId,
-            CONCAT(s.first_name, ' ', s.last_name) AS StudentName,
-            i.id AS InstituteId,
-            i.institute_name AS InstituteName,
-            p.amount AS Amount,
-            p.payment_status AS Status,
-            p.payment_method AS PaymentMethod,
-            p.transaction_ref AS TransactionRef,
-            p.created_date AS CreatedDate,
-            p.last_modified_date AS LastModifiedDate
-    FROM payment p
-    INNER JOIN student s ON s.id = p.student_id
-    INNER JOIN institute i ON i.id = p.institute_id
-    WHERE
-        p.institute_id = :instituteId
-        AND (:paymentId IS NULL OR p.id = :paymentId)
-        AND (:studentId IS NULL OR p.student_id = :studentId)
-        AND (:studentName IS NULL OR CONCAT(s.first_name,' ',s.last_name) LIKE CONCAT('%', :studentName, '%'))
-        AND (:status IS NULL OR p.payment_status = :status)
-        AND (:paymentMethod IS NULL OR p.payment_method = :paymentMethod)
-        AND (:transactionRef IS NULL OR p.transaction_ref LIKE CONCAT('%', :transactionRef, '%'))
-        AND (:createdDate IS NULL OR p.created_date >= :createdDate)
-    """,
+            SELECT
+                    p.id AS PaymentId,
+                    s.id AS StudentId,
+                    CONCAT(s.first_name, ' ', s.last_name) AS StudentName,
+                    i.id AS InstituteId,
+                    i.institute_name AS InstituteName,
+                    p.amount AS Amount,
+                    p.payment_status AS Status,
+                    p.payment_method AS PaymentMethod,
+                    p.transaction_ref AS TransactionRef,
+                    p.created_date AS CreatedDate,
+                    p.last_modified_date AS LastModifiedDate
+            FROM payment p
+            INNER JOIN student s ON s.id = p.student_id
+            INNER JOIN institute i ON i.id = p.institute_id
+            WHERE
+                p.institute_id = :instituteId
+                AND (:paymentId IS NULL OR p.id = :paymentId)
+                AND (:studentId IS NULL OR p.student_id = :studentId)
+                AND (:studentName IS NULL OR CONCAT(s.first_name,' ',s.last_name) LIKE CONCAT('%', :studentName, '%'))
+                AND (:status IS NULL OR p.payment_status = :status)
+                AND (:paymentMethod IS NULL OR p.payment_method = :paymentMethod)
+                AND (:transactionRef IS NULL OR p.transaction_ref LIKE CONCAT('%', :transactionRef, '%'))
+                AND (:createdDate IS NULL OR p.created_date >= :createdDate)
+            """,
             countQuery = """
-    SELECT count(p.id)
-    FROM payment p
-    INNER JOIN student s ON s.id = p.student_id
-    INNER JOIN institute i ON i.id = p.institute_id
-    WHERE
-        p.institute_id = :instituteId
-        AND (:paymentId IS NULL OR p.id = :paymentId)
-        AND (:studentId IS NULL OR p.student_id = :studentId)
-        AND (:studentName IS NULL OR CONCAT(s.first_name,' ',s.last_name) LIKE CONCAT('%', :studentName, '%'))
-        AND (:status IS NULL OR p.payment_status = :status)
-        AND (:paymentMethod IS NULL OR p.payment_method = :paymentMethod)
-        AND (:transactionRef IS NULL OR p.transaction_ref LIKE CONCAT('%', :transactionRef, '%'))
-        AND (:createdDate IS NULL OR p.created_date >= :createdDate)
-    """,nativeQuery = true)
+                    SELECT count(p.id)
+                    FROM payment p
+                    INNER JOIN student s ON s.id = p.student_id
+                    INNER JOIN institute i ON i.id = p.institute_id
+                    WHERE
+                        p.institute_id = :instituteId
+                        AND (:paymentId IS NULL OR p.id = :paymentId)
+                        AND (:studentId IS NULL OR p.student_id = :studentId)
+                        AND (:studentName IS NULL OR CONCAT(s.first_name,' ',s.last_name) LIKE CONCAT('%', :studentName, '%'))
+                        AND (:status IS NULL OR p.payment_status = :status)
+                        AND (:paymentMethod IS NULL OR p.payment_method = :paymentMethod)
+                        AND (:transactionRef IS NULL OR p.transaction_ref LIKE CONCAT('%', :transactionRef, '%'))
+                        AND (:createdDate IS NULL OR p.created_date >= :createdDate)
+                    """, nativeQuery = true)
     Page<PaymentDetailsProjection> getMyReceives(
             Long instituteId,
             Long paymentId,

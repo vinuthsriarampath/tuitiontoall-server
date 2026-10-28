@@ -19,11 +19,18 @@ import java.time.LocalDateTime;
 
 public interface UpcomingAssignmentProjection {
     Long getAssignmentId();
+
     AssignmentType getAssignmentType();
+
     String getTitle();
+
     LocalDateTime getDueDate();
+
     Long getCourseId();
+
     Long getBatchId();
+
     Long getModuleId();
+
     Long getChapterId();
 }

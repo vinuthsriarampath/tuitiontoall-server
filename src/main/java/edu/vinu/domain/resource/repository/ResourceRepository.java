@@ -21,29 +21,29 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ResourceRepository extends JpaRepository<ResourceEntity,Long> {
+public interface ResourceRepository extends JpaRepository<ResourceEntity, Long> {
     boolean existsByNameAndChapterId(String name, Long chapterId);
 
     @Query(value = """
-        SELECT
-            r.id,
-            r.chapter_id,
-            r.name,
-            r.file_name,
-            r.created_date,
-            r.last_modified_date
-        FROM resource r
-        WHERE (:chapterId IS NULL OR r.chapter_id = :chapterId)
-            AND (:resourceId IS NULL OR r.id = :resourceId)
-            AND (:name IS NULL OR r.name LIKE CONCAT('%', :name, '%'))
-    """,
-   countQuery = """
-        SELECT COUNT(*)
-        FROM resource r
-        WHERE (:chapterId IS NULL OR r.chapter_id = :chapterId)
-            AND (:resourceId IS NULL OR r.id = :resourceId)
-            AND (:name IS NULL OR r.name LIKE CONCAT('%', :name, '%'))
-   """,
-   nativeQuery=true)
-   Page<ResourceEntity> getAllResourcesByChapter(Long chapterId, Long resourceId, String name, Pageable pageable);
+                SELECT
+                    r.id,
+                    r.chapter_id,
+                    r.name,
+                    r.file_name,
+                    r.created_date,
+                    r.last_modified_date
+                FROM resource r
+                WHERE (:chapterId IS NULL OR r.chapter_id = :chapterId)
+                    AND (:resourceId IS NULL OR r.id = :resourceId)
+                    AND (:name IS NULL OR r.name LIKE CONCAT('%', :name, '%'))
+            """,
+            countQuery = """
+                         SELECT COUNT(*)
+                         FROM resource r
+                         WHERE (:chapterId IS NULL OR r.chapter_id = :chapterId)
+                             AND (:resourceId IS NULL OR r.id = :resourceId)
+                             AND (:name IS NULL OR r.name LIKE CONCAT('%', :name, '%'))
+                    """,
+            nativeQuery = true)
+    Page<ResourceEntity> getAllResourcesByChapter(Long chapterId, Long resourceId, String name, Pageable pageable);
 }

@@ -36,311 +36,311 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentBatchEnrollment,Long> {
+public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentBatchEnrollment, Long> {
     @Query(value = """ 
-    SELECT COUNT(*)
-    FROM student_batch_enrollment sbe
-    WHERE sbe.student_id = :studentId
-    AND sbe.batch_id = :batchId
-    """, nativeQuery = true)
+            SELECT COUNT(*)
+            FROM student_batch_enrollment sbe
+            WHERE sbe.student_id = :studentId
+            AND sbe.batch_id = :batchId
+            """, nativeQuery = true)
     long countByStudentIdAndBatchId(@Param("studentId") Long studentId, @Param("batchId") Long batchId);
 
     @Query(value = """
-    SELECT COUNT(*)
-    FROM student_batch_enrollment sbe
-    INNER JOIN batch b
-    ON b.id = sbe.batch_id
-    WHERE sbe.student_id = :studentId
-    AND b.course_id = :courseId
-    AND b.batch_status <> 'COMPLETED'
-    """, nativeQuery = true)
+            SELECT COUNT(*)
+            FROM student_batch_enrollment sbe
+            INNER JOIN batch b
+            ON b.id = sbe.batch_id
+            WHERE sbe.student_id = :studentId
+            AND b.course_id = :courseId
+            AND b.batch_status <> 'COMPLETED'
+            """, nativeQuery = true)
     long countActiveEnrollmentByStudentAndCourse(@Param("studentId") Long studentId, @Param("courseId") Long courseId);
 
     @Query(value = """
-    SELECT COUNT(*)
-    FROM student_batch_enrollment sbe
-    WHERE sbe.batch_id = :batchId
-    """, nativeQuery = true)
+            SELECT COUNT(*)
+            FROM student_batch_enrollment sbe
+            WHERE sbe.batch_id = :batchId
+            """, nativeQuery = true)
     long countEnrollmentsByBatchId(@Param("batchId") Long batchId);
 
 
     @Query(value = """
-    SELECT
-        u.id AS userId,
-        u.email AS email,
-        u.contact AS contact,
-        u.dp AS dp,
-        u.address AS address,
-        s.id AS studentId,
-        s.first_name AS firstName,
-        s.last_name AS lastName,
-        s.dob AS dob
-    FROM student_batch_enrollment sbe
-    INNER JOIN student s ON s.id = sbe.student_id
-    INNER JOIN users u ON u.id = s.user_id
-    WHERE sbe.batch_id = :batchId
-    AND (
-            (:name IS NOT NULL AND CONCAT(s.first_name, ' ', s.last_name) LIKE LOWER(CONCAT('%', :name, '%')))
-            OR
-            (:email IS NOT NULL AND u.email LIKE LOWER(CONCAT('%', :email, '%')))
-            OR (:name IS NULL AND :email IS NULL)
-    )
-    AND (:enrolledDate IS NULL OR DATE(sbe.created_date) = :enrolledDate)
-    AND (:enrollmentStatus IS NULL OR sbe.status = :enrollmentStatus)
-    """,nativeQuery = true)
+            SELECT
+                u.id AS userId,
+                u.email AS email,
+                u.contact AS contact,
+                u.dp AS dp,
+                u.address AS address,
+                s.id AS studentId,
+                s.first_name AS firstName,
+                s.last_name AS lastName,
+                s.dob AS dob
+            FROM student_batch_enrollment sbe
+            INNER JOIN student s ON s.id = sbe.student_id
+            INNER JOIN users u ON u.id = s.user_id
+            WHERE sbe.batch_id = :batchId
+            AND (
+                    (:name IS NOT NULL AND CONCAT(s.first_name, ' ', s.last_name) LIKE LOWER(CONCAT('%', :name, '%')))
+                    OR
+                    (:email IS NOT NULL AND u.email LIKE LOWER(CONCAT('%', :email, '%')))
+                    OR (:name IS NULL AND :email IS NULL)
+            )
+            AND (:enrolledDate IS NULL OR DATE(sbe.created_date) = :enrolledDate)
+            AND (:enrollmentStatus IS NULL OR sbe.status = :enrollmentStatus)
+            """, nativeQuery = true)
     Page<StudentUserProjection> findAllStudentsByBatchId(Long batchId, String name, String email, LocalDate enrolledDate, String enrollmentStatus, Pageable pageable);
 
     @Query(value = """
-    SELECT EXISTS (
-        SELECT 1
-        FROM student_batch_enrollment sbe
-        INNER JOIN batch b ON b.id = sbe.batch_id
-        WHERE sbe.student_id = :studentId
-            AND b.course_id = :courseId
-    )
-    """, nativeQuery = true)
+            SELECT EXISTS (
+                SELECT 1
+                FROM student_batch_enrollment sbe
+                INNER JOIN batch b ON b.id = sbe.batch_id
+                WHERE sbe.student_id = :studentId
+                    AND b.course_id = :courseId
+            )
+            """, nativeQuery = true)
     int existsEnrollmentByStudentAndCourse(Long studentId, Long courseId);
 
     @Transactional
     @Modifying
     @Query(value = """
-    UPDATE student_batch_enrollment sbe
-        INNER JOIN batch b ON b.id = sbe.batch_id
-        SET sbe.status = 'COMPLETED'
-        WHERE b.batch_status = 'COMPLETED'
-            AND sbe.status <> 'COMPLETED'
-    """,nativeQuery = true)
+            UPDATE student_batch_enrollment sbe
+                INNER JOIN batch b ON b.id = sbe.batch_id
+                SET sbe.status = 'COMPLETED'
+                WHERE b.batch_status = 'COMPLETED'
+                    AND sbe.status <> 'COMPLETED'
+            """, nativeQuery = true)
     int completeEnrollmentsWhereBatchCompleted();
 
     @Query(value = """
-    SELECT COUNT(DISTINCT sbe.student_id)
-        FROM student_batch_enrollment sbe
-            INNER JOIN batch b ON b.id = sbe.batch_id
-        WHERE b.course_id = :courseId
-            AND b.batch_status = :batchStatus
-            AND sbe.status = :enrollmentStatus
-    """, nativeQuery = true)
+            SELECT COUNT(DISTINCT sbe.student_id)
+                FROM student_batch_enrollment sbe
+                    INNER JOIN batch b ON b.id = sbe.batch_id
+                WHERE b.course_id = :courseId
+                    AND b.batch_status = :batchStatus
+                    AND sbe.status = :enrollmentStatus
+            """, nativeQuery = true)
     Long countActiveStudentsByCourseId(Long courseId, String batchStatus, String enrollmentStatus);
 
     @Query(value = """
-    SELECT COUNT(DISTINCT sbe.student_id)
-        FROM student_batch_enrollment sbe
-            INNER JOIN batch b ON b.id = sbe.batch_id
-            INNER JOIN courses c ON c.id = b.course_id
-        WHERE c.institute_id = :instituteId
-            AND (:enrollmentStatus IS NULL OR sbe.status = :enrollmentStatus)
-    """, nativeQuery = true)
+            SELECT COUNT(DISTINCT sbe.student_id)
+                FROM student_batch_enrollment sbe
+                    INNER JOIN batch b ON b.id = sbe.batch_id
+                    INNER JOIN courses c ON c.id = b.course_id
+                WHERE c.institute_id = :instituteId
+                    AND (:enrollmentStatus IS NULL OR sbe.status = :enrollmentStatus)
+            """, nativeQuery = true)
     Long countEnrollmentsByInstitute(Long instituteId, String enrollmentStatus);
 
     @Query(value = """
-    SELECT COUNT(DISTINCT sbe.student_id)
-        FROM student_batch_enrollment sbe
-        INNER JOIN batch b ON b.id = sbe.batch_id
-        INNER JOIN courses c ON c.id = b.course_id
-        INNER JOIN institute i ON i.id = c.institute_id
-        WHERE c.institute_id = :instituteId
-            AND sbe.created_date >= :startDateTime
-            AND sbe.created_date < :endDateTime
-    """, nativeQuery = true)
+            SELECT COUNT(DISTINCT sbe.student_id)
+                FROM student_batch_enrollment sbe
+                INNER JOIN batch b ON b.id = sbe.batch_id
+                INNER JOIN courses c ON c.id = b.course_id
+                INNER JOIN institute i ON i.id = c.institute_id
+                WHERE c.institute_id = :instituteId
+                    AND sbe.created_date >= :startDateTime
+                    AND sbe.created_date < :endDateTime
+            """, nativeQuery = true)
     Long countStudentsEnrolledBetween(Long instituteId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-        DATE_FORMAT(sbe.created_date, '%Y-%m-%d %H:00:00') AS bucket,
-        COUNT(DISTINCT sbe.student_id) AS value
-    FROM student_batch_enrollment sbe
-    INNER JOIN batch b ON b.id = sbe.batch_id
-    INNER JOIN courses c ON c.id = b.course_id
-    WHERE c.institute_id = :instituteId
-        AND sbe.created_date >= :startDateTime
-        AND sbe.created_date < :endDateTime
-    GROUP BY DATE_FORMAT(sbe.created_date, '%Y-%m-%d %H')
-    ORDER BY bucket
-    """,nativeQuery = true)
+            SELECT
+                DATE_FORMAT(sbe.created_date, '%Y-%m-%d %H:00:00') AS bucket,
+                COUNT(DISTINCT sbe.student_id) AS value
+            FROM student_batch_enrollment sbe
+            INNER JOIN batch b ON b.id = sbe.batch_id
+            INNER JOIN courses c ON c.id = b.course_id
+            WHERE c.institute_id = :instituteId
+                AND sbe.created_date >= :startDateTime
+                AND sbe.created_date < :endDateTime
+            GROUP BY DATE_FORMAT(sbe.created_date, '%Y-%m-%d %H')
+            ORDER BY bucket
+            """, nativeQuery = true)
     List<TrendPointProjection> getHourlyStudentEnrollmentTrend(Long instituteId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-        DATE_FORMAT(sbe.created_date, '%Y-%m-%d 00:00:00') AS bucket,
-        COUNT(DISTINCT sbe.student_id) AS value
-    FROM student_batch_enrollment sbe
-    INNER JOIN batch b ON b.id = sbe.batch_id
-    INNER JOIN courses c ON c.id = b.course_id
-    WHERE c.institute_id = :instituteId
-        AND sbe.created_date >= :startDateTime
-        AND sbe.created_date < :endDateTime
-    GROUP BY DATE(sbe.created_date)
-    ORDER BY bucket
-    """,nativeQuery = true)
+            SELECT
+                DATE_FORMAT(sbe.created_date, '%Y-%m-%d 00:00:00') AS bucket,
+                COUNT(DISTINCT sbe.student_id) AS value
+            FROM student_batch_enrollment sbe
+            INNER JOIN batch b ON b.id = sbe.batch_id
+            INNER JOIN courses c ON c.id = b.course_id
+            WHERE c.institute_id = :instituteId
+                AND sbe.created_date >= :startDateTime
+                AND sbe.created_date < :endDateTime
+            GROUP BY DATE(sbe.created_date)
+            ORDER BY bucket
+            """, nativeQuery = true)
     List<TrendPointProjection> getDailyStudentEnrollmentTrend(Long instituteId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-        DATE_FORMAT(sbe.created_date, '%Y-%m-01 00:00:00') AS bucket,
-        COUNT(DISTINCT sbe.student_id) AS value
-    FROM student_batch_enrollment sbe
-    INNER JOIN batch b ON b.id = sbe.batch_id
-    INNER JOIN courses c ON c.id = b.course_id
-    WHERE c.institute_id = :instituteId
-        AND sbe.created_date >= :startDateTime
-        AND sbe.created_date < :endDateTime
-    GROUP BY YEAR(sbe.created_date), MONTH(sbe.created_date)
-    ORDER BY bucket
-    """,nativeQuery = true)
+            SELECT
+                DATE_FORMAT(sbe.created_date, '%Y-%m-01 00:00:00') AS bucket,
+                COUNT(DISTINCT sbe.student_id) AS value
+            FROM student_batch_enrollment sbe
+            INNER JOIN batch b ON b.id = sbe.batch_id
+            INNER JOIN courses c ON c.id = b.course_id
+            WHERE c.institute_id = :instituteId
+                AND sbe.created_date >= :startDateTime
+                AND sbe.created_date < :endDateTime
+            GROUP BY YEAR(sbe.created_date), MONTH(sbe.created_date)
+            ORDER BY bucket
+            """, nativeQuery = true)
     List<TrendPointProjection> getMonthlyStudentEnrollmentTrend(Long instituteId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-    COUNT(*) AS totalEnrollments,
-    COUNT(CASE WHEN sbe.status = 'ACTIVE' THEN 1 END) AS activeEnrollments,
-    COUNT(CASE WHEN sbe.status = 'COMPLETED' THEN 1 END) AS completedEnrollments,
-    COUNT(CASE WHEN sbe.status = 'SUSPENDED' THEN 1 END) AS suspendedEnrollments
-    FROM student_batch_enrollment sbe
-    INNER JOIN batch b ON b.id = sbe.batch_id
-    INNER JOIN courses c ON c.id = b.course_id
-    WHERE c.institute_id = :instituteId
-    """, nativeQuery = true)
+            SELECT
+            COUNT(*) AS totalEnrollments,
+            COUNT(CASE WHEN sbe.status = 'ACTIVE' THEN 1 END) AS activeEnrollments,
+            COUNT(CASE WHEN sbe.status = 'COMPLETED' THEN 1 END) AS completedEnrollments,
+            COUNT(CASE WHEN sbe.status = 'SUSPENDED' THEN 1 END) AS suspendedEnrollments
+            FROM student_batch_enrollment sbe
+            INNER JOIN batch b ON b.id = sbe.batch_id
+            INNER JOIN courses c ON c.id = b.course_id
+            WHERE c.institute_id = :instituteId
+            """, nativeQuery = true)
     EnrollmentDistributionProjection getEnrollmentDistributionByInstituteId(Long instituteId);
 
 
     @Query(value = """
-    SELECT
-    DATE_FORMAT(sbe.created_date, '%Y-%m-01 00:00:00') as bucket,
-    COUNT(distinct sbe.student_id) as value
-    FROM student_batch_enrollment sbe
-    INNER JOIN batch b ON b.id = sbe.batch_id
-    INNER JOIN courses c ON c.id = b.course_id
-    WHERE c.institute_id = :instituteId
-    AND sbe.created_date >= :startDateTime
-    AND sbe.created_date < :endDateTime
-    GROUP BY YEAR(sbe.created_date), MONTH(sbe.created_date)
-    ORDER BY value DESC
-    LIMIT :limit;
-    """,nativeQuery = true)
+            SELECT
+            DATE_FORMAT(sbe.created_date, '%Y-%m-01 00:00:00') as bucket,
+            COUNT(distinct sbe.student_id) as value
+            FROM student_batch_enrollment sbe
+            INNER JOIN batch b ON b.id = sbe.batch_id
+            INNER JOIN courses c ON c.id = b.course_id
+            WHERE c.institute_id = :instituteId
+            AND sbe.created_date >= :startDateTime
+            AND sbe.created_date < :endDateTime
+            GROUP BY YEAR(sbe.created_date), MONTH(sbe.created_date)
+            ORDER BY value DESC
+            LIMIT :limit;
+            """, nativeQuery = true)
     List<TrendPointProjection> getPeakMonthlyEnrollmentTrendByInstitute(Long instituteId, int limit, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT COUNT(DISTINCT sbe.student_id)
-    FROM student_batch_enrollment sbe
-    INNER JOIN batch b ON b.id = sbe.batch_id
-    INNER JOIN courses c ON c.id = b.course_id
-    WHERE c.institute_id = :instituteId
-    AND sbe.created_date < :endDateTime
-    """,nativeQuery = true)
+            SELECT COUNT(DISTINCT sbe.student_id)
+            FROM student_batch_enrollment sbe
+            INNER JOIN batch b ON b.id = sbe.batch_id
+            INNER JOIN courses c ON c.id = b.course_id
+            WHERE c.institute_id = :instituteId
+            AND sbe.created_date < :endDateTime
+            """, nativeQuery = true)
     long countEnrollmentsBefore(Long instituteId, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-        sbe.id AS enrollmentId,
-        sbe.status AS enrollmentStatus,
-        sbe.created_date AS enrollmentDate,
-    
-        b.id AS batchId,
-        b.name AS batchName,
-        b.batch_status AS batchStatus,
-        b.start_date AS batchStartDate,
-    
-        c.id AS courseId,
-        c.title AS courseTitle,
-        c.description AS courseDescription,
-        c.category AS courseCategory,
-        c.status AS courseStatus,
-        c.level AS courseLevel,
-        c.language AS courseLanguage,
-        c.mode AS courseMode,
-        c.thumbnail AS thumbnail,
-        c.avg_rating AS avgRating,
-        c.total_no_ratings AS totalRatings,
-    
-        i.id AS instituteId,
-        i.institute_name AS instituteName
-    FROM student_batch_enrollment sbe
-    INNER JOIN batch b ON b.id = sbe.batch_id
-    INNER JOIN courses c ON c.id = b.course_id
-    INNER JOIN institute i ON i.id = c.institute_id
-    WHERE sbe.student_id = :studentId
-    ORDER BY i.id
-    """,nativeQuery = true)
+            SELECT
+                sbe.id AS enrollmentId,
+                sbe.status AS enrollmentStatus,
+                sbe.created_date AS enrollmentDate,
+            
+                b.id AS batchId,
+                b.name AS batchName,
+                b.batch_status AS batchStatus,
+                b.start_date AS batchStartDate,
+            
+                c.id AS courseId,
+                c.title AS courseTitle,
+                c.description AS courseDescription,
+                c.category AS courseCategory,
+                c.status AS courseStatus,
+                c.level AS courseLevel,
+                c.language AS courseLanguage,
+                c.mode AS courseMode,
+                c.thumbnail AS thumbnail,
+                c.avg_rating AS avgRating,
+                c.total_no_ratings AS totalRatings,
+            
+                i.id AS instituteId,
+                i.institute_name AS instituteName
+            FROM student_batch_enrollment sbe
+            INNER JOIN batch b ON b.id = sbe.batch_id
+            INNER JOIN courses c ON c.id = b.course_id
+            INNER JOIN institute i ON i.id = c.institute_id
+            WHERE sbe.student_id = :studentId
+            ORDER BY i.id
+            """, nativeQuery = true)
     List<StudentLearningProjection> findStudentLearning(Long studentId);
 
 
     @Query(value = """
-    SELECT
-        sbe.id AS enrollmentId,
-        sbe.status AS enrollmentStatus,
-        sbe.created_date AS enrollmentDate,
-
-        b.id AS batchId,
-        b.name AS batchName,
-        b.batch_status AS batchStatus,
-        b.start_date AS batchStartDate,
-
-        c.id AS courseId,
-        c.title AS courseTitle
-    FROM student_batch_enrollment sbe
-    INNER JOIN batch b ON b.id = sbe.batch_id
-    INNER JOIN courses c ON c.id = b.course_id
-    WHERE sbe.student_id = :studentId
-        AND c.id = :courseId
-    ORDER BY sbe.created_date DESC
-    """, nativeQuery = true)
+            SELECT
+                sbe.id AS enrollmentId,
+                sbe.status AS enrollmentStatus,
+                sbe.created_date AS enrollmentDate,
+            
+                b.id AS batchId,
+                b.name AS batchName,
+                b.batch_status AS batchStatus,
+                b.start_date AS batchStartDate,
+            
+                c.id AS courseId,
+                c.title AS courseTitle
+            FROM student_batch_enrollment sbe
+            INNER JOIN batch b ON b.id = sbe.batch_id
+            INNER JOIN courses c ON c.id = b.course_id
+            WHERE sbe.student_id = :studentId
+                AND c.id = :courseId
+            ORDER BY sbe.created_date DESC
+            """, nativeQuery = true)
     List<EnrollmentHistoryProjection> findEnrollmentHistory(Long studentId, Long courseId);
 
     @Query(value = """
-    SELECT
-        c.id AS courseId,
-        c.title AS courseTitle,
-        c.description AS courseDescription,
-        c.duration_in_hours AS durationInHours,
-        c.level AS courseLevel,
-        c.category AS courseCategory,
-        c.status AS courseStatus,
-        c.language AS courseLanguage,
-        c.mode AS courseMode,
-        c.thumbnail AS thumbnail,
-        c.avg_rating AS avgRating,
-        c.total_no_ratings AS totalRatings,
-
-        b.id AS batchId,
-        b.course_id AS batchCourseId,
-        b.name AS batchName,
-        b.start_date AS startDate,
-        b.start_time AS startTime,
-        b.batch_status AS batchStatus
-
-    FROM student_batch_enrollment sbe
-
-    INNER JOIN batch b ON b.id = sbe.batch_id
-    INNER JOIN courses c ON c.id = b.course_id
-    WHERE sbe.student_id = :studentId
-        AND b.id = :batchId
-        AND c.id = :courseId
-    """, nativeQuery = true)
+            SELECT
+                c.id AS courseId,
+                c.title AS courseTitle,
+                c.description AS courseDescription,
+                c.duration_in_hours AS durationInHours,
+                c.level AS courseLevel,
+                c.category AS courseCategory,
+                c.status AS courseStatus,
+                c.language AS courseLanguage,
+                c.mode AS courseMode,
+                c.thumbnail AS thumbnail,
+                c.avg_rating AS avgRating,
+                c.total_no_ratings AS totalRatings,
+            
+                b.id AS batchId,
+                b.course_id AS batchCourseId,
+                b.name AS batchName,
+                b.start_date AS startDate,
+                b.start_time AS startTime,
+                b.batch_status AS batchStatus
+            
+            FROM student_batch_enrollment sbe
+            
+            INNER JOIN batch b ON b.id = sbe.batch_id
+            INNER JOIN courses c ON c.id = b.course_id
+            WHERE sbe.student_id = :studentId
+                AND b.id = :batchId
+                AND c.id = :courseId
+            """, nativeQuery = true)
     Optional<StudentCourseProjection> findStudentCourse(Long courseId, Long batchId, Long studentId);
 
     @Query(value = """
-    SELECT COUNT(DISTINCT c.id)
-    FROM student_batch_enrollment sbe
-    INNER JOIN batch b ON b.id = sbe.batch_id
-    INNER JOIN courses c ON c.id = b.course_id
-    WHERE sbe.student_id = :studentId
-    """,nativeQuery = true)
+            SELECT COUNT(DISTINCT c.id)
+            FROM student_batch_enrollment sbe
+            INNER JOIN batch b ON b.id = sbe.batch_id
+            INNER JOIN courses c ON c.id = b.course_id
+            WHERE sbe.student_id = :studentId
+            """, nativeQuery = true)
     Long countStudentUniqueCourseEnrollments(Long studentId);
 
     @Query(value = """
-    SELECT
-        sbe.id AS enrollmentId,
-        c.id AS courseId,
-        c.title AS courseName,
-        b.id AS batchId,
-        b.name AS batchName,
-        sbe.created_date AS enrollmentDate
-    FROM student_batch_enrollment sbe
-    INNER JOIN batch b ON b.id = sbe.batch_id
-    INNER JOIN courses c ON c.id = b.course_id
-    WHERE sbe.student_id = :studentId
-    ORDER BY sbe.created_date DESC
-    LIMIT :limit
-    """,nativeQuery = true)
-    List<RecentEnrollmentProjection>  getRecentEnrollmentByStudent(Long studentId, int limit);
+            SELECT
+                sbe.id AS enrollmentId,
+                c.id AS courseId,
+                c.title AS courseName,
+                b.id AS batchId,
+                b.name AS batchName,
+                sbe.created_date AS enrollmentDate
+            FROM student_batch_enrollment sbe
+            INNER JOIN batch b ON b.id = sbe.batch_id
+            INNER JOIN courses c ON c.id = b.course_id
+            WHERE sbe.student_id = :studentId
+            ORDER BY sbe.created_date DESC
+            LIMIT :limit
+            """, nativeQuery = true)
+    List<RecentEnrollmentProjection> getRecentEnrollmentByStudent(Long studentId, int limit);
 }

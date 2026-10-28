@@ -57,9 +57,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByEmail(String email) {
-        UserEntity userEntity=this.getUserEntityByEmail(email);
+        UserEntity userEntity = this.getUserEntityByEmail(email);
         User user = mapper.map(userEntity, User.class);
-        switch (user.getRole().getRole()){
+        switch (user.getRole().getRole()) {
             case "student":
                 user.setDetails(StudentMapper.toStudent(userEntity.getStudent()));
                 break;
@@ -75,9 +75,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity getUserEntityByEmail(String email) {
-        UserEntity userEntity=userRepository.findByEmail(email);
-        if (userEntity == null){
-            throw new NotFoundException("A user from "+email+" not found!!");
+        UserEntity userEntity = userRepository.findByEmail(email);
+        if (userEntity == null) {
+            throw new NotFoundException("A user from " + email + " not found!!");
         }
         return userEntity;
     }
@@ -104,11 +104,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Object> getAllUsersByFirstNameLike(String firstname) {
-        List<Object> userList =new ArrayList<>();
+        List<Object> userList = new ArrayList<>();
 //        userList.addAll(getAllStudentsByFirstName(firstname));
 //        userList.addAll(getAllTeachersByFirstName(firstname));
-        if (userList.isEmpty()){
-            throw new NotFoundException("There are no users starts with "+firstname);
+        if (userList.isEmpty()) {
+            throw new NotFoundException("There are no users starts with " + firstname);
         }
         return userList;
     }
@@ -185,7 +185,7 @@ public class UserServiceImpl implements UserService {
         return getUserEntityByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
-    public Institute convertToInstituteModel(InstituteEntity instituteEntity){
+    public Institute convertToInstituteModel(InstituteEntity instituteEntity) {
         try {
             return mapper.map(instituteEntity, Institute.class);
         } catch (ClassCastException e) {
@@ -193,7 +193,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public Student convertToStudentModel(StudentEntity studentEntity){
+    public Student convertToStudentModel(StudentEntity studentEntity) {
         try {
             return mapper.map(studentEntity, Student.class);
         } catch (ClassCastException e) {
@@ -201,7 +201,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public Teacher convertToTeacherModel(TeacherEntity teacherEntity){
+    public Teacher convertToTeacherModel(TeacherEntity teacherEntity) {
         try {
             return mapper.map(teacherEntity, Teacher.class);
         } catch (ClassCastException e) {

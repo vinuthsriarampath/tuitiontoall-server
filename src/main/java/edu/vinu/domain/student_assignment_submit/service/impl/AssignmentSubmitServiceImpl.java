@@ -75,7 +75,7 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
 
         StudentEntity currentStudent = studentService.getCurrentStudent();
 
-        if(file.isEmpty()){
+        if (file.isEmpty()) {
             throw new InvalidInputException("file", "File is required for submission.");
         }
 
@@ -96,7 +96,7 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
 
         AssignmentSubmitStatus status = AssignmentSubmitStatus.SUBMITTED;
 
-        if (assignmentEntity.isLateSubmission() && assignmentEntity.getDueDate().isBefore(LocalDateTime.now()) ) {
+        if (assignmentEntity.isLateSubmission() && assignmentEntity.getDueDate().isBefore(LocalDateTime.now())) {
             status = AssignmentSubmitStatus.LATE_SUBMITTED;
         }
 
@@ -107,7 +107,7 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
         StudentAssignmentSubmit submission = StudentAssignmentSubmit.builder()
                 .url(fileName)
                 .status(status)
-                .attemptNo(submissionCount+1)
+                .attemptNo(submissionCount + 1)
                 .student(currentStudent)
                 .assignment(assignmentEntity)
                 .build();
@@ -132,16 +132,16 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
 
         AssignmentSubmissionEligibilityResponse response = new AssignmentSubmissionEligibilityResponse();
 
-        if (!validateLateSubmission(assignmentEntity)){
+        if (!validateLateSubmission(assignmentEntity)) {
             response.setCanSubmit(false);
             response.setReason(SubmissionEligibilityReason.LATE_SUBMISSION_NOT_ALLOWED);
-        }else if (!validateMaxAttempts(assignmentEntity, submissionCount)){
+        } else if (!validateMaxAttempts(assignmentEntity, submissionCount)) {
             response.setCanSubmit(false);
             response.setReason(SubmissionEligibilityReason.MAX_ATTEMPTS_REACHED);
-        }else if (!validateResubmission(assignmentEntity, submissionCount)){
+        } else if (!validateResubmission(assignmentEntity, submissionCount)) {
             response.setCanSubmit(false);
             response.setReason(SubmissionEligibilityReason.RESUBMISSION_NOT_ALLOWED);
-        }else {
+        } else {
             response.setCanSubmit(true);
             response.setReason(SubmissionEligibilityReason.ELIGIBLE);
         }
@@ -155,7 +155,7 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
 
         validateMarksGainedFilter(filters.marksGained(), filters.minMarksGained(), filters.maxMarksGained());
 
-        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(),pagination.sortBy().isEmpty() ? List.of("submitted_at") : pagination.sortBy(), List.of("submitted_at")));
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy().isEmpty() ? List.of("submitted_at") : pagination.sortBy(), List.of("submitted_at")));
 
         try {
             Page<AssignmentSubmissionDetailedResponse> page = submitRepository.getAllByAssignmentWithFilters(
@@ -194,7 +194,7 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
 
         validateMarksGainedFilter(filters.marksGained(), filters.minMarksGained(), filters.maxMarksGained());
 
-        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(),pagination.sortBy().isEmpty() ? List.of("submitted_at") : pagination.sortBy(), List.of("submitted_at")));
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy().isEmpty() ? List.of("submitted_at") : pagination.sortBy(), List.of("submitted_at")));
 
         StudentEntity currentStudent = studentService.getCurrentStudent();
 
@@ -247,12 +247,12 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
 
     @Override
     public StudentAssignmentSubmit getSubmissionEntityById(Long submissionId) {
-        return  submitRepository.findById(submissionId).orElseThrow(() -> new NotFoundException("Submission with ID " + submissionId + " not found."));
+        return submitRepository.findById(submissionId).orElseThrow(() -> new NotFoundException("Submission with ID " + submissionId + " not found."));
     }
 
     @Override
     public int countPendingEvaluationsForTeacher(Long teacherId) {
-        return  submitRepository.countPendingEvaluationsForTeacher(teacherId);
+        return submitRepository.countPendingEvaluationsForTeacher(teacherId);
     }
 
     @Override
@@ -261,11 +261,11 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
     }
 
     private void checkEligibility(AssignmentEntity assignmentEntity, int submissionCount) {
-        if (!validateLateSubmission(assignmentEntity)){
+        if (!validateLateSubmission(assignmentEntity)) {
             throw new InvalidInputException("Late submissions are not allowed for this assignment.");
-        }else if (!validateMaxAttempts(assignmentEntity, submissionCount)){
+        } else if (!validateMaxAttempts(assignmentEntity, submissionCount)) {
             throw new InvalidInputException("Maximum attempts reached for this assignment.");
-        }else if (!validateResubmission(assignmentEntity, submissionCount)){
+        } else if (!validateResubmission(assignmentEntity, submissionCount)) {
             throw new InvalidInputException("Resubmissions are not allowed for this assignment.");
         }
     }
@@ -276,16 +276,16 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
     }
 
     private boolean validateLateSubmission(AssignmentEntity assignmentEntity) {
-        if (assignmentEntity.getDueDate().isBefore(LocalDateTime.now())){
+        if (assignmentEntity.getDueDate().isBefore(LocalDateTime.now())) {
             return assignmentEntity.isLateSubmission();
         }
-        return  true;
+        return true;
     }
 
     private boolean validateResubmission(AssignmentEntity assignmentEntity, int submissionCount) {
-        if (submissionCount == 0){
+        if (submissionCount == 0) {
             return true;
-        }else {
+        } else {
             return assignmentEntity.isResubmission();
         }
     }
@@ -294,17 +294,17 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
         return submissionCount < assignmentEntity.getMaxAttempts();
     }
 
-    private Path getSubmissionPath(){
+    private Path getSubmissionPath() {
         return Path.of(submissionPath);
     }
 
-    private Path getSubmissionPath(String fileName){
+    private Path getSubmissionPath(String fileName) {
         Path path = Path.of(submissionPath, fileName);
         if (!Files.exists(path)) throw new NotFoundException("Submission file not found.");
         return path;
     }
 
-    private String generateFileName(String originalFilename,StudentEntity currentStudent, AssignmentEntity assignmentEntity, int submissionCount) {
+    private String generateFileName(String originalFilename, StudentEntity currentStudent, AssignmentEntity assignmentEntity, int submissionCount) {
         String extension = fileService.extractExtension(originalFilename);
         if (!extension.startsWith(".")) {
             extension = "." + extension;
@@ -312,13 +312,13 @@ public class AssignmentSubmitServiceImpl implements AssignmentSubmitService {
         String namePart = (currentStudent.getFirstName() + currentStudent.getLastName()).toLowerCase();
         String datePart = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss"));
         String uuidPart = UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
-        String assignmentIdPart = assignmentEntity.getId().toString()+(submissionCount+1);
+        String assignmentIdPart = assignmentEntity.getId().toString() + (submissionCount + 1);
 
-        return String.format("%s_%s_%s_%s%s", namePart, assignmentIdPart , datePart, uuidPart, extension);
+        return String.format("%s_%s_%s_%s%s", namePart, assignmentIdPart, datePart, uuidPart, extension);
     }
 
-    private void validateMarksGainedFilter(Integer marksGained,Integer minMarksGained,Integer maxMarksGained){
-        if(marksGained != null && (minMarksGained!= null || maxMarksGained != null)){
+    private void validateMarksGainedFilter(Integer marksGained, Integer minMarksGained, Integer maxMarksGained) {
+        if (marksGained != null && (minMarksGained != null || maxMarksGained != null)) {
             throw new BadRequestException("Cannot supply both exact 'marksGained' and range ('minMarksGained' / 'maxMarksGained') parameters.");
         }
 

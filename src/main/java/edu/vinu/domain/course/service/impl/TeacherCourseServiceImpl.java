@@ -62,7 +62,7 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
                 .totalRatings(first.getCourseTotalRatings())
                 .build();
 
-        Map<Long,List<TeacherCourseProjection>> batchGroup = projections
+        Map<Long, List<TeacherCourseProjection>> batchGroup = projections
                 .stream()
                 .collect(Collectors.groupingBy(
                         TeacherCourseProjection::getBatchId,
@@ -71,9 +71,9 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
                 ));
 
         List<TeacherBatchResponse> batches = batchGroup.values()
-                        .stream()
-                        .map(this::buildBatchResponse)
-                        .toList();
+                .stream()
+                .map(this::buildBatchResponse)
+                .toList();
 
 
         TeacherCourseViewResponse response = TeacherCourseViewResponse.builder()
@@ -84,7 +84,7 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
         return createApiResponse("Teacher's course details retrieved successfully", response);
     }
 
-    private TeacherBatchResponse buildBatchResponse(List<TeacherCourseProjection> batchRows){
+    private TeacherBatchResponse buildBatchResponse(List<TeacherCourseProjection> batchRows) {
         TeacherCourseProjection first = batchRows.get(0);
 
         List<TeacherModuleResponse> modules = batchRows.stream()
@@ -101,7 +101,7 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
                 .build();
     }
 
-    private TeacherModuleResponse buildModuleResponse(TeacherCourseProjection moduleRow){
+    private TeacherModuleResponse buildModuleResponse(TeacherCourseProjection moduleRow) {
         return TeacherModuleResponse.builder()
                 .moduleId(moduleRow.getModuleId())
                 .moduleName(moduleRow.getModuleName())

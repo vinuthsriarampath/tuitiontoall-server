@@ -68,7 +68,8 @@ public class TeacherVacancyServiceImpl implements TeacherVacancyService {
                 .orElseThrow(() -> new NotFoundException("Vacancy not found"));
 
         if (request.getTitle() != null) vacancy.setTitle(request.getTitle());
-        if (request.getRequiredExperienceYears() != null) vacancy.setRequiredExperienceYears(request.getRequiredExperienceYears());
+        if (request.getRequiredExperienceYears() != null)
+            vacancy.setRequiredExperienceYears(request.getRequiredExperienceYears());
         if (request.getJobDescription() != null) vacancy.setJobDescription(request.getJobDescription());
         if (request.getStatus() != null) vacancy.setStatus(request.getStatus());
         if (request.getVacancyClosingDate() != null) vacancy.setVacancyClosingDate(request.getVacancyClosingDate());
@@ -109,7 +110,7 @@ public class TeacherVacancyServiceImpl implements TeacherVacancyService {
 
     @Override
     public List<TeacherVacancy> getAllByInstituteIdAndStatus(Long instituteId, String status) {
-        return vacancyRepository.findByStatusAndInstituteId(TeacherVacancyStatus.valueOf(status),instituteId)
+        return vacancyRepository.findByStatusAndInstituteId(TeacherVacancyStatus.valueOf(status), instituteId)
                 .stream().map(TeacherVacancyMapper::toTeacherVacancy).toList();
     }
 
@@ -130,7 +131,7 @@ public class TeacherVacancyServiceImpl implements TeacherVacancyService {
 
     @Override
     public TeacherVacancy getByVacancyIdAndStatus(Long vacancyId, TeacherVacancyStatus status) {
-        this.vacancyRepository.findByIdAndStatus(vacancyId,status).orElseThrow(() -> new NotFoundException("Vacancy not found with the given Id/Status"));
+        this.vacancyRepository.findByIdAndStatus(vacancyId, status).orElseThrow(() -> new NotFoundException("Vacancy not found with the given Id/Status"));
         return TeacherVacancyMapper.toTeacherVacancy(this.getEntityById(vacancyId));
     }
 

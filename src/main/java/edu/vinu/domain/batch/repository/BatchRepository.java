@@ -32,35 +32,36 @@ import java.util.List;
 @Repository
 public interface BatchRepository extends JpaRepository<BatchEntity, Long> {
     Boolean existsByNameAndCourseId(String name, Long courseId);
+
     @Query(value = """
-    SELECT *
-    FROM batch b
-    WHERE b.course_id = :courseId
-    AND (:id IS NULL OR b.id = :id)
-    AND (:batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%'))
-    AND (:batchStatus IS NULL OR b.batch_status = :batchStatus)
-    AND (:batchEnrollmentStatus IS NULL OR b.enrollment_status = :batchEnrollmentStatus)
-    """,countQuery = """
-    SELECT COUNT(*)
-    FROM batch b
-    WHERE b.course_id = :courseId
-    AND (:id IS NULL OR b.id = :id)
-    AND (:batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%'))
-    AND (:batchStatus IS NULL OR b.batch_status = :batchStatus)
-    AND (:batchEnrollmentStatus IS NULL OR b.enrollment_status = :batchEnrollmentStatus)
-    """, nativeQuery = true)
+            SELECT *
+            FROM batch b
+            WHERE b.course_id = :courseId
+            AND (:id IS NULL OR b.id = :id)
+            AND (:batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%'))
+            AND (:batchStatus IS NULL OR b.batch_status = :batchStatus)
+            AND (:batchEnrollmentStatus IS NULL OR b.enrollment_status = :batchEnrollmentStatus)
+            """, countQuery = """
+            SELECT COUNT(*)
+            FROM batch b
+            WHERE b.course_id = :courseId
+            AND (:id IS NULL OR b.id = :id)
+            AND (:batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%'))
+            AND (:batchStatus IS NULL OR b.batch_status = :batchStatus)
+            AND (:batchEnrollmentStatus IS NULL OR b.enrollment_status = :batchEnrollmentStatus)
+            """, nativeQuery = true)
     Page<BatchEntity> getAllBatchesByCourseId(Long courseId, Long id, String batchName, String batchStatus, String batchEnrollmentStatus, Pageable pageable);
 
 
     @Modifying
     @Transactional
     @Query(value = """
-    UPDATE batch
-    SET enrollment_status = :closeEnrollmentStatus, batch_status = :ongoingBatchStatus
-    WHERE TIMESTAMP(start_date,start_time) <= CURRENT_TIMESTAMP
-    AND batch_status = :preparationStatus
-    and enrollment_status = :openEnrollmentStatus;
-    """, nativeQuery = true)
+            UPDATE batch
+            SET enrollment_status = :closeEnrollmentStatus, batch_status = :ongoingBatchStatus
+            WHERE TIMESTAMP(start_date,start_time) <= CURRENT_TIMESTAMP
+            AND batch_status = :preparationStatus
+            and enrollment_status = :openEnrollmentStatus;
+            """, nativeQuery = true)
     int closeEnrollmentAndStartPreparationBatch(
             @Param("openEnrollmentStatus") String openEnrollmentStatus,
             @Param("closeEnrollmentStatus") String closeEnrollmentStatus,
@@ -69,159 +70,159 @@ public interface BatchRepository extends JpaRepository<BatchEntity, Long> {
     );
 
     @Query(value = """
-SELECT
-    b.id AS id,
-    b.course_id AS courseId,
-    b.name AS name,
-    b.is_seat_limited AS isSeatLimited,
-    b.max_seat_limit AS maxSeatLimit,
-    b.start_date AS startDate,
-    b.start_time AS startTime,
-    b.batch_status AS batchStatus,
-    b.enrollment_status AS enrollmentStatus,
-    b.created_date AS createdDate,
-    b.last_modified_date AS lastModifiedDate
-FROM batch b
-WHERE b.course_id = :courseId
-    AND b.enrollment_status = 'OPEN'
-    AND b.batch_status != 'COMPLETED'
-ORDER BY b.start_date DESC
-""", nativeQuery = true)
+            SELECT
+                b.id AS id,
+                b.course_id AS courseId,
+                b.name AS name,
+                b.is_seat_limited AS isSeatLimited,
+                b.max_seat_limit AS maxSeatLimit,
+                b.start_date AS startDate,
+                b.start_time AS startTime,
+                b.batch_status AS batchStatus,
+                b.enrollment_status AS enrollmentStatus,
+                b.created_date AS createdDate,
+                b.last_modified_date AS lastModifiedDate
+            FROM batch b
+            WHERE b.course_id = :courseId
+                AND b.enrollment_status = 'OPEN'
+                AND b.batch_status != 'COMPLETED'
+            ORDER BY b.start_date DESC
+            """, nativeQuery = true)
     List<BatchProjection> getAllEnrollableBatchesByCourse(Long courseId);
 
 
     @Query(value = """
-    SELECT COUNT(*)
-    FROM batch b
-    WHERE b.course_id = :courseId
-    AND b.batch_status = :batchStatus
-    """, nativeQuery = true)
+            SELECT COUNT(*)
+            FROM batch b
+            WHERE b.course_id = :courseId
+            AND b.batch_status = :batchStatus
+            """, nativeQuery = true)
     Long countByCourseIdAndBatchStatus(Long courseId, String batchStatus);
 
 
     @Query(value = """
-    SELECT COUNT(*)
-    FROM batch b
-    JOIN courses c ON b.course_id = c.id
-    WHERE c.institute_id = :instituteId
-    AND b.batch_status = :batchStatus
-    """,nativeQuery = true)
+            SELECT COUNT(*)
+            FROM batch b
+            JOIN courses c ON b.course_id = c.id
+            WHERE c.institute_id = :instituteId
+            AND b.batch_status = :batchStatus
+            """, nativeQuery = true)
     Long countBatchesByInstituteIdAndBatchStatus(Long instituteId, String batchStatus);
 
     @Query(value = """
-    SELECT COUNT(*)
-    FROM batch b
-    JOIN courses c ON b.course_id = c.id
-    WHERE c.institute_id = :instituteId
-    AND b.batch_status = :batchStatus
-    AND b.created_date >= :startDateTime
-    AND b.created_date < :endDateTime
-    """,nativeQuery = true)
+            SELECT COUNT(*)
+            FROM batch b
+            JOIN courses c ON b.course_id = c.id
+            WHERE c.institute_id = :instituteId
+            AND b.batch_status = :batchStatus
+            AND b.created_date >= :startDateTime
+            AND b.created_date < :endDateTime
+            """, nativeQuery = true)
     Long countBatchesByInstituteIdAndBatchStatusBetween(Long instituteId, String batchStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-    DATE_FORMAT(b.created_date, '%Y-%m-%d %H:00:00') AS bucket,
-    COUNT(*) AS value
-    FROM batch b
-    JOIN courses c ON b.course_id = c.id
-    WHERE c.institute_id = :instituteId
-    AND b.batch_status = :batchStatus
-    AND b.created_date >= :startDateTime
-    AND b.created_date < :endDateTime
-    GROUP BY DATE_FORMAT(b.created_date, '%Y-%m-%d %H')
-    ORDER BY bucket
-    """,nativeQuery = true)
+            SELECT
+            DATE_FORMAT(b.created_date, '%Y-%m-%d %H:00:00') AS bucket,
+            COUNT(*) AS value
+            FROM batch b
+            JOIN courses c ON b.course_id = c.id
+            WHERE c.institute_id = :instituteId
+            AND b.batch_status = :batchStatus
+            AND b.created_date >= :startDateTime
+            AND b.created_date < :endDateTime
+            GROUP BY DATE_FORMAT(b.created_date, '%Y-%m-%d %H')
+            ORDER BY bucket
+            """, nativeQuery = true)
     List<TrendPointProjection> getHourlyBatchesTrendByInstituteAndBatchStatus(Long instituteId, String batchStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-    DATE_FORMAT(b.created_date, '%Y-%m-%d 00:00:00') AS bucket,
-    COUNT(*) AS value
-    FROM batch b
-    JOIN courses c ON b.course_id = c.id
-    WHERE c.institute_id = :instituteId
-    AND b.batch_status = :batchStatus
-    AND b.created_date >= :startDateTime
-    AND b.created_date < :endDateTime
-    GROUP BY DATE(b.created_date)
-    ORDER BY bucket
-    """,nativeQuery = true)
+            SELECT
+            DATE_FORMAT(b.created_date, '%Y-%m-%d 00:00:00') AS bucket,
+            COUNT(*) AS value
+            FROM batch b
+            JOIN courses c ON b.course_id = c.id
+            WHERE c.institute_id = :instituteId
+            AND b.batch_status = :batchStatus
+            AND b.created_date >= :startDateTime
+            AND b.created_date < :endDateTime
+            GROUP BY DATE(b.created_date)
+            ORDER BY bucket
+            """, nativeQuery = true)
     List<TrendPointProjection> getDailyBatchesTrendByInstituteAndBatchStatus(Long instituteId, String batchStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-    DATE_FORMAT(b.created_date, '%Y-%m-01 00:00:00') AS bucket,
-    COUNT(*) AS value
-    FROM batch b
-    JOIN courses c ON b.course_id = c.id
-    WHERE c.institute_id = :instituteId
-    AND b.batch_status = :batchStatus
-    AND b.created_date >= :startDateTime
-    AND b.created_date < :endDateTime
-    GROUP BY YEAR(b.created_date), MONTH(b.created_date)
-    ORDER BY bucket
-    """,nativeQuery = true)
+            SELECT
+            DATE_FORMAT(b.created_date, '%Y-%m-01 00:00:00') AS bucket,
+            COUNT(*) AS value
+            FROM batch b
+            JOIN courses c ON b.course_id = c.id
+            WHERE c.institute_id = :instituteId
+            AND b.batch_status = :batchStatus
+            AND b.created_date >= :startDateTime
+            AND b.created_date < :endDateTime
+            GROUP BY YEAR(b.created_date), MONTH(b.created_date)
+            ORDER BY bucket
+            """, nativeQuery = true)
     List<TrendPointProjection> getMonthlyBatchesTrendByInstituteAndBatchStatus(Long instituteId, String batchStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value =
             """
-    SELECT
-    b.id AS id,
-    b.course_id AS courseId,
-    c.title AS courseTitle,
-    b.name AS name,
-    b.is_seat_limited AS isSeatLimited,
-    b.max_seat_limit AS maxSeatsLimit,
-    b.batch_status AS batchStatus,
-    b.enrollment_status AS enrollmentStatus,
-    b.start_date AS startDate,
-    b.start_time AS startTime,
-    COUNT(sbe.student_id) AS totalEnrollments,
-    b.created_date AS createdDate,
-    b.last_modified_date AS lastModifiedDate
-    FROM batch b
-    INNER JOIN courses c ON b.course_id = c.id
-    LEFT JOIN student_batch_enrollment sbe ON b.id = sbe.batch_id AND sbe.status = 'ACTIVE'
-    WHERE
-    ( :id IS NULL OR b.id = :id )
-    AND ( :batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%') )
-    AND ( :batchStatus IS NULL OR b.batch_status = :batchStatus )
-    AND ( :enrollmentStatus IS NULL OR b.enrollment_status = :enrollmentStatus )
-    AND ( :instituteId IS NULL OR c.institute_id = :instituteId )
-    GROUP BY
-    b.id,
-    b.course_id,
-    c.title,
-    b.name,
-    b.is_seat_limited,
-    b.batch_status,
-    b.enrollment_status,
-    b.start_date,
-    b.start_time,
-    b.created_date,
-    b.last_modified_date
-    """,
-    countQuery = """
-    SELECT COUNT(*)
-    FROM batch b
-    INNER JOIN courses c ON b.course_id = c.id
-    WHERE
-    ( :id IS NULL OR b.id = :id )
-    AND ( :batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%') )
-    AND ( :batchStatus IS NULL OR b.batch_status = :batchStatus )
-    AND ( :enrollmentStatus IS NULL OR b.enrollment_status = :enrollmentStatus )
-    AND ( :instituteId IS NULL OR c.institute_id = :instituteId )
-    """
-    ,nativeQuery = true)
-   Page<BatchDetailedProjection> getBatches(Long id, String batchName, String batchStatus, String enrollmentStatus, Long instituteId, Pageable pageable);
+                    SELECT
+                    b.id AS id,
+                    b.course_id AS courseId,
+                    c.title AS courseTitle,
+                    b.name AS name,
+                    b.is_seat_limited AS isSeatLimited,
+                    b.max_seat_limit AS maxSeatsLimit,
+                    b.batch_status AS batchStatus,
+                    b.enrollment_status AS enrollmentStatus,
+                    b.start_date AS startDate,
+                    b.start_time AS startTime,
+                    COUNT(sbe.student_id) AS totalEnrollments,
+                    b.created_date AS createdDate,
+                    b.last_modified_date AS lastModifiedDate
+                    FROM batch b
+                    INNER JOIN courses c ON b.course_id = c.id
+                    LEFT JOIN student_batch_enrollment sbe ON b.id = sbe.batch_id AND sbe.status = 'ACTIVE'
+                    WHERE
+                    ( :id IS NULL OR b.id = :id )
+                    AND ( :batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%') )
+                    AND ( :batchStatus IS NULL OR b.batch_status = :batchStatus )
+                    AND ( :enrollmentStatus IS NULL OR b.enrollment_status = :enrollmentStatus )
+                    AND ( :instituteId IS NULL OR c.institute_id = :instituteId )
+                    GROUP BY
+                    b.id,
+                    b.course_id,
+                    c.title,
+                    b.name,
+                    b.is_seat_limited,
+                    b.batch_status,
+                    b.enrollment_status,
+                    b.start_date,
+                    b.start_time,
+                    b.created_date,
+                    b.last_modified_date
+                    """,
+            countQuery = """
+                    SELECT COUNT(*)
+                    FROM batch b
+                    INNER JOIN courses c ON b.course_id = c.id
+                    WHERE
+                    ( :id IS NULL OR b.id = :id )
+                    AND ( :batchName IS NULL OR b.name LIKE CONCAT('%', :batchName, '%') )
+                    AND ( :batchStatus IS NULL OR b.batch_status = :batchStatus )
+                    AND ( :enrollmentStatus IS NULL OR b.enrollment_status = :enrollmentStatus )
+                    AND ( :instituteId IS NULL OR c.institute_id = :instituteId )
+                    """
+            , nativeQuery = true)
+    Page<BatchDetailedProjection> getBatches(Long id, String batchName, String batchStatus, String enrollmentStatus, Long instituteId, Pageable pageable);
 
     @Query(value = """
-    SELECT COUNT(DISTINCT b.id)
-    FROM batch b
-    INNER JOIN module m ON b.id = m.batch_id
-    WHERE m.teacher_id = :teacherId
-    AND (:batchStatus IS NULL OR b.batch_status = :batchStatus)
-    """,nativeQuery = true)
+            SELECT COUNT(DISTINCT b.id)
+            FROM batch b
+            INNER JOIN module m ON b.id = m.batch_id
+            WHERE m.teacher_id = :teacherId
+            AND (:batchStatus IS NULL OR b.batch_status = :batchStatus)
+            """, nativeQuery = true)
     int countBatchesByTeacherIdAndStatus(Long teacherId, String batchStatus);
 }

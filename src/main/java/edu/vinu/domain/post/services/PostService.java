@@ -23,6 +23,7 @@ import java.util.List;
 
 public interface PostService {
     ApiResponse<PostResponse> createPost(PostCreateRequest request, List<MultipartFile> files);
+
     ApiResponse<PostResponse> publishDraftPost(Long postId);
 
     Post getPostById(Long postId);

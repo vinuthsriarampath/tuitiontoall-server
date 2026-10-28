@@ -18,18 +18,28 @@ import java.time.LocalDateTime;
 
 public interface ApplicationProjection {
     Long getId();
+
     Long getTeacherVacancyId();
+
     String getStatus();
+
     LocalDateTime getAppliedDate();
+
     LocalDateTime getLastModifiedDate();
 
     Long getUserId();
+
     String getEmail();
+
     String getContact();
+
     String getDp();
+
     String getAddress();
 
     String getFirstName();
+
     String getLastName();
+
     LocalDate getDob();
 }

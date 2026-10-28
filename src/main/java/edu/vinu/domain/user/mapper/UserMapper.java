@@ -37,13 +37,13 @@ public class UserMapper {
                 .build();
     }
 
-    public static User toUser(UserEntity userEntity, RoleDetails details){
+    public static User toUser(UserEntity userEntity, RoleDetails details) {
         User user = toUser(userEntity);
         user.setDetails(details);
         return user;
     }
 
-    public static UserBasicResponse toUserBasicResponse(UserBasicProjection p){
+    public static UserBasicResponse toUserBasicResponse(UserBasicProjection p) {
         return UserBasicResponse.builder()
                 .id(p.getId())
                 .displayName(p.getDisplayName())

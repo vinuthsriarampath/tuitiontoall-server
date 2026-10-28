@@ -34,7 +34,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "teacher")
-public class TeacherEntity{
+public class TeacherEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,7 +43,7 @@ public class TeacherEntity{
     private String lastName;
 
     @OneToOne
-    @JoinColumn(name = "user_id",nullable = false,unique = true)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private UserEntity user;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

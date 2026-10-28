@@ -22,5 +22,6 @@ import java.util.Optional;
 @Repository
 public interface ResourceUploadRepository extends JpaRepository<ResourceUploadEntity, String> {
     boolean existsByNameAndChapterId(String name, Long chapterId);
+
     Optional<ResourceUploadEntity> findByResourceId(long resourceId);
 }

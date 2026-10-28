@@ -15,7 +15,10 @@ package edu.vinu.domain.student_batch_enrollment.repository.projection;
 
 public interface EnrollmentDistributionProjection {
     Long getTotalEnrollments();
+
     Long getActiveEnrollments();
+
     Long getCompletedEnrollments();
+
     Long getSuspendedEnrollments();
 }

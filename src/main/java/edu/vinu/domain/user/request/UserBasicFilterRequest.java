@@ -13,11 +13,11 @@
 
 package edu.vinu.domain.user.request;
 
-public record UserBasicFilterRequest (
+public record UserBasicFilterRequest(
         Long id,
         String displayName,
         String email,
         String userSlug,
         String role
-){
+) {
 }

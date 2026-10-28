@@ -48,7 +48,7 @@ public class Review {
     private int rating;
 
     @CreationTimestamp
-    @Column(name = "created_date",nullable = false,updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp

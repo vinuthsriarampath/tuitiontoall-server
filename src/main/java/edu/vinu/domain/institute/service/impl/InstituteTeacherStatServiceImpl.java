@@ -33,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InstituteTeacherStatServiceImpl implements InstituteTeacherStatService {
     private final InstituteTeacherRepository instituteTeacherRepository;
+
     @Override
     public BigDecimal countInstituteTeachersByInstituteAndStatus(Long instituteId, InstituteTeacherStatus status) {
         Long count = instituteTeacherRepository.countByInstituteIdAndStatus(instituteId, status.name());
@@ -49,24 +50,25 @@ public class InstituteTeacherStatServiceImpl implements InstituteTeacherStatServ
     public List<TrendPoint> getInstituteTeachersTrends(Long instituteId, InstituteTeacherStatus status, ReportingPeriod period, ReportingPeriodRange range) {
         return switch (period) {
             case TODAY -> getHourlyInstituteTeachersTrend(instituteId, status, range);
-            case CURRENT_WEEK, CURRENT_MONTH, CURRENT_3_MONTHS -> getDailyInstituteTeachersTrend(instituteId, status, range);
+            case CURRENT_WEEK, CURRENT_MONTH, CURRENT_3_MONTHS ->
+                    getDailyInstituteTeachersTrend(instituteId, status, range);
             case CURRENT_YEAR, OVERALL -> getMonthlyInstituteTeachersTrend(instituteId, status, range);
         };
     }
 
     private List<TrendPoint> getHourlyInstituteTeachersTrend(Long instituteId, InstituteTeacherStatus status, ReportingPeriodRange range) {
         List<TrendPointProjection> projections = instituteTeacherRepository.getHourlyInstituteTeachersTrendByInstituteAndStatus(instituteId, status.name(), range.currentStart(), range.currentEnd());
-        return TrendBuilder.build(range.currentStart(),range.currentEnd(), TrendType.HOUR, projections);
+        return TrendBuilder.build(range.currentStart(), range.currentEnd(), TrendType.HOUR, projections);
     }
 
     private List<TrendPoint> getDailyInstituteTeachersTrend(Long instituteId, InstituteTeacherStatus status, ReportingPeriodRange range) {
         List<TrendPointProjection> projections = instituteTeacherRepository.getDailyInstituteTeachersTrendByInstituteAndStatus(instituteId, status.name(), range.currentStart(), range.currentEnd());
-        return TrendBuilder.build(range.currentStart(),range.currentEnd(), TrendType.DAY, projections);
+        return TrendBuilder.build(range.currentStart(), range.currentEnd(), TrendType.DAY, projections);
     }
 
     private List<TrendPoint> getMonthlyInstituteTeachersTrend(Long instituteId, InstituteTeacherStatus status, ReportingPeriodRange range) {
         List<TrendPointProjection> projections = instituteTeacherRepository.getMonthlyInstituteTeachersTrendByInstituteAndStatus(instituteId, status.name(), range.currentStart(), range.currentEnd());
-        return TrendBuilder.build(range.currentStart(),range.currentEnd(), TrendType.MONTH, projections);
+        return TrendBuilder.build(range.currentStart(), range.currentEnd(), TrendType.MONTH, projections);
     }
 
 

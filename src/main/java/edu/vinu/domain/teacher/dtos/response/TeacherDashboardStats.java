@@ -23,8 +23,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TeacherDashboardStats{
-        DashboardStats ongoingAssignedBatchesCount;
-        DashboardStats publishedAssignedModulesCount;
-        DashboardStats pendingEvaluationsCount;
+public class TeacherDashboardStats {
+    DashboardStats ongoingAssignedBatchesCount;
+    DashboardStats publishedAssignedModulesCount;
+    DashboardStats pendingEvaluationsCount;
 }

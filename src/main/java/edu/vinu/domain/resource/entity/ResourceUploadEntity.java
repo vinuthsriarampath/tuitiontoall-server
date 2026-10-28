@@ -26,9 +26,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "resource_upload",
-    uniqueConstraints = {
-        @UniqueConstraint(name = "uk_chapter_id_name",columnNames = {"chapter_id","name"})
-    }
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_chapter_id_name", columnNames = {"chapter_id", "name"})
+        }
 )
 @Data
 @AllArgsConstructor
@@ -55,13 +55,13 @@ public class ResourceUploadEntity {
     @Column(name = "completed")
     private boolean completed = false;
 
-    @Column(name = "total_size",nullable = false)
+    @Column(name = "total_size", nullable = false)
     private Long totalSize;
 
-    @Column(name = "total_chunks",nullable = false)
+    @Column(name = "total_chunks", nullable = false)
     private Integer totalChunks;
 
-    @Column(name = "uploaded_chunks",nullable = false)
+    @Column(name = "uploaded_chunks", nullable = false)
     private Integer uploadedChunks;
 
     @CreationTimestamp
@@ -69,6 +69,6 @@ public class ResourceUploadEntity {
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    @Column(name = "last_modified_date",insertable = false)
+    @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime lastModifiedDate;
 }

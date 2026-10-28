@@ -18,7 +18,7 @@ import edu.vinu.domain.course.response.TeacherBasicCourseResponse;
 
 public class TeacherCourseMapper {
 
-    public static TeacherBasicCourseResponse toTeacherBasicCourseResponse(TeacherBasicCourseProjection p){
+    public static TeacherBasicCourseResponse toTeacherBasicCourseResponse(TeacherBasicCourseProjection p) {
         return TeacherBasicCourseResponse.builder()
                 .courseId(p.getCourseId())
                 .courseTitle(p.getCourseTitle())

@@ -47,7 +47,7 @@ public class StudentServiceImpl implements StudentService {
                 .stream()
                 .map(StudentMapper::toStudent)
                 .toList();
-        if (studentList.isEmpty()){
+        if (studentList.isEmpty()) {
             throw new NotFoundException("No Students Found");
         }
         return studentList;
@@ -62,7 +62,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student updateStudentDetails(String email, StudentDetailsUpdateRequest studentDetailsUpdateRequest) {
-        if (!isValidDob(studentDetailsUpdateRequest.getDob())){
+        if (!isValidDob(studentDetailsUpdateRequest.getDob())) {
             throw new InvalidInputException("You must be at least 6 years old");
         }
 
@@ -82,11 +82,11 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentEntity getCurrentStudent() {
         UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
-        if (userEntity == null){
+        if (userEntity == null) {
             throw new NotFoundException("User not found");
-        }else if (!userEntity.getRole().getRole().equals("student")) {
+        } else if (!userEntity.getRole().getRole().equals("student")) {
             throw new UnauthorizedException("User is not a student");
-        }else {
+        } else {
             return userEntity.getStudent();
         }
     }

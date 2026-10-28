@@ -29,7 +29,7 @@ public class TeacherVacancyScheduler {
     private final TeacherVacancyRepository teacherVacancyRepository;
 
     @Scheduled(cron = "0 */5 * * * *", zone = "Asia/Colombo")
-    private void closeVacancies(){
+    private void closeVacancies() {
         int updated = teacherVacancyRepository.closeExpiredVacancies(
                 TeacherVacancyStatus.OPEN.name(),
                 TeacherVacancyStatus.CLOSED.name()

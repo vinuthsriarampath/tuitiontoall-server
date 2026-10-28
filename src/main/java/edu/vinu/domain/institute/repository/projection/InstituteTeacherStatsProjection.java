@@ -15,7 +15,10 @@ package edu.vinu.domain.institute.repository.projection;
 
 public interface InstituteTeacherStatsProjection {
     Long getTotalTeachers();
+
     Long getActiveTeachers();
+
     Long getInactiveTeachers();
+
     Long getSuspendedTeachers();
 }

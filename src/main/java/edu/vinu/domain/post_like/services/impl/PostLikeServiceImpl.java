@@ -36,7 +36,7 @@ public class PostLikeServiceImpl implements PostLikeService {
     public void likePost(Long postId) {
         UserEntity currentUser = userService.getCurrentUser();
 
-        if(likeRepository.isLikedByUser(postId, currentUser.getId()) > 0) {
+        if (likeRepository.isLikedByUser(postId, currentUser.getId()) > 0) {
             throw new BadRequestException("Post already liked by user!");
         }
 
@@ -52,7 +52,7 @@ public class PostLikeServiceImpl implements PostLikeService {
     public void dislikePost(Long postId) {
         UserEntity currentUser = userService.getCurrentUser();
 
-        if(!postRepository.existsById(postId)) throw new NotFoundException("Post not found by id!");
+        if (!postRepository.existsById(postId)) throw new NotFoundException("Post not found by id!");
 
         PostLike postLike = likeRepository.findByPostIdAndUserId(postId, currentUser.getId()).orElseThrow(() -> new NotFoundException("User haven't liked for the post!"));
 

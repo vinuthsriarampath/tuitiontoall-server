@@ -22,194 +22,194 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AssignmentRepository extends JpaRepository<AssignmentEntity,Long> {
+public interface AssignmentRepository extends JpaRepository<AssignmentEntity, Long> {
 
     @Query(value = """
-        SELECT EXISTS(
-        SELECT 1
-        FROM assignment a
-        WHERE a.id = :assignmentId
-            AND (
-                    (a.type = 'MODULE' AND EXISTS(
-                        SELECT 1
-                        FROM module_assignment ma
-                        INNER JOIN module m ON m.id = ma.module_id
-                        INNER JOIN batch b ON m.batch_id = b.id
-                        INNER JOIN courses cr ON b.course_id = cr.id
-                        WHERE cr.institute_id = :instituteId
-                    ))
-                    OR (a.type = 'CHAPTER' AND EXISTS(
-                        SELECT 1
-                        FROM chapter_assignment ca
-                        INNER JOIN chapter c ON c.id = ca.chapter_id
-                        INNER JOIN module m ON c.module_id = m.id
-                        INNER JOIN batch b ON m.batch_id = b.id
-                        INNER JOIN courses cr ON b.course_id = cr.id
-                        WHERE cr.institute_id = :instituteId
-                    ))
-            )
-        )
-    """, nativeQuery = true)
+                SELECT EXISTS(
+                SELECT 1
+                FROM assignment a
+                WHERE a.id = :assignmentId
+                    AND (
+                            (a.type = 'MODULE' AND EXISTS(
+                                SELECT 1
+                                FROM module_assignment ma
+                                INNER JOIN module m ON m.id = ma.module_id
+                                INNER JOIN batch b ON m.batch_id = b.id
+                                INNER JOIN courses cr ON b.course_id = cr.id
+                                WHERE cr.institute_id = :instituteId
+                            ))
+                            OR (a.type = 'CHAPTER' AND EXISTS(
+                                SELECT 1
+                                FROM chapter_assignment ca
+                                INNER JOIN chapter c ON c.id = ca.chapter_id
+                                INNER JOIN module m ON c.module_id = m.id
+                                INNER JOIN batch b ON m.batch_id = b.id
+                                INNER JOIN courses cr ON b.course_id = cr.id
+                                WHERE cr.institute_id = :instituteId
+                            ))
+                    )
+                )
+            """, nativeQuery = true)
     int instituteAccess(Long assignmentId, Long instituteId);
 
     @Query(value = """
-    SELECT EXISTS(
-            SELECT 1
-            FROM assignment a
-            WHERE
-                a.id = :assignmentId
-                AND (
+            SELECT EXISTS(
+                    SELECT 1
+                    FROM assignment a
+                    WHERE
+                        a.id = :assignmentId
+                        AND (
+                                (a.type = 'MODULE' AND EXISTS(
+                                    SELECT 1
+                                    FROM module_assignment ma
+                                    INNER JOIN module m ON m.id = ma.module_id
+                                    INNER JOIN teacher t ON t.id = m.teacher_id
+                                    WHERE t.id = :teacherId
+                                ))
+                                OR (a.type = 'CHAPTER' AND EXISTS(
+                                    SELECT 1
+                                    FROM chapter_assignment ca
+                                    INNER JOIN chapter c ON c.id = ca.chapter_id
+                                    INNER JOIN module m ON c.module_id = m.id
+                                    INNER JOIN teacher t ON t.id = m.teacher_id
+                                    WHERE t.id = :teacherId
+                                ))
+                            )
+                )
+            """, nativeQuery = true)
+    int teacherAccess(Long assignmentId, Long teacherId);
+
+    @Query(value = """
+            SELECT EXISTS(
+                SELECT 1
+                FROM assignment a
+                WHERE
+                    a.id = :assignmentId
+                    AND (
                         (a.type = 'MODULE' AND EXISTS(
                             SELECT 1
                             FROM module_assignment ma
-                            INNER JOIN module m ON m.id = ma.module_id
-                            INNER JOIN teacher t ON t.id = m.teacher_id
-                            WHERE t.id = :teacherId
+                            INNER JOIN module m ON m.id = ma.module_id = m.id
+                            INNER JOIN student_batch_enrollment sbe ON sbe.batch_id = m.batch_id
+                            WHERE sbe.student_id = :studentId
                         ))
                         OR (a.type = 'CHAPTER' AND EXISTS(
                             SELECT 1
                             FROM chapter_assignment ca
                             INNER JOIN chapter c ON c.id = ca.chapter_id
                             INNER JOIN module m ON c.module_id = m.id
-                            INNER JOIN teacher t ON t.id = m.teacher_id
-                            WHERE t.id = :teacherId
+                            INNER JOIN student_batch_enrollment sbe ON sbe.batch_id = m.batch_id
+                            WHERE sbe.student_id = :studentId
                         ))
                     )
-        )
-    """,nativeQuery = true)
-    int teacherAccess(Long assignmentId, Long teacherId);
-
-    @Query(value = """
-    SELECT EXISTS(
-        SELECT 1
-        FROM assignment a
-        WHERE
-            a.id = :assignmentId
-            AND (
-                (a.type = 'MODULE' AND EXISTS(
-                    SELECT 1
-                    FROM module_assignment ma
-                    INNER JOIN module m ON m.id = ma.module_id = m.id
-                    INNER JOIN student_batch_enrollment sbe ON sbe.batch_id = m.batch_id
-                    WHERE sbe.student_id = :studentId
-                ))
-                OR (a.type = 'CHAPTER' AND EXISTS(
-                    SELECT 1
-                    FROM chapter_assignment ca
-                    INNER JOIN chapter c ON c.id = ca.chapter_id
-                    INNER JOIN module m ON c.module_id = m.id
-                    INNER JOIN student_batch_enrollment sbe ON sbe.batch_id = m.batch_id
-                    WHERE sbe.student_id = :studentId
-                ))
             )
-    )
-    """,nativeQuery = true)
+            """, nativeQuery = true)
     int studentAccess(Long assignmentId, Long studentId);
 
     @Query(value = """
-    SELECT COUNT(DISTINCT a.id)
-    FROM assignment a
-    INNER JOIN (
-        SELECT ma.assignment_id, m.batch_id
-        FROM module_assignment ma
-        INNER JOIN module m ON ma.module_id = m.id
-        INNER JOIN batch b ON m.batch_id = b.id
-        WHERE b.batch_status <> 'COMPLETED'
-
-        UNION ALL
-    
-        SELECT ca.assignment_id, m.batch_id
-        FROM chapter_assignment ca
-        INNER JOIN chapter c ON ca.chapter_id = c.id
-        INNER JOIN module m ON c.module_id = m.id
-        INNER JOIN batch b ON m.batch_id = b.id
-        WHERE b.batch_status <> 'COMPLETED'
-    
-    ) AS target_assignments on target_assignments.assignment_id = a.id
-
-    INNER JOIN student_batch_enrollment sbe ON target_assignments.batch_id = sbe.batch_id
-    
-    WHERE sbe.student_id = :studentId
-      AND NOT EXISTS (
-          SELECT 1
-          FROM student_assignment_submit sas
-          WHERE sas.assignment_id = a.id
-            AND sas.student_id = :studentId
-      );
-    """,nativeQuery = true)
+            SELECT COUNT(DISTINCT a.id)
+            FROM assignment a
+            INNER JOIN (
+                SELECT ma.assignment_id, m.batch_id
+                FROM module_assignment ma
+                INNER JOIN module m ON ma.module_id = m.id
+                INNER JOIN batch b ON m.batch_id = b.id
+                WHERE b.batch_status <> 'COMPLETED'
+            
+                UNION ALL
+            
+                SELECT ca.assignment_id, m.batch_id
+                FROM chapter_assignment ca
+                INNER JOIN chapter c ON ca.chapter_id = c.id
+                INNER JOIN module m ON c.module_id = m.id
+                INNER JOIN batch b ON m.batch_id = b.id
+                WHERE b.batch_status <> 'COMPLETED'
+            
+            ) AS target_assignments on target_assignments.assignment_id = a.id
+            
+            INNER JOIN student_batch_enrollment sbe ON target_assignments.batch_id = sbe.batch_id
+            
+            WHERE sbe.student_id = :studentId
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM student_assignment_submit sas
+                  WHERE sas.assignment_id = a.id
+                    AND sas.student_id = :studentId
+              );
+            """, nativeQuery = true)
     Long countStudentsPendingAssignments(Long studentId);
 
 
     @Query(value = """
-    SELECT COUNT(DISTINCT a.id)
-    FROM assignment a
-    INNER JOIN (
-        SELECT ma.assignment_id, m.batch_id
-        FROM module_assignment ma
-        INNER JOIN module m ON ma.module_id = m.id
-        INNER JOIN batch b ON m.batch_id = b.id
-        WHERE b.batch_status <> 'COMPLETED'
-
-        UNION ALL
-    
-        SELECT ca.assignment_id, m.batch_id
-        FROM chapter_assignment ca
-        INNER JOIN chapter c ON ca.chapter_id = c.id
-        INNER JOIN module m ON c.module_id = m.id
-        INNER JOIN batch b ON m.batch_id = b.id
-        WHERE b.batch_status <> 'COMPLETED'
-    
-    ) AS target_assignments on target_assignments.assignment_id = a.id
-
-    INNER JOIN student_batch_enrollment sbe ON target_assignments.batch_id = sbe.batch_id
-    
-    WHERE sbe.student_id = :studentId
-      AND EXISTS (
-          SELECT 1
-          FROM student_assignment_submit sas
-          WHERE sas.assignment_id = a.id
-            AND sas.student_id = :studentId
-      );
-    """,nativeQuery = true)
+            SELECT COUNT(DISTINCT a.id)
+            FROM assignment a
+            INNER JOIN (
+                SELECT ma.assignment_id, m.batch_id
+                FROM module_assignment ma
+                INNER JOIN module m ON ma.module_id = m.id
+                INNER JOIN batch b ON m.batch_id = b.id
+                WHERE b.batch_status <> 'COMPLETED'
+            
+                UNION ALL
+            
+                SELECT ca.assignment_id, m.batch_id
+                FROM chapter_assignment ca
+                INNER JOIN chapter c ON ca.chapter_id = c.id
+                INNER JOIN module m ON c.module_id = m.id
+                INNER JOIN batch b ON m.batch_id = b.id
+                WHERE b.batch_status <> 'COMPLETED'
+            
+            ) AS target_assignments on target_assignments.assignment_id = a.id
+            
+            INNER JOIN student_batch_enrollment sbe ON target_assignments.batch_id = sbe.batch_id
+            
+            WHERE sbe.student_id = :studentId
+              AND EXISTS (
+                  SELECT 1
+                  FROM student_assignment_submit sas
+                  WHERE sas.assignment_id = a.id
+                    AND sas.student_id = :studentId
+              );
+            """, nativeQuery = true)
     Long countStudentsCompletedAssignments(Long studentId);
 
     @Query(value = """
-    SELECT
-    a.id AS assignmentId,
-    a.type AS assignmentType,
-    a.topic As title,
-    a.due_date AS dueDate,
-    target_assignments.course_id AS courseId,
-    target_assignments.batch_id AS batchId,
-    target_assignments.module_id AS moduleId,
-    target_assignments.chapter_id AS chapterId
-    FROM assignment a
-    INNER JOIN (
-            SELECT ma.assignment_id, NULL AS chapter_id, ma.module_id, m.batch_id, b.course_id
-            FROM module_assignment ma
-            INNER JOIN module m ON ma.module_id = m.id
-            INNER JOIN batch b ON m.batch_id = b.id
-            WHERE b.batch_status <> 'COMPLETED'
-    
-            UNION ALL
-    
-            SELECT ca.assignment_id, ca.chapter_id, ch.module_id, m.batch_id, b.course_id
-            FROM chapter_assignment ca
-            INNER JOIN chapter ch ON ca.chapter_id = ch.id
-            INNER JOIN module m ON ch.module_id = m.id
-            INNER JOIN batch b ON m.batch_id = b.id
-            WHERE b.batch_status <> 'COMPLETED'
-    ) AS target_assignments ON target_assignments.assignment_id = a.id
-    INNER JOIN student_batch_enrollment sbe ON target_assignments.batch_id = sbe.batch_id
-    WHERE sbe.student_id = :studentId
-    AND NOT EXISTS (
-        SELECT 1
-        FROM student_assignment_submit sas
-        WHERE sas.assignment_id = a.id
-          AND sas.student_id = :studentId
-    )
-    ORDER BY a.due_date
-    LIMIT :limit
-    """,nativeQuery = true)
+            SELECT
+            a.id AS assignmentId,
+            a.type AS assignmentType,
+            a.topic As title,
+            a.due_date AS dueDate,
+            target_assignments.course_id AS courseId,
+            target_assignments.batch_id AS batchId,
+            target_assignments.module_id AS moduleId,
+            target_assignments.chapter_id AS chapterId
+            FROM assignment a
+            INNER JOIN (
+                    SELECT ma.assignment_id, NULL AS chapter_id, ma.module_id, m.batch_id, b.course_id
+                    FROM module_assignment ma
+                    INNER JOIN module m ON ma.module_id = m.id
+                    INNER JOIN batch b ON m.batch_id = b.id
+                    WHERE b.batch_status <> 'COMPLETED'
+            
+                    UNION ALL
+            
+                    SELECT ca.assignment_id, ca.chapter_id, ch.module_id, m.batch_id, b.course_id
+                    FROM chapter_assignment ca
+                    INNER JOIN chapter ch ON ca.chapter_id = ch.id
+                    INNER JOIN module m ON ch.module_id = m.id
+                    INNER JOIN batch b ON m.batch_id = b.id
+                    WHERE b.batch_status <> 'COMPLETED'
+            ) AS target_assignments ON target_assignments.assignment_id = a.id
+            INNER JOIN student_batch_enrollment sbe ON target_assignments.batch_id = sbe.batch_id
+            WHERE sbe.student_id = :studentId
+            AND NOT EXISTS (
+                SELECT 1
+                FROM student_assignment_submit sas
+                WHERE sas.assignment_id = a.id
+                  AND sas.student_id = :studentId
+            )
+            ORDER BY a.due_date
+            LIMIT :limit
+            """, nativeQuery = true)
     List<UpcomingAssignmentProjection> getUpcomingAssignmentSubmissionsForStudent(Long studentId, int limit);
 }

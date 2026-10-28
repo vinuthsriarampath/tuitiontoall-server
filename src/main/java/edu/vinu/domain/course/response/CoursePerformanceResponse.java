@@ -19,9 +19,10 @@ import java.math.BigDecimal;
 
 @Builder
 public record CoursePerformanceResponse(
-     Long id,
-     String title,
-     Long activeStudentsCount,
-     Long ongoingBatchesCount,
-     BigDecimal avgRating
-){}
+        Long id,
+        String title,
+        Long activeStudentsCount,
+        Long ongoingBatchesCount,
+        BigDecimal avgRating
+) {
+}

@@ -99,7 +99,7 @@ public class StudentLearningServiceImpl implements StudentLearningService {
 
     }
 
-    private StudentLearningResponse buildInstituteResponse(List<StudentLearningProjection> instituteRows){
+    private StudentLearningResponse buildInstituteResponse(List<StudentLearningProjection> instituteRows) {
         StudentLearningProjection first = instituteRows.get(0);
 
         Map<Long, List<StudentLearningProjection>> courseGroups =
@@ -123,7 +123,7 @@ public class StudentLearningServiceImpl implements StudentLearningService {
                 .build();
     }
 
-    private CourseLearningResponse buildCourseResponse(List<StudentLearningProjection> courseRows){
+    private CourseLearningResponse buildCourseResponse(List<StudentLearningProjection> courseRows) {
         StudentLearningProjection first = courseRows.get(0);
 
         StudentLearningProjection currentEnrollment = findCurrentEnrollment(courseRows);

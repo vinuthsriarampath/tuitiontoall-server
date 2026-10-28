@@ -52,38 +52,38 @@ public class TeacherController {
 
     @PreAuthorize("hasAuthority('teacher')")
     @PatchMapping("/me")
-    public ResponseEntity<ApiResponse<Teacher>> updateTeacherDetails(@Valid @RequestBody TeacherDetailsUpdateRequest teacherDetailsUpdateRequest){
-        Teacher updatedTeacherDetails = teacherService.updateTeacherDetails(SecurityContextHolder.getContext().getAuthentication().getName(),teacherDetailsUpdateRequest);
-        return ResponseEntity.status(OK).body(createApiResponse("Teacher Profile Updated!",updatedTeacherDetails));
+    public ResponseEntity<ApiResponse<Teacher>> updateTeacherDetails(@Valid @RequestBody TeacherDetailsUpdateRequest teacherDetailsUpdateRequest) {
+        Teacher updatedTeacherDetails = teacherService.updateTeacherDetails(SecurityContextHolder.getContext().getAuthentication().getName(), teacherDetailsUpdateRequest);
+        return ResponseEntity.status(OK).body(createApiResponse("Teacher Profile Updated!", updatedTeacherDetails));
     }
 
     @PreAuthorize("hasAuthority('teacher')")
     @GetMapping("/validate/role")
-    public ResponseEntity<ApiResponse<Void>> validateTeacher(){
+    public ResponseEntity<ApiResponse<Void>> validateTeacher() {
         return ResponseEntity.status(OK).body(createApiResponse("User has teacher role!", null));
     }
 
     @PreAuthorize("hasAuthority('teacher')")
     @GetMapping("/me/teachings")
-    public ResponseEntity<ApiResponse<List<TeachingResponse>>> getMyTeachingDetails(){
+    public ResponseEntity<ApiResponse<List<TeachingResponse>>> getMyTeachingDetails() {
         return ResponseEntity.ok(teachingService.getMyTeachingDetails());
     }
 
     @PreAuthorize("hasAuthority('teacher')")
     @GetMapping("/me/teachings/courses/{courseId}")
-    public ResponseEntity<ApiResponse<TeacherCourseViewResponse>> getTeacherDetailedCourse(@PathVariable Long courseId){
+    public ResponseEntity<ApiResponse<TeacherCourseViewResponse>> getTeacherDetailedCourse(@PathVariable Long courseId) {
         return ResponseEntity.ok(teacherCourseService.getTeacherDetailedCourse(courseId));
     }
 
     @PreAuthorize("hasAuthority('teacher')")
     @GetMapping("/me/applications")
-    public ResponseEntity<PaginatedApiResponse<TeacherApplicationResponse>> getMyApplications(PaginationRequest pagination, TeacherApplicationFilterRequest filters){
-        return ResponseEntity.ok(applicationService.getCurrentTeacherApplications(pagination,filters));
+    public ResponseEntity<PaginatedApiResponse<TeacherApplicationResponse>> getMyApplications(PaginationRequest pagination, TeacherApplicationFilterRequest filters) {
+        return ResponseEntity.ok(applicationService.getCurrentTeacherApplications(pagination, filters));
     }
 
     @PreAuthorize("hasAuthority('teacher')")
     @GetMapping("/me/bootstrap")
-    public ResponseEntity<ApiResponse<TeacherBootstrapResponse>> getTeacherBootstrapData(){
+    public ResponseEntity<ApiResponse<TeacherBootstrapResponse>> getTeacherBootstrapData() {
         return ResponseEntity.ok(teacherBootstrapService.getTeacherDashboardStats());
     }
 }

@@ -29,18 +29,18 @@ import java.util.Map;
 public class VideoStreamTokenScheduler {
     private final VideoStreamTokenService videoStreamTokenService;
 
-    @Scheduled(cron = "0 */30 * * * *",zone = "Asia/Colombo")
-    private void cleanExpiredTokens(){
+    @Scheduled(cron = "0 */30 * * * *", zone = "Asia/Colombo")
+    private void cleanExpiredTokens() {
         Map<String, VideoStreamTokenEntity> tokens = videoStreamTokenService.getAllTokens();
 
         int removedTokens = 0;
 
-        for(Map.Entry<String, VideoStreamTokenEntity> entry : tokens.entrySet()){
+        for (Map.Entry<String, VideoStreamTokenEntity> entry : tokens.entrySet()) {
             if (entry.getValue().getExpiresAt().isBefore(LocalDateTime.now())) {
                 tokens.remove(entry.getKey());
                 removedTokens++;
             }
         }
-        log.atInfo().log("Removed {} expired tokens at {}", removedTokens,  LocalDateTime.now());
+        log.atInfo().log("Removed {} expired tokens at {}", removedTokens, LocalDateTime.now());
     }
 }

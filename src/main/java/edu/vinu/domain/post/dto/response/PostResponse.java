@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
-public record PostResponse (
+public record PostResponse(
         Long id,
         Long userId,
         String caption,
@@ -31,5 +31,5 @@ public record PostResponse (
         LocalDateTime publishedDate,
         LocalDateTime lastModifiedDate,
         List<PostMediaResponse> mediaList
-){
+) {
 }

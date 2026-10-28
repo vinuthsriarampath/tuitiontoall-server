@@ -47,20 +47,20 @@ public class StudentController {
 
     @PreAuthorize("hasAuthority('student')")
     @PatchMapping("/me")
-    public ResponseEntity<ApiResponse<Student>> updateStudentDetails(@Valid @RequestBody StudentDetailsUpdateRequest studentDetailsUpdateRequest){
-        Student updatedStudentDetails = studentService.updateStudentDetails(SecurityContextHolder.getContext().getAuthentication().getName(),studentDetailsUpdateRequest);
-        return ResponseEntity.status(OK).body(createApiResponse("Student Profile Updated!",updatedStudentDetails));
+    public ResponseEntity<ApiResponse<Student>> updateStudentDetails(@Valid @RequestBody StudentDetailsUpdateRequest studentDetailsUpdateRequest) {
+        Student updatedStudentDetails = studentService.updateStudentDetails(SecurityContextHolder.getContext().getAuthentication().getName(), studentDetailsUpdateRequest);
+        return ResponseEntity.status(OK).body(createApiResponse("Student Profile Updated!", updatedStudentDetails));
     }
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("/validate/role")
-    public ResponseEntity<ApiResponse<Void>> validateStudent(){
+    public ResponseEntity<ApiResponse<Void>> validateStudent() {
         return ResponseEntity.status(OK).body(createApiResponse("User has student role!", null));
     }
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("/me/learning")
-    public ResponseEntity<ApiResponse<List<StudentLearningResponse>>> getMyLearningDetails(){
+    public ResponseEntity<ApiResponse<List<StudentLearningResponse>>> getMyLearningDetails() {
         return ResponseEntity.ok(studentLearningService.getMyLearningDetails());
     }
 
@@ -72,13 +72,13 @@ public class StudentController {
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("/me/learning/courses/{courseId}/batches/{batchId}")
-    public ResponseEntity<ApiResponse<StudentCourseViewResponse>> getStudentCourseDetails(@PathVariable Long courseId, @PathVariable Long batchId){
+    public ResponseEntity<ApiResponse<StudentCourseViewResponse>> getStudentCourseDetails(@PathVariable Long courseId, @PathVariable Long batchId) {
         return ResponseEntity.ok(studentCourseService.getStudentDetailedCourse(courseId, batchId));
     }
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("/me/bootstrap")
-    public ResponseEntity<ApiResponse<StudentBootstrapResponse>> getStudentBootstrapData(){
+    public ResponseEntity<ApiResponse<StudentBootstrapResponse>> getStudentBootstrapData() {
         return ResponseEntity.ok(studentBootstrapService.getBootstrapData());
     }
 }

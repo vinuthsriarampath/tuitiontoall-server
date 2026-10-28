@@ -52,15 +52,15 @@ public class ChapterAssignmentServiceImpl implements ChapterAssignmentService {
             AssignmentValidator.validateCreate(request.totalMarks(), request.availableOn(), request.dueDate(), request.resubmission(), request.maxAttempts());
             GradingRangeValidator.validate(request.gradingRanges(), request.totalMarks());
 
-            assignmentEntity = assignmentService.createAssignment(AssignmentMapper.toAssignmentCreateRequest(request),file);
+            assignmentEntity = assignmentService.createAssignment(AssignmentMapper.toAssignmentCreateRequest(request), file);
 
             ChapterEntity chapterEntity = chapterService.getChapterEntityById(request.chapterId());
 
-            if(moduleAssignmentQueryService.existsByAssignmentId(assignmentEntity.getId())){
+            if (moduleAssignmentQueryService.existsByAssignmentId(assignmentEntity.getId())) {
                 throw new InvalidInputException("Assignment is already exists with module");
             }
 
-            ChapterAssignmentEntity chapterAssignmentEntity = ChapterAssignmentMapper.toChapterAssignmentEntity(assignmentEntity,chapterEntity);
+            ChapterAssignmentEntity chapterAssignmentEntity = ChapterAssignmentMapper.toChapterAssignmentEntity(assignmentEntity, chapterEntity);
 
             ChapterAssignmentEntity savedChapterAssignmentEntity = chapterAssignmentRepository.save(chapterAssignmentEntity);
 

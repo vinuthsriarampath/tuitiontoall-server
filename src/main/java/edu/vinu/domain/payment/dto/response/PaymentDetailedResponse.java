@@ -21,16 +21,17 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Builder
-public record PaymentDetailedResponse (
-    Long id,
-    Long studentId,
-    String studentName,
-    Long instituteId,
-    String instituteName,
-    BigDecimal amount,
-    PaymentStatus status,
-    PaymentMethod paymentMethod,
-    String transactionRef,
-    LocalDateTime createdDate,
-    LocalDateTime lastModifiedDate
-){}
+public record PaymentDetailedResponse(
+        Long id,
+        Long studentId,
+        String studentName,
+        Long instituteId,
+        String instituteName,
+        BigDecimal amount,
+        PaymentStatus status,
+        PaymentMethod paymentMethod,
+        String transactionRef,
+        LocalDateTime createdDate,
+        LocalDateTime lastModifiedDate
+) {
+}

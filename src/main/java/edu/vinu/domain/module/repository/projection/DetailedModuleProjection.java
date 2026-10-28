@@ -21,25 +21,40 @@ import java.time.LocalDateTime;
 
 public interface DetailedModuleProjection {
     Long getId();
+
     String getName();
+
     ModuleStatus getStatus();
+
     LocalDateTime getCreatedDate();
+
     LocalDateTime getLastModifiedDate();
 
     Long getBatchId();
+
     Long getCourseId();
+
     String getBatchName();
+
     BatchStatus getBatchStatus();
+
     BatchEnrollmentStatus getBatchEnrollmentStatus();
+
     LocalDateTime getBatchCreatedDate();
+
     LocalDateTime getBatchLastModifiedDate();
 
     Long getTeacherId();
+
     String getTeacherFirstName();
+
     String getTeacherLastName();
 
     String getUserEmail();
+
     String getUserContact();
+
     String getUserDp();
+
     String getUserSlug();
 }

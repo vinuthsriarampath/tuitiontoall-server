@@ -31,7 +31,7 @@ public class UserUnfollowController {
     private final UserFollowService userFollowService;
 
     @DeleteMapping("/user/{followingId}")
-    public ResponseEntity<ApiResponse<UserUnfollowResponse>> unfollowUser(@PathVariable Long followingId){
+    public ResponseEntity<ApiResponse<UserUnfollowResponse>> unfollowUser(@PathVariable Long followingId) {
         return ResponseEntity.ok(userFollowService.unfollowUser(followingId));
     }
 }

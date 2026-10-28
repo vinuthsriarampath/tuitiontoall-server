@@ -56,7 +56,7 @@ public record AssignmentCreateRequest(
         @NotEmpty(message = "At least one grading range is required!")
         List<GradingRangeCreateRequest> gradingRanges,
 
-        @NotBlank(message ="assignment type is mandatory!")
+        @NotBlank(message = "assignment type is mandatory!")
         AssignmentType type
 ) {
 }

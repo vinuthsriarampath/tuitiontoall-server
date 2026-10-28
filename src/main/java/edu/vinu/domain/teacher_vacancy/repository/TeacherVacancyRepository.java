@@ -31,19 +31,19 @@ import java.util.Optional;
 public interface TeacherVacancyRepository extends JpaRepository<TeacherVacancyEntity, Long> {
 
     @Query(value = """
-    SELECT *
-    FROM teacher_vacancy tv
-    WHERE tv.institute_id = :instituteId
-    AND (:title IS NULL OR tv.title LIKE LOWER(CONCAT('%', :title, '%')))
-    AND (:status IS NULL OR tv.status = :status)
-    """,countQuery = """
-    SELECT COUNT(*)
-    FROM teacher_vacancy tv
-    WHERE tv.institute_id = :instituteId
-    AND (:title IS NULL OR tv.title LIKE LOWER(CONCAT('%', :title, '%')))
-    AND (:status IS NULL OR tv.status = :status)
-    """, nativeQuery = true)
-    Page<TeacherVacancyEntity> findByInstituteId(Long instituteId,String title, String status, Pageable pageable);
+            SELECT *
+            FROM teacher_vacancy tv
+            WHERE tv.institute_id = :instituteId
+            AND (:title IS NULL OR tv.title LIKE LOWER(CONCAT('%', :title, '%')))
+            AND (:status IS NULL OR tv.status = :status)
+            """, countQuery = """
+            SELECT COUNT(*)
+            FROM teacher_vacancy tv
+            WHERE tv.institute_id = :instituteId
+            AND (:title IS NULL OR tv.title LIKE LOWER(CONCAT('%', :title, '%')))
+            AND (:status IS NULL OR tv.status = :status)
+            """, nativeQuery = true)
+    Page<TeacherVacancyEntity> findByInstituteId(Long instituteId, String title, String status, Pageable pageable);
 
     List<TeacherVacancyEntity> findByStatusAndInstituteId(TeacherVacancyStatus status, Long instituteId);
 
@@ -52,9 +52,9 @@ public interface TeacherVacancyRepository extends JpaRepository<TeacherVacancyEn
     @Modifying
     @Transactional
     @Query(value = """
-    UPDATE teacher_vacancy
-    SET status = :closedStatus
-    WHERE vacancy_closing_date <= CURRENT_TIMESTAMP AND status = :openStatus
-    """,nativeQuery = true)
+            UPDATE teacher_vacancy
+            SET status = :closedStatus
+            WHERE vacancy_closing_date <= CURRENT_TIMESTAMP AND status = :openStatus
+            """, nativeQuery = true)
     int closeExpiredVacancies(@Param("openStatus") String openStatus, @Param("closedStatus") String closedStatus);
 }

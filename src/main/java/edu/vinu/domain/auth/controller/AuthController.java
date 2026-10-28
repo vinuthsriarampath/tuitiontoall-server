@@ -54,17 +54,17 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest){
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(userAuthService.verify(loginRequest));
     }
 
     @PostMapping("/forgot-password/request")
-    public ResponseEntity<ApiResponse<Void>> startForgotPassword(@RequestBody String email){
+    public ResponseEntity<ApiResponse<Void>> startForgotPassword(@RequestBody String email) {
         return ResponseEntity.ok(userAuthService.startForgotPassword(email));
     }
 
     @PostMapping("/forgot-password/reset")
-    public ResponseEntity<ApiResponse<Void>> resetPassword(@RequestParam String token, @RequestBody String newPassword){
+    public ResponseEntity<ApiResponse<Void>> resetPassword(@RequestParam String token, @RequestBody String newPassword) {
         return ResponseEntity.ok(userAuthService.resetPassword(token, newPassword));
     }
 }

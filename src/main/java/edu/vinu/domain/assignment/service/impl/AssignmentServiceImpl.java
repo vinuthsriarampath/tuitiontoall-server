@@ -66,7 +66,7 @@ public class AssignmentServiceImpl implements AssignmentService {
 
         try {
 
-            AssignmentEntity entity = AssignmentMapper.toAssignmentEntity(request,savedAssignmentFileName);
+            AssignmentEntity entity = AssignmentMapper.toAssignmentEntity(request, savedAssignmentFileName);
 
             AssignmentEntity savedAssignmentEntity = assignmentRepository.save(entity);
 
@@ -97,7 +97,7 @@ public class AssignmentServiceImpl implements AssignmentService {
         AssignmentEntity existing = getAssignmentEntity(id);
 
         AssignmentValidator.validateUpdate(existing, request);
-        GradingRangeValidator.validate(request.gradingRanges(),request.totalMarks());
+        GradingRangeValidator.validate(request.gradingRanges(), request.totalMarks());
 
         existing.setTopic(request.topic());
         existing.setDescription(request.description());
@@ -169,13 +169,13 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public AssignmentEntity getAssignmentEntity(Long id){
-        return assignmentRepository.findById(id).orElseThrow(()-> new NotFoundException("Assignment not found by id!"));
+    public AssignmentEntity getAssignmentEntity(Long id) {
+        return assignmentRepository.findById(id).orElseThrow(() -> new NotFoundException("Assignment not found by id!"));
     }
 
     @Override
     public List<UpcomingAssignmentResponse> getTop5UpcomingAssignmentsSubmissionsForStudent(Long studentId) {
-        return assignmentRepository.getUpcomingAssignmentSubmissionsForStudent(studentId,5).stream().map(AssignmentMapper::toUpcomingAssignmentResponse).toList();
+        return assignmentRepository.getUpcomingAssignmentSubmissionsForStudent(studentId, 5).stream().map(AssignmentMapper::toUpcomingAssignmentResponse).toList();
     }
 
     private String saveAssignmentFile(MultipartFile file) {
@@ -188,16 +188,16 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     private String generateFileName(String originalFilename) {
         final String extension = fileService.extractExtension(originalFilename);
-        return UUID.randomUUID()+extension;
+        return UUID.randomUUID() + extension;
     }
 
-    private Path getAssignmentPath(){
+    private Path getAssignmentPath() {
         return Path.of(assignmentPath);
     }
 
     private Path getAssignmentPath(String fileName) {
-        Path path = Path.of(assignmentPath,fileName);
-        if(!Files.exists(path)) throw new NotFoundException("Assignment File not found.");
+        Path path = Path.of(assignmentPath, fileName);
+        if (!Files.exists(path)) throw new NotFoundException("Assignment File not found.");
         return path;
     }
 

@@ -60,29 +60,29 @@ public class DatabaseSeeder implements CommandLineRunner {
     public void run(String... args) {
         seedRoles();
 
-        if (userRepository.count() == 0){
+        if (userRepository.count() == 0) {
             seedInstitutes();
             seedTeachers();
             seedStudents();
-        }else {
+        } else {
             log.info("User Table already contains data, Skipping seeding. ⏏️");
         }
 
-        if(courseRepository.count() == 0){
+        if (courseRepository.count() == 0) {
             seedCourses();
-        }else {
+        } else {
             log.info("Course Table already contains data, Skipping seeding. ⏏️");
         }
     }
 
-    private void seedInstitutes(){
+    private void seedInstitutes() {
         InstituteRegistrationRequest request = new InstituteRegistrationRequest();
         for (int i = 0; i < 50; i++) {
             try {
                 request.setInstituteName(faker.university().name());
                 request.setPassword("Password@123");
                 request.setAddress(faker.address().fullAddress());
-                request.setEmail("institute"+(i+1)+"@exm.com");
+                request.setEmail("institute" + (i + 1) + "@exm.com");
                 request.setContact(faker.number().digits(10));
                 authService.registerInstitute(request);
             } catch (UserAlreadyExistException | InvalidInputException ex) {
@@ -92,7 +92,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         log.info("Seeded 50 institutes 🏫");
     }
 
-    private void seedTeachers(){
+    private void seedTeachers() {
         TeacherRegistrationRequest request = new TeacherRegistrationRequest();
         for (int i = 0; i < 50; i++) {
             try {
@@ -101,7 +101,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 request.setDob(faker.date().birthday(6, 100).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                 request.setContact(faker.number().digits(10));
                 request.setAddress(faker.address().fullAddress());
-                request.setEmail("teacher"+(i+1)+"@exm.com");
+                request.setEmail("teacher" + (i + 1) + "@exm.com");
                 request.setPassword("Password@123");
                 authService.registerTeacher(request);
             } catch (UserAlreadyExistException | InvalidInputException ex) {
@@ -111,7 +111,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         log.info("Seeded 50 Teachers 🧑‍🏫");
     }
 
-    private void seedStudents(){
+    private void seedStudents() {
         StudentRegistrationRequest request = new StudentRegistrationRequest();
         for (int i = 0; i < 50; i++) {
             try {
@@ -120,7 +120,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                 request.setDob(faker.date().birthday(6, 100).toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                 request.setContact(faker.number().digits(10));
                 request.setAddress(faker.address().fullAddress());
-                request.setEmail("student"+(i+1)+"@exm.com");
+                request.setEmail("student" + (i + 1) + "@exm.com");
                 request.setPassword("Password@123");
                 authService.registerStudent(request);
             } catch (UserAlreadyExistException | InvalidInputException ex) {
@@ -130,13 +130,13 @@ public class DatabaseSeeder implements CommandLineRunner {
         log.info("Seeded 50 Student 🧑‍🎓");
     }
 
-    private void seedCourses(){
+    private void seedCourses() {
         List<Institute> institutes = instituteService.getAllInstitutes();
         if (institutes.isEmpty()) return;
 
         CourseEntity request = new CourseEntity();
 
-        for (int i = 0;i < 100; i++){
+        for (int i = 0; i < 100; i++) {
             try {
                 Institute institute = institutes.get(faker.random().nextInt(institutes.size()));
                 request.setId(null);
@@ -156,21 +156,21 @@ public class DatabaseSeeder implements CommandLineRunner {
                 request.setInstitute(mapper.map(institute, InstituteEntity.class));
 
                 courseRepository.save(request);
-            }catch (RuntimeException ex){
+            } catch (RuntimeException ex) {
                 log.error("Error seeding course data: {}", ex.getMessage());
             }
         }
         log.info("Seeded 100 Courses 📚");
     }
 
-    private void seedRoles(){
+    private void seedRoles() {
         List<String> roles = new ArrayList<>();
         roles.add("institute");
         roles.add("teacher");
         roles.add("student");
 
-        for (String role : roles){
-            if(roleRepository.existsByRole(role)) continue;
+        for (String role : roles) {
+            if (roleRepository.existsByRole(role)) continue;
             RoleEntity newRole = new RoleEntity();
             newRole.setRole(role);
             roleRepository.save(newRole);

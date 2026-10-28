@@ -36,8 +36,8 @@ public class Course {
     private CourseLanguage language;
     private CourseMode mode;
     private String thumbnail;
-    private BigDecimal avg_rating= BigDecimal.ZERO;
-    private Integer total_no_ratings=0;
+    private BigDecimal avg_rating = BigDecimal.ZERO;
+    private Integer total_no_ratings = 0;
     private LocalDateTime creationTimeStamp;
     private LocalDateTime updatedAt;
 }

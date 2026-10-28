@@ -31,5 +31,5 @@ public interface LectureRecordService {
 
     ResponseEntity<ResourceRegion> streamVideo(String fileName, String rangeHeader);
 
-    LectureRecordResponse updateLectureRecordDetails(Long id,LectureRecordDetailsUpdateRequest request);
+    LectureRecordResponse updateLectureRecordDetails(Long id, LectureRecordDetailsUpdateRequest request);
 }

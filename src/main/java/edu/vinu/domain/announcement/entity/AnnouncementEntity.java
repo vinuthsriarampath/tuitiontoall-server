@@ -39,31 +39,31 @@ public class AnnouncementEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title",nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "description",nullable = false, columnDefinition = "LONGTEXT")
+    @Column(name = "description", nullable = false, columnDefinition = "LONGTEXT")
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "visibility",nullable = false)
+    @Column(name = "visibility", nullable = false)
     private AnnouncementVisibility visibility;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status",nullable = false)
+    @Column(name = "status", nullable = false)
     private AnnouncementStatus status;
 
-    @Column(name = "is_pinned",nullable = false)
+    @Column(name = "is_pinned", nullable = false)
     private boolean isPinned;
 
     @Column(name = "published_date")
     private LocalDateTime publishedDate;
 
-    @Column(name = "expire_at",nullable = false)
+    @Column(name = "expire_at", nullable = false)
     private LocalDateTime expireAt;
 
     @CreationTimestamp
-    @Column(name = "created_date",nullable = false)
+    @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp

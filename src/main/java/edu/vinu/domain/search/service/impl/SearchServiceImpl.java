@@ -34,17 +34,17 @@ public class SearchServiceImpl implements SearchService {
     private final InstituteService instituteService;
 
     @Async
-    private CompletableFuture<List<User>> searchStudents(String query){
+    private CompletableFuture<List<User>> searchStudents(String query) {
         return CompletableFuture.completedFuture(studentService.getAllStudentsByFirstName(query));
     }
-    
+
     @Async
-    private CompletableFuture<List<User>> searchTeachers(String query){
+    private CompletableFuture<List<User>> searchTeachers(String query) {
         return CompletableFuture.completedFuture(teacherService.getAllTeachersByFirstName(query));
     }
-    
+
     @Async
-    private CompletableFuture<List<User>> searchInstitutes(String query){
+    private CompletableFuture<List<User>> searchInstitutes(String query) {
         return CompletableFuture.completedFuture(instituteService.getAllInstitutesByName(query));
     }
 

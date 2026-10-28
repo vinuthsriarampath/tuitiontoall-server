@@ -35,27 +35,27 @@ public class AssignmentController {
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PatchMapping("{id}")
-    public ResponseEntity<ApiResponse<AssignmentDetailedResponse>> updateAssignment(@PathVariable Long id, @Valid @RequestBody AssignmentUpdateRequest request){
-        AssignmentDetailedResponse response = assignmentService.updateAssignment(id,request);
-        return ResponseEntity.ok(createApiResponse("Assignment updated successfully!",response));
+    public ResponseEntity<ApiResponse<AssignmentDetailedResponse>> updateAssignment(@PathVariable Long id, @Valid @RequestBody AssignmentUpdateRequest request) {
+        AssignmentDetailedResponse response = assignmentService.updateAssignment(id, request);
+        return ResponseEntity.ok(createApiResponse("Assignment updated successfully!", response));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PatchMapping(value = "{id}/files")
-    public ResponseEntity<ApiResponse<String>> updateAssignmentFiles(@PathVariable("id") Long id, @RequestParam("file")MultipartFile file){
+    public ResponseEntity<ApiResponse<String>> updateAssignmentFiles(@PathVariable("id") Long id, @RequestParam("file") MultipartFile file) {
         String fileName = assignmentService.updateAssignmentFile(id, file);
-        return ResponseEntity.ok(createApiResponse("Assignment file updated successfully!",fileName));
+        return ResponseEntity.ok(createApiResponse("Assignment file updated successfully!", fileName));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}/detailed")
-    public ResponseEntity<ApiResponse<AssignmentDetailedResponse>> getDetailedAssignmentById(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<AssignmentDetailedResponse>> getDetailedAssignmentById(@PathVariable Long id) {
         AssignmentDetailedResponse response = assignmentService.getDetailedAssignmentById(id);
-        return ResponseEntity.ok(createApiResponse("Assignment retrieved successfully!",response));
+        return ResponseEntity.ok(createApiResponse("Assignment retrieved successfully!", response));
     }
 
     @GetMapping("/download/{fileName:.+}")
-    public ResponseEntity<Resource> downloadResource(@PathVariable String fileName){
+    public ResponseEntity<Resource> downloadResource(@PathVariable String fileName) {
         return assignmentService.downloadFile(fileName);
     }
 }

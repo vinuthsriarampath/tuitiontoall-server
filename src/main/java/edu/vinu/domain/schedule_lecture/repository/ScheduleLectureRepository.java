@@ -28,74 +28,74 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Repository
-public interface ScheduleLectureRepository extends JpaRepository<ScheduleLectureEntity,Long> {
+public interface ScheduleLectureRepository extends JpaRepository<ScheduleLectureEntity, Long> {
     @Query(value = """
-    SELECT EXISTS (
-        SELECT 1
-        FROM schedule_lecture sl
-        WHERE sl.chapter_id = :chapterId
-        AND sl.start_date = :startDate
-        AND (:excludedId IS NULL OR sl.id != :excludedId)
-        AND (
-            (:startTime < sl.end_time AND :endTime > sl.start_time)
-        )
-    )
-""",nativeQuery = true)
+                SELECT EXISTS (
+                    SELECT 1
+                    FROM schedule_lecture sl
+                    WHERE sl.chapter_id = :chapterId
+                    AND sl.start_date = :startDate
+                    AND (:excludedId IS NULL OR sl.id != :excludedId)
+                    AND (
+                        (:startTime < sl.end_time AND :endTime > sl.start_time)
+                    )
+                )
+            """, nativeQuery = true)
     Integer existsInSameTimePeriodInChapter(Long chapterId, LocalDate startDate, LocalTime startTime, LocalTime endTime, Long excludedId);
 
     @Query(value = """
-    SELECT
-        sl.id,
-        sl.chapter_id,
-        sl.topic,
-        sl.start_date,
-        sl.start_time,
-        sl.end_time,
-        sl.late_attendance,
-        sl.meeting_url,
-        sl.status,
-        sl.created_date,
-        sl.last_modified_date
-    FROM schedule_lecture sl
-    WHERE (:chapterId IS NULL OR sl.chapter_id = :chapterId)
-        AND (:id IS NULL OR sl.id = :id)
-        AND (:start_date IS NULL OR sl.start_date = :start_date)
-        AND (:start_time IS NULL OR sl.start_time >= :start_time)
-        AND (:end_time IS NULL OR sl.end_time <= :end_time)
-        AND (:status IS NULL OR sl.status = :status)
-    """,
-    countQuery = """
-    SELECT COUNT(*)
-    FROM schedule_lecture sl
-    WHERE (:chapterId IS NULL OR chapter_id = :chapterId)
-        AND (:id IS NULL OR id = :id)
-        AND (:start_date IS NULL OR start_date = :start_date)
-        AND (:start_time IS NULL OR start_time >= :start_time)
-        AND (:end_time IS NULL OR end_time <= :end_time)
-        AND (:status IS NULL OR status = :status)
-    """,
-    nativeQuery = true)
+            SELECT
+                sl.id,
+                sl.chapter_id,
+                sl.topic,
+                sl.start_date,
+                sl.start_time,
+                sl.end_time,
+                sl.late_attendance,
+                sl.meeting_url,
+                sl.status,
+                sl.created_date,
+                sl.last_modified_date
+            FROM schedule_lecture sl
+            WHERE (:chapterId IS NULL OR sl.chapter_id = :chapterId)
+                AND (:id IS NULL OR sl.id = :id)
+                AND (:start_date IS NULL OR sl.start_date = :start_date)
+                AND (:start_time IS NULL OR sl.start_time >= :start_time)
+                AND (:end_time IS NULL OR sl.end_time <= :end_time)
+                AND (:status IS NULL OR sl.status = :status)
+            """,
+            countQuery = """
+                    SELECT COUNT(*)
+                    FROM schedule_lecture sl
+                    WHERE (:chapterId IS NULL OR chapter_id = :chapterId)
+                        AND (:id IS NULL OR id = :id)
+                        AND (:start_date IS NULL OR start_date = :start_date)
+                        AND (:start_time IS NULL OR start_time >= :start_time)
+                        AND (:end_time IS NULL OR end_time <= :end_time)
+                        AND (:status IS NULL OR status = :status)
+                    """,
+            nativeQuery = true)
     Page<ScheduleLectureEntity> getAllModules(Long chapterId, Long id, LocalDate start_date, LocalTime start_time, LocalTime end_time, String status, Pageable pageable);
 
     @Modifying
     @Transactional
     @Query(value = """
-    UPDATE schedule_lecture
-    SET status = :completedStatus
-    WHERE TIMESTAMP(start_date, end_time) <= CURRENT_TIMESTAMP
-    AND status in (:liveStatus, :scheduledStatus);
-""",nativeQuery = true)
+                UPDATE schedule_lecture
+                SET status = :completedStatus
+                WHERE TIMESTAMP(start_date, end_time) <= CURRENT_TIMESTAMP
+                AND status in (:liveStatus, :scheduledStatus);
+            """, nativeQuery = true)
     int completeEndedLectures(@Param("completedStatus") String completedStatus, @Param("liveStatus") String liveStatus, @Param("scheduledStatus") String scheduledStatus);
 
     @Query(value = """
-    SELECT sl.*
-    FROM schedule_lecture sl
-    JOIN chapter c ON sl.chapter_id = c.id
-    JOIN module m ON c.module_id = m.id
-    WHERE m.teacher_id = :teacherId
-    AND sl.status IN ('SCHEDULED', 'LIVE')
-    AND TIMESTAMP(sl.start_date, sl.end_time) >= CURRENT_TIMESTAMP
-    ORDER BY sl.start_date , sl.start_time
-    """,nativeQuery = true)
+            SELECT sl.*
+            FROM schedule_lecture sl
+            JOIN chapter c ON sl.chapter_id = c.id
+            JOIN module m ON c.module_id = m.id
+            WHERE m.teacher_id = :teacherId
+            AND sl.status IN ('SCHEDULED', 'LIVE')
+            AND TIMESTAMP(sl.start_date, sl.end_time) >= CURRENT_TIMESTAMP
+            ORDER BY sl.start_date , sl.start_time
+            """, nativeQuery = true)
     List<ScheduleLectureEntity> findUpcomingLecturesForTeacher(Long teacherId);
 }

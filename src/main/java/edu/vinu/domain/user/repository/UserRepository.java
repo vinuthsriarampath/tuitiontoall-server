@@ -19,7 +19,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity,Long>{
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
     UserEntity findByEmail(String username);
 
     boolean existsByEmail(String email);

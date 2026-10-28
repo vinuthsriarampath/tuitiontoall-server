@@ -62,7 +62,7 @@ public class ReviewServiceImpl implements ReviewService {
         UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
         CourseEntity courseEntity = courseService.getCourseEntityById(request.courseId());
 
-        if(reviewRepository.countUserReviewsByCourseId(courseEntity.getId(), userEntity.getId()) > 0){
+        if (reviewRepository.countUserReviewsByCourseId(courseEntity.getId(), userEntity.getId()) > 0) {
             throw new BadRequestException("User has already reviewed this course");
         }
 
@@ -116,19 +116,19 @@ public class ReviewServiceImpl implements ReviewService {
         UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
         CourseEntity courseEntity = courseService.getCourseEntityById(courseId);
 
-        if(!userEntity.getRole().getRole().equals("student")){
+        if (!userEntity.getRole().getRole().equals("student")) {
             return ReviewEligibilityResponse.builder()
                     .canReview(false)
                     .reason(ReviewEligibilityReason.NOT_STUDENT)
                     .build();
-        }else if(enrollmentRepository.existsEnrollmentByStudentAndCourse(userEntity.getStudent().getId(), courseEntity.getId()) == 0){
+        } else if (enrollmentRepository.existsEnrollmentByStudentAndCourse(userEntity.getStudent().getId(), courseEntity.getId()) == 0) {
             return ReviewEligibilityResponse.builder()
                     .canReview(false)
                     .reason(ReviewEligibilityReason.NOT_ENROLLED)
                     .build();
         }
 
-        if(reviewRepository.countUserReviewsByCourseId(courseEntity.getId(), userEntity.getId()) > 0){
+        if (reviewRepository.countUserReviewsByCourseId(courseEntity.getId(), userEntity.getId()) > 0) {
             return ReviewEligibilityResponse.builder()
                     .canReview(false)
                     .reason(ReviewEligibilityReason.ALREADY_REVIEWED)

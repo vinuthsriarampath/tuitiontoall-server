@@ -29,7 +29,8 @@ import java.util.List;
 
 public interface BatchService {
     Batch createBatch(BatchCreateRequest request);
-    Batch createBatch(CourseEntity course,BatchCreateRequest request);
+
+    Batch createBatch(CourseEntity course, BatchCreateRequest request);
 
     PaginatedApiResponse<Batch> getAllBatchesByCourseId(Long courseId, PaginationRequest pagination, BatchFilterRequest filters);
 

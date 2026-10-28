@@ -40,7 +40,7 @@ public class AssignmentSubmitController {
 
     @PreAuthorize("hasAuthority('student')")
     @PostMapping("/assignment/{assignmentId}")
-    public ResponseEntity<ApiResponse<AssignmentSubmissionResponse>> submit(@PathVariable Long assignmentId, @RequestParam("file")MultipartFile file) {
+    public ResponseEntity<ApiResponse<AssignmentSubmissionResponse>> submit(@PathVariable Long assignmentId, @RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(submitService.submit(assignmentId, file));
     }
 
@@ -53,13 +53,13 @@ public class AssignmentSubmitController {
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @GetMapping("/assignment/{assignmentId}")
     public ResponseEntity<PaginatedApiResponse<AssignmentSubmissionDetailedResponse>> getAllSubmissions(@PathVariable Long assignmentId, PaginationRequest pagination, AssignmentSubmissionFilterRequest filters) {
-        return ResponseEntity.ok().body(submitService.getAllSubmissionByAssignment(assignmentId,pagination,filters));
+        return ResponseEntity.ok().body(submitService.getAllSubmissionByAssignment(assignmentId, pagination, filters));
     }
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("/assignment/{assignmentId}/me")
     public ResponseEntity<PaginatedApiResponse<StudentAssignmentSubmissionResponse>> getMySubmissions(@PathVariable Long assignmentId, PaginationRequest pagination, StudentAssignmentSubmissionFilterRequest filters) {
-        return ResponseEntity.ok().body(submitService.getAllSubmissionsByAssignmentOfStudent(assignmentId,pagination,filters));
+        return ResponseEntity.ok().body(submitService.getAllSubmissionsByAssignmentOfStudent(assignmentId, pagination, filters));
     }
 
     @GetMapping("/download/{fileName:.+}")

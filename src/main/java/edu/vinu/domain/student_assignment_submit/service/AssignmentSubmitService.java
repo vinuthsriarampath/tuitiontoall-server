@@ -34,7 +34,7 @@ public interface AssignmentSubmitService {
 
     PaginatedApiResponse<AssignmentSubmissionDetailedResponse> getAllSubmissionByAssignment(Long assignmentId, PaginationRequest pagination, AssignmentSubmissionFilterRequest filters);
 
-    PaginatedApiResponse<StudentAssignmentSubmissionResponse> getAllSubmissionsByAssignmentOfStudent(Long assignmentId,PaginationRequest pagination, StudentAssignmentSubmissionFilterRequest filters);
+    PaginatedApiResponse<StudentAssignmentSubmissionResponse> getAllSubmissionsByAssignmentOfStudent(Long assignmentId, PaginationRequest pagination, StudentAssignmentSubmissionFilterRequest filters);
 
     ResponseEntity<Resource> downloadSubmissionFile(String fileName);
 

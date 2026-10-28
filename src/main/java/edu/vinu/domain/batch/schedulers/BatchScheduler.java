@@ -30,13 +30,13 @@ public class BatchScheduler {
     private final BatchRepository batchRepository;
 
     @Scheduled(cron = "0 * * * * *", zone = "Asia/Colombo")
-    private void closeEnrollmentAndStartPreparationBatch(){
+    private void closeEnrollmentAndStartPreparationBatch() {
         int updated = batchRepository.closeEnrollmentAndStartPreparationBatch(
                 BatchEnrollmentStatus.OPEN.name(),
                 BatchEnrollmentStatus.CLOSED.name(),
                 BatchStatus.PREPARATION.name(),
                 BatchStatus.ONGOING.name()
         );
-        log.atInfo().log("{} PREPARATION batches got ONGOING! and CLOSE Enrollment at {}", updated , LocalDateTime.now());
+        log.atInfo().log("{} PREPARATION batches got ONGOING! and CLOSE Enrollment at {}", updated, LocalDateTime.now());
     }
 }

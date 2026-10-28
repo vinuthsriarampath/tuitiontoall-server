@@ -18,7 +18,7 @@ import edu.vinu.domain.course.repository.projections.StudentCourseProjection;
 import edu.vinu.domain.course.response.StudentCourseResponse;
 
 public class StudentCourseMapper {
-    public static StudentCourseResponse toStudentCourseResponse(StudentCourseProjection p){
+    public static StudentCourseResponse toStudentCourseResponse(StudentCourseProjection p) {
         return StudentCourseResponse.builder()
                 .id(p.getCourseId())
                 .title(p.getCourseTitle())
@@ -34,7 +34,7 @@ public class StudentCourseMapper {
                 .build();
     }
 
-    public static StudentBatchResponse toStudentBatchResponse(StudentCourseProjection p){
+    public static StudentBatchResponse toStudentBatchResponse(StudentCourseProjection p) {
         return StudentBatchResponse.builder()
                 .id(p.getBatchId())
                 .courseId(p.getCourseId())

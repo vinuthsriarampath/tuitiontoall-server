@@ -18,7 +18,7 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record TeachingResponse (
+public record TeachingResponse(
         Long instituteId,
         String instituteName,
         List<CourseTeachingResponse> courses

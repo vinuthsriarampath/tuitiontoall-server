@@ -15,4 +15,5 @@ package edu.vinu.domain.course.events;
 
 import edu.vinu.domain.course.entity.CourseEntity;
 
-public record CourseCreatedEvent(CourseEntity course) { }
+public record CourseCreatedEvent(CourseEntity course) {
+}

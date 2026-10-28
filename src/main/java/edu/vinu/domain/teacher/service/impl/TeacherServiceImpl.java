@@ -47,7 +47,7 @@ public class TeacherServiceImpl implements TeacherService {
         List<Teacher> teacherList = teacherRepository.getAllTeachers().stream()
                 .map(TeacherMapper::toTeacher)
                 .toList();
-        if (teacherList.isEmpty()){
+        if (teacherList.isEmpty()) {
             throw new NotFoundException("No Teachers Found!");
         }
         return teacherList;
@@ -87,11 +87,11 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public TeacherEntity getCurrentTeacher() {
         UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
-        if(userEntity == null){
+        if (userEntity == null) {
             throw new NotFoundException("User not found !");
-        }else if(!userEntity.getRole().getRole().equalsIgnoreCase("teacher")) {
+        } else if (!userEntity.getRole().getRole().equalsIgnoreCase("teacher")) {
             throw new UnauthorizedException("User is not associated with teacher role!");
-        }else {
+        } else {
             return userEntity.getTeacher();
         }
     }

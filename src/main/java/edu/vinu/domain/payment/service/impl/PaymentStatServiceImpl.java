@@ -34,6 +34,7 @@ import java.util.List;
 public class PaymentStatServiceImpl implements PaymentStatService {
 
     private final PaymentRepository paymentRepository;
+
     @Override
     public BigDecimal sumPaymentsByInstituteIdAndPaymentStatus(Long instituteId, PaymentStatus paymentStatus) {
         BigDecimal sum = paymentRepository.sumRevenueByInstituteAndStatus(instituteId, paymentStatus.name());
@@ -50,22 +51,23 @@ public class PaymentStatServiceImpl implements PaymentStatService {
     public List<TrendPoint> getRevenueTrendByInstituteAndPaymentStatus(Long instituteId, PaymentStatus paymentStatus, ReportingPeriod period, ReportingPeriodRange range) {
         return switch (period) {
             case TODAY -> getHourlyRevenueTrend(instituteId, paymentStatus, range);
-            case CURRENT_WEEK, CURRENT_MONTH, CURRENT_3_MONTHS -> getDailyRevenueTrend(instituteId, paymentStatus, range);
+            case CURRENT_WEEK, CURRENT_MONTH, CURRENT_3_MONTHS ->
+                    getDailyRevenueTrend(instituteId, paymentStatus, range);
             case CURRENT_YEAR, OVERALL -> getMonthlyRevenueTrend(instituteId, paymentStatus, range);
         };
     }
 
-    private List<TrendPoint> getHourlyRevenueTrend(Long instituteId, PaymentStatus paymentStatus, ReportingPeriodRange range){
+    private List<TrendPoint> getHourlyRevenueTrend(Long instituteId, PaymentStatus paymentStatus, ReportingPeriodRange range) {
         List<TrendPointProjection> projections = paymentRepository.getHourlyPaymentTrendsByInstituteAndStatus(instituteId, paymentStatus.name(), range.currentStart(), range.currentEnd());
         return TrendBuilder.build(range.currentStart(), range.currentEnd(), TrendType.HOUR, projections);
     }
 
-    private List<TrendPoint> getDailyRevenueTrend(Long instituteId, PaymentStatus paymentStatus, ReportingPeriodRange range){
+    private List<TrendPoint> getDailyRevenueTrend(Long instituteId, PaymentStatus paymentStatus, ReportingPeriodRange range) {
         List<TrendPointProjection> projections = paymentRepository.getDailyPaymentTrendsByInstituteAndStatus(instituteId, paymentStatus.name(), range.currentStart(), range.currentEnd());
         return TrendBuilder.build(range.currentStart(), range.currentEnd(), TrendType.DAY, projections);
     }
 
-    private List<TrendPoint> getMonthlyRevenueTrend(Long instituteId, PaymentStatus paymentStatus, ReportingPeriodRange range){
+    private List<TrendPoint> getMonthlyRevenueTrend(Long instituteId, PaymentStatus paymentStatus, ReportingPeriodRange range) {
         List<TrendPointProjection> projections = paymentRepository.getMonthlyPaymentTrendsByInstituteAndStatus(instituteId, paymentStatus.name(), range.currentStart(), range.currentEnd());
         return TrendBuilder.build(range.currentStart(), range.currentEnd(), TrendType.MONTH, projections);
     }

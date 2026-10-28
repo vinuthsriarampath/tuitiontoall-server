@@ -26,7 +26,8 @@ public class UserValidator {
     private static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d])[A-Za-z\\d@$!%*?&]{8,}$";
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
 
-    private UserValidator(){}
+    private UserValidator() {
+    }
 
     public static boolean isValidateEmail(String email) {
         return email != null && EMAIL_PATTERN.matcher(email).matches();

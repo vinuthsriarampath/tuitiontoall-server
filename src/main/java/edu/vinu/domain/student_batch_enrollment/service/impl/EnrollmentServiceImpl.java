@@ -84,7 +84,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private final UserService userService;
     private final BatchService batchService;
     private final PaymentService paymentService;
-    private final StudentBatchEnrollmentRepository  studentBatchEnrollmentRepository;
+    private final StudentBatchEnrollmentRepository studentBatchEnrollmentRepository;
     private final InvoicePdfGeneratorService invoicePdfGenerator;
     private final UserAuthenticationService authService;
     private final PeriodService periodService;
@@ -96,13 +96,13 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
         StudentEntity studentEntity;
 
-        if(userEntity.getRole().getRole().equals("student")){
+        if (userEntity.getRole().getRole().equals("student")) {
             studentEntity = userEntity.getStudent();
 
             CourseEntity courseEntity = courseService.getCourseEntityById(request.courseId());
             BatchEntity batchEntity = batchService.getBatchEntityById(request.batchId());
 
-            if(!Objects.equals(batchEntity.getCourse().getId(), courseEntity.getId())){
+            if (!Objects.equals(batchEntity.getCourse().getId(), courseEntity.getId())) {
                 throw new InvalidInputException("Batch does not belong to the course");
             }
 
@@ -123,7 +123,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 }
             }
 
-            Payment payment = paymentService.pay(BigDecimal.valueOf(courseEntity.getPrice()),studentEntity, courseEntity.getInstitute());
+            Payment payment = paymentService.pay(BigDecimal.valueOf(courseEntity.getPrice()), studentEntity, courseEntity.getInstitute());
 
             StudentBatchEnrollment studentBatchEnrollment = StudentBatchEnrollment.builder()
                     .student(studentEntity)
@@ -159,14 +159,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         UserEntity userEntity = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
         StudentEntity studentEntity;
 
-        if(userEntity.getRole().getRole().equals("student")){
+        if (userEntity.getRole().getRole().equals("student")) {
             studentEntity = userEntity.getStudent();
             if (!Objects.equals(batch.getCourse().getId(), course.getId())) {
                 EnrollmentEligibilityResponse response = EnrollmentEligibilityResponse.builder()
                         .canEnroll(false)
                         .reason(EnrollmentEligibilityReason.INVALID_BATCH)
                         .build();
-                return createApiResponse("The selected batch does not belong to this course",response);
+                return createApiResponse("The selected batch does not belong to this course", response);
             }
 
             if (batch.getEnrollment_status() != BatchEnrollmentStatus.OPEN) {
@@ -216,7 +216,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public PaginatedApiResponse<StudentUserResponse> getStudentsByBatch(Long batchId, PaginationRequest pagination, BatchStudentFilterRequest filters) {
-        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));;
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));
         Page<StudentUserResponse> pageData = studentBatchEnrollmentRepository.findAllStudentsByBatchId(
                 batchId,
                 filters.name(),
@@ -243,8 +243,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     public List<TrendPoint> getStudentEnrollmentTrend(Long instituteId, ReportingPeriod period, ReportingPeriodRange range) {
         return switch (period) {
             case TODAY -> getHourlyStudentEnrollmentTrend(instituteId, range.currentStart(), range.currentEnd());
-            case CURRENT_WEEK, CURRENT_MONTH, CURRENT_3_MONTHS -> getDailyStudentEnrollmentTrend(instituteId, range.currentStart(), range.currentEnd());
-            case CURRENT_YEAR, OVERALL -> getMonthlyStudentEnrollmentTrend(instituteId, range.currentStart(), range.currentEnd());
+            case CURRENT_WEEK, CURRENT_MONTH, CURRENT_3_MONTHS ->
+                    getDailyStudentEnrollmentTrend(instituteId, range.currentStart(), range.currentEnd());
+            case CURRENT_YEAR, OVERALL ->
+                    getMonthlyStudentEnrollmentTrend(instituteId, range.currentStart(), range.currentEnd());
         };
     }
 
@@ -290,7 +292,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
 
         List<TrendPoint> overallEnrollmentTrend = getStudentEnrollmentTrend(instituteId, ReportingPeriod.OVERALL, periodRange);
-        TrendPoint peakMonthTrend = getPeakMonthlyEnrollmentTrendByInstitute(instituteId,1, periodRange).get(0);
+        TrendPoint peakMonthTrend = getPeakMonthlyEnrollmentTrendByInstitute(instituteId, 1, periodRange).get(0);
 
         LocalDateTime peakMonthStart = peakMonthTrend.getDate();
         LocalDateTime monthAfterPeakMonth = peakMonthStart.plusMonths(1);
@@ -306,9 +308,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 .peakMonthTrend(peakMonthTrend)
                 .growthRateSincePeakMonth(
                         DifferenceCalculator.calculate(
-                            BigDecimal.valueOf(currentCumulativeEnrollments),
-                            BigDecimal.valueOf(peakCumulativeEnrollments),
-                            ChangeValueType.PERCENTAGE
+                                BigDecimal.valueOf(currentCumulativeEnrollments),
+                                BigDecimal.valueOf(peakCumulativeEnrollments),
+                                ChangeValueType.PERCENTAGE
                         )
                 )
                 .build();
@@ -316,7 +318,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
     @Override
     public List<RecentEnrollmentResponse> getRecent5EnrollmentsByStudent(Long studentId) {
-        return studentBatchEnrollmentRepository.getRecentEnrollmentByStudent(studentId,5).stream().map(StudentBatchEnrollmentMapper::toRecentEnrollmentResponse).toList();
+        return studentBatchEnrollmentRepository.getRecentEnrollmentByStudent(studentId, 5).stream().map(StudentBatchEnrollmentMapper::toRecentEnrollmentResponse).toList();
     }
 
     private List<TrendPoint> getHourlyStudentEnrollmentTrend(Long instituteId, LocalDateTime start, LocalDateTime end) {

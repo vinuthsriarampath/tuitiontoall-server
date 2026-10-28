@@ -32,7 +32,7 @@ public class ModuleMapper {
                 .build();
     }
 
-    public static ModuleResponse toModuleResponse(ModuleEntity entity){
+    public static ModuleResponse toModuleResponse(ModuleEntity entity) {
         return ModuleResponse.builder()
                 .id(entity.getId())
                 .name(entity.getName())
@@ -44,7 +44,7 @@ public class ModuleMapper {
                 .build();
     }
 
-    public static ModuleDetailedResponse toModuleDetailedResponse(DetailedModuleProjection p){
+    public static ModuleDetailedResponse toModuleDetailedResponse(DetailedModuleProjection p) {
         return ModuleDetailedResponse.builder()
                 .id(p.getId())
                 .name(p.getName())

@@ -62,12 +62,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse> handleJsonParseException(HttpMessageNotReadableException ex) {
-        ApiResponse response = new ApiResponse("Invalid JSON input: " +ex.getMessage(),null);
+        ApiResponse response = new ApiResponse("Invalid JSON input: " + ex.getMessage(), null);
         return ResponseEntity.badRequest().body(response);
     }
+
     @ExceptionHandler(DateTimeParseException.class)
     public ResponseEntity<ApiResponse> handleDateTimeParseException(DateTimeParseException ex) {
-        ApiResponse response = new ApiResponse(ex.getMessage(),null);
+        ApiResponse response = new ApiResponse(ex.getMessage(), null);
         return ResponseEntity.badRequest().body(response);
     }
 
@@ -78,7 +79,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ApiResponse> handleUserNotFoundException(NotFoundException ex){
+    public ResponseEntity<ApiResponse> handleUserNotFoundException(NotFoundException ex) {
         ApiResponse response = new ApiResponse(ex.getMessage(), null);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
@@ -123,7 +124,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<ApiResponse> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex){
+    public ResponseEntity<ApiResponse> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
         ApiResponse error = new ApiResponse(ex.getMessage(), null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }

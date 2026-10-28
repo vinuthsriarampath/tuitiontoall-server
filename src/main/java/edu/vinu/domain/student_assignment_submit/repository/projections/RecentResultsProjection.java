@@ -17,8 +17,12 @@ import java.time.LocalDateTime;
 
 public interface RecentResultsProjection {
     Long getAssignmentId();
+
     String getAssignmentTitle();
+
     String getGrade();
+
     Integer getMarksGained();
+
     LocalDateTime getSubmittedAt();
 }

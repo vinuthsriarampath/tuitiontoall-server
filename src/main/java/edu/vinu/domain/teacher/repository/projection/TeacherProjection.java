@@ -18,7 +18,10 @@ import java.time.LocalDate;
 
 public interface TeacherProjection {
     Long getTeacherId();
+
     String getFirstName();
+
     String getLastName();
+
     LocalDate getDob();
 }

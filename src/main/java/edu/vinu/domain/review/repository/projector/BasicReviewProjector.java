@@ -17,8 +17,12 @@ import java.time.LocalDateTime;
 
 public interface BasicReviewProjector {
     Long getId();
+
     String getReview();
+
     int getRating();
+
     LocalDateTime getCreatedDate();
+
     LocalDateTime getLastModifiedDate();
 }

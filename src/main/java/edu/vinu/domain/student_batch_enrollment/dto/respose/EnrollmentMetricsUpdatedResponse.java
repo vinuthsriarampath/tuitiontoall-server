@@ -22,5 +22,5 @@ public record EnrollmentMetricsUpdatedResponse(
         DashboardKpi revenueKpi,
         OverallEnrollmentResponse overallEnrollment,
         EnrollmentDistributionResponse enrollmentDistribution
-){
+) {
 }

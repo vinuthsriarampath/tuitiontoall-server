@@ -22,4 +22,5 @@ public record ChapterOrderRequest(
         Long chapterId,
         @NotNull(message = "Chapter order is mandatory!")
         int chapterOrder
-) {}
+) {
+}

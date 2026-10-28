@@ -16,7 +16,7 @@ package edu.vinu.common.dto;
 import java.util.List;
 
 public record PaginationRequest(
-        Integer  page,
+        Integer page,
         Integer size,
         String direction,
         List<String> sortBy

@@ -225,7 +225,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
                 String token = jwtService.generateToken(authentication);
                 UserEntity userEntity = userRepository.findByEmail(request.getEmail());
                 User user = mapper.map(userEntity, User.class);
-                switch (user.getRole().getRole()){
+                switch (user.getRole().getRole()) {
                     case "student":
                         user.setDetails(mapper.map(userEntity.getStudent(), Student.class));
                         break;
@@ -237,7 +237,7 @@ public class UserAuthenticationServiceImpl implements UserAuthenticationService 
                         break;
                 }
 
-                return new AuthResponse(token,user);
+                return new AuthResponse(token, user);
             }
             throw new UnauthorizedException("Invalid access");
         } catch (AuthenticationException e) {

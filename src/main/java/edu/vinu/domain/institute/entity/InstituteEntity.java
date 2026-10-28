@@ -32,7 +32,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "institute")
-public class InstituteEntity{
+public class InstituteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,7 +40,7 @@ public class InstituteEntity{
     private String instituteName;
 
     @OneToOne
-    @JoinColumn(name = "user_id",nullable = false,unique = true)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private UserEntity user;
 
     @OneToMany(mappedBy = "institute")

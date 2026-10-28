@@ -32,10 +32,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResourceQueryServiceImpl implements ResourceQueryService {
     private final ResourceRepository resourceRepository;
+
     @Override
     public PaginatedApiResponse<ResourceResponse> getAllResourcesByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ResourceFilterRequest filters) {
         Pageable pageable = PageRequest.of(page, size, SortUtil.buildSort(direction, sortBy, List.of("created_date")));
-        Page<ResourceResponse> pageData = resourceRepository.getAllResourcesByChapter(chapterId, filters.resourceId() , filters.name(), pageable)
+        Page<ResourceResponse> pageData = resourceRepository.getAllResourcesByChapter(chapterId, filters.resourceId(), filters.name(), pageable)
                 .map(ResourceMapper::toResourceResponse);
 
         return PaginatedApiResponse.<ResourceResponse>builder()

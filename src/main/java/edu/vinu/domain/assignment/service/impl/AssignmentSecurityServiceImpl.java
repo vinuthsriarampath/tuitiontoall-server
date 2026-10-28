@@ -41,23 +41,26 @@ public class AssignmentSecurityServiceImpl implements AssignmentSecurityService 
         UserEntity currentUser = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
         String userRole = currentUser.getRole().getRole();
 
-        boolean hasAccess = switch (userRole.toLowerCase()){
-            case "institute"->{
-                if (currentUser.getInstitute() == null) throw new UnauthorizedException("User is not associated with any institute");
+        boolean hasAccess = switch (userRole.toLowerCase()) {
+            case "institute" -> {
+                if (currentUser.getInstitute() == null)
+                    throw new UnauthorizedException("User is not associated with any institute");
                 yield assignmentRepository.instituteAccess(assignmentId, currentUser.getInstitute().getId()) > 0;
             }
-            case "teacher"->{
-                if (currentUser.getTeacher() == null) throw new UnauthorizedException("User is not associated with any teacher");
+            case "teacher" -> {
+                if (currentUser.getTeacher() == null)
+                    throw new UnauthorizedException("User is not associated with any teacher");
                 yield assignmentRepository.teacherAccess(assignmentId, currentUser.getTeacher().getId()) > 0;
             }
-            case "student"->{
-                if (currentUser.getStudent() == null) throw new UnauthorizedException("User is not associated with any student");
+            case "student" -> {
+                if (currentUser.getStudent() == null)
+                    throw new UnauthorizedException("User is not associated with any student");
                 yield assignmentRepository.studentAccess(assignmentId, currentUser.getStudent().getId()) > 0;
             }
             default -> false;
         };
 
-        if (!hasAccess){
+        if (!hasAccess) {
             throw new UnauthorizedException("User is not authorized to access this assignment");
         }
     }

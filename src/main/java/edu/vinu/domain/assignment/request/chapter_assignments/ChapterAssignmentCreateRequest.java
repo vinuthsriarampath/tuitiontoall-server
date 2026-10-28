@@ -52,4 +52,5 @@ public record ChapterAssignmentCreateRequest(
         @NotNull(message = "Grading ranges list is mandatory!")
         @NotEmpty(message = "At least one grading range is required!")
         List<GradingRangeCreateRequest> gradingRanges
-){}
+) {
+}

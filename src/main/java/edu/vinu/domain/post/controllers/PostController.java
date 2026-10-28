@@ -63,8 +63,8 @@ public class PostController {
     }
 
     @GetMapping("me")
-    public ResponseEntity<PaginatedApiResponse<UserPostResponse>> getMyPosts(PaginationRequest paginationRequest, MyPostsFilterRequests filters){
-        return ResponseEntity.ok(userPostService.getMyPosts(paginationRequest,filters));
+    public ResponseEntity<PaginatedApiResponse<UserPostResponse>> getMyPosts(PaginationRequest paginationRequest, MyPostsFilterRequests filters) {
+        return ResponseEntity.ok(userPostService.getMyPosts(paginationRequest, filters));
     }
 
     @GetMapping("/user/{targetUserId}")
@@ -80,13 +80,13 @@ public class PostController {
     @PostMapping("/{postId}/like")
     public ResponseEntity<ApiResponse<Void>> likePost(@PathVariable Long postId) {
         postLikeService.likePost(postId);
-        return ResponseEntity.ok(createApiResponse("Post liked successfully.",null));
+        return ResponseEntity.ok(createApiResponse("Post liked successfully.", null));
     }
 
     @DeleteMapping("/{postId}/dislike")
     public ResponseEntity<ApiResponse<Void>> dislikePost(@PathVariable Long postId) {
         postLikeService.dislikePost(postId);
-        return ResponseEntity.ok(createApiResponse("Post disliked successfully.",null));
+        return ResponseEntity.ok(createApiResponse("Post disliked successfully.", null));
     }
 
     @PostMapping("/{postId}/comment")
@@ -95,7 +95,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}/comments")
-    public ResponseEntity<PaginatedApiResponse<PostCommentDetailedResponse>> getPostComments(@PathVariable Long postId, PaginationRequest pagination, PostCommentsFilterRequest filters){
+    public ResponseEntity<PaginatedApiResponse<PostCommentDetailedResponse>> getPostComments(@PathVariable Long postId, PaginationRequest pagination, PostCommentsFilterRequest filters) {
         return ResponseEntity.ok(postCommentService.getPostComments(postId, pagination, filters));
     }
 }

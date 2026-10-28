@@ -35,7 +35,7 @@ public interface TeacherVacancyService {
 
     PaginatedApiResponse<TeacherVacancy> getAllByInstitute(PaginationRequest pagination, TeacherVacancyFilterRequest filters);
 
-    List<TeacherVacancy> getAllByInstituteIdAndStatus(Long instituteId, String  status);
+    List<TeacherVacancy> getAllByInstituteIdAndStatus(Long instituteId, String status);
 
     TeacherVacancyEntity getEntityById(Long id);
 

@@ -21,5 +21,5 @@ public record GradingSubmissionRequest(
         @NotNull(message = "Marks gained is required.")
         @Min(value = 0, message = "Marks cannot be negative.")
         int marksGained
-){
+) {
 }

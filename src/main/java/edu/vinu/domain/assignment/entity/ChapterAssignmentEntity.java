@@ -36,18 +36,18 @@ public class ChapterAssignmentEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "chapter_id",nullable = false)
+    @JoinColumn(name = "chapter_id", nullable = false)
     private ChapterEntity chapter;
 
     @OneToOne
-    @JoinColumn(name = "assignment_id",unique = true,nullable = false)
+    @JoinColumn(name = "assignment_id", unique = true, nullable = false)
     private AssignmentEntity assignment;
 
     @CreationTimestamp
-    @Column(name = "created_date",nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    @Column(name = "last_modified_date",insertable = false)
+    @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime lastModifiedDate;
 }

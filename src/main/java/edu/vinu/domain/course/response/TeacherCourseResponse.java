@@ -22,7 +22,7 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record TeacherCourseResponse (
+public record TeacherCourseResponse(
         Long id,
         String title,
         String description,
@@ -34,5 +34,5 @@ public record TeacherCourseResponse (
         String thumbnail,
         BigDecimal avgRating,
         Integer totalRatings
-){
+) {
 }

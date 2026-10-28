@@ -22,7 +22,7 @@ public class ResponseUtil {
         return new ApiResponse<>(message, data);
     }
 
-    public static <T>PaginatedApiResponse<T> createPaginatedApiResponse(String message, Page<T> page){
+    public static <T> PaginatedApiResponse<T> createPaginatedApiResponse(String message, Page<T> page) {
         return new PaginatedApiResponse<>(message, page.getContent(), page.getNumber(), page.getSize(), page.getTotalElements(), page.getTotalPages(), page.isLast());
     }
 }

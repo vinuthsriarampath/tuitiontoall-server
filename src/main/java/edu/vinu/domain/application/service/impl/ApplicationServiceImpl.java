@@ -69,19 +69,19 @@ public class ApplicationServiceImpl implements ApplicationService {
             }
 
             if (teacherVacancyEntity.getStatus() == TeacherVacancyStatus.OPEN) {
-                if (this.isUserAlreadyApplied(userEntity.getTeacher().getId(),vacancyId)) {
+                if (this.isUserAlreadyApplied(userEntity.getTeacher().getId(), vacancyId)) {
                     throw new BadRequestException("You have already applied for this vacancy");
                 }
-                ApplicationEntity applicationEntity =  ApplicationEntity.builder()
+                ApplicationEntity applicationEntity = ApplicationEntity.builder()
                         .teacherVacancy(teacherVacancyEntity)
                         .teacher(userEntity.getTeacher())
                         .status(ApplicationStatus.PENDING)
                         .build();
                 ApplicationEntity save = applicationRepository.save(applicationEntity);
 
-                emailService.SendApplicationSuccessEmail(userEntity.getEmail(), userEntity.getTeacher().getFirstName()+" "+userEntity.getTeacher().getLastName(),"#");
+                emailService.SendApplicationSuccessEmail(userEntity.getEmail(), userEntity.getTeacher().getFirstName() + " " + userEntity.getTeacher().getLastName(), "#");
                 return this.mapToDto(save);
-            }else{
+            } else {
                 throw new BadRequestException("Vacancy is not open for applications");
             }
         } else {
@@ -91,20 +91,20 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public boolean isUserAlreadyApplied(Long teacherId,Long vacancyId) {
-        if(!teacherVacancyService.existsById(vacancyId)){
+    public boolean isUserAlreadyApplied(Long teacherId, Long vacancyId) {
+        if (!teacherVacancyService.existsById(vacancyId)) {
             throw new NotFoundException("Vacancy not found!");
         }
         if (!teacherService.isTeacherExistById(teacherId)) {
             throw new NotFoundException("Teacher not found!");
         }
-        return applicationRepository.isUserAlreadyApplied(teacherId,vacancyId) == 1;
+        return applicationRepository.isUserAlreadyApplied(teacherId, vacancyId) == 1;
     }
 
     @Override
     public PaginatedApiResponse<ApplicationDetailsResponse> getApplicationsByVacancy(Long vacancyId, PaginationRequest pagination, ApplicationFilterRequest filters) {
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("applied_date")));
-        if (teacherVacancyService.existsById(vacancyId)){
+        if (teacherVacancyService.existsById(vacancyId)) {
             Page<ApplicationDetailsResponse> page = applicationRepository.findAllByTeacherVacancy_Id(
                     vacancyId,
                     filters.status() != null ? filters.status().name() : null,
@@ -120,7 +120,7 @@ public class ApplicationServiceImpl implements ApplicationService {
                     .totalPages(page.getTotalPages())
                     .last(page.isLast())
                     .build();
-        }else {
+        } else {
             throw new NotFoundException("Vacancy not found!");
         }
     }
@@ -146,7 +146,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     public PaginatedApiResponse<TeacherApplicationResponse> getCurrentTeacherApplications(PaginationRequest pagination, TeacherApplicationFilterRequest filters) {
         TeacherEntity currentTeacher = teacherService.getCurrentTeacher();
 
-        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(),pagination.sortBy(),List.of("applied_date")));
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("applied_date")));
 
 
         Page<TeacherApplicationResponse> pageData = applicationRepository.getApplicationsByTeacher(
@@ -171,8 +171,8 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .build();
     }
 
-    private Application mapToDto(ApplicationEntity a){
-        return  Application.builder()
+    private Application mapToDto(ApplicationEntity a) {
+        return Application.builder()
                 .id(a.getId())
                 .teacherId(a.getTeacher().getId())
                 .status(a.getStatus())

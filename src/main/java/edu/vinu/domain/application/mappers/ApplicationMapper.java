@@ -21,7 +21,7 @@ import edu.vinu.domain.application.response.TeacherApplicationResponse;
 import edu.vinu.domain.teacher.dtos.response.TeacherUserResponse;
 
 public class ApplicationMapper {
-    public static TeacherApplicationResponse toTeacherApplicationResponse(TeacherApplicationProjection p){
+    public static TeacherApplicationResponse toTeacherApplicationResponse(TeacherApplicationProjection p) {
         return TeacherApplicationResponse.builder()
                 .applicationId(p.getApplicationId())
                 .vacancyId(p.getVacancyId())
@@ -35,7 +35,7 @@ public class ApplicationMapper {
                 .build();
     }
 
-    public static ApplicationDetailsResponse toApplicationDetailsResponse(ApplicationProjection ap){
+    public static ApplicationDetailsResponse toApplicationDetailsResponse(ApplicationProjection ap) {
         return ApplicationDetailsResponse.builder()
                 .id(ap.getId())
                 .teacherVacancyId(ap.getTeacherVacancyId())

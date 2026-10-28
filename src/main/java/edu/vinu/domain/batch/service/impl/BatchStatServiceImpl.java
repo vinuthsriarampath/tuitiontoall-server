@@ -34,9 +34,10 @@ import java.util.List;
 public class BatchStatServiceImpl implements BatchStatService {
 
     private final BatchRepository batchRepository;
+
     @Override
     public BigDecimal countBatchesByInstituteAndBatchStatus(Long instituteId, BatchStatus batchStatus) {
-        Long count =  batchRepository.countBatchesByInstituteIdAndBatchStatus(instituteId, batchStatus.name());
+        Long count = batchRepository.countBatchesByInstituteIdAndBatchStatus(instituteId, batchStatus.name());
         return count != null ? BigDecimal.valueOf(count) : BigDecimal.ZERO;
     }
 
@@ -48,25 +49,25 @@ public class BatchStatServiceImpl implements BatchStatService {
 
     @Override
     public List<TrendPoint> getBatchesTrendByInstituteAndBatchStatus(Long instituteId, BatchStatus batchStatus, ReportingPeriod period, ReportingPeriodRange range) {
-        return switch (period){
+        return switch (period) {
             case TODAY -> getHourlyBatchesTrend(instituteId, batchStatus, range);
-            case CURRENT_WEEK,CURRENT_MONTH,CURRENT_3_MONTHS -> getDailyBatchesTrend(instituteId, batchStatus, range);
+            case CURRENT_WEEK, CURRENT_MONTH, CURRENT_3_MONTHS -> getDailyBatchesTrend(instituteId, batchStatus, range);
             case CURRENT_YEAR, OVERALL -> getMonthlyBatchesTrend(instituteId, batchStatus, range);
         };
     }
 
-    private List<TrendPoint> getHourlyBatchesTrend(Long instituteId, BatchStatus batchStatus, ReportingPeriodRange range ) {
+    private List<TrendPoint> getHourlyBatchesTrend(Long instituteId, BatchStatus batchStatus, ReportingPeriodRange range) {
         List<TrendPointProjection> projections = batchRepository.getHourlyBatchesTrendByInstituteAndBatchStatus(instituteId, batchStatus.name(), range.currentStart(), range.currentEnd());
-        return TrendBuilder.build(range.currentStart(), range.currentEnd(), TrendType.HOUR , projections);
+        return TrendBuilder.build(range.currentStart(), range.currentEnd(), TrendType.HOUR, projections);
     }
 
-    private List<TrendPoint> getDailyBatchesTrend(Long instituteId, BatchStatus batchStatus, ReportingPeriodRange range ) {
+    private List<TrendPoint> getDailyBatchesTrend(Long instituteId, BatchStatus batchStatus, ReportingPeriodRange range) {
         List<TrendPointProjection> projections = batchRepository.getDailyBatchesTrendByInstituteAndBatchStatus(instituteId, batchStatus.name(), range.currentStart(), range.currentEnd());
-        return TrendBuilder.build(range.currentStart(), range.currentEnd(), TrendType.DAY , projections);
+        return TrendBuilder.build(range.currentStart(), range.currentEnd(), TrendType.DAY, projections);
     }
 
-    private List<TrendPoint> getMonthlyBatchesTrend(Long instituteId, BatchStatus batchStatus, ReportingPeriodRange range ) {
+    private List<TrendPoint> getMonthlyBatchesTrend(Long instituteId, BatchStatus batchStatus, ReportingPeriodRange range) {
         List<TrendPointProjection> projections = batchRepository.getMonthlyBatchesTrendByInstituteAndBatchStatus(instituteId, batchStatus.name(), range.currentStart(), range.currentEnd());
-        return TrendBuilder.build(range.currentStart(), range.currentEnd(), TrendType.MONTH , projections);
+        return TrendBuilder.build(range.currentStart(), range.currentEnd(), TrendType.MONTH, projections);
     }
 }

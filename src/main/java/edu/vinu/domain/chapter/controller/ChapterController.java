@@ -47,14 +47,14 @@ public class ChapterController {
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping
-    public ResponseEntity<ApiResponse<ChapterResponse>> createChapter(@Valid @RequestBody ChapterCreateRequest request){
+    public ResponseEntity<ApiResponse<ChapterResponse>> createChapter(@Valid @RequestBody ChapterCreateRequest request) {
         return ResponseEntity.ok(createApiResponse("Chapter created successfully", chapterService.createChapter(request)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PatchMapping("{id}/details")
-    public ResponseEntity<ApiResponse<ChapterResponse>> updateChapterDetails(@PathVariable("id")Long id,@Valid @RequestBody ChapterDetailsUpdateRequest request){
-        return ResponseEntity.ok(createApiResponse("Chapter details updated successfully", chapterService.updateChapterDetailsById(id,request)));
+    public ResponseEntity<ApiResponse<ChapterResponse>> updateChapterDetails(@PathVariable("id") Long id, @Valid @RequestBody ChapterDetailsUpdateRequest request) {
+        return ResponseEntity.ok(createApiResponse("Chapter details updated successfully", chapterService.updateChapterDetailsById(id, request)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
@@ -65,13 +65,13 @@ public class ChapterController {
 
     @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}/detailed")
-    public ResponseEntity<ApiResponse<ChapterDetailedResponse>> getDetailedChapterById(@PathVariable("id")Long id){
+    public ResponseEntity<ApiResponse<ChapterDetailedResponse>> getDetailedChapterById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(createApiResponse("Chapter details fetched successfully", chapterService.getDetailedChapterById(id)));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}/lecture-records")
-    public ResponseEntity<ApiResponse<List<LectureRecordResponse>>> getAllLectureRecordsById(@PathVariable("id")Long id){
+    public ResponseEntity<ApiResponse<List<LectureRecordResponse>>> getAllLectureRecordsById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(createApiResponse("All lecture records related to chapter fetched successfully!", chapterService.getAllLectureRecordsByChapterId(id)));
     }
 
@@ -83,7 +83,7 @@ public class ChapterController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "desc") String direction,
-            @RequestParam(defaultValue = "created_date")List<String> sortBy,
+            @RequestParam(defaultValue = "created_date") List<String> sortBy,
             ScheduleLectureFilterRequest filters
     ) {
         PaginatedApiResponse<ScheduleLectureResponse> response = chapterService.getAllScheduleLecturesByChapter(chapterId, page, size, direction, sortBy, filters);
@@ -97,10 +97,10 @@ public class ChapterController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "desc") String direction,
-            @RequestParam(defaultValue = "created_date")List<String> sortBy,
+            @RequestParam(defaultValue = "created_date") List<String> sortBy,
             ResourceFilterRequest filters
-    ){
-        PaginatedApiResponse<ResourceResponse> response = chapterService.getAllResourcesByChapter(chapterId,page,size,direction,sortBy,filters);
+    ) {
+        PaginatedApiResponse<ResourceResponse> response = chapterService.getAllResourcesByChapter(chapterId, page, size, direction, sortBy, filters);
         return ResponseEntity.ok(response);
     }
 
@@ -111,16 +111,16 @@ public class ChapterController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "desc") String direction,
-            @RequestParam(defaultValue = "created_date")List<String> sortBy,
+            @RequestParam(defaultValue = "created_date") List<String> sortBy,
             ChapterAssignmentFilterRequest filters
-    ){
+    ) {
         PaginatedApiResponse<ChapterAssignmentResponse> response = chapterService.getAllChapterAssignmentsByChapter(chapterId, page, size, direction, sortBy, filters);
         return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("{id}/stats")
-    public ResponseEntity<ApiResponse<ChapterStatCountResponse>> getStats(@PathVariable("id") Long id){
+    public ResponseEntity<ApiResponse<ChapterStatCountResponse>> getStats(@PathVariable("id") Long id) {
         return ResponseEntity.ok(createApiResponse("Chapter stats fetched successfully!", chapterService.getStatCountByCourseId(id)));
     }
 }

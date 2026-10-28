@@ -44,32 +44,32 @@ public class InstituteTeacherController {
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping("/onboard")
-    public ResponseEntity<ApiResponse<ApplicationSelectionResponse>> onboardTeachers(@Valid @RequestBody ApplicationSelectionRequest request){
+    public ResponseEntity<ApiResponse<ApplicationSelectionResponse>> onboardTeachers(@Valid @RequestBody ApplicationSelectionRequest request) {
         return ResponseEntity.status(201).body(createApiResponse("Teachers Onboarded Successfully!", instituteTeacherService.onBoardTeachers(request)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping("/reject")
-    public ResponseEntity<ApiResponse<ApplicationRejectionResponse>> rejectApplications(@Valid @RequestBody ApplicationRejectionRequest request){
+    public ResponseEntity<ApiResponse<ApplicationRejectionResponse>> rejectApplications(@Valid @RequestBody ApplicationRejectionRequest request) {
         return ResponseEntity.ok(createApiResponse("Applications Rejected Successfully!", instituteTeacherService.rejectApplications(request)));
     }
 
     @PreAuthorize(("hasAuthority('institute')"))
     @GetMapping
-    public ResponseEntity<PaginatedApiResponse<InstituteTeacherResponse>> getAllTeacherByInstitute(PaginationRequest pagination, InstituteTeacherFilterRequest filters){
+    public ResponseEntity<PaginatedApiResponse<InstituteTeacherResponse>> getAllTeacherByInstitute(PaginationRequest pagination, InstituteTeacherFilterRequest filters) {
         return ResponseEntity.ok(instituteTeacherService.getAllTeachersByInstitute(pagination, filters));
     }
 
     @PreAuthorize(("hasAuthority('institute')"))
     @GetMapping("/basic")
-    public ResponseEntity<ApiResponse<List<TeacherBasicResponse>>> getAllTeacherByCurrentInstitute(){
+    public ResponseEntity<ApiResponse<List<TeacherBasicResponse>>> getAllTeacherByCurrentInstitute() {
         return ResponseEntity.ok(createApiResponse("Teachers related to the institute fetched successfully!", instituteTeacherService.getAllTeachersByCurrentInstitute()));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("/stats")
-    public ResponseEntity<ApiResponse<InstituteTeacherStatsResponse>> getInstituteTeacherStats(){
-        return ResponseEntity.ok(createApiResponse("Institute teacher stats fetched successfully!",instituteTeacherService.getInstituteTeacherStats()));
+    public ResponseEntity<ApiResponse<InstituteTeacherStatsResponse>> getInstituteTeacherStats() {
+        return ResponseEntity.ok(createApiResponse("Institute teacher stats fetched successfully!", instituteTeacherService.getInstituteTeacherStats()));
     }
 
 }

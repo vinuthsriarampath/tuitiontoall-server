@@ -35,7 +35,7 @@ public class EnrollmentController {
 
     @PreAuthorize("hasAuthority('student')")
     @PostMapping(produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> enrollStudents(@Valid @RequestBody EnrollmentRequest request){
+    public ResponseEntity<byte[]> enrollStudents(@Valid @RequestBody EnrollmentRequest request) {
         byte[] invoice = enrollmentService.enrollStudent(request);
         return ResponseEntity.ok()
                 .header(
@@ -48,7 +48,7 @@ public class EnrollmentController {
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("/eligibility-check")
-    public ResponseEntity<ApiResponse<EnrollmentEligibilityResponse>> checkEnrolmentEligibility(@Valid EnrollmentEligibilityCheckRequest request){
+    public ResponseEntity<ApiResponse<EnrollmentEligibilityResponse>> checkEnrolmentEligibility(@Valid EnrollmentEligibilityCheckRequest request) {
         return ResponseEntity.ok(enrollmentService.checkEnrollmentEligibility(request));
     }
 }

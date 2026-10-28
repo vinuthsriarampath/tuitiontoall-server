@@ -24,19 +24,19 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EnrollmentDistributionResponse{
-        @Builder.Default
-        Long totalEnrollments = 0L;
-        @Builder.Default
-        Long activeEnrollments = 0L;
-        @Builder.Default
-        BigDecimal activeEnrollmentsPercentage = BigDecimal.ZERO;
-        @Builder.Default
-        Long completedEnrollments = 0L;
-        @Builder.Default
-        BigDecimal completedEnrollmentsPercentage = BigDecimal.ZERO;
-        @Builder.Default
-        Long suspendedEnrollments = 0L;
-        @Builder.Default
-        BigDecimal suspendedEnrollmentsPercentage = BigDecimal.ZERO;
+public class EnrollmentDistributionResponse {
+    @Builder.Default
+    Long totalEnrollments = 0L;
+    @Builder.Default
+    Long activeEnrollments = 0L;
+    @Builder.Default
+    BigDecimal activeEnrollmentsPercentage = BigDecimal.ZERO;
+    @Builder.Default
+    Long completedEnrollments = 0L;
+    @Builder.Default
+    BigDecimal completedEnrollmentsPercentage = BigDecimal.ZERO;
+    @Builder.Default
+    Long suspendedEnrollments = 0L;
+    @Builder.Default
+    BigDecimal suspendedEnrollmentsPercentage = BigDecimal.ZERO;
 }

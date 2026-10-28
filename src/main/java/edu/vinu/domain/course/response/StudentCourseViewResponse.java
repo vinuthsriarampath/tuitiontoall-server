@@ -18,11 +18,11 @@ import edu.vinu.domain.module.response.StudentModuleResponse;
 
 import java.util.List;
 
-public record StudentCourseViewResponse (
+public record StudentCourseViewResponse(
         StudentCourseResponse course,
         StudentBatchResponse selectedBatch,
         List<StudentModuleResponse> modules
-){
+) {
     public StudentCourseViewResponse {
         modules = modules == null ? List.of() : List.copyOf(modules);
     }

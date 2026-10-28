@@ -37,12 +37,12 @@ public class ProfileFileController {
     private final ProfileFileService profileFileService;
 
     @PostMapping("/upload/{type:dp|banner}")
-    public ResponseEntity<ApiResponse<String>> uploadFile(@PathVariable String type, @RequestParam("file") MultipartFile file){
+    public ResponseEntity<ApiResponse<String>> uploadFile(@PathVariable String type, @RequestParam("file") MultipartFile file) {
         return ResponseEntity.status(200).body(createApiResponse("File uploaded successfully", profileFileService.uploadFile(file, type)));
     }
 
     @GetMapping("/load/{type:dp|banner}/{filename:.+}")
-    public ResponseEntity<byte[]> getFile(@PathVariable("type") String type,@PathVariable("filename") String fileName) throws IOException {
+    public ResponseEntity<byte[]> getFile(@PathVariable("type") String type, @PathVariable("filename") String fileName) throws IOException {
         File file = profileFileService.loadFile(type, fileName);
 
         if (!file.exists() || !file.isFile()) {

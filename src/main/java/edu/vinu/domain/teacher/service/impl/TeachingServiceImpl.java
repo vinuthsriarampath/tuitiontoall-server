@@ -61,8 +61,8 @@ public class TeachingServiceImpl implements TeachingService {
         return createApiResponse("Teaching details retrieved successfully", response);
     }
 
-    private TeachingResponse buildInstituteResponse(List<TeachingProjection> instituteRows){
-        TeachingProjection first =  instituteRows.get(0);
+    private TeachingResponse buildInstituteResponse(List<TeachingProjection> instituteRows) {
+        TeachingProjection first = instituteRows.get(0);
 
         Map<Long, List<TeachingProjection>> courseGroups = instituteRows.stream()
                 .collect(Collectors.groupingBy(
@@ -82,7 +82,7 @@ public class TeachingServiceImpl implements TeachingService {
                 .build();
     }
 
-    private CourseTeachingResponse buildTeachingResponse(List<TeachingProjection> courseRows){
+    private CourseTeachingResponse buildTeachingResponse(List<TeachingProjection> courseRows) {
         TeachingProjection first = courseRows.get(0);
 
         Map<Long, List<TeachingProjection>> batchGroups = courseRows.stream()
@@ -112,7 +112,7 @@ public class TeachingServiceImpl implements TeachingService {
                 .build();
     }
 
-    private BatchBasicResponse buildBatchResponse(List<TeachingProjection> batchRows){
+    private BatchBasicResponse buildBatchResponse(List<TeachingProjection> batchRows) {
         TeachingProjection first = batchRows.get(0);
 
         return BatchBasicResponse.builder()
