@@ -24,19 +24,19 @@ import java.util.List;
 import java.util.Objects;
 
 public class AssignmentValidator {
-    public static void validateCreate(Integer totalMarks, LocalDateTime availableOn, LocalDateTime dueDate, boolean resubmission, Integer maxAttempts){
+    public static void validateCreate(Integer totalMarks, LocalDateTime availableOn, LocalDateTime dueDate, boolean resubmission, Integer maxAttempts) {
         List<FieldError> errors = new ArrayList<>();
 
         validateTotalMarks(totalMarks, errors);
         validateDateRelationship(availableOn, dueDate, errors);
-        validateResubmission(resubmission,maxAttempts,errors);
+        validateResubmission(resubmission, maxAttempts, errors);
 
-        if(!errors.isEmpty()){
+        if (!errors.isEmpty()) {
             throw new InvalidInputException(errors);
         }
     }
 
-    public static void validateUpdate(AssignmentEntity existing, AssignmentUpdateRequest request){
+    public static void validateUpdate(AssignmentEntity existing, AssignmentUpdateRequest request) {
         List<FieldError> errors = new ArrayList<>();
 
         validateTotalMarks(request.totalMarks(), errors);
@@ -44,13 +44,13 @@ public class AssignmentValidator {
 
         boolean dateChanged = !Objects.equals(existing.getAvailableOn(), request.availableOn()) || !Objects.equals(existing.getDueDate(), request.dueDate());
 
-        if(dateChanged){
+        if (dateChanged) {
             validateDateRelationship(request.availableOn(), request.dueDate(), errors);
             validateAvailableOnFuture(request.availableOn(), errors);
             validateDueDateFuture(request.dueDate(), errors);
         }
 
-        if(!errors.isEmpty()){
+        if (!errors.isEmpty()) {
             throw new InvalidInputException(errors);
         }
     }
@@ -62,29 +62,29 @@ public class AssignmentValidator {
     }
 
     private static void validateDateRelationship(LocalDateTime availableOn, LocalDateTime dueDate, List<FieldError> errors) {
-        if(dueDate!=null && availableOn!=null && !dueDate.isAfter(availableOn)){
+        if (dueDate != null && availableOn != null && !dueDate.isAfter(availableOn)) {
             errors.add(new FieldError("dueDate", "Assignment due date must be after available on date!"));
         }
     }
 
     private static void validateResubmission(boolean resubmission, Integer maxAttempts, List<FieldError> errors) {
-        if(resubmission && (maxAttempts==null || maxAttempts <= 1)){
+        if (resubmission && (maxAttempts == null || maxAttempts <= 1)) {
             errors.add(new FieldError("maxAttempts", "Max attempts must be greater than 1 if resubmission is allowed!"));
         }
 
-        if(!resubmission && maxAttempts!=1){
+        if (!resubmission && maxAttempts != 1) {
             errors.add(new FieldError("maxAttempts", "Max attempts need to be 1 if resubmission is not allowed!"));
         }
     }
 
-    private static void validateAvailableOnFuture(LocalDateTime availableOn, List<FieldError> errors){
-        if(availableOn!=null && availableOn.isBefore(LocalDateTime.now())){
+    private static void validateAvailableOnFuture(LocalDateTime availableOn, List<FieldError> errors) {
+        if (availableOn != null && availableOn.isBefore(LocalDateTime.now())) {
             errors.add(new FieldError("availableOn", "Available on must be future date!"));
         }
     }
 
-    private static void validateDueDateFuture(LocalDateTime dueDate, List<FieldError> errors){
-        if(dueDate!=null && dueDate.isBefore(LocalDateTime.now())){
+    private static void validateDueDateFuture(LocalDateTime dueDate, List<FieldError> errors) {
+        if (dueDate != null && dueDate.isBefore(LocalDateTime.now())) {
             errors.add(new FieldError("dueDate", "Due date must be a future date!"));
         }
     }

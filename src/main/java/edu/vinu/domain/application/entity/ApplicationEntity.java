@@ -50,7 +50,7 @@ public class ApplicationEntity {
     private TeacherVacancyEntity teacherVacancy;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status",nullable = false)
+    @Column(name = "status", nullable = false)
     private ApplicationStatus status;
 
     @CreationTimestamp

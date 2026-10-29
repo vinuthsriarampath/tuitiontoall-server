@@ -20,21 +20,34 @@ import java.time.LocalDateTime;
 
 public interface FeedPostProjection {
     Long getId();
+
     String getCaption();
+
     PostVisibility getVisibility();
+
     PostStatus getStatus();
+
     LocalDateTime getCreatedDate();
+
     LocalDateTime getUpdatedDate();
+
     LocalDateTime getPublishedDate();
 
     Long getAuthorId();
+
     String getAuthorName();
+
     String getAuthorSlug();
+
     String getAuthorDp();
+
     String getAuthorRole();
+
     int getIsFollowingAuthor();
 
     Long getLikesCount();
+
     Long getCommentsCount();
+
     int getIsLikedByUser();
 }

@@ -26,14 +26,9 @@ import edu.vinu.domain.teacher.dtos.response.Teacher;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static edu.vinu.domain.user.validator.UserValidator.USER_VALIDATION_FAILED_ERROR;
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
 
 @CrossOrigin
 @RestController
@@ -44,59 +39,32 @@ public class AuthController {
     private final UserAuthenticationService userAuthService;
 
     @PostMapping("/register/institute")
-    public ResponseEntity<ApiResponse> registerInstitute(@Valid @RequestBody InstituteRegistrationRequest institute, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(new ApiResponse(USER_VALIDATION_FAILED_ERROR, errors));
-        }
-        Institute savedInstitute = userAuthService.registerInstitute(institute);
-        return ResponseEntity.ok(new ApiResponse("Institute Registered Successfully!", savedInstitute));
+    public ResponseEntity<ApiResponse<Institute>> registerInstitute(@Valid @RequestBody InstituteRegistrationRequest institute) {
+        return ResponseEntity.ok(createApiResponse("Institute Registered Successfully!", userAuthService.registerInstitute(institute)));
     }
 
     @PostMapping("/register/teacher")
-    public ResponseEntity<ApiResponse> registerTeacher(@Valid @RequestBody TeacherRegistrationRequest teacher, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(new ApiResponse(USER_VALIDATION_FAILED_ERROR, errors));
-        }
-        Teacher savedTeacher = userAuthService.registerTeacher(teacher);
-        return ResponseEntity.ok(new ApiResponse("Teacher Registered Successfully!", savedTeacher));
+    public ResponseEntity<ApiResponse<Teacher>> registerTeacher(@Valid @RequestBody TeacherRegistrationRequest teacher) {
+        return ResponseEntity.ok(createApiResponse("Teacher Registered Successfully!", userAuthService.registerTeacher(teacher)));
     }
 
     @PostMapping("/register/student")
-    public ResponseEntity<ApiResponse> registerStudent(@Valid @RequestBody StudentRegistrationRequest student, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(new ApiResponse(USER_VALIDATION_FAILED_ERROR, errors));
-        }
-        Student savedStudent = userAuthService.registerStudent(student);
-        return ResponseEntity.ok(new ApiResponse("Student Registered Successfully!", savedStudent));
+    public ResponseEntity<ApiResponse<Student>> registerStudent(@Valid @RequestBody StudentRegistrationRequest student) {
+        return ResponseEntity.ok(createApiResponse("Student Registered Successfully!", userAuthService.registerStudent(student)));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest){
-        AuthResponse authResponse = userAuthService.verify(loginRequest);
-        return ResponseEntity.ok(authResponse);
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+        return ResponseEntity.ok(userAuthService.verify(loginRequest));
     }
 
     @PostMapping("/forgot-password/request")
-    public ResponseEntity<ApiResponse> startForgotPassword(@RequestBody String email){
-        ApiResponse apiResponse = userAuthService.startForgotPassword(email);
-        return ResponseEntity.ok(apiResponse);
+    public ResponseEntity<ApiResponse<Void>> startForgotPassword(@RequestBody String email) {
+        return ResponseEntity.ok(userAuthService.startForgotPassword(email));
     }
 
     @PostMapping("/forgot-password/reset")
-    public ResponseEntity<ApiResponse> resetPassword(@RequestParam String token, @RequestBody String newPassword){
-        ApiResponse apiResponse = userAuthService.resetPassword(token, newPassword);
-        return ResponseEntity.ok(apiResponse);
+    public ResponseEntity<ApiResponse<Void>> resetPassword(@RequestParam String token, @RequestBody String newPassword) {
+        return ResponseEntity.ok(userAuthService.resetPassword(token, newPassword));
     }
 }

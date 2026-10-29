@@ -24,18 +24,18 @@ import java.util.Optional;
 public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
 
     @Query(value = """
-    SELECT IF(COUNT(*) > 0, true, false)
-    FROM post_like pl
-    WHERE pl.post_id = :postId AND pl.user_id = :userId
-    LIMIT 1
-    """,nativeQuery = true)
+            SELECT IF(COUNT(*) > 0, true, false)
+            FROM post_like pl
+            WHERE pl.post_id = :postId AND pl.user_id = :userId
+            LIMIT 1
+            """, nativeQuery = true)
     int isLikedByUser(Long postId, Long userId);
 
     @Query(value = """
-    SELECT *
-    FROM post_like pl
-    WHERE pl.post_id = :postId AND pl.user_id = :id
-    LIMIT 1
-    """,nativeQuery = true)
+            SELECT *
+            FROM post_like pl
+            WHERE pl.post_id = :postId AND pl.user_id = :id
+            LIMIT 1
+            """, nativeQuery = true)
     Optional<PostLike> findByPostIdAndUserId(Long postId, Long id);
 }

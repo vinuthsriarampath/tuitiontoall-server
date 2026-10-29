@@ -36,11 +36,11 @@ public class InstituteDashboardBatchKpiListener {
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handle(BatchUpdateEvent event){
+    public void handle(BatchUpdateEvent event) {
         updateBatchKpiMetrics(event.instituteId());
     }
 
-    private void updateBatchKpiMetrics(Long instituteId){
+    private void updateBatchKpiMetrics(Long instituteId) {
         dashboardWebSocketService.updateBatchMetrics(
                 instituteId,
                 BatchMetricsUpdatedResponse.builder()

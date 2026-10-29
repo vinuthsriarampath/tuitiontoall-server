@@ -17,7 +17,7 @@ import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 
 public class InstituteMapper {
-    public static Institute toInstitute(InstituteEntity instituteEntity){
+    public static Institute toInstitute(InstituteEntity instituteEntity) {
         return Institute.builder()
                 .id(instituteEntity.getId())
                 .instituteName(instituteEntity.getInstituteName())

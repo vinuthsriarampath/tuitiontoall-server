@@ -31,7 +31,7 @@ public class TrendBuilder {
 
     private static final DateTimeFormatter BUCKET_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public static List<TrendPoint> build(LocalDateTime start, LocalDateTime end, TrendType trendType, List<TrendPointProjection> projections){
+    public static List<TrendPoint> build(LocalDateTime start, LocalDateTime end, TrendType trendType, List<TrendPointProjection> projections) {
 
         Map<LocalDateTime, BigDecimal> values =
                 projections.stream()

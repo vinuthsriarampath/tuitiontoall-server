@@ -56,7 +56,7 @@ public class JwtService {
                 .compact();
     }
 
-    public String generateResetToken(String email){
+    public String generateResetToken(String email) {
         return Jwts.builder()
                 .subject(email)
                 .issuedAt(new Date())
@@ -65,18 +65,20 @@ public class JwtService {
                 .compact();
     }
 
-    private SecretKey getKey(){
+    private SecretKey getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String extractUsername(String token){
+    public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
-    private Date extractExpiration(String token){
-        return extractClaim(token,Claims::getExpiration);
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
-    private <T>T extractClaim(String token, Function<Claims,T> claimResolver) {
+
+    private <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
         final Claims claims = extractAllClaims(token);
         return claimResolver.apply(claims);
     }
@@ -89,25 +91,25 @@ public class JwtService {
                 .getPayload();
     }
 
-    private boolean isTokenExpired(String token){
+    private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    public boolean validateToken(String token, UserDetails userDetails){
-        final String username= extractUsername(token);
-        if(!username.equals(userDetails.getUsername())){
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        if (!username.equals(userDetails.getUsername())) {
             throw new JwtException("Username dose not match with the token subject!");
         }
-        if (isTokenExpired(token)){
+        if (isTokenExpired(token)) {
             throw new JwtException("Token is Expired!");
         }
-        if (!userDetails.isEnabled()){
+        if (!userDetails.isEnabled()) {
             throw new JwtException("User is Disabled!");
         }
         return (true);
     }
 
-    public boolean validateResetToken(String token){
+    public boolean validateResetToken(String token) {
         try {
             if (isTokenExpired(token)) {
                 throw new JwtException("Reset token is expired");

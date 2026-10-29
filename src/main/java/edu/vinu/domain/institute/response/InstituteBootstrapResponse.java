@@ -30,7 +30,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class InstituteBootstrapResponse{
+public class InstituteBootstrapResponse {
     @Builder.Default
     private InstituteDashboardKpiStats kpiStats = new InstituteDashboardKpiStats();
     @Builder.Default

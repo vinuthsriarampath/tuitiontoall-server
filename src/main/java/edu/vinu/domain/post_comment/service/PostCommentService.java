@@ -19,9 +19,10 @@ import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.post_comment.dtos.request.PostCommentRequest;
 import edu.vinu.domain.post_comment.dtos.request.PostCommentsFilterRequest;
 import edu.vinu.domain.post_comment.dtos.response.PostCommentDetailedResponse;
+import edu.vinu.domain.post_comment.dtos.response.PostCommentResponse;
 
 public interface PostCommentService {
-    ApiResponse comment(Long postId,PostCommentRequest request);
+    ApiResponse<PostCommentResponse> comment(Long postId, PostCommentRequest request);
 
     PaginatedApiResponse<PostCommentDetailedResponse> getPostComments(Long postId, PaginationRequest pagination, PostCommentsFilterRequest filters);
 }

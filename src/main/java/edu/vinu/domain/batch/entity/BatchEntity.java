@@ -46,7 +46,7 @@ public class BatchEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "course_id",nullable = false)
+    @JoinColumn(name = "course_id", nullable = false)
     private CourseEntity course;
 
     @Column(nullable = false)
@@ -66,14 +66,14 @@ public class BatchEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private BatchStatus batch_status=BatchStatus.PREPARATION;
+    private BatchStatus batch_status = BatchStatus.PREPARATION;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private BatchEnrollmentStatus enrollment_status=BatchEnrollmentStatus.OPEN;
+    private BatchEnrollmentStatus enrollment_status = BatchEnrollmentStatus.OPEN;
 
     @CreationTimestamp
-    @Column(nullable = false,updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime created_date;
 
     @UpdateTimestamp
@@ -81,7 +81,7 @@ public class BatchEntity {
     private LocalDateTime last_modified_date;
 
     @OneToMany(mappedBy = "batch")
-    private List<AnnouncementEntity> announcements =  new ArrayList<>();
+    private List<AnnouncementEntity> announcements = new ArrayList<>();
 
     @OneToMany(mappedBy = "batch")
     private List<ModuleEntity> modules = new ArrayList<>();

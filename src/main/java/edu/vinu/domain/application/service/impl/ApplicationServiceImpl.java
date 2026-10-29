@@ -24,11 +24,11 @@ import edu.vinu.domain.application.entity.ApplicationEntity;
 import edu.vinu.domain.application.enums.ApplicationStatus;
 import edu.vinu.domain.application.mappers.ApplicationMapper;
 import edu.vinu.domain.application.repository.ApplicationRepository;
+import edu.vinu.domain.application.request.ApplicationFilterRequest;
 import edu.vinu.domain.application.request.TeacherApplicationFilterRequest;
 import edu.vinu.domain.application.response.ApplicationDetailsResponse;
 import edu.vinu.domain.application.response.TeacherApplicationResponse;
 import edu.vinu.domain.application.service.ApplicationService;
-import edu.vinu.domain.teacher.dtos.response.TeacherUserResponse;
 import edu.vinu.domain.teacher.entity.TeacherEntity;
 import edu.vinu.domain.teacher.service.TeacherService;
 import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
@@ -41,7 +41,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -70,19 +69,19 @@ public class ApplicationServiceImpl implements ApplicationService {
             }
 
             if (teacherVacancyEntity.getStatus() == TeacherVacancyStatus.OPEN) {
-                if (this.isUserAlreadyApplied(userEntity.getTeacher().getId(),vacancyId)) {
+                if (this.isUserAlreadyApplied(userEntity.getTeacher().getId(), vacancyId)) {
                     throw new BadRequestException("You have already applied for this vacancy");
                 }
-                ApplicationEntity applicationEntity =  ApplicationEntity.builder()
+                ApplicationEntity applicationEntity = ApplicationEntity.builder()
                         .teacherVacancy(teacherVacancyEntity)
                         .teacher(userEntity.getTeacher())
                         .status(ApplicationStatus.PENDING)
                         .build();
                 ApplicationEntity save = applicationRepository.save(applicationEntity);
 
-                emailService.SendApplicationSuccessEmail(userEntity.getEmail(), userEntity.getTeacher().getFirstName()+" "+userEntity.getTeacher().getLastName(),"#");
+                emailService.SendApplicationSuccessEmail(userEntity.getEmail(), userEntity.getTeacher().getFirstName() + " " + userEntity.getTeacher().getLastName(), "#");
                 return this.mapToDto(save);
-            }else{
+            } else {
                 throw new BadRequestException("Vacancy is not open for applications");
             }
         } else {
@@ -92,42 +91,36 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public boolean isUserAlreadyApplied(Long teacherId,Long vacancyId) {
-        if(!teacherVacancyService.existsById(vacancyId)){
+    public boolean isUserAlreadyApplied(Long teacherId, Long vacancyId) {
+        if (!teacherVacancyService.existsById(vacancyId)) {
             throw new NotFoundException("Vacancy not found!");
         }
         if (!teacherService.isTeacherExistById(teacherId)) {
             throw new NotFoundException("Teacher not found!");
         }
-        return applicationRepository.isUserAlreadyApplied(teacherId,vacancyId) == 1;
+        return applicationRepository.isUserAlreadyApplied(teacherId, vacancyId) == 1;
     }
 
     @Override
-    public Page<ApplicationDetailsResponse> getApplicationsByVacancy(Long vacancyId, int page, int size, String direction, String sortBy) {
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+    public PaginatedApiResponse<ApplicationDetailsResponse> getApplicationsByVacancy(Long vacancyId, PaginationRequest pagination, ApplicationFilterRequest filters) {
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("applied_date")));
+        if (teacherVacancyService.existsById(vacancyId)) {
+            Page<ApplicationDetailsResponse> page = applicationRepository.findAllByTeacherVacancy_Id(
+                    vacancyId,
+                    filters.status() != null ? filters.status().name() : null,
+                    filters.teacherName(),
+                    pageable).map(ApplicationMapper::toApplicationDetailsResponse);
 
-        if (teacherVacancyService.existsById(vacancyId)){
-            return applicationRepository.findAllByTeacherVacancy_Id(vacancyId, pageable).map(ap -> ApplicationDetailsResponse.builder()
-                    .id(ap.getId())
-                    .teacherVacancyId(ap.getTeacherVacancyId())
-                    .status(ApplicationStatus.valueOf(ap.getStatus()))
-                    .appliedDate(ap.getAppliedDate())
-                    .lastModifiedDate(ap.getLastModifiedDate())
-                    .teacher(
-                            TeacherUserResponse.builder()
-                                    .userId(ap.getUserId())
-                                    .email(ap.getEmail())
-                                    .contact(ap.getContact())
-                                    .dp(ap.getDp())
-                                    .address(ap.getAddress())
-                                    .firstName(ap.getFirstName())
-                                    .lastName(ap.getLastName())
-                                    .dob(ap.getDob())
-                                    .build()
-                    )
-                    .build());
-        }else {
+            return PaginatedApiResponse.<ApplicationDetailsResponse>builder()
+                    .message("Applications retrieved successfully")
+                    .data(page.getContent())
+                    .page(page.getNumber())
+                    .size(page.getSize())
+                    .totalElements(page.getTotalElements())
+                    .totalPages(page.getTotalPages())
+                    .last(page.isLast())
+                    .build();
+        } else {
             throw new NotFoundException("Vacancy not found!");
         }
     }
@@ -153,7 +146,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     public PaginatedApiResponse<TeacherApplicationResponse> getCurrentTeacherApplications(PaginationRequest pagination, TeacherApplicationFilterRequest filters) {
         TeacherEntity currentTeacher = teacherService.getCurrentTeacher();
 
-        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(),pagination.sortBy(),List.of("applied_date")));
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("applied_date")));
 
 
         Page<TeacherApplicationResponse> pageData = applicationRepository.getApplicationsByTeacher(
@@ -178,8 +171,8 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .build();
     }
 
-    private Application mapToDto(ApplicationEntity a){
-        return  Application.builder()
+    private Application mapToDto(ApplicationEntity a) {
+        return Application.builder()
                 .id(a.getId())
                 .teacherId(a.getTeacher().getId())
                 .status(a.getStatus())

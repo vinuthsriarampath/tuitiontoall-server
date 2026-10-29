@@ -26,6 +26,8 @@ import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class StudentBootstrapServiceImpl implements StudentBootstrapService {
@@ -36,7 +38,7 @@ public class StudentBootstrapServiceImpl implements StudentBootstrapService {
     private final GradingService gradingService;
 
     @Override
-    public ApiResponse getBootstrapData() {
+    public ApiResponse<StudentBootstrapResponse> getBootstrapData() {
         StudentEntity currentStudent = studentService.getCurrentStudent();
 
         StudentBootstrapResponse response = new StudentBootstrapResponse();
@@ -46,10 +48,7 @@ public class StudentBootstrapServiceImpl implements StudentBootstrapService {
         response.setRecentEnrollments(enrollmentService.getRecent5EnrollmentsByStudent(currentStudent.getId()));
         response.setRecentResults(gradingService.getRecent5Results(currentStudent.getId()));
 
-        return ApiResponse.builder()
-                .message("Bootstrap data retrieved successfully")
-                .data(response)
-                .build();
+        return createApiResponse("Student Bootstrap Data retrieved successfully!", response);
     }
 
     private StudentDashboardStats getStudentDashboardStats(Long studentId) {

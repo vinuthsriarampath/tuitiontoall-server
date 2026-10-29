@@ -27,6 +27,7 @@ import java.util.List;
 public class ChapterQueryServiceImpl implements ChapterQueryService {
 
     private final ChapterRepository chapterRepository;
+
     @Override
     public List<ChapterResponse> getAllChaptersByModuleId(Long moduleId) {
         return chapterRepository.findAllByModuleIdOrderByChapterOrderAsc(moduleId).stream().map(ChapterMapper::toChapterResponse).toList();

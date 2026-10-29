@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CourseStatsResponse{
+public class CourseStatsResponse {
     private Long courseId;
     private Long activeStudents = 0L;
     private Long ongoingBatches = 0L;

@@ -54,18 +54,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LectureRecordServiceImpl implements LectureRecordService {
 
+    private static final long CHUNK_SIZE = 1024 * 1024;
     private final LectureRecordUploadRepository lectureRecordUploadRepository;
     private final LectureRecordRepository lectureRecordRepository;
     private final ChapterService chapterService;
     private final FileService fileService;
-
     @Value("${file.lecture-record.temp-path}")
     private String tempLectureRecordPath;
-
     @Value("${file.lecture-record.video-path}")
     private String lectureRecordVideoPath;
-
-    private static final long CHUNK_SIZE = 1024 * 1024;
 
     @Override
     public LectureRecordUploadInitResponse initializeUpload(LectureRecordUploadInitRequest request) {
@@ -73,13 +70,15 @@ public class LectureRecordServiceImpl implements LectureRecordService {
 
         List<FieldError> errors = new ArrayList<>();
 
-        if(isLectureRecordExistsByTitleAndChapterId(request.title(), request.chapterId())) errors.add(new FieldError("title", "Lecture record with the same title already exists in the chapter"));
+        if (isLectureRecordExistsByTitleAndChapterId(request.title(), request.chapterId()))
+            errors.add(new FieldError("title", "Lecture record with the same title already exists in the chapter"));
 
-        if(isRecordedDateInValid(request.recordedDate())) errors.add(new FieldError("recordedDate", "Recorded date cannot be in the future"));
+        if (isRecordedDateInValid(request.recordedDate()))
+            errors.add(new FieldError("recordedDate", "Recorded date cannot be in the future"));
 
         ChapterEntity chapterEntity = chapterService.getChapterEntityById(request.chapterId());
 
-        if(!errors.isEmpty()){
+        if (!errors.isEmpty()) {
             throw new InvalidInputException(errors);
         }
 
@@ -99,7 +98,7 @@ public class LectureRecordServiceImpl implements LectureRecordService {
 
         lectureRecordUploadRepository.save(uploadEntity);
 
-        fileService.createDirectory(Path.of(tempLectureRecordPath,uploadId));
+        fileService.createDirectory(Path.of(tempLectureRecordPath, uploadId));
 
         return LectureRecordUploadInitResponse.builder()
                 .uploadId(uploadId)
@@ -131,7 +130,8 @@ public class LectureRecordServiceImpl implements LectureRecordService {
 
         if (uploadEntity.getCompleted()) throw new InvalidInputException("Upload already completed");
 
-        if (!uploadEntity.getUploadedChunks().equals(uploadEntity.getTotalChunks())) throw new InvalidInputException("All chunks are not uploaded yet");
+        if (!uploadEntity.getUploadedChunks().equals(uploadEntity.getTotalChunks()))
+            throw new InvalidInputException("All chunks are not uploaded yet");
 
         String extension = fileService.extractExtension(uploadEntity.getOriginalFileName());
 
@@ -217,9 +217,9 @@ public class LectureRecordServiceImpl implements LectureRecordService {
         }
 
         if (!request.recordedDate().equals(lectureRecordEntity.getRecordedDate())) {
-            if (isRecordedDateInValid(request.recordedDate())){
+            if (isRecordedDateInValid(request.recordedDate())) {
                 errors.add(new FieldError("recordedDate", "Recorded date cannot be in the future"));
-            }else {
+            } else {
                 lectureRecordEntity.setRecordedDate(request.recordedDate());
             }
         }
@@ -231,7 +231,7 @@ public class LectureRecordServiceImpl implements LectureRecordService {
         return LectureRecordMapper.toLectureRecordResponse(lectureRecordRepository.save(lectureRecordEntity));
     }
 
-    private LectureRecordEntity getLectureRecordEntity(Long id){
+    private LectureRecordEntity getLectureRecordEntity(Long id) {
         return lectureRecordRepository.findById(id).orElseThrow(() -> new NotFoundException("Lecture record with the given id does not exist"));
     }
 
@@ -240,10 +240,10 @@ public class LectureRecordServiceImpl implements LectureRecordService {
     }
 
     private boolean isLectureRecordExistsByTitleAndChapterId(String title, Long chapterId) {
-        return lectureRecordRepository.existsByTitleAndChapterId(title,chapterId);
+        return lectureRecordRepository.existsByTitleAndChapterId(title, chapterId);
     }
 
-    private boolean isRecordedDateInValid(LocalDate recordedDate){
+    private boolean isRecordedDateInValid(LocalDate recordedDate) {
         return recordedDate.isAfter(LocalDate.now());
     }
 }

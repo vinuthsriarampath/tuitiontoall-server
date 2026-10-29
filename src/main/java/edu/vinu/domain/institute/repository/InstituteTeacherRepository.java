@@ -56,15 +56,29 @@ public interface InstituteTeacherRepository extends JpaRepository<InstituteTeach
             JOIN teacher t ON ti.teacher_id = t.id
             JOIN users u ON t.user_id = u.id
             WHERE ti.institute_id = :instituteId
-            
+            AND (
+                            (:name IS NOT NULL AND CONCAT(t.first_name, ' ', t.last_name) LIKE LOWER(CONCAT('%', :name, '%')))
+                            OR (:email IS NOT NULL AND u.email LIKE LOWER(CONCAT('%', :email, '%')))
+                            OR (:userSlug IS NOT NULL AND u.user_slug LIKE LOWER(CONCAT('%', :userSlug, '%')))
+                            OR (:name IS NULL AND :email IS NULL AND :userSlug IS NULL)
+                )
+            AND (:status IS NULL OR ti.status = :status)
             """,
             countQuery = """
                     SELECT COUNT(*)
                     FROM institute_teacher ti
+                    JOIN teacher t ON ti.teacher_id = t.id
+                    JOIN users u ON t.user_id = u.id
                     WHERE ti.institute_id = :instituteId
-                    """,
-            nativeQuery = true)
-    Page<InstituteTeacherProjection> getAllByInstituteId(@Param("instituteId") Long instituteId, Pageable pageable);
+                    AND (
+                                    (:name IS NOT NULL AND CONCAT(t.first_name, ' ', t.last_name) LIKE LOWER(CONCAT('%', :name, '%')))
+                                    OR (:email IS NOT NULL AND u.email LIKE LOWER(CONCAT('%', :email, '%')))
+                                    OR (:userSlug IS NOT NULL AND u.user_slug LIKE LOWER(CONCAT('%', :userSlug, '%')))
+                                    OR (:name IS NULL AND :email IS NULL AND :userSlug IS NULL)
+                        )
+                    AND (:status IS NULL OR ti.status = :status)
+                    """, nativeQuery = true)
+    Page<InstituteTeacherProjection> getAllByInstituteId(@Param("instituteId") Long instituteId, String name, String email, String userSlug, String status, Pageable pageable);
 
     @Query(value = """
                 SELECT
@@ -79,109 +93,109 @@ public interface InstituteTeacherRepository extends JpaRepository<InstituteTeach
 
     @Query(
             value = """
-                SELECT
-                    t.id AS teacherId,
-                    t.first_name AS firstName,
-                    t.last_name AS lastName
-                FROM institute_teacher it
-                JOIN teacher t ON it.teacher_id = t.id
-                WHERE it.institute_id = :instituteId
-            """,nativeQuery = true
+                        SELECT
+                            t.id AS teacherId,
+                            t.first_name AS firstName,
+                            t.last_name AS lastName
+                        FROM institute_teacher it
+                        JOIN teacher t ON it.teacher_id = t.id
+                        WHERE it.institute_id = :instituteId
+                    """, nativeQuery = true
     )
     List<TeacherProjection> findAllTeachersByInstituteId(@Param("instituteId") Long instituteId);
 
     Optional<InstituteTeacherEntity> findByTeacherIdAndInstituteId(Long id, Long instituteId);
 
     @Query(value = """
-    SELECT COUNT(*)
-    FROM institute_teacher it
-    WHERE it.institute_id = :instituteId
-    AND it.status = :status
-    """,nativeQuery = true)
+            SELECT COUNT(*)
+            FROM institute_teacher it
+            WHERE it.institute_id = :instituteId
+            AND it.status = :status
+            """, nativeQuery = true)
     Long countByInstituteIdAndStatus(Long instituteId, String status);
 
     @Query(value = """
-    SELECT COUNT(*)
-    FROM institute_teacher it
-    WHERE it.institute_id = :instituteId
-    AND it.status = :status
-    AND it.joined_date >= :startDateTime
-    AND it.joined_date < :endDateTime
-    """,nativeQuery = true)
+            SELECT COUNT(*)
+            FROM institute_teacher it
+            WHERE it.institute_id = :instituteId
+            AND it.status = :status
+            AND it.joined_date >= :startDateTime
+            AND it.joined_date < :endDateTime
+            """, nativeQuery = true)
     Long countByInstituteIdAndStatusBetween(Long instituteId, String status, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-    DATE_FORMAT(it.joined_date, '%Y-%m-%d %H:00:00') AS bucket,
-    COUNT(*) AS value
-    FROM institute_teacher it
-    WHERE it.institute_id = :instituteId
-    AND it.status = :status
-    AND it.joined_date >= :startDateTime
-    AND it.joined_date < :endDateTime
-    GROUP BY DATE_FORMAT(it.joined_date, '%Y-%m-%d %H')
-    ORDER BY bucket
-    """,nativeQuery = true)
+            SELECT
+            DATE_FORMAT(it.joined_date, '%Y-%m-%d %H:00:00') AS bucket,
+            COUNT(*) AS value
+            FROM institute_teacher it
+            WHERE it.institute_id = :instituteId
+            AND it.status = :status
+            AND it.joined_date >= :startDateTime
+            AND it.joined_date < :endDateTime
+            GROUP BY DATE_FORMAT(it.joined_date, '%Y-%m-%d %H')
+            ORDER BY bucket
+            """, nativeQuery = true)
     List<TrendPointProjection> getHourlyInstituteTeachersTrendByInstituteAndStatus(Long instituteId, String status, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-    DATE_FORMAT(it.joined_date, '%Y-%m-%d 00:00:00') AS bucket,
-    COUNT(*) AS value
-    FROM institute_teacher it
-    WHERE it.institute_id = :instituteId
-    AND it.status = :status
-    AND it.joined_date >= :startDateTime
-    AND it.joined_date < :endDateTime
-    GROUP BY DATE(it.joined_date)
-    ORDER BY bucket
-    """,nativeQuery = true)
+            SELECT
+            DATE_FORMAT(it.joined_date, '%Y-%m-%d 00:00:00') AS bucket,
+            COUNT(*) AS value
+            FROM institute_teacher it
+            WHERE it.institute_id = :instituteId
+            AND it.status = :status
+            AND it.joined_date >= :startDateTime
+            AND it.joined_date < :endDateTime
+            GROUP BY DATE(it.joined_date)
+            ORDER BY bucket
+            """, nativeQuery = true)
     List<TrendPointProjection> getDailyInstituteTeachersTrendByInstituteAndStatus(Long instituteId, String status, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-    DATE_FORMAT(it.joined_date, '%Y-%m-01 00:00:00') AS bucket,
-    COUNT(*) AS value
-    FROM institute_teacher it
-    WHERE it.institute_id = :instituteId
-    AND it.status = :status
-    AND it.joined_date >= :startDateTime
-    AND it.joined_date < :endDateTime
-    GROUP BY YEAR(it.joined_date), MONTH(it.joined_date)
-    ORDER BY bucket
-    """,nativeQuery = true)
+            SELECT
+            DATE_FORMAT(it.joined_date, '%Y-%m-01 00:00:00') AS bucket,
+            COUNT(*) AS value
+            FROM institute_teacher it
+            WHERE it.institute_id = :instituteId
+            AND it.status = :status
+            AND it.joined_date >= :startDateTime
+            AND it.joined_date < :endDateTime
+            GROUP BY YEAR(it.joined_date), MONTH(it.joined_date)
+            ORDER BY bucket
+            """, nativeQuery = true)
     List<TrendPointProjection> getMonthlyInstituteTeachersTrendByInstituteAndStatus(Long instituteId, String status, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     @Query(value = """
-    SELECT
-    i.id AS instituteId,
-    i.institute_name AS instituteName,
-    
-    c.id AS courseId,
-    c.title AS courseTitle,
-    c.description AS courseDescription,
-    c.category AS courseCategory,
-    c.status AS courseStatus,
-    c.language AS courseLanguage,
-    c.level AS courseLevel,
-    c.mode AS courseMode,
-    c.thumbnail AS thumbnail,
-    c.avg_rating AS averageRating,
-    c.total_no_ratings AS totalRatings,
-    
-    b.id AS batchId,
-    b.name AS batchName,
-    b.batch_status AS batchStatus,
-    b.enrollment_status AS batchEnrollmentStatus,
-    b.start_date AS batchStartDate,
-    b.created_date AS batchCreatedDate,
-    b.last_modified_date AS batchLastModifiedDate
-    FROM institute_teacher it
-    INNER JOIN institute i ON it.institute_id = i.id
-    INNER JOIN module m ON m.teacher_id = it.teacher_id
-    INNER JOIN batch b ON m.batch_id = b.id
-    INNER JOIN courses c ON b.course_id = c.id AND c.institute_id = i.id
-    WHERE it.teacher_id = :teacherId
-    """,nativeQuery = true)
+            SELECT
+            i.id AS instituteId,
+            i.institute_name AS instituteName,
+            
+            c.id AS courseId,
+            c.title AS courseTitle,
+            c.description AS courseDescription,
+            c.category AS courseCategory,
+            c.status AS courseStatus,
+            c.language AS courseLanguage,
+            c.level AS courseLevel,
+            c.mode AS courseMode,
+            c.thumbnail AS thumbnail,
+            c.avg_rating AS averageRating,
+            c.total_no_ratings AS totalRatings,
+            
+            b.id AS batchId,
+            b.name AS batchName,
+            b.batch_status AS batchStatus,
+            b.enrollment_status AS batchEnrollmentStatus,
+            b.start_date AS batchStartDate,
+            b.created_date AS batchCreatedDate,
+            b.last_modified_date AS batchLastModifiedDate
+            FROM institute_teacher it
+            INNER JOIN institute i ON it.institute_id = i.id
+            INNER JOIN module m ON m.teacher_id = it.teacher_id
+            INNER JOIN batch b ON m.batch_id = b.id
+            INNER JOIN courses c ON b.course_id = c.id AND c.institute_id = i.id
+            WHERE it.teacher_id = :teacherId
+            """, nativeQuery = true)
     List<TeachingProjection> getTeachingByTeacherId(Long teacherId);
 }

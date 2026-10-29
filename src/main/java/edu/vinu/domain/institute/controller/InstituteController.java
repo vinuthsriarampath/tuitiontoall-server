@@ -17,8 +17,10 @@ package edu.vinu.domain.institute.controller;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.institute.dto.Institute;
 import edu.vinu.domain.institute.request.InstituteDetailsUpdateRequest;
+import edu.vinu.domain.institute.response.InstituteBootstrapResponse;
 import edu.vinu.domain.institute.service.InstituteBootstrapService;
 import edu.vinu.domain.institute.service.InstituteService;
+import edu.vinu.domain.teacher_vacancy.dto.TeacherVacancy;
 import edu.vinu.domain.teacher_vacancy.service.TeacherVacancyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -39,26 +44,26 @@ public class InstituteController {
     private final TeacherVacancyService vacancyService;
 
     @GetMapping("/{instituteId}/vacancies")
-    public ResponseEntity<ApiResponse> getVacanciesByStatusAndInstituteId(@PathVariable(name = "instituteId") Long instituteId, @RequestParam(defaultValue = "OPEN") String status) {
-        return ResponseEntity.status(200).body(new ApiResponse("All Vacancies By provided status",vacancyService.getAllByInstituteIdAndStatus(instituteId,status)));
+    public ResponseEntity<ApiResponse<List<TeacherVacancy>>> getVacanciesByStatusAndInstituteId(@PathVariable(name = "instituteId") Long instituteId, @RequestParam(defaultValue = "OPEN") String status) {
+        return ResponseEntity.status(200).body(createApiResponse("All Vacancies By provided status", vacancyService.getAllByInstituteIdAndStatus(instituteId, status)));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/me")
-    public ResponseEntity<ApiResponse> updateInstituteDetails(@Valid @RequestBody InstituteDetailsUpdateRequest instituteDetailsUpdateRequest){
-        Institute updateInstituteDetails = instituteService.updateInstituteDetails(SecurityContextHolder.getContext().getAuthentication().getName(),instituteDetailsUpdateRequest);
-        return ResponseEntity.status(OK).body(new ApiResponse("Profile Updated",updateInstituteDetails));
+    public ResponseEntity<ApiResponse<Institute>> updateInstituteDetails(@Valid @RequestBody InstituteDetailsUpdateRequest instituteDetailsUpdateRequest) {
+        Institute updateInstituteDetails = instituteService.updateInstituteDetails(SecurityContextHolder.getContext().getAuthentication().getName(), instituteDetailsUpdateRequest);
+        return ResponseEntity.status(OK).body(createApiResponse("Profile Updated", updateInstituteDetails));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("validate/role")
-    public ResponseEntity<ApiResponse> validateInstituteRole(){
-        return ResponseEntity.status(OK).body(new ApiResponse("User has institute role!",null));
+    public ResponseEntity<ApiResponse<Void>> validateInstituteRole() {
+        return ResponseEntity.status(OK).body(createApiResponse("User has institute role!", null));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("/me/bootstrap")
-    public ResponseEntity<ApiResponse> getInstituteBootstrapData(){
+    public ResponseEntity<ApiResponse<InstituteBootstrapResponse>> getInstituteBootstrapData() {
         return ResponseEntity.ok(instituteBootstrapService.getCurrentInstituteBootstrapData());
     }
 }

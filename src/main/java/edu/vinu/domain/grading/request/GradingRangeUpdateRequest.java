@@ -35,5 +35,5 @@ public record GradingRangeUpdateRequest(
         String desiredGrade,
 
         String description
-) implements GradingRangeRequest{
+) implements GradingRangeRequest {
 }

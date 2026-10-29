@@ -18,7 +18,7 @@ import edu.vinu.domain.post_comment.dtos.response.PostCommentResponse;
 import edu.vinu.domain.post_comment.entity.PostComment;
 import edu.vinu.domain.post_comment.repository.projection.PostCommentDetailedProjection;
 
-public class PostCommentMapper{
+public class PostCommentMapper {
     public static PostCommentResponse toPostCommentResponse(PostComment comment) {
         return PostCommentResponse.builder()
                 .id(comment.getId())

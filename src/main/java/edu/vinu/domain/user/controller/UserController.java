@@ -26,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
@@ -36,31 +37,31 @@ public class UserController {
     private final UserFollowService userFollowService;
 
     @GetMapping("/me")
-    public ResponseEntity<ApiResponse> getUserDetails(){
+    public ResponseEntity<ApiResponse<User>> getUserDetails() {
         User user = userService.getUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        return ResponseEntity.ok(new ApiResponse("User Verified!",user));
+        return ResponseEntity.ok(createApiResponse("User Verified!", user));
     }
 
     @DeleteMapping("/disable/me")
-    public ResponseEntity<ApiResponse> disableMyAccount(){
+    public ResponseEntity<ApiResponse<Void>> disableMyAccount() {
         userService.disableUserAccountByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-        return ResponseEntity.status(OK).body(new ApiResponse("User disabled successfully!",null));
+        return ResponseEntity.status(OK).body(createApiResponse("User disabled successfully!", null));
     }
 
     @GetMapping("/by-user-slug/{userSlug}")
-    public ResponseEntity<ApiResponse> getUserByUserSlug(@PathVariable String userSlug){
+    public ResponseEntity<ApiResponse<User>> getUserByUserSlug(@PathVariable String userSlug) {
         User user = userService.getUserByUserSlug(userSlug);
-        return ResponseEntity.status(OK).body(new ApiResponse("User Found By "+userSlug,user));
+        return ResponseEntity.status(OK).body(createApiResponse("User Found By " + userSlug, user));
     }
 
     @GetMapping("me/followers")
-    public ResponseEntity<PaginatedApiResponse<UserBasicResponse>> getMyFollowers(PaginationRequest pagination, UserBasicFilterRequest filters){
-        return ResponseEntity.ok(userFollowService.getMyFollowers(pagination,filters));
+    public ResponseEntity<PaginatedApiResponse<UserBasicResponse>> getMyFollowers(PaginationRequest pagination, UserBasicFilterRequest filters) {
+        return ResponseEntity.ok(userFollowService.getMyFollowers(pagination, filters));
     }
 
     @GetMapping("me/followings")
-    public ResponseEntity<PaginatedApiResponse<UserBasicResponse>> getMyFollowings(PaginationRequest pagination, UserBasicFilterRequest filters){
-        return ResponseEntity.ok(userFollowService.getMyFollowings(pagination,filters));
+    public ResponseEntity<PaginatedApiResponse<UserBasicResponse>> getMyFollowings(PaginationRequest pagination, UserBasicFilterRequest filters) {
+        return ResponseEntity.ok(userFollowService.getMyFollowings(pagination, filters));
     }
 
 }

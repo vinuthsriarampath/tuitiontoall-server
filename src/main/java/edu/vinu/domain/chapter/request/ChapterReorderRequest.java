@@ -22,4 +22,5 @@ import java.util.List;
 public record ChapterReorderRequest(
         @NotEmpty(message = "Chapters reorder list cannot be empty!")
         List<ChapterOrderRequest> chapters
-) { }
+) {
+}

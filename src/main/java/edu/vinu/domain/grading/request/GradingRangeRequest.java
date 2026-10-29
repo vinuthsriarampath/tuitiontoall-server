@@ -15,6 +15,8 @@ package edu.vinu.domain.grading.request;
 
 public interface GradingRangeRequest {
     Integer minMarks();
+
     Integer maxMarks();
+
     String desiredGrade();
 }

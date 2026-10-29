@@ -34,13 +34,13 @@ public class PaymentController {
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("my")
-    public ResponseEntity<PaginatedApiResponse<PaymentDetailedResponse>> getMyPayments(PaginationRequest pagination, MyPaymentFilterRequest filters){
-        return ResponseEntity.ok().body(paymentService.myPayments(pagination,filters));
+    public ResponseEntity<PaginatedApiResponse<PaymentDetailedResponse>> getMyPayments(PaginationRequest pagination, MyPaymentFilterRequest filters) {
+        return ResponseEntity.ok().body(paymentService.myPayments(pagination, filters));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("my/receives")
-    public ResponseEntity<PaginatedApiResponse<PaymentDetailedResponse>> getMyReceivedPayments(PaginationRequest pagination, MyPaymentReceivesFilterRequest filters){
-        return ResponseEntity.ok().body(paymentService.myPaymentsReceives(pagination,filters));
+    public ResponseEntity<PaginatedApiResponse<PaymentDetailedResponse>> getMyReceivedPayments(PaginationRequest pagination, MyPaymentReceivesFilterRequest filters) {
+        return ResponseEntity.ok().body(paymentService.myPaymentsReceives(pagination, filters));
     }
 }

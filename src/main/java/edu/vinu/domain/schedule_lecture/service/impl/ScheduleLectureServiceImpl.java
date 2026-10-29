@@ -44,11 +44,11 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
 
     @Override
     public ScheduleLectureResponse scheduleLecture(ScheduleLectureCreateRequest request) {
-        validateSchedule(request.chapterId(), request.startDate(),request.startTime(),request.endTime(),null);
+        validateSchedule(request.chapterId(), request.startDate(), request.startTime(), request.endTime(), null);
 
         ChapterEntity chapterEntity = chapterService.getChapterEntityById(request.chapterId());
 
-        ScheduleLectureEntity scheduleLectureEntity =  ScheduleLectureEntity.builder()
+        ScheduleLectureEntity scheduleLectureEntity = ScheduleLectureEntity.builder()
                 .chapter(chapterEntity)
                 .topic(request.topic())
                 .startDate(request.startDate())
@@ -66,7 +66,7 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
     public ScheduleLectureResponse updateScheduleLecture(Long id, ScheduleLectureUpdateRequest request) {
         ScheduleLectureEntity entity = getScheduleLectureEntity(id);
 
-        validateSchedule(entity.getChapter().getId(), request.startDate(),request.startTime(),request.endTime(), entity);
+        validateSchedule(entity.getChapter().getId(), request.startDate(), request.startTime(), request.endTime(), entity);
 
         entity.setStartDate(request.startDate());
         entity.setStartTime(request.startTime());
@@ -84,18 +84,18 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
         return scheduleLectureRepository.findUpcomingLecturesForTeacher(teacherId).stream().map(ScheduleLectureMapper::toScheduleLectureResponse).toList();
     }
 
-    private ScheduleLectureEntity getScheduleLectureEntity(Long id){
+    private ScheduleLectureEntity getScheduleLectureEntity(Long id) {
         return scheduleLectureRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Schedule lecture with id " + id + " not found!"));
     }
 
-    private void validateSchedule(Long chapterId,LocalDate startDate,LocalTime startTime, LocalTime endTime, @Nullable ScheduleLectureEntity existingEntity){
+    private void validateSchedule(Long chapterId, LocalDate startDate, LocalTime startTime, LocalTime endTime, @Nullable ScheduleLectureEntity existingEntity) {
 
         boolean startDateChanged = true;
         boolean startTimeChanged = true;
         boolean endTimeChanged = true;
 
-        if (existingEntity != null){
+        if (existingEntity != null) {
             startDateChanged = !existingEntity.getStartDate().isEqual(startDate);
             startTimeChanged = !existingEntity.getStartTime().equals(startTime);
             endTimeChanged = !existingEntity.getEndTime().equals(endTime);
@@ -105,21 +105,21 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
 
         List<FieldError> errors = new ArrayList<>();
 
-        if(startDateChanged && startDate.isBefore(LocalDate.now())){
-                errors.add(new FieldError("startDate", "Meeting start date time must be in the future!"));
+        if (startDateChanged && startDate.isBefore(LocalDate.now())) {
+            errors.add(new FieldError("startDate", "Meeting start date time must be in the future!"));
         }
 
-        if (startTimeChanged && startDateTime.isBefore(LocalDateTime.now())){
-                errors.add(new FieldError("startTime", "Meeting start date time must be in the future!"));
+        if (startTimeChanged && startDateTime.isBefore(LocalDateTime.now())) {
+            errors.add(new FieldError("startTime", "Meeting start date time must be in the future!"));
         }
 
-        if(endTimeChanged && !endDateTime.isAfter(startDateTime)){
-                errors.add(new FieldError("endTime", "Meeting end time must be after start time!"));
+        if (endTimeChanged && !endDateTime.isAfter(startDateTime)) {
+            errors.add(new FieldError("endTime", "Meeting end time must be after start time!"));
         }
 
         Long excludedId = existingEntity != null ? existingEntity.getId() : null;
 
-        if ((startDateChanged || startTimeChanged || endTimeChanged) && isAlreadyExistsInSameTimePeriodInChapter(chapterId, startDate, startTime, endTime, excludedId)){
+        if ((startDateChanged || startTimeChanged || endTimeChanged) && isAlreadyExistsInSameTimePeriodInChapter(chapterId, startDate, startTime, endTime, excludedId)) {
             errors.add(new FieldError("startDate", "You cannot schedule lectures with overlapping time periods and lectures with draft,scheduled,live and completed status on the same day!"));
         }
 
@@ -128,7 +128,7 @@ public class ScheduleLectureServiceImpl implements ScheduleLectureService {
         }
     }
 
-    private boolean isAlreadyExistsInSameTimePeriodInChapter(Long chapterId,LocalDate startDate,LocalTime startTime, LocalTime endTime,Long excludedId){
+    private boolean isAlreadyExistsInSameTimePeriodInChapter(Long chapterId, LocalDate startDate, LocalTime startTime, LocalTime endTime, Long excludedId) {
         return scheduleLectureRepository.existsInSameTimePeriodInChapter(chapterId, startDate, startTime, endTime, excludedId) == 1;
     }
 }

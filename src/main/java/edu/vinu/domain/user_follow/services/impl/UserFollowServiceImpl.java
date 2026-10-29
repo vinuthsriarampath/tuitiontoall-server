@@ -25,6 +25,7 @@ import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.mapper.UserMapper;
 import edu.vinu.domain.user.request.UserBasicFilterRequest;
 import edu.vinu.domain.user.service.UserService;
+import edu.vinu.domain.user_follow.dtos.response.UserFollowResponse;
 import edu.vinu.domain.user_follow.dtos.response.UserUnfollowResponse;
 import edu.vinu.domain.user_follow.entity.UserFollow;
 import edu.vinu.domain.user_follow.mapper.UserFollowMapper;
@@ -38,6 +39,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class UserFollowServiceImpl implements UserFollowService {
@@ -47,16 +50,16 @@ public class UserFollowServiceImpl implements UserFollowService {
     private final UserFollowRepository userFollowRepository;
 
     @Override
-    public ApiResponse followUser(Long followingId) {
+    public ApiResponse<UserFollowResponse> followUser(Long followingId) {
 
         UserEntity followerUser = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
         UserEntity followingUser = userService.getUserEntityById(followingId);
 
-        if(followerUser.getId().equals(followingUser.getId())) {
+        if (followerUser.getId().equals(followingUser.getId())) {
             throw new BadRequestException("You cannot follow yourself");
         }
 
-        if(userFollowRepository.existsByFollowerIdAndFollowingId(followerUser.getId(), followingUser.getId()) > 0) {
+        if (userFollowRepository.existsByFollowerIdAndFollowingId(followerUser.getId(), followingUser.getId()) > 0) {
             throw new BadRequestException("You are already following this user");
         }
 
@@ -67,14 +70,11 @@ public class UserFollowServiceImpl implements UserFollowService {
 
         UserFollow saved = userFollowRepository.save(userFollow);
 
-        return ApiResponse.builder()
-                .message("User followed successfully")
-                .data(UserFollowMapper.toResponse(saved))
-                .build();
+        return createApiResponse("User followed successfully", UserFollowMapper.toResponse(saved));
     }
 
     @Override
-    public ApiResponse unfollowUser(Long followingId) {
+    public ApiResponse<UserUnfollowResponse> unfollowUser(Long followingId) {
 
         UserEntity followerUser = userService.getUserEntityByEmail(authService.getCurrentUserEmail());
         UserEntity followingUser = userService.getUserEntityById(followingId);
@@ -89,10 +89,7 @@ public class UserFollowServiceImpl implements UserFollowService {
                 .followingId(userFollow.getFollowingUser().getId())
                 .build();
 
-        return ApiResponse.builder()
-                .message("User Unfollowed Successfully!")
-                .data(response)
-                .build();
+        return createApiResponse("User unfollowed successfully", response);
     }
 
     @Override
@@ -101,7 +98,7 @@ public class UserFollowServiceImpl implements UserFollowService {
 
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("followed_on")));
 
-        Page<UserBasicResponse> page =userFollowRepository.getFollowersByFollowingId(
+        Page<UserBasicResponse> page = userFollowRepository.getFollowersByFollowingId(
                 userEntity.getId(),
                 filters.id(),
                 filters.displayName(),
@@ -128,7 +125,7 @@ public class UserFollowServiceImpl implements UserFollowService {
 
         Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("followed_on")));
 
-        Page<UserBasicResponse> page =userFollowRepository.getFollowingsByFollowerId(
+        Page<UserBasicResponse> page = userFollowRepository.getFollowingsByFollowerId(
                 userEntity.getId(),
                 filters.id(),
                 filters.displayName(),

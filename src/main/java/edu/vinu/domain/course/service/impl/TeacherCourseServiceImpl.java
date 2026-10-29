@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class TeacherCourseServiceImpl implements TeacherCourseService {
@@ -39,7 +41,7 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
     private final CourseRepository courseRepository;
 
     @Override
-    public ApiResponse getTeacherDetailedCourse(Long courseId) {
+    public ApiResponse<TeacherCourseViewResponse> getTeacherDetailedCourse(Long courseId) {
         TeacherEntity currentTeacher = teacherService.getCurrentTeacher();
 
         List<TeacherCourseProjection> projections = courseRepository.getTeacherCourse(courseId, currentTeacher.getId());
@@ -60,7 +62,7 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
                 .totalRatings(first.getCourseTotalRatings())
                 .build();
 
-        Map<Long,List<TeacherCourseProjection>> batchGroup = projections
+        Map<Long, List<TeacherCourseProjection>> batchGroup = projections
                 .stream()
                 .collect(Collectors.groupingBy(
                         TeacherCourseProjection::getBatchId,
@@ -69,9 +71,9 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
                 ));
 
         List<TeacherBatchResponse> batches = batchGroup.values()
-                        .stream()
-                        .map(this::buildBatchResponse)
-                        .toList();
+                .stream()
+                .map(this::buildBatchResponse)
+                .toList();
 
 
         TeacherCourseViewResponse response = TeacherCourseViewResponse.builder()
@@ -79,13 +81,10 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
                 .batches(batches)
                 .build();
 
-        return ApiResponse.builder()
-                .message("Teacher's course details retrieved successfully")
-                .data(response)
-                .build();
+        return createApiResponse("Teacher's course details retrieved successfully", response);
     }
 
-    private TeacherBatchResponse buildBatchResponse(List<TeacherCourseProjection> batchRows){
+    private TeacherBatchResponse buildBatchResponse(List<TeacherCourseProjection> batchRows) {
         TeacherCourseProjection first = batchRows.get(0);
 
         List<TeacherModuleResponse> modules = batchRows.stream()
@@ -102,7 +101,7 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
                 .build();
     }
 
-    private TeacherModuleResponse buildModuleResponse(TeacherCourseProjection moduleRow){
+    private TeacherModuleResponse buildModuleResponse(TeacherCourseProjection moduleRow) {
         return TeacherModuleResponse.builder()
                 .moduleId(moduleRow.getModuleId())
                 .moduleName(moduleRow.getModuleName())

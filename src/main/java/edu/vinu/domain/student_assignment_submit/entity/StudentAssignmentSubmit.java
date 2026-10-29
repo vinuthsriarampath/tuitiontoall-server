@@ -31,7 +31,7 @@ import java.time.LocalDateTime;
         name = "student_assignment_submit",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        columnNames = {"assignment_id","student_id","attempt_no"}
+                        columnNames = {"assignment_id", "student_id", "attempt_no"}
                 )
         }
 )
@@ -45,22 +45,22 @@ public class StudentAssignmentSubmit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "url",nullable = false)
+    @Column(name = "url", nullable = false)
     private String url;
 
     @Column(name = "grade", length = 5)
     private String grade;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status",nullable = false)
+    @Column(name = "status", nullable = false)
     private AssignmentSubmitStatus status;
 
     @Builder.Default
-    @Column(name = "marks_gained",nullable = false)
+    @Column(name = "marks_gained", nullable = false)
     private int marksGained = 0;
 
     @Builder.Default
-    @Column(name = "attempt_no",nullable = false)
+    @Column(name = "attempt_no", nullable = false)
     private int attemptNo = 1;
 
     @Column(name = "graded_at")
@@ -74,11 +74,11 @@ public class StudentAssignmentSubmit {
     @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime lastModifiedDate;
 
-    @ManyToOne(optional = false, fetch =  FetchType.LAZY)
-    @JoinColumn(name = "student_id",nullable = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", nullable = false)
     private StudentEntity student;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "assignment_id",nullable = false)
+    @JoinColumn(name = "assignment_id", nullable = false)
     private AssignmentEntity assignment;
 }

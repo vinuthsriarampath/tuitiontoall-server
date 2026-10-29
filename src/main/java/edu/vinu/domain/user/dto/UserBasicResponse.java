@@ -16,11 +16,12 @@ package edu.vinu.domain.user.dto;
 import lombok.Builder;
 
 @Builder
-public record UserBasicResponse (
+public record UserBasicResponse(
         Long id,
         String displayName,
         String email,
         String dp,
         String userSlug,
         String role
-){ }
+) {
+}

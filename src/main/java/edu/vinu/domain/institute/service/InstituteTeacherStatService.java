@@ -25,7 +25,7 @@ import java.util.List;
 public interface InstituteTeacherStatService {
     BigDecimal countInstituteTeachersByInstituteAndStatus(Long instituteId, InstituteTeacherStatus status);
 
-    BigDecimal countActiveTeachersByInstituteAndStatusIdBetween(Long instituteId,InstituteTeacherStatus status, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    BigDecimal countActiveTeachersByInstituteAndStatusIdBetween(Long instituteId, InstituteTeacherStatus status, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     List<TrendPoint> getInstituteTeachersTrends(Long instituteId, InstituteTeacherStatus status, ReportingPeriod period, ReportingPeriodRange range);
 }

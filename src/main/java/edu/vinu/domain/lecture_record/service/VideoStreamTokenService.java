@@ -19,6 +19,7 @@ import java.util.Map;
 
 public interface VideoStreamTokenService {
     String generateToken(String fileName);
+
     VideoStreamTokenEntity validateToken(String token);
 
     Map<String, VideoStreamTokenEntity> getAllTokens();

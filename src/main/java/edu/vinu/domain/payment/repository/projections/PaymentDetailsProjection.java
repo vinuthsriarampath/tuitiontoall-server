@@ -21,14 +21,24 @@ import java.time.LocalDateTime;
 
 public interface PaymentDetailsProjection {
     Long getPaymentId();
+
     Long getStudentId();
+
     String getStudentName();
+
     Long getInstituteId();
+
     String getInstituteName();
+
     BigDecimal getAmount();
+
     PaymentStatus getStatus();
+
     PaymentMethod getPaymentMethod();
+
     String getTransactionRef();
+
     LocalDateTime getCreatedDate();
+
     LocalDateTime getLastModifiedDate();
 }

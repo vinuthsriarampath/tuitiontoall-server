@@ -17,7 +17,7 @@ package edu.vinu.domain.student_batch_enrollment.dto.request;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-public record EnrollmentRequest (
+public record EnrollmentRequest(
         @Positive
         @NotNull
         Long courseId,

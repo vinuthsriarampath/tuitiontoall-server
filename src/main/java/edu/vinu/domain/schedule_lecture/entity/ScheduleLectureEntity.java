@@ -30,7 +30,7 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "schedule_lecture",
         uniqueConstraints = {
-            @UniqueConstraint(name = "uk_chapter_start_date_time_end_time", columnNames = {"chapter_id", "start_date", "start_time", "end_time"})
+                @UniqueConstraint(name = "uk_chapter_start_date_time_end_time", columnNames = {"chapter_id", "start_date", "start_time", "end_time"})
         }
 )
 @Data
@@ -44,29 +44,29 @@ public class ScheduleLectureEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "chapter_id",nullable = false)
+    @JoinColumn(name = "chapter_id", nullable = false)
     private ChapterEntity chapter;
 
     @Column(name = "topic", nullable = false)
     private String topic;
 
-    @Column(name = "start_date",nullable = false)
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "start_time",nullable = false)
+    @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
 
-    @Column(name = "end_time",nullable = false)
+    @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private ScheduleLectureStatus status;
 
-    @Column(name = "late_attendance",nullable = false)
+    @Column(name = "late_attendance", nullable = false)
     private boolean lateAttendance = true;
 
-    @Column(name = "meeting_url",nullable = false)
+    @Column(name = "meeting_url", nullable = false)
     private String meetingUrl;
 
     @CreationTimestamp
@@ -74,6 +74,6 @@ public class ScheduleLectureEntity {
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    @Column(name = "last_modified_date",insertable = false)
+    @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime lastModifiedDate;
 }

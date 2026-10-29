@@ -27,9 +27,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "lecture_recording",
-    uniqueConstraints = {
-        @UniqueConstraint(name = "uk_chapter_title",columnNames = {"title","chapter_id"})
-    }
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_chapter_title", columnNames = {"title", "chapter_id"})
+        }
 )
 @Data
 @AllArgsConstructor
@@ -39,13 +39,13 @@ public class LectureRecordEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "title",nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
-    @Column(name = "url",nullable = false)
+    @Column(name = "url", nullable = false)
     private String url;
-    @Column(name = "recorded_date",nullable = false)
+    @Column(name = "recorded_date", nullable = false)
     private LocalDate recordedDate;
-    @Column(name = "created_date",updatable = false,nullable = false)
+    @Column(name = "created_date", updatable = false, nullable = false)
     @CreationTimestamp
     private LocalDateTime createdDate;
     @Column(name = "last_modified_date", insertable = false)
@@ -53,7 +53,7 @@ public class LectureRecordEntity {
     private LocalDateTime lastModifiedDate;
 
     @ManyToOne
-    @JoinColumn(name = "chapter_id",nullable = false)
+    @JoinColumn(name = "chapter_id", nullable = false)
     private ChapterEntity chapter;
 
 }

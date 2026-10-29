@@ -32,9 +32,9 @@ public interface UserAuthenticationService {
 
     AuthResponse verify(LoginRequest request);
 
-    ApiResponse startForgotPassword(String email);
+    ApiResponse<Void> startForgotPassword(String email);
 
-    ApiResponse resetPassword(String token, String newPassword);
+    ApiResponse<Void> resetPassword(String token, String newPassword);
 
     String getCurrentUserEmail();
 }

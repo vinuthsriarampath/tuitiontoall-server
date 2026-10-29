@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User{
+public class User {
     @JsonProperty(index = 1)
     private Long id;
     private String address;

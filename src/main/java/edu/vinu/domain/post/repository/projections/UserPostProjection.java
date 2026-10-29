@@ -20,14 +20,22 @@ import java.time.LocalDateTime;
 
 public interface UserPostProjection {
     Long getId();
+
     String getCaption();
+
     PostVisibility getVisibility();
+
     PostStatus getStatus();
+
     LocalDateTime getCreatedDate();
+
     LocalDateTime getUpdatedDate();
+
     LocalDateTime getPublishedDate();
 
     Long getLikesCount();
+
     Long getCommentsCount();
+
     int getIsLikedByUser();
 }

@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 
 public interface SimpleCourseProjection {
     Long getId();
+
     String getTitle();
+
     BigDecimal getAvgRating();
 }

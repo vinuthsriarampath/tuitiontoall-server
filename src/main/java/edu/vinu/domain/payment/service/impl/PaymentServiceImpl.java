@@ -46,6 +46,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final StudentService studentService;
     private final InstituteService instituteService;
+
     @Override
     public Payment pay(BigDecimal amount, StudentEntity studentEntity, InstituteEntity instituteEntity) {
         Payment paymentEntity = Payment.builder()
@@ -58,7 +59,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         try {
             return paymentRepository.save(paymentEntity);
-        }catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             throw new InvalidInputException("Duplicate Payment!");
         }
     }
@@ -67,7 +68,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaginatedApiResponse<PaymentDetailedResponse> myPayments(PaginationRequest pagination, MyPaymentFilterRequest filters) {
         StudentEntity currentStudent = studentService.getCurrentStudent();
 
-        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(),pagination.sortBy(), List.of("created_date")));
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));
 
         Page<PaymentDetailedResponse> page = paymentRepository.getMyPayments(
                 currentStudent.getId(),
@@ -96,7 +97,7 @@ public class PaymentServiceImpl implements PaymentService {
     public PaginatedApiResponse<PaymentDetailedResponse> myPaymentsReceives(PaginationRequest pagination, MyPaymentReceivesFilterRequest filters) {
         InstituteEntity currentInstitute = instituteService.getCurrentInstitute();
 
-        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(),pagination.sortBy(), List.of("created_date")));
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));
 
         Page<PaymentDetailedResponse> page = paymentRepository.getMyReceives(
                 currentInstitute.getId(),

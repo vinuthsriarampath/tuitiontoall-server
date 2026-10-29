@@ -14,7 +14,10 @@
 package edu.vinu.domain.teacher.service;
 
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.teacher.dtos.response.TeachingResponse;
+
+import java.util.List;
 
 public interface TeachingService {
-    ApiResponse getMyTeachingDetails();
+    ApiResponse<List<TeachingResponse>> getMyTeachingDetails();
 }

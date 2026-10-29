@@ -31,7 +31,7 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping
-    public ResponseEntity<SearchResponse> Search(@RequestParam String query){
+    public ResponseEntity<SearchResponse> Search(@RequestParam String query) {
         SearchResponse searchResponse = searchService.search(query);
         return ResponseEntity.status(200).body(searchResponse);
     }

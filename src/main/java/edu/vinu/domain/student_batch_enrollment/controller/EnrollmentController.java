@@ -16,6 +16,7 @@ package edu.vinu.domain.student_batch_enrollment.controller;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentEligibilityCheckRequest;
 import edu.vinu.domain.student_batch_enrollment.dto.request.EnrollmentRequest;
+import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentEligibilityResponse;
 import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class EnrollmentController {
 
     @PreAuthorize("hasAuthority('student')")
     @PostMapping(produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> enrollStudents(@Valid @RequestBody EnrollmentRequest request){
+    public ResponseEntity<byte[]> enrollStudents(@Valid @RequestBody EnrollmentRequest request) {
         byte[] invoice = enrollmentService.enrollStudent(request);
         return ResponseEntity.ok()
                 .header(
@@ -47,8 +48,7 @@ public class EnrollmentController {
 
     @PreAuthorize("hasAuthority('student')")
     @GetMapping("/eligibility-check")
-    public ResponseEntity<ApiResponse> checkEnrolmentEligibility(@Valid EnrollmentEligibilityCheckRequest request){
-        ApiResponse response = enrollmentService.checkEnrollmentEligibility(request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<ApiResponse<EnrollmentEligibilityResponse>> checkEnrolmentEligibility(@Valid EnrollmentEligibilityCheckRequest request) {
+        return ResponseEntity.ok(enrollmentService.checkEnrollmentEligibility(request));
     }
 }

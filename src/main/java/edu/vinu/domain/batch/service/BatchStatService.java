@@ -24,6 +24,8 @@ import java.util.List;
 
 public interface BatchStatService {
     BigDecimal countBatchesByInstituteAndBatchStatus(Long instituteId, BatchStatus batchStatus);
+
     BigDecimal countBatchesByInstituteAndBatchStatusBetween(Long instituteId, BatchStatus batchStatus, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
     List<TrendPoint> getBatchesTrendByInstituteAndBatchStatus(Long instituteId, BatchStatus batchStatus, ReportingPeriod period, ReportingPeriodRange range);
 }

@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class GradingEligibilityResponse{
-        private boolean canGrade;
-        private GradingEligibilityReason reason;
+public class GradingEligibilityResponse {
+    private boolean canGrade;
+    private GradingEligibilityReason reason;
 }

@@ -16,6 +16,7 @@ package edu.vinu.domain.course.service;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.course.enums.CourseStatus;
 import edu.vinu.domain.course.response.CoursePerformanceResponse;
+import edu.vinu.domain.course.response.CourseStatsResponse;
 import edu.vinu.domain.reporting.enums.ReportingPeriod;
 import edu.vinu.domain.reporting.response.ReportingPeriodRange;
 import edu.vinu.domain.reporting.response.TrendPoint;
@@ -25,7 +26,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CourseStatsService {
-    ApiResponse getCourseStats(Long courseId);
+    ApiResponse<CourseStatsResponse> getCourseStats(Long courseId);
 
     BigDecimal countCoursesByStatusAndInstituteId(Long instituteId, CourseStatus status);
 

@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class LectureRecordMapper {
 
-    public static LectureRecordResponse toLectureRecordResponse(LectureRecordEntity entity){
+    public static LectureRecordResponse toLectureRecordResponse(LectureRecordEntity entity) {
         return LectureRecordResponse.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())

@@ -29,12 +29,12 @@ public class ScheduleLectureSchedulers {
     private final ScheduleLectureRepository scheduleLectureRepository;
 
     @Scheduled(cron = " 0 * * * * *", zone = "Asia/Colombo")
-    private void completeEndedLectures(){
+    private void completeEndedLectures() {
         int updated = scheduleLectureRepository.completeEndedLectures(
                 ScheduleLectureStatus.COMPLETED.name(),
                 ScheduleLectureStatus.LIVE.name(),
                 ScheduleLectureStatus.SCHEDULED.name()
         );
-        log.atInfo().log("{} Scheduled Lectures got COMPLETED! at {}", updated , LocalDateTime.now());
+        log.atInfo().log("{} Scheduled Lectures got COMPLETED! at {}", updated, LocalDateTime.now());
     }
 }

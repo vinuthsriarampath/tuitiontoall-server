@@ -20,9 +20,7 @@ import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.request.AssignmentSubmissionFilterRequest;
 import edu.vinu.domain.student_assignment_submit.request.StudentAssignmentSubmissionFilterRequest;
-import edu.vinu.domain.student_assignment_submit.response.AssignmentSubmissionDetailedResponse;
-import edu.vinu.domain.student_assignment_submit.response.NonGradedSubmissionResponse;
-import edu.vinu.domain.student_assignment_submit.response.StudentAssignmentSubmissionResponse;
+import edu.vinu.domain.student_assignment_submit.response.*;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,13 +28,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface AssignmentSubmitService {
-    ApiResponse submit(Long assignmentId, MultipartFile file);
+    ApiResponse<AssignmentSubmissionResponse> submit(Long assignmentId, MultipartFile file);
 
-    ApiResponse checkEligibility(Long assignmentId);
+    ApiResponse<AssignmentSubmissionEligibilityResponse> checkEligibility(Long assignmentId);
 
     PaginatedApiResponse<AssignmentSubmissionDetailedResponse> getAllSubmissionByAssignment(Long assignmentId, PaginationRequest pagination, AssignmentSubmissionFilterRequest filters);
 
-    PaginatedApiResponse<StudentAssignmentSubmissionResponse> getAllSubmissionsByAssignmentOfStudent(Long assignmentId,PaginationRequest pagination, StudentAssignmentSubmissionFilterRequest filters);
+    PaginatedApiResponse<StudentAssignmentSubmissionResponse> getAllSubmissionsByAssignmentOfStudent(Long assignmentId, PaginationRequest pagination, StudentAssignmentSubmissionFilterRequest filters);
 
     ResponseEntity<Resource> downloadSubmissionFile(String fileName);
 

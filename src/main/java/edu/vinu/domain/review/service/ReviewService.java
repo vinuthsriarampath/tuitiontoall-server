@@ -21,7 +21,7 @@ import edu.vinu.domain.review.response.BasicReviewResponse;
 import edu.vinu.domain.review.response.ReviewEligibilityResponse;
 
 public interface ReviewService {
-    ApiResponse createReview(ReviewCreateRequest request);
+    ApiResponse<Void> createReview(ReviewCreateRequest request);
 
     PaginatedApiResponse<BasicReviewResponse> getReviewsByCourseId(Long courseId, PaginationRequest pagination);
 

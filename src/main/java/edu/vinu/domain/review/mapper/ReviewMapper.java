@@ -17,7 +17,7 @@ import edu.vinu.domain.review.repository.projector.BasicReviewProjector;
 import edu.vinu.domain.review.response.BasicReviewResponse;
 
 public class ReviewMapper {
-    public static BasicReviewResponse toBasicReviewResponse(BasicReviewProjector projector){
+    public static BasicReviewResponse toBasicReviewResponse(BasicReviewProjector projector) {
         return BasicReviewResponse.builder()
                 .id(projector.getId())
                 .review(projector.getReview())

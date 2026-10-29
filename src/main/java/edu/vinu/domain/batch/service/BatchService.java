@@ -29,9 +29,10 @@ import java.util.List;
 
 public interface BatchService {
     Batch createBatch(BatchCreateRequest request);
-    Batch createBatch(CourseEntity course,BatchCreateRequest request);
 
-    List<Batch> getAllBatchesByCourseId(Long courseId);
+    Batch createBatch(CourseEntity course, BatchCreateRequest request);
+
+    PaginatedApiResponse<Batch> getAllBatchesByCourseId(Long courseId, PaginationRequest pagination, BatchFilterRequest filters);
 
     Batch getBatchById(Long batchId);
 
@@ -43,7 +44,7 @@ public interface BatchService {
 
     Boolean isBatchBelongToCourse(BatchEntity batchEntity, Long courseId);
 
-    ApiResponse getAllEnrollableBatchesOfCourse(Long courseId);
+    ApiResponse<List<Batch>> getAllEnrollableBatchesOfCourse(Long courseId);
 
     PaginatedApiResponse<BatchDetailedResponse> getAllBatches(PaginationRequest pagination, BatchFilterRequest filters);
 

@@ -22,15 +22,15 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Builder
-public record TeacherBatchResponse (
+public record TeacherBatchResponse(
         Long batchId,
         String batchName,
         LocalDate batchStartDate,
         LocalTime batchStartTime,
         BatchStatus batchStatus,
         List<TeacherModuleResponse> modules
-){
-    public TeacherBatchResponse{
+) {
+    public TeacherBatchResponse {
         modules = modules == null ? List.of() : List.copyOf(modules);
     }
 }

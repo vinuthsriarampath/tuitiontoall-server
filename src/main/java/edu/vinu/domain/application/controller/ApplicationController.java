@@ -13,16 +13,19 @@
 
 package edu.vinu.domain.application.controller;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.application.dto.Application;
+import edu.vinu.domain.application.request.ApplicationFilterRequest;
 import edu.vinu.domain.application.response.ApplicationDetailsResponse;
 import edu.vinu.domain.application.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
 
 @RestController
 @RequestMapping("/api/v2/applications")
@@ -33,38 +36,21 @@ public class ApplicationController {
 
     @PreAuthorize("hasAuthority('teacher')")
     @PostMapping("/vacancies/{vacancyId}/apply")
-    public ResponseEntity<ApiResponse> createApplication(@PathVariable Long vacancyId){
+    public ResponseEntity<ApiResponse<Application>> createApplication(@PathVariable Long vacancyId) {
         Application application = applicationService.createApplication(vacancyId);
-        return ResponseEntity.status(201).body(new ApiResponse("Application created successfully", application));
+        return ResponseEntity.status(201).body(createApiResponse("Application created successfully", application));
     }
 
     @PreAuthorize("hasAuthority('teacher')")
     @GetMapping("/check")
-    public ResponseEntity<ApiResponse> checkIfUserAlreadyApplied(@RequestParam("teacherId") Long userId,@RequestParam("vacancyId") Long vacancyId){
+    public ResponseEntity<ApiResponse<Boolean>> checkIfUserAlreadyApplied(@RequestParam("teacherId") Long userId, @RequestParam("vacancyId") Long vacancyId) {
         boolean userAlreadyApplied = applicationService.isUserAlreadyApplied(userId, vacancyId);
-        return ResponseEntity.status(200).body(new ApiResponse("Success", userAlreadyApplied));
+        return ResponseEntity.status(200).body(createApiResponse("Success", userAlreadyApplied));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @GetMapping("vacancies/{vacancyId}")
-    public ResponseEntity<PaginatedApiResponse<ApplicationDetailsResponse>> getAllApplicationsByVacancy(
-            @PathVariable("vacancyId") Long vacancyId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "desc") String direction,
-            @RequestParam(defaultValue = "appliedDate") String sortBy){
-        Page<ApplicationDetailsResponse> pageData = applicationService.getApplicationsByVacancy(vacancyId,page,size,direction,sortBy);
-
-        PaginatedApiResponse<ApplicationDetailsResponse> response =  PaginatedApiResponse.<ApplicationDetailsResponse>builder()
-                .message("Applications By Vacancy!")
-                .data(pageData.getContent())
-                .page(pageData.getNumber())
-                .size(pageData.getSize())
-                .totalElements(pageData.getTotalElements())
-                .totalPages(pageData.getTotalPages())
-                .last(pageData.isLast())
-                .build();
-
-        return ResponseEntity.ok(response);
+    public ResponseEntity<PaginatedApiResponse<ApplicationDetailsResponse>> getAllApplicationsByVacancy(@PathVariable("vacancyId") Long vacancyId, PaginationRequest pagination, ApplicationFilterRequest filters) {
+        return ResponseEntity.ok(applicationService.getApplicationsByVacancy(vacancyId, pagination, filters));
     }
 }

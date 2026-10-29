@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ChapterMapper {
-    public static ChapterResponse toChapterResponse(ChapterEntity chapterEntity){
+    public static ChapterResponse toChapterResponse(ChapterEntity chapterEntity) {
         return ChapterResponse.builder()
                 .id(chapterEntity.getId())
                 .title(chapterEntity.getTitle())
@@ -36,7 +36,7 @@ public class ChapterMapper {
                 .build();
     }
 
-    public static ChapterDetailedResponse toChapterDetailedResponse(ChapterDetailedProjection proj){
+    public static ChapterDetailedResponse toChapterDetailedResponse(ChapterDetailedProjection proj) {
         return ChapterDetailedResponse.builder()
                 .id(proj.getId())
                 .title(proj.getTitle())
@@ -56,7 +56,7 @@ public class ChapterMapper {
                 .build();
     }
 
-    public static ChapterStatCountResponse toChapterStatCountResponse(ChapterStatCountProjection proj){
+    public static ChapterStatCountResponse toChapterStatCountResponse(ChapterStatCountProjection proj) {
         return ChapterStatCountResponse.builder()
                 .resourceCount(proj.getResourceCount())
                 .lectureRecordingCount(proj.getLectureRecordingCount())

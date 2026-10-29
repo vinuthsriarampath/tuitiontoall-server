@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class TeachingServiceImpl implements TeachingService {
@@ -38,7 +40,7 @@ public class TeachingServiceImpl implements TeachingService {
     private final InstituteTeacherRepository instituteTeacherRepository;
 
     @Override
-    public ApiResponse getMyTeachingDetails() {
+    public ApiResponse<List<TeachingResponse>> getMyTeachingDetails() {
 
         TeacherEntity currentTeacher = teacherService.getCurrentTeacher();
 
@@ -56,14 +58,11 @@ public class TeachingServiceImpl implements TeachingService {
                 .map(this::buildInstituteResponse)
                 .toList();
 
-        return ApiResponse.builder()
-                .message("Teaching details retrieved successfully")
-                .data(response)
-                .build();
+        return createApiResponse("Teaching details retrieved successfully", response);
     }
 
-    private TeachingResponse buildInstituteResponse(List<TeachingProjection> instituteRows){
-        TeachingProjection first =  instituteRows.get(0);
+    private TeachingResponse buildInstituteResponse(List<TeachingProjection> instituteRows) {
+        TeachingProjection first = instituteRows.get(0);
 
         Map<Long, List<TeachingProjection>> courseGroups = instituteRows.stream()
                 .collect(Collectors.groupingBy(
@@ -83,7 +82,7 @@ public class TeachingServiceImpl implements TeachingService {
                 .build();
     }
 
-    private CourseTeachingResponse buildTeachingResponse(List<TeachingProjection> courseRows){
+    private CourseTeachingResponse buildTeachingResponse(List<TeachingProjection> courseRows) {
         TeachingProjection first = courseRows.get(0);
 
         Map<Long, List<TeachingProjection>> batchGroups = courseRows.stream()
@@ -113,7 +112,7 @@ public class TeachingServiceImpl implements TeachingService {
                 .build();
     }
 
-    private BatchBasicResponse buildBatchResponse(List<TeachingProjection> batchRows){
+    private BatchBasicResponse buildBatchResponse(List<TeachingProjection> batchRows) {
         TeachingProjection first = batchRows.get(0);
 
         return BatchBasicResponse.builder()

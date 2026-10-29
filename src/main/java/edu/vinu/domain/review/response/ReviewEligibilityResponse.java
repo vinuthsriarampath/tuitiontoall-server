@@ -20,4 +20,5 @@ import lombok.Builder;
 public record ReviewEligibilityResponse(
         boolean canReview,
         ReviewEligibilityReason reason
-) {}
+) {
+}

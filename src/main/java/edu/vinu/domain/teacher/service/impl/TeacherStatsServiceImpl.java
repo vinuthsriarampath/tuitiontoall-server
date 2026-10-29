@@ -40,7 +40,7 @@ public class TeacherStatsServiceImpl implements TeacherStatsService {
     public DashboardStats getAssignedBatchesCount(Long teacherId, BatchStatus batchStatus) {
         return DashboardStats.builder()
                 .value(BigDecimal.valueOf(batchService.countAssignedBatchesToTeacher(teacherId, batchStatus)))
-                .label("Currently teaching" )
+                .label("Currently teaching")
                 .build();
     }
 

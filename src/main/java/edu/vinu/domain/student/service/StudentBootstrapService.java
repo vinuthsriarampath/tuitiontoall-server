@@ -14,7 +14,8 @@
 package edu.vinu.domain.student.service;
 
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.student.dto.response.StudentBootstrapResponse;
 
 public interface StudentBootstrapService {
-    ApiResponse getBootstrapData();
+    ApiResponse<StudentBootstrapResponse> getBootstrapData();
 }

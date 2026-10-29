@@ -31,9 +31,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "module",
-uniqueConstraints = {
-        @UniqueConstraint(name = "uk_batch_module_name",columnNames = {"name","batch_id"})
-})
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_batch_module_name", columnNames = {"name", "batch_id"})
+        })
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,24 +42,24 @@ public class ModuleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name",nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
     @Enumerated(EnumType.STRING)
-    @Column(name = "status",nullable = false)
+    @Column(name = "status", nullable = false)
     private ModuleStatus status = ModuleStatus.DRAFT;
     @CreationTimestamp
-    @Column(name = "created_date",nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdAt;
     @UpdateTimestamp
-    @Column(name = "last_modified_date",insertable = false)
+    @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime lastModifiedDate;
 
     @ManyToOne
-    @JoinColumn(name = "batch_id",nullable = false)
+    @JoinColumn(name = "batch_id", nullable = false)
     private BatchEntity batch;
 
     @ManyToOne
-    @JoinColumn(name = "teacher_id",nullable = false)
+    @JoinColumn(name = "teacher_id", nullable = false)
     private TeacherEntity teacher;
 
     @OneToMany(mappedBy = "module")

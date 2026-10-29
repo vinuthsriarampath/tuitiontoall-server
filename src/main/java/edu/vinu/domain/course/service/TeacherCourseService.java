@@ -14,7 +14,8 @@
 package edu.vinu.domain.course.service;
 
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.course.response.TeacherCourseViewResponse;
 
 public interface TeacherCourseService {
-    ApiResponse getTeacherDetailedCourse(Long courseId);
+    ApiResponse<TeacherCourseViewResponse> getTeacherDetailedCourse(Long courseId);
 }

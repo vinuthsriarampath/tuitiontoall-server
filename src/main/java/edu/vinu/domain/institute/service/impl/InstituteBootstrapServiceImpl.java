@@ -14,36 +14,24 @@
 package edu.vinu.domain.institute.service.impl;
 
 import edu.vinu.common.dto.PaginationRequest;
-import edu.vinu.common.enums.ChangeValueType;
 import edu.vinu.common.response.ApiResponse;
-import edu.vinu.common.response.DashboardKpi;
 import edu.vinu.domain.batch.enums.BatchStatus;
 import edu.vinu.domain.batch.request.BatchFilterRequest;
 import edu.vinu.domain.batch.service.BatchService;
-import edu.vinu.domain.batch.service.BatchStatService;
-import edu.vinu.domain.course.enums.CourseStatus;
 import edu.vinu.domain.course.service.CourseStatsService;
 import edu.vinu.domain.institute.entity.InstituteEntity;
-import edu.vinu.domain.institute.enums.InstituteTeacherStatus;
 import edu.vinu.domain.institute.response.InstituteBootstrapResponse;
 import edu.vinu.domain.institute.response.InstituteDashboardKpiStats;
 import edu.vinu.domain.institute.service.InstituteBootstrapService;
 import edu.vinu.domain.institute.service.InstituteDashboardKpiService;
 import edu.vinu.domain.institute.service.InstituteService;
-import edu.vinu.domain.institute.service.InstituteTeacherStatService;
-import edu.vinu.domain.payment.enums.PaymentStatus;
-import edu.vinu.domain.payment.service.PaymentStatService;
-import edu.vinu.domain.reporting.enums.ReportingPeriod;
-import edu.vinu.domain.reporting.response.ReportingPeriodRange;
-import edu.vinu.domain.reporting.response.TrendPoint;
-import edu.vinu.domain.reporting.service.PeriodService;
-import edu.vinu.domain.reporting.utility.DifferenceCalculator;
 import edu.vinu.domain.student_batch_enrollment.service.EnrollmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
+
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -55,7 +43,7 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
     private final InstituteDashboardKpiService instituteDashboardKpiService;
 
     @Override
-    public ApiResponse getCurrentInstituteBootstrapData() {
+    public ApiResponse<InstituteBootstrapResponse> getCurrentInstituteBootstrapData() {
         InstituteEntity currentInstitute = instituteService.getCurrentInstitute();
 
         InstituteBootstrapResponse response = new InstituteBootstrapResponse();
@@ -71,13 +59,10 @@ public class InstituteBootstrapServiceImpl implements InstituteBootstrapService 
         response.setKpiStats(kpiStats);
         response.setCoursePerformance(courseStatsService.getTopPerformingCoursesByRatingAndInstituteId(currentInstitute.getId(), 5));
         response.setEnrollmentDistribution(enrollmentService.getEnrollmentDistributionByInstitute(currentInstitute.getId()));
-        response.setOverallEnrollment(enrollmentService.getOverallEnrollmentStatsByInstitute(currentInstitute.getId(),currentInstitute.getUser().getCreationTimeStamp().toLocalDate()));
-        response.setActiveBatches(batchService.getAllBatches(new PaginationRequest(0,5,null,  List.of("created_date")), new BatchFilterRequest(null, null, null, currentInstitute.getId(), BatchStatus.ONGOING, null)));
+        response.setOverallEnrollment(enrollmentService.getOverallEnrollmentStatsByInstitute(currentInstitute.getId(), currentInstitute.getUser().getCreationTimeStamp().toLocalDate()));
+        response.setActiveBatches(batchService.getAllBatches(new PaginationRequest(0, 5, "desc", List.of("created_date")), new BatchFilterRequest(null, null, BatchStatus.ONGOING, null)));
 
-        return ApiResponse.builder()
-                .message("Bootstrap data retrieved successfully")
-                .data(response)
-                .build();
+        return createApiResponse("Bootstrap data retrieved successfully", response);
     }
 
 }

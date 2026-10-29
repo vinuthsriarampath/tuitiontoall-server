@@ -14,6 +14,7 @@
 package edu.vinu.domain.user_follow.controller;
 
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.user_follow.dtos.response.UserUnfollowResponse;
 import edu.vinu.domain.user_follow.services.UserFollowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class UserUnfollowController {
     private final UserFollowService userFollowService;
 
     @DeleteMapping("/user/{followingId}")
-    public ResponseEntity<ApiResponse> unfollowUser(@PathVariable Long followingId){
+    public ResponseEntity<ApiResponse<UserUnfollowResponse>> unfollowUser(@PathVariable Long followingId) {
         return ResponseEntity.ok(userFollowService.unfollowUser(followingId));
     }
 }

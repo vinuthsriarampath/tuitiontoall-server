@@ -13,12 +13,14 @@
 
 package edu.vinu.domain.teacher_vacancy.service;
 
+import edu.vinu.common.dto.PaginationRequest;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.teacher_vacancy.dto.TeacherVacancy;
 import edu.vinu.domain.teacher_vacancy.entity.TeacherVacancyEntity;
 import edu.vinu.domain.teacher_vacancy.enums.TeacherVacancyStatus;
 import edu.vinu.domain.teacher_vacancy.request.CreateVacancyRequest;
+import edu.vinu.domain.teacher_vacancy.request.TeacherVacancyFilterRequest;
 import edu.vinu.domain.teacher_vacancy.request.UpdateVacancyRequest;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -31,9 +33,9 @@ public interface TeacherVacancyService {
 
     TeacherVacancy getById(Long vacancyId);
 
-    Page<TeacherVacancy> getAllByInstitute(int page, int size, String sortBy, String direction);
+    PaginatedApiResponse<TeacherVacancy> getAllByInstitute(PaginationRequest pagination, TeacherVacancyFilterRequest filters);
 
-    List<TeacherVacancy> getAllByInstituteIdAndStatus(Long instituteId, String  status);
+    List<TeacherVacancy> getAllByInstituteIdAndStatus(Long instituteId, String status);
 
     TeacherVacancyEntity getEntityById(Long id);
 

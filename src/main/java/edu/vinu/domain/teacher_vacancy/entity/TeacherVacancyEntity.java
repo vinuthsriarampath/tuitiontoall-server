@@ -42,29 +42,29 @@ public class TeacherVacancyEntity {
     @Column(name = "title", nullable = false)
     private java.lang.String title;
 
-    @Column(name = "required_experience_years",nullable = false)
+    @Column(name = "required_experience_years", nullable = false)
     private Integer requiredExperienceYears;
 
-    @Column(name = "job_description", columnDefinition = "TEXT",nullable = false)
+    @Column(name = "job_description", columnDefinition = "TEXT", nullable = false)
     private java.lang.String jobDescription;
 
-    @Column(name = "status",nullable = false)
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private TeacherVacancyStatus status;
 
-    @Column(name = "vacancy_closing_date",nullable = false)
+    @Column(name = "vacancy_closing_date", nullable = false)
     private LocalDateTime vacancyClosingDate;
 
     @CreationTimestamp
-    @Column(name = "created_date", updatable = false,nullable = false)
+    @Column(name = "created_date", updatable = false, nullable = false)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    @Column(name = "last_modified_date",insertable = false)
+    @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime lastModifiedDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "instituteId",nullable = false)
+    @JoinColumn(name = "instituteId", nullable = false)
     private InstituteEntity institute;
 
     @OneToMany(mappedBy = "teacherVacancy")

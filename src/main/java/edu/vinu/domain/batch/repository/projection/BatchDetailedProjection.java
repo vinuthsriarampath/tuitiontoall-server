@@ -22,16 +22,28 @@ import java.time.LocalTime;
 
 public interface BatchDetailedProjection {
     Long getId();
+
     String getName();
+
     Long getCourseId();
+
     String getCourseTitle();
+
     boolean getIsSeatLimited();
+
     Integer getMaxSeatsLimit();
+
     Long getTotalEnrollments();
+
     BatchStatus getBatchStatus();
+
     BatchEnrollmentStatus getEnrollmentStatus();
+
     LocalDate getStartDate();
+
     LocalTime getStartTime();
+
     LocalDateTime getCreatedDate();
+
     LocalDateTime getLastModifiedDate();
 }

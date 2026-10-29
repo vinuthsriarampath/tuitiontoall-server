@@ -57,7 +57,7 @@ public class ProfileFileServiceImpl implements ProfileFileService {
         UserEntity userEntity = Optional.ofNullable(userRepository.findByEmail(email))
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        if (!isValidFile(file)){
+        if (!isValidFile(file)) {
             throw new InvalidInputException("Invalid file type. Only JPEG, PNG, and GIF are allowed.");
         }
 
@@ -94,7 +94,8 @@ public class ProfileFileServiceImpl implements ProfileFileService {
         return switch (type) {
             case "dp" -> Path.of(profilePicturePath);
             case "banner" -> Path.of(profileBannerPath);
-            default -> throw new IllegalArgumentException("Profile file type must be either 'dp' or 'banner'. Provided: " + type);
+            default ->
+                    throw new IllegalArgumentException("Profile file type must be either 'dp' or 'banner'. Provided: " + type);
         };
     }
 

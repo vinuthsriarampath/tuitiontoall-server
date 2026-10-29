@@ -33,7 +33,7 @@ public class PaymentMapper {
                 .build();
     }
 
-    public static PaymentDetailedResponse toPaymentDetailedResponse(PaymentDetailsProjection p){
+    public static PaymentDetailedResponse toPaymentDetailedResponse(PaymentDetailsProjection p) {
         return PaymentDetailedResponse.builder()
                 .id(p.getPaymentId())
                 .studentId(p.getStudentId())

@@ -18,14 +18,21 @@ import java.time.LocalDate;
 public interface StudentUserProjection {
 
     Long getStudentId();
+
     String getFirstName();
+
     String getLastName();
+
     LocalDate getDob();
 
 
     Long getUserId();
+
     String getEmail();
+
     String getContact();
+
     String getDp();
+
     String getAddress();
 }

@@ -38,7 +38,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "courses")
-public class CourseEntity{
+public class CourseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -79,13 +79,13 @@ public class CourseEntity{
     private String thumbnail;
 
     @Column(name = "avg_rating", nullable = false, precision = 2, scale = 1)
-    private BigDecimal avg_rating= BigDecimal.ZERO;
+    private BigDecimal avg_rating = BigDecimal.ZERO;
 
     @Column(name = "total_no_ratings", nullable = false)
-    private Integer total_no_ratings=0;
+    private Integer total_no_ratings = 0;
 
     @ManyToOne
-    @JoinColumn(name="institute_id", nullable = false)
+    @JoinColumn(name = "institute_id", nullable = false)
     private InstituteEntity institute;
 
     @OneToMany(mappedBy = "course")
@@ -95,10 +95,10 @@ public class CourseEntity{
     private List<AnnouncementEntity> announcements = new ArrayList<>();
 
     @CreationTimestamp
-    @Column(name = "created_date",nullable = false,updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime creationTimeStamp;
 
     @UpdateTimestamp
-    @Column(name = "last_modified_date",insertable = false)
+    @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime updatedAt;
 }

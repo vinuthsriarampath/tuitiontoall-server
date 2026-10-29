@@ -34,7 +34,7 @@ import java.util.List;
 public interface ChapterService {
     ChapterResponse createChapter(ChapterCreateRequest request);
 
-    ChapterResponse updateChapterDetailsById(Long id,ChapterDetailsUpdateRequest request);
+    ChapterResponse updateChapterDetailsById(Long id, ChapterDetailsUpdateRequest request);
 
     List<ChapterResponse> reorderChapters(ChapterReorderRequest request);
 

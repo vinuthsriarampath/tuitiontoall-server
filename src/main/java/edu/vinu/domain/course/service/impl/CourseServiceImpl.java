@@ -13,8 +13,11 @@
 
 package edu.vinu.domain.course.service.impl;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
+import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.common.util.SortUtil;
 import edu.vinu.domain.course.dto.Course;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.enums.CourseStatus;
@@ -30,14 +33,16 @@ import edu.vinu.domain.course.request.CourseUpdateRequest;
 import edu.vinu.domain.course.response.TeacherBasicCourseResponse;
 import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.institute.entity.InstituteEntity;
-import edu.vinu.domain.institute.repository.InstituteRepository;
+import edu.vinu.domain.institute.service.InstituteService;
 import edu.vinu.infastructure.service.file_storage.FileService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,10 +59,9 @@ public class CourseServiceImpl implements CourseService {
 
     private final ModelMapper mapper;
     private final CourseRepository courseRepository;
-    private final InstituteRepository instituteRepository;
-    private final Environment env;
     private final FileService fileService;
     private final ApplicationEventPublisher eventPublisher;
+    private final InstituteService instituteService;
 
     @Value("${file.course.thumbnail-path}")
     private String courseThumbnailPath;
@@ -66,8 +70,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course createCourse(CourseCreateRequest courseCreateRequest, MultipartFile thumbnail) {
         CourseEntity courseEntity = mapper.map(courseCreateRequest, CourseEntity.class);
-        InstituteEntity institute = instituteRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
-                .orElseThrow(() -> new NotFoundException("Institute not found!"));
+        InstituteEntity institute = instituteService.getCurrentInstitute();
 
         courseEntity.setInstitute(institute);
 
@@ -153,14 +156,31 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getAllCoursesForInstitute() {
-        InstituteEntity institute = instituteRepository.findInstituteByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
-                .orElseThrow(() -> new NotFoundException("Institute not found!"));
+    public PaginatedApiResponse<Course> getPaginatedCoursesForCurrentInstitute(PaginationRequest pagination, CourseFilterRequest filters) {
+        InstituteEntity institute = instituteService.getCurrentInstitute();
 
-        return courseRepository.findAllByInstituteId(institute.getId())
-                .stream()
-                .map(courseEntity -> mapper.map(courseEntity, Course.class))
-                .toList();
+        Pageable pageable = PageRequest.of(pagination.page(), pagination.size(), SortUtil.buildSort(pagination.direction(), pagination.sortBy(), List.of("created_date")));
+
+        Page<Course> page = courseRepository.findAllByInstituteIdWithFilters(
+                institute.getId(),
+                filters.title(),
+                filters.category() != null ? filters.category().name() : null,
+                filters.level() != null ? filters.level().name() : null,
+                filters.language() != null ? filters.language().name() : null,
+                filters.mode() != null ? filters.mode().name() : null,
+                filters.status() != null ? filters.status().name() : null,
+                pageable
+        ).map(courseEntity -> mapper.map(courseEntity, Course.class));
+
+        return PaginatedApiResponse.<Course>builder()
+                .message("Courses retrieved successfully")
+                .data(page.getContent())
+                .page(page.getNumber())
+                .size(page.getSize())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .last(page.isLast())
+                .build();
     }
 
     @Override
@@ -172,14 +192,21 @@ public class CourseServiceImpl implements CourseService {
     @Transactional()
     public List<Course> getAllCoursesByInstituteId(Long instituteId, CourseFilterRequest filters) {
 
-        return courseRepository.findAllByInstituteIdWithFilters(instituteId, filters.category(), filters.level(), filters.language(), filters.mode(), filters.status())
-                .stream()
+        return courseRepository.findAllByInstituteIdWithFilters(
+                        instituteId,
+                        filters.title(),
+                        filters.category() != null ? filters.category().name() : null,
+                        filters.level() != null ? filters.level().name() : null,
+                        filters.language() != null ? filters.language().name() : null,
+                        filters.mode() != null ? filters.mode().name() : null,
+                        filters.status() != null ? filters.status().name() : null
+                ).stream()
                 .map(courseEntity -> mapper.map(courseEntity, Course.class))
                 .toList();
     }
 
     @Override
-    public Boolean isCourseOwner(CourseEntity courseEntity){
+    public Boolean isCourseOwner(CourseEntity courseEntity) {
         return courseEntity.getInstitute().getUser().getEmail().equals(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 

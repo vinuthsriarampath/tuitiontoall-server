@@ -26,11 +26,11 @@ import lombok.NoArgsConstructor;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "uk_assignment_grading_range",
-                        columnNames = {"assignment_id","min_marks","max_marks"}
+                        columnNames = {"assignment_id", "min_marks", "max_marks"}
                 ),
                 @UniqueConstraint(
                         name = "uk_assignment_desired_grade",
-                        columnNames = {"assignment_id","desired_grade"}
+                        columnNames = {"assignment_id", "desired_grade"}
                 )
         }
 )
@@ -44,16 +44,16 @@ public class GradingRangeEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "assignment_id",nullable = false)
+    @JoinColumn(name = "assignment_id", nullable = false)
     private AssignmentEntity assignment;
 
-    @Column(name = "min_marks",nullable = false)
+    @Column(name = "min_marks", nullable = false)
     private Integer minMarks;
 
-    @Column(name = "max_marks",nullable = false)
+    @Column(name = "max_marks", nullable = false)
     private Integer maxMarks;
 
-    @Column(name = "desired_grade",nullable = false, length = 5)
+    @Column(name = "desired_grade", nullable = false, length = 5)
     private String desiredGrade;
 
     @Column(name = "description")

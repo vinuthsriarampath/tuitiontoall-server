@@ -17,19 +17,19 @@ import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.application.dto.Application;
 import edu.vinu.domain.application.entity.ApplicationEntity;
+import edu.vinu.domain.application.request.ApplicationFilterRequest;
 import edu.vinu.domain.application.request.TeacherApplicationFilterRequest;
 import edu.vinu.domain.application.response.ApplicationDetailsResponse;
 import edu.vinu.domain.application.response.TeacherApplicationResponse;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface ApplicationService {
     Application createApplication(Long vacancyId);
 
-    boolean isUserAlreadyApplied(Long userId,Long vacancyId);
+    boolean isUserAlreadyApplied(Long userId, Long vacancyId);
 
-    Page<ApplicationDetailsResponse> getApplicationsByVacancy(Long vacancyId, int page, int size, String direction, String sortBy);
+    PaginatedApiResponse<ApplicationDetailsResponse> getApplicationsByVacancy(Long vacancyId, PaginationRequest pagination, ApplicationFilterRequest filters);
 
     List<ApplicationEntity> getAllApplicationEntitiesByIds(List<Long> applicationIds);
 

@@ -26,9 +26,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "resource",
-    uniqueConstraints = {
-        @UniqueConstraint(name = "uk_chapter_id_name", columnNames = {"chapter_id", "name"})
-    }
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_chapter_id_name", columnNames = {"chapter_id", "name"})
+        }
 )
 @Data
 @AllArgsConstructor
@@ -40,13 +40,13 @@ public class ResourceEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "chapter_id",nullable = false)
+    @JoinColumn(name = "chapter_id", nullable = false)
     private ChapterEntity chapter;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "file_name",nullable = false)
+    @Column(name = "file_name", nullable = false)
     private String fileName;
 
     @CreationTimestamp

@@ -37,6 +37,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -89,7 +90,7 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (IOException e) {
             log.error("JWTFilter Section 4: {}", e.getMessage());
             handlerExceptionResolver.resolveException(request, response, null, e);
-        }catch(SignatureException e){
+        } catch (SignatureException e) {
             log.error("JWT has signed with an invalid signature!");
             handlerExceptionResolver.resolveException(request, response, null, new UnauthorizedException("JWT has signed with an invalid signature!"));
         } catch (RuntimeException e) {

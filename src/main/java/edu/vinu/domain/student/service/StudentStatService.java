@@ -17,7 +17,10 @@ import edu.vinu.common.response.DashboardStats;
 
 public interface StudentStatService {
     DashboardStats getTotalEnrollmentsStats(Long studentId);
+
     DashboardStats getPendingAssignmentsStats(Long studentId);
+
     DashboardStats getCompletedAssignmentsStats(Long studentId);
+
     DashboardStats getAverageMarksStats(Long studentId);
 }

@@ -16,5 +16,5 @@ package edu.vinu.domain.course.events;
 import lombok.Builder;
 
 @Builder
-public record CourseUpdatedEvent (Long instituteId) {
+public record CourseUpdatedEvent(Long instituteId) {
 }

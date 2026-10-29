@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @AllArgsConstructor
 public class StudentLearningServiceImpl implements StudentLearningService {
@@ -44,7 +46,7 @@ public class StudentLearningServiceImpl implements StudentLearningService {
     private final StudentBatchEnrollmentRepository enrollmentRepository;
 
     @Override
-    public ApiResponse getMyLearningDetails() {
+    public ApiResponse<List<StudentLearningResponse>> getMyLearningDetails() {
 
         StudentEntity currentStudent = studentService.getCurrentStudent();
 
@@ -64,16 +66,13 @@ public class StudentLearningServiceImpl implements StudentLearningService {
                         .map(this::buildInstituteResponse)
                         .toList();
 
-        return ApiResponse.builder()
-                .message("Student learning details retrieved successfully")
-                .data(institutes)
-                .build();
+        return createApiResponse("Student learning details retrieved successfully", institutes);
 
 
     }
 
     @Override
-    public ApiResponse getEnrollmentHistory(Long courseId) {
+    public ApiResponse<EnrollmentHistoryResponse> getEnrollmentHistory(Long courseId) {
         StudentEntity currentStudent = studentService.getCurrentStudent();
 
         List<EnrollmentHistoryProjection> projections = enrollmentRepository.findEnrollmentHistory(currentStudent.getId(), courseId);
@@ -96,14 +95,11 @@ public class StudentLearningServiceImpl implements StudentLearningService {
                         .enrollments(enrollments)
                         .build();
 
-        return ApiResponse.builder()
-                .message("Enrollment history retrieved successfully")
-                .data(response)
-                .build();
+        return createApiResponse("Enrollment history retrieved successfully", response);
 
     }
 
-    private StudentLearningResponse buildInstituteResponse(List<StudentLearningProjection> instituteRows){
+    private StudentLearningResponse buildInstituteResponse(List<StudentLearningProjection> instituteRows) {
         StudentLearningProjection first = instituteRows.get(0);
 
         Map<Long, List<StudentLearningProjection>> courseGroups =
@@ -127,7 +123,7 @@ public class StudentLearningServiceImpl implements StudentLearningService {
                 .build();
     }
 
-    private CourseLearningResponse buildCourseResponse(List<StudentLearningProjection> courseRows){
+    private CourseLearningResponse buildCourseResponse(List<StudentLearningProjection> courseRows) {
         StudentLearningProjection first = courseRows.get(0);
 
         StudentLearningProjection currentEnrollment = findCurrentEnrollment(courseRows);

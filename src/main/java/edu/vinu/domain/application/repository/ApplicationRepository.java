@@ -40,74 +40,77 @@ public interface ApplicationRepository extends JpaRepository<ApplicationEntity, 
 
     @Query(value = """ 
             SELECT
-                                    a.id AS id,
-                                    a.teacher_vacancy_id AS teacherVacancyId,
-                                    a.status AS status,
-                                    a.applied_date AS appliedDate,
-                                    a.last_modified_date AS lastModifiedDate,
-                                    u.id AS userId,
-                                    u.email AS email,
-                                    u.contact AS contact,
-                                    u.dp AS dp,
-                                    u.address AS address,
-                                    t.first_name AS firstName,
-                                    t.last_name AS lastName,
-                                    t.dob AS dob
-                                    FROM applications a
-                                    JOIN teacher t ON a.teacher_id = t.id
-                                    JOIN users u ON t.user_id = u.id
-                                    WHERE a.teacher_vacancy_id = :vacancyId
+            a.id AS id,
+            a.teacher_vacancy_id AS teacherVacancyId,
+            a.status AS status,
+            a.applied_date AS appliedDate,
+            a.last_modified_date AS lastModifiedDate,
+            
+            u.id AS userId,
+            u.email AS email,
+            u.contact AS contact,
+            u.dp AS dp,
+            u.address AS address,
+            
+            t.first_name AS firstName,
+            t.last_name AS lastName,
+            t.dob AS dob
+            FROM applications a
+            JOIN teacher t ON a.teacher_id = t.id
+            JOIN users u ON t.user_id = u.id
+            WHERE a.teacher_vacancy_id = :vacancyId
+            AND (:status IS NULL OR a.status = :status)
+            AND (:teacherName IS NULL OR (LOWER(CONCAT(t.first_name, ' ', t.last_name)) LIKE LOWER(CONCAT('%', :teacherName, '%'))))
+            """, countQuery = """
+            SELECT COUNT(*)
+            FROM applications a
+            WHERE a.teacher_vacancy_id = :vacancyId
+            AND (:status IS NULL OR a.status = :status)
+            AND (:teacherName IS NULL OR (LOWER(CONCAT(t.first_name, ' ', t.last_name)) LIKE LOWER(CONCAT('%', :teacherName, '%'))))
+            """, nativeQuery = true)
+    Page<ApplicationProjection> findAllByTeacherVacancy_Id(@Param("vacancyId") Long teacherVacancyId, String status, String teacherName, Pageable pageable);
+
+    @Query(value = """
+            SELECT
+            a.id AS applicationId,
+            a.status AS applicationStatus,
+            a.applied_date AS appliedDate,
+            a.last_modified_date AS lastModifiedDate,
+            
+            tv.id AS vacancyId,
+            tv.title AS vacancyTitle,
+            
+            i.id AS instituteId,
+            i.institute_name AS instituteName,
+            
+            u.user_slug AS instituteUserSlug
+            FROM applications a
+            INNER JOIN teacher_vacancy tv ON a.teacher_vacancy_id = tv.id
+            INNER JOIN institute i ON tv.institute_id = i.id
+            INNER JOIN users u ON i.user_id = u.id
+            WHERE a.teacher_id = :teacherId
+            AND (:applicationId IS NULL OR a.id = :applicationId)
+            AND (:vacancyId IS NULL OR a.teacher_vacancy_id = :vacancyId)
+            AND (:vacancyTitle IS NULL OR tv.title LIKE CONCAT('%', :vacancyTitle, '%'))
+            AND (:instituteId IS NULL OR i.id = :instituteId)
+            AND (:instituteName IS NULL OR i.institute_name LIKE CONCAT('%', :instituteName, '%'))
+            AND (:applicationStatus IS NULL OR a.status = :applicationStatus)
+            AND (:appliedDate IS NULL OR (DATE(a.applied_date) = DATE(:appliedDate) OR a.applied_date >= :appliedDate))
             """,
             countQuery = """
                     SELECT COUNT(*)
                     FROM applications a
-                    WHERE a.teacher_vacancy_id = :vacancyId
-                    """,
-            nativeQuery = true
-    )
-    Page<ApplicationProjection> findAllByTeacherVacancy_Id(@Param("vacancyId") Long teacherVacancyId, Pageable pageable);
-
-    @Query(value = """
-    SELECT
-    a.id AS applicationId,
-    a.status AS applicationStatus,
-    a.applied_date AS appliedDate,
-    a.last_modified_date AS lastModifiedDate,
-    
-    tv.id AS vacancyId,
-    tv.title AS vacancyTitle,
-    
-    i.id AS instituteId,
-    i.institute_name AS instituteName,
-    
-    u.user_slug AS instituteUserSlug
-    FROM applications a
-    INNER JOIN teacher_vacancy tv ON a.teacher_vacancy_id = tv.id
-    INNER JOIN institute i ON tv.institute_id = i.id
-    INNER JOIN users u ON i.user_id = u.id
-    WHERE a.teacher_id = :teacherId
-    AND (:applicationId IS NULL OR a.id = :applicationId)
-    AND (:vacancyId IS NULL OR a.teacher_vacancy_id = :vacancyId)
-    AND (:vacancyTitle IS NULL OR tv.title LIKE CONCAT('%', :vacancyTitle, '%'))
-    AND (:instituteId IS NULL OR i.id = :instituteId)
-    AND (:instituteName IS NULL OR i.institute_name LIKE CONCAT('%', :instituteName, '%'))
-    AND (:applicationStatus IS NULL OR a.status = :applicationStatus)
-    AND (:appliedDate IS NULL OR (DATE(a.applied_date) = DATE(:appliedDate) OR a.applied_date >= :appliedDate))
-    """,
-    countQuery = """
-    SELECT COUNT(*)
-    FROM applications a
-    INNER JOIN teacher_vacancy tv ON a.teacher_vacancy_id = tv.id
-    INNER JOIN institute i ON tv.institute_id = i.id
-    INNER JOIN users u ON i.user_id = u.id
-    WHERE a.teacher_id = :teacherId
-    AND (:applicationId IS NULL OR a.id = :applicationId)
-    AND (:vacancyId IS NULL OR a.teacher_vacancy_id = :vacancyId)
-    AND (:vacancyTitle IS NULL OR tv.title LIKE CONCAT('%', :vacancyTitle, '%'))
-    AND (:instituteId IS NULL OR i.id = :instituteId)
-    AND (:instituteName IS NULL OR i.institute_name LIKE CONCAT('%', :instituteName, '%'))
-    AND (:applicationStatus IS NULL OR a.status = :applicationStatus)
-    AND (:appliedDate IS NULL OR (DATE(a.applied_date) = DATE(:appliedDate) OR a.applied_date >= :appliedDate))
-    """, nativeQuery = true)
+                    INNER JOIN teacher_vacancy tv ON a.teacher_vacancy_id = tv.id
+                    INNER JOIN institute i ON tv.institute_id = i.id
+                    INNER JOIN users u ON i.user_id = u.id
+                    WHERE a.teacher_id = :teacherId
+                    AND (:applicationId IS NULL OR a.id = :applicationId)
+                    AND (:vacancyId IS NULL OR a.teacher_vacancy_id = :vacancyId)
+                    AND (:vacancyTitle IS NULL OR tv.title LIKE CONCAT('%', :vacancyTitle, '%'))
+                    AND (:instituteId IS NULL OR i.id = :instituteId)
+                    AND (:instituteName IS NULL OR i.institute_name LIKE CONCAT('%', :instituteName, '%'))
+                    AND (:applicationStatus IS NULL OR a.status = :applicationStatus)
+                    AND (:appliedDate IS NULL OR (DATE(a.applied_date) = DATE(:appliedDate) OR a.applied_date >= :appliedDate))
+                    """, nativeQuery = true)
     Page<TeacherApplicationProjection> getApplicationsByTeacher(Long teacherId, Long applicationId, Long vacancyId, String vacancyTitle, Long instituteId, String instituteName, String applicationStatus, LocalDateTime appliedDate, Pageable pageable);
 }

@@ -18,7 +18,7 @@ import edu.vinu.domain.teacher.entity.TeacherEntity;
 
 public class TeacherMapper {
 
-    public static Teacher toTeacher(TeacherEntity teacherEntity){
+    public static Teacher toTeacher(TeacherEntity teacherEntity) {
         return Teacher.builder()
                 .id(teacherEntity.getId())
                 .firstName(teacherEntity.getFirstName())

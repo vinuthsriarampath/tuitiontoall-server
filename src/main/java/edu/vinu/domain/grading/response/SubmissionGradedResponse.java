@@ -16,9 +16,9 @@ package edu.vinu.domain.grading.response;
 import lombok.Builder;
 
 @Builder
-public record SubmissionGradedResponse (
+public record SubmissionGradedResponse(
         Long submissionId,
         String grade,
         Integer marksGained
-){
+) {
 }

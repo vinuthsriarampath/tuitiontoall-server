@@ -19,7 +19,7 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record NonGradedSubmissionResponse (
+public record NonGradedSubmissionResponse(
         Long submissionId,
         Long studentId,
         String studentName,
@@ -27,5 +27,5 @@ public record NonGradedSubmissionResponse (
         AssignmentSubmitStatus status,
         int attemptNo,
         LocalDateTime submittedAt
-){
+) {
 }

@@ -18,7 +18,7 @@ import edu.vinu.domain.user_follow.entity.UserFollow;
 
 public class UserFollowMapper {
 
-    public static UserFollowResponse toResponse(UserFollow userFollow){
+    public static UserFollowResponse toResponse(UserFollow userFollow) {
         return UserFollowResponse.builder()
                 .id(userFollow.getId())
                 .followingId(userFollow.getFollowingUser().getId())

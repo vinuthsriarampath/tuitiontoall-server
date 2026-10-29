@@ -24,21 +24,21 @@ import org.springframework.stereotype.Repository;
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 
     @Query(value = """
-    SELECT COUNT(*)
-    FROM feedbacks f
-    WHERE f.course_id = :courseId  AND f.user_id = :userId
-    """, nativeQuery = true)
+            SELECT COUNT(*)
+            FROM feedbacks f
+            WHERE f.course_id = :courseId  AND f.user_id = :userId
+            """, nativeQuery = true)
     int countUserFeedbacksByCourseId(Long courseId, Long userId);
 
     @Query(value = """
-    SELECT *
-        FROM feedbacks f
-        WHERE f.course_id = :courseId
-    """,
-    countQuery = """
-    SELECT COUNT(*)
-        FROM feedbacks f
-        WHERE f.course_id = :courseId
-    """, nativeQuery = true)
+            SELECT *
+                FROM feedbacks f
+                WHERE f.course_id = :courseId
+            """,
+            countQuery = """
+                    SELECT COUNT(*)
+                        FROM feedbacks f
+                        WHERE f.course_id = :courseId
+                    """, nativeQuery = true)
     Page<Feedback> getFeedbacksByCourse(Long courseId, Pageable pageable);
 }

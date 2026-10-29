@@ -22,11 +22,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BatchFilterRequest{
-        private Long id;
-        private String batchName;
-        private Long courseId;
-        private Long instituteId;
-        private BatchStatus status;
-        private BatchEnrollmentStatus enrollmentStatus;
+public class BatchFilterRequest {
+    private Long id;
+    private String batchName;
+    private BatchStatus status;
+    private BatchEnrollmentStatus enrollmentStatus;
 }

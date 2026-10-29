@@ -17,9 +17,14 @@ import java.time.LocalDateTime;
 
 public interface RecentEnrollmentProjection {
     Long getEnrollmentId();
+
     Long getCourseId();
+
     String getCourseName();
+
     Long getBatchId();
+
     String getBatchName();
+
     LocalDateTime getEnrollmentDate();
 }

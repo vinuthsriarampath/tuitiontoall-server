@@ -20,17 +20,28 @@ import java.time.LocalDateTime;
 
 public interface ChapterDetailedProjection {
     Long getId();
+
     String getTitle();
+
     int getChapterOrder();
+
     ChapterStatus getStatus();
+
     LocalDateTime getCreatedDate();
+
     LocalDateTime getLastModifiedDate();
 
     Long getModuleId();
+
     String getModuleName();
+
     ModuleStatus getModuleStatus();
+
     Long getModuleBatchId();
+
     Long getModuleTeacherId();
+
     LocalDateTime getModuleCreatedDate();
+
     LocalDateTime getModuleLastModifiedDate();
 }

@@ -30,6 +30,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+import static edu.vinu.common.util.ResponseUtil.createPaginatedApiResponse;
+
 @RestController
 @RequestMapping("/api/v2/announcements")
 @RequiredArgsConstructor
@@ -38,64 +41,64 @@ public class AnnouncementController {
 
     @PreAuthorize("hasAuthority('institute')")
     @PostMapping
-    public ResponseEntity<ApiResponse> createAnnouncement(@Valid @RequestBody AnnouncementCreateRequest request){
+    public ResponseEntity<ApiResponse<AnnouncementResponse>> createAnnouncement(@Valid @RequestBody AnnouncementCreateRequest request) {
         AnnouncementResponse response = announcementService.createAnnouncement(request);
-        return ResponseEntity.status(201).body(new ApiResponse("Announcement created successfully!", response));
+        return ResponseEntity.status(201).body(createApiResponse("Announcement created successfully!", response));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/{announcementId}/visibility")
-    public ResponseEntity<ApiResponse> updateAnnouncementVisibility(@PathVariable Long announcementId, @Valid @RequestBody AnnouncementVisibilityUpdateRequest request){
+    public ResponseEntity<ApiResponse<AnnouncementResponse>> updateAnnouncementVisibility(@PathVariable Long announcementId, @Valid @RequestBody AnnouncementVisibilityUpdateRequest request) {
         AnnouncementResponse response = announcementService.updateAnnouncementVisibility(announcementId, request);
-        return ResponseEntity.status(200).body(new ApiResponse("Announcement visibility updated successfully!", response));
+        return ResponseEntity.status(200).body(createApiResponse("Announcement visibility updated successfully!", response));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/{announcementId}")
-    public ResponseEntity<ApiResponse> updateAnnouncementTitleAndDescription(@PathVariable Long announcementId, @RequestBody AnnouncementUpdateRequest request){
+    public ResponseEntity<ApiResponse<AnnouncementResponse>> updateAnnouncementTitleAndDescription(@PathVariable Long announcementId, @RequestBody AnnouncementUpdateRequest request) {
         AnnouncementResponse response = announcementService.updateAnnouncement(announcementId, request);
-        return ResponseEntity.status(200).body(new ApiResponse("Announcement updated successfully!", response));
+        return ResponseEntity.status(200).body(createApiResponse("Announcement updated successfully!", response));
     }
 
     @PatchMapping("/{id}/archive")
-    public ResponseEntity<ApiResponse> archiveAnnouncement(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<AnnouncementResponse>> archiveAnnouncement(@PathVariable Long id) {
         AnnouncementResponse response = announcementService.archiveAnnouncementById(id);
-        return ResponseEntity.status(200).body(new ApiResponse("Announcement Archived successfully!", response));
+        return ResponseEntity.status(200).body(createApiResponse("Announcement Archived successfully!", response));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/{id}/pin")
-    public ResponseEntity<ApiResponse> pinAnnouncement(@PathVariable Long id){
-        AnnouncementResponse response =  announcementService.pinAnnouncementById(id);
-        return ResponseEntity.status(200).body(new ApiResponse("Announcement Pin successfully!", response));
+    public ResponseEntity<ApiResponse<AnnouncementResponse>> pinAnnouncement(@PathVariable Long id) {
+        AnnouncementResponse response = announcementService.pinAnnouncementById(id);
+        return ResponseEntity.status(200).body(createApiResponse("Announcement Pin successfully!", response));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/{id}/unpin")
-    public ResponseEntity<ApiResponse> unpinAnnouncement(@PathVariable Long id){
-        AnnouncementResponse response =  announcementService.unpinAnnouncementById(id);
-        return ResponseEntity.status(200).body(new ApiResponse("Announcement Unpin successfully!", response));
+    public ResponseEntity<ApiResponse<AnnouncementResponse>> unpinAnnouncement(@PathVariable Long id) {
+        AnnouncementResponse response = announcementService.unpinAnnouncementById(id);
+        return ResponseEntity.status(200).body(createApiResponse("Announcement Unpin successfully!", response));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @PatchMapping("/{id}/publish")
-    public ResponseEntity<ApiResponse> publishAnnouncement(@PathVariable Long id){
-        AnnouncementResponse response =  announcementService.publishAnnouncementById(id);
-        return ResponseEntity.status(200).body(new ApiResponse("Announcement published successfully!", response));
+    public ResponseEntity<ApiResponse<AnnouncementResponse>> publishAnnouncement(@PathVariable Long id) {
+        AnnouncementResponse response = announcementService.publishAnnouncementById(id);
+        return ResponseEntity.status(200).body(createApiResponse("Announcement published successfully!", response));
     }
 
     @PreAuthorize("hasAuthority('institute')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteAnnouncement(@PathVariable Long id){
-        AnnouncementResponse response =  announcementService.deleteAnnouncementById(id);
-        return ResponseEntity.status(200).body(new ApiResponse("Announcement deleted successfully!", response));
+    public ResponseEntity<ApiResponse<AnnouncementResponse>> deleteAnnouncement(@PathVariable Long id) {
+        AnnouncementResponse response = announcementService.deleteAnnouncementById(id);
+        return ResponseEntity.status(200).body(createApiResponse("Announcement deleted successfully!", response));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getAnnouncementById(@PathVariable Long id){
-        AnnouncementResponse response =  announcementService.getAnnouncementById(id);
-        return ResponseEntity.status(200).body(new ApiResponse("Announcement Found!", response));
+    public ResponseEntity<ApiResponse<AnnouncementResponse>> getAnnouncementById(@PathVariable Long id) {
+        AnnouncementResponse response = announcementService.getAnnouncementById(id);
+        return ResponseEntity.status(200).body(createApiResponse("Announcement Found!", response));
     }
 
     @PreAuthorize("hasAnyAuthority('institute','student','teacher')")
@@ -106,17 +109,8 @@ public class AnnouncementController {
             @RequestParam(defaultValue = "desc") String direction,
             @RequestParam(defaultValue = "published_date") List<String> sortBy,
             AnnouncementFilterRequest filters
-            ){
-        Page<AnnouncementResponse> pageData = announcementService.getAllAnnouncements(page,size,direction,sortBy,filters);
-        PaginatedApiResponse<AnnouncementResponse> response = PaginatedApiResponse.<AnnouncementResponse>builder()
-                .message("Announcements fetched successfully!")
-                .data(pageData.getContent())
-                .page(pageData.getNumber())
-                .size(pageData.getSize())
-                .totalElements(pageData.getTotalElements())
-                .totalPages(pageData.getTotalPages())
-                .last(pageData.isLast())
-                .build();
-        return ResponseEntity.status(200).body(response);
+    ) {
+        Page<AnnouncementResponse> pageData = announcementService.getAllAnnouncements(page, size, direction, sortBy, filters);
+        return ResponseEntity.status(200).body(createPaginatedApiResponse("Announcements fetched successfully!", pageData));
     }
 }

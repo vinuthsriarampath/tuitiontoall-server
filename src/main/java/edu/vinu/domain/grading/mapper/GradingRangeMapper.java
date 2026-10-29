@@ -32,7 +32,7 @@ public class GradingRangeMapper {
                 .build();
     }
 
-    public static GradingRageResponse toGradingRageResponse(GradingRangeEntity entity){
+    public static GradingRageResponse toGradingRageResponse(GradingRangeEntity entity) {
         return GradingRageResponse.builder()
                 .id(entity.getId())
                 .assignmentId(entity.getAssignment().getId())

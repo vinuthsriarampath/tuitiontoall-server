@@ -28,12 +28,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TeacherBootstrapResponse{
-        TeacherDashboardStats stats;
-        @Builder.Default
-        List<TeacherBasicCourseResponse> assignedPublishedCourses = new ArrayList<>();
-        @Builder.Default
-        List<ScheduleLectureResponse> upcomingLectureSchedules = new ArrayList<>();
-        @Builder.Default
-        List<NonGradedSubmissionResponse> nonGradedSubmissions = new ArrayList<>();
+public class TeacherBootstrapResponse {
+    TeacherDashboardStats stats;
+    @Builder.Default
+    List<TeacherBasicCourseResponse> assignedPublishedCourses = new ArrayList<>();
+    @Builder.Default
+    List<ScheduleLectureResponse> upcomingLectureSchedules = new ArrayList<>();
+    @Builder.Default
+    List<NonGradedSubmissionResponse> nonGradedSubmissions = new ArrayList<>();
 }

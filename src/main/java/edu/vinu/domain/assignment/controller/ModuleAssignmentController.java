@@ -36,8 +36,8 @@ public class ModuleAssignmentController {
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse> createModuleAssignment(@RequestPart("file") MultipartFile file, @Valid @RequestPart("request") ModuleAssignmentCreateRequest request){
-        ModuleAssignmentResponse response = moduleAssignmentService.createModuleAssignment(request,file);
+    public ResponseEntity<ApiResponse> createModuleAssignment(@RequestPart("file") MultipartFile file, @Valid @RequestPart("request") ModuleAssignmentCreateRequest request) {
+        ModuleAssignmentResponse response = moduleAssignmentService.createModuleAssignment(request, file);
         return ResponseEntity.ok(new ApiResponse("Module assignment created successfully", response));
     }
 }

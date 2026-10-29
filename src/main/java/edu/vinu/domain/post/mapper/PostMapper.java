@@ -17,8 +17,8 @@ import edu.vinu.domain.post.dto.request.PostCreateRequest;
 import edu.vinu.domain.post.dto.request.enums.PostCreateStatus;
 import edu.vinu.domain.post.dto.response.FeedPostResponse;
 import edu.vinu.domain.post.dto.response.PostMediaResponse;
-import edu.vinu.domain.post.dto.response.UserPostResponse;
 import edu.vinu.domain.post.dto.response.PostResponse;
+import edu.vinu.domain.post.dto.response.UserPostResponse;
 import edu.vinu.domain.post.entity.Post;
 import edu.vinu.domain.post.enums.PostStatus;
 import edu.vinu.domain.post.enums.PostVisibility;
@@ -56,7 +56,7 @@ public class PostMapper {
                 .build();
     }
 
-    public static UserPostResponse toUserPostResponse(UserPostProjection p, List<PostMediaResponse> mediaList){
+    public static UserPostResponse toUserPostResponse(UserPostProjection p, List<PostMediaResponse> mediaList) {
         return UserPostResponse.builder()
                 .id(p.getId())
                 .caption(p.getCaption())

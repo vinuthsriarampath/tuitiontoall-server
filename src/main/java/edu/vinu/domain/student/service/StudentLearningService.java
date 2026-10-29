@@ -14,9 +14,13 @@
 package edu.vinu.domain.student.service;
 
 import edu.vinu.common.response.ApiResponse;
+import edu.vinu.domain.student.dto.response.StudentLearningResponse;
+import edu.vinu.domain.student_batch_enrollment.dto.respose.EnrollmentHistoryResponse;
+
+import java.util.List;
 
 public interface StudentLearningService {
-    ApiResponse getMyLearningDetails();
+    ApiResponse<List<StudentLearningResponse>> getMyLearningDetails();
 
-    ApiResponse getEnrollmentHistory(Long courseId);
+    ApiResponse<EnrollmentHistoryResponse> getEnrollmentHistory(Long courseId);
 }

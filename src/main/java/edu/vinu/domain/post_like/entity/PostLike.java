@@ -29,22 +29,22 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "post_like",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"post_id", "user_id"})
-    }
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"post_id", "user_id"})
+        }
 )
 @Builder
 public class PostLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name = "post_id",nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
-    @JoinColumn(name = "user_id",nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
     @CreationTimestamp
-    @Column(name = "liked_on",nullable = false, updatable = false)
+    @Column(name = "liked_on", nullable = false, updatable = false)
     private LocalDateTime likedOn;
 }

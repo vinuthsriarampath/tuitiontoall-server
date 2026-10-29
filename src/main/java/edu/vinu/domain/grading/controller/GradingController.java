@@ -15,6 +15,8 @@ package edu.vinu.domain.grading.controller;
 
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.grading.request.GradingSubmissionRequest;
+import edu.vinu.domain.grading.response.GradingEligibilityResponse;
+import edu.vinu.domain.grading.response.SubmissionGradedResponse;
 import edu.vinu.domain.grading.service.GradingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +33,14 @@ public class GradingController {
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @PostMapping("/submissions/{submissionId}")
-    public ResponseEntity<ApiResponse> gradeSubmissions(@PathVariable Long submissionId, @Valid @RequestBody GradingSubmissionRequest request){
+    public ResponseEntity<ApiResponse<SubmissionGradedResponse>> gradeSubmissions(@PathVariable Long submissionId, @Valid @RequestBody GradingSubmissionRequest request) {
         return ResponseEntity.ok().body(gradingService.gradeSubmission(submissionId, request));
     }
 
 
     @PreAuthorize("hasAnyAuthority('institute','teacher')")
     @GetMapping("/submissions/{submissionId}/eligibility")
-    public ResponseEntity<ApiResponse> checkGradingEligibility(@PathVariable Long submissionId){
+    public ResponseEntity<ApiResponse<GradingEligibilityResponse>> checkGradingEligibility(@PathVariable Long submissionId) {
         return ResponseEntity.ok().body(gradingService.checkEligibility(submissionId));
     }
 }

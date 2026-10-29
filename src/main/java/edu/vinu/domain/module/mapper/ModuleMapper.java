@@ -13,8 +13,14 @@
 
 package edu.vinu.domain.module.mapper;
 
+import edu.vinu.domain.batch.response.BatchBasicResponse;
+import edu.vinu.domain.module.entity.ModuleEntity;
+import edu.vinu.domain.module.repository.projection.DetailedModuleProjection;
 import edu.vinu.domain.module.repository.projection.StudentModuleProjection;
+import edu.vinu.domain.module.response.ModuleDetailedResponse;
+import edu.vinu.domain.module.response.ModuleResponse;
 import edu.vinu.domain.module.response.StudentModuleResponse;
+import edu.vinu.domain.teacher.dtos.response.TeacherBasicResponse;
 
 public class ModuleMapper {
     public static StudentModuleResponse toStudentModuleResponse(StudentModuleProjection p) {
@@ -23,6 +29,50 @@ public class ModuleMapper {
                 .name(p.getName())
                 .status(p.getStatus())
                 .batchId(p.getBatchId())
+                .build();
+    }
+
+    public static ModuleResponse toModuleResponse(ModuleEntity entity) {
+        return ModuleResponse.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .status(entity.getStatus())
+                .batchId(entity.getBatch().getId())
+                .teacherId(entity.getTeacher().getId())
+                .createdDate(entity.getCreatedAt())
+                .lastModifiedDate(entity.getLastModifiedDate())
+                .build();
+    }
+
+    public static ModuleDetailedResponse toModuleDetailedResponse(DetailedModuleProjection p) {
+        return ModuleDetailedResponse.builder()
+                .id(p.getId())
+                .name(p.getName())
+                .status(p.getStatus())
+                .createdDate(p.getCreatedDate())
+                .lastModifiedDate(p.getLastModifiedDate())
+                .batch(
+                        BatchBasicResponse.builder()
+                                .id(p.getBatchId())
+                                .courseId(p.getCourseId())
+                                .name(p.getBatchName())
+                                .status(p.getBatchStatus())
+                                .enrollmentStatus(p.getBatchEnrollmentStatus())
+                                .createdDate(p.getBatchCreatedDate())
+                                .lastModifiedDate(p.getBatchLastModifiedDate())
+                                .build()
+                )
+                .teacher(
+                        TeacherBasicResponse.builder()
+                                .id(p.getTeacherId())
+                                .firstName(p.getTeacherFirstName())
+                                .lastName(p.getTeacherLastName())
+                                .email(p.getUserEmail())
+                                .contact(p.getUserContact())
+                                .dp(p.getUserDp())
+                                .userslug(p.getUserSlug())
+                                .build()
+                )
                 .build();
     }
 }

@@ -21,7 +21,7 @@ import edu.vinu.domain.feedback.response.FeedbackEligibilityResponse;
 import edu.vinu.domain.feedback.response.FeedbackResponse;
 
 public interface FeedbackService {
-    ApiResponse submitFeedback(FeedbackCreateRequest request);
+    ApiResponse<FeedbackResponse> submitFeedback(FeedbackCreateRequest request);
 
     PaginatedApiResponse<FeedbackResponse> getFeedbacksByCourse(Long courseId, PaginationRequest pagination);
 

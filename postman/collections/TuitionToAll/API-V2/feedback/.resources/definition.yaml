@@ -1,7 +1,0 @@
-$kind: collection
-name: feedback
-auth:
-  type: bearer
-  credentials:
-    token: "{{JWT_TOKEN}}"
-order: 2371887897247743

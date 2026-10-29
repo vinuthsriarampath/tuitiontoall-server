@@ -14,7 +14,6 @@
 package edu.vinu.domain.grading.service.impl;
 
 import edu.vinu.common.exception.custom.BadRequestException;
-import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.common.exception.custom.InvalidInputException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.response.ApiResponse;
@@ -23,6 +22,7 @@ import edu.vinu.domain.grading.entity.GradingRangeEntity;
 import edu.vinu.domain.grading.enums.GradingEligibilityReason;
 import edu.vinu.domain.grading.request.GradingSubmissionRequest;
 import edu.vinu.domain.grading.response.GradingEligibilityResponse;
+import edu.vinu.domain.grading.response.SubmissionGradedResponse;
 import edu.vinu.domain.grading.service.GradingRangeService;
 import edu.vinu.domain.grading.service.GradingService;
 import edu.vinu.domain.student.dto.response.RecentResultsResponse;
@@ -30,7 +30,6 @@ import edu.vinu.domain.student_assignment_submit.entity.StudentAssignmentSubmit;
 import edu.vinu.domain.student_assignment_submit.enums.AssignmentSubmitStatus;
 import edu.vinu.domain.student_assignment_submit.mapper.AssignmentSubmissionMapper;
 import edu.vinu.domain.student_assignment_submit.repository.StudentAssignmentSubmitRepository;
-import edu.vinu.domain.grading.response.SubmissionGradedResponse;
 import edu.vinu.domain.student_assignment_submit.service.AssignmentSubmitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,6 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -50,10 +51,10 @@ public class GradingServiceImpl implements GradingService {
 
     @Transactional
     @Override
-    public ApiResponse gradeSubmission(Long submissionId, GradingSubmissionRequest request) {
+    public ApiResponse<SubmissionGradedResponse> gradeSubmission(Long submissionId, GradingSubmissionRequest request) {
         StudentAssignmentSubmit submission = assignmentSubmitService.getSubmissionEntityById(submissionId);
 
-        if(submission.getGrade() != null || submission.getStatus() == AssignmentSubmitStatus.GRADED){
+        if (submission.getGrade() != null || submission.getStatus() == AssignmentSubmitStatus.GRADED) {
             throw new BadRequestException("Submission has already been graded.");
         }
 
@@ -82,33 +83,32 @@ public class GradingServiceImpl implements GradingService {
             }
         }
 
-        if(receivedGrade == null){
+        if (receivedGrade == null) {
             throw new NotFoundException("No grading range found for the provided marks gained: " + request.marksGained());
         }
 
-        return ApiResponse.builder()
-                .message("Submission graded successfully.")
-                .data(SubmissionGradedResponse.builder()
-                        .submissionId(submission.getId())
-                        .grade(receivedGrade)
-                        .marksGained(submission.getMarksGained())
-                        .build())
+        SubmissionGradedResponse response = SubmissionGradedResponse.builder()
+                .submissionId(submission.getId())
+                .grade(receivedGrade)
+                .marksGained(submission.getMarksGained())
                 .build();
+
+        return createApiResponse("Submission graded successfully.", response);
     }
 
     @Override
-    public ApiResponse checkEligibility(Long submissionId) {
+    public ApiResponse<GradingEligibilityResponse> checkEligibility(Long submissionId) {
         StudentAssignmentSubmit submission = assignmentSubmitService.getSubmissionEntityById(submissionId);
 
         GradingEligibilityResponse response;
 
-        if(submission.getGrade() != null || submission.getStatus() == AssignmentSubmitStatus.GRADED){
+        if (submission.getGrade() != null || submission.getStatus() == AssignmentSubmitStatus.GRADED) {
             response = new GradingEligibilityResponse(false, GradingEligibilityReason.ALREADY_GRADED);
-        }else{
+        } else {
             response = new GradingEligibilityResponse(true, GradingEligibilityReason.ELIGIBLE);
         }
 
-        return ApiResponse.builder().message("Grading eligibility checked!").data(response).build();
+        return createApiResponse("Grading eligibility checked!", response);
     }
 
     @Override
@@ -118,12 +118,12 @@ public class GradingServiceImpl implements GradingService {
 
     @Override
     public List<RecentResultsResponse> getRecent5Results(Long studentId) {
-        return assignmentSubmitRepository.getRecentResultsByStudent(studentId,5).stream().map(AssignmentSubmissionMapper::toRecentResultsResponse).toList();
+        return assignmentSubmitRepository.getRecentResultsByStudent(studentId, 5).stream().map(AssignmentSubmissionMapper::toRecentResultsResponse).toList();
     }
 
     private void validateMarksGained(int marksGained, int totalMarks) {
         if (marksGained < 0 || marksGained > totalMarks) {
-            throw new InvalidInputException("marksGained","Marks gained must be between 0 and " + totalMarks);
+            throw new InvalidInputException("marksGained", "Marks gained must be between 0 and " + totalMarks);
         }
     }
 }

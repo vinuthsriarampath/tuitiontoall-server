@@ -13,8 +13,10 @@
 
 package edu.vinu.domain.course.service;
 
+import edu.vinu.common.dto.PaginationRequest;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
+import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.course.dto.Course;
 import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.request.CourseCreateRequest;
@@ -30,8 +32,9 @@ public interface CourseService {
 
     /**
      * Creates a new course and associates it with the currently authenticated institute.
+     *
      * @param courseCreateRequest the details of the course to be created
-     * @param thumbnail the thumbnail image file for the course
+     * @param thumbnail           the thumbnail image file for the course
      * @return the created Course object
      * @throws NotFoundException if the currently authenticated institute is not found
      */
@@ -51,18 +54,21 @@ public interface CourseService {
 
     /**
      * Deletes a course by its ID.
+     *
      * @param courseId the ID of the course to be deleted
      */
     void deleteCourse(Long courseId);
 
     /**
      * Archive a course by its ID.
+     *
      * @param courseId the ID of the course to be archived
      */
     Course archiveCourse(Long courseId);
 
     /**
      * Retrieves a course by its ID.
+     *
      * @param courseId the ID of the course to be retrieved
      * @return the Course object
      * @throws NotFoundException if the course with the given ID does not exist
@@ -71,14 +77,17 @@ public interface CourseService {
 
 
     CourseEntity getCourseEntityById(Long courseId);
+
     /**
      * Retrieves all courses associated with the currently authenticated institute.
+     *
      * @return a list of Course objects
      */
-    List<Course> getAllCoursesForInstitute();
+    PaginatedApiResponse<Course> getPaginatedCoursesForCurrentInstitute(PaginationRequest pagination, CourseFilterRequest filters);
 
     /**
      * Retrieves the thumbnail based on filename
+     *
      * @param filename name of the filename
      * @return File
      */
@@ -86,8 +95,9 @@ public interface CourseService {
 
     /**
      * Get all courses by institute id
+     *
      * @param instituteId id of the institute
-     * @param filters filters for the courses
+     * @param filters     filters for the courses
      * @return list of courses
      */
     List<Course> getAllCoursesByInstituteId(Long instituteId, CourseFilterRequest filters);

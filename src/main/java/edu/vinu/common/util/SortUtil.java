@@ -20,7 +20,7 @@ import java.util.List;
 
 public class SortUtil {
 
-    public static Sort buildSort(String direction, List<String> sortBy, List<String> defaultSortBy){
+    public static Sort buildSort(String direction, List<String> sortBy, List<String> defaultSortBy) {
 
         List<String> effectedSortBy = (sortBy == null || sortBy.isEmpty()) ? defaultSortBy : sortBy;
 
@@ -30,7 +30,7 @@ public class SortUtil {
 
         List<Sort.Order> orders = new ArrayList<>();
 
-        for (String param : effectedSortBy){
+        for (String param : effectedSortBy) {
 
             if (param == null || param.isBlank()) continue;
 

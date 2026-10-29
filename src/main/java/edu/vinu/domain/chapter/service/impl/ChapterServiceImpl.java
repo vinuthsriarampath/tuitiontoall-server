@@ -61,6 +61,7 @@ public class ChapterServiceImpl implements ChapterService {
     private final ScheduleLectureQueryService scheduleLectureQueryService;
     private final ResourceQueryService resourceQueryService;
     private final ChapterAssignmentQueryService chapterAssignmentQueryService;
+
     @Override
     public ChapterResponse createChapter(ChapterCreateRequest request) {
 
@@ -68,15 +69,15 @@ public class ChapterServiceImpl implements ChapterService {
 
         ModuleEntity moduleEntity = this.moduleService.getModuleEntityById(request.moduleId());
 
-        if(moduleEntity == null){
+        if (moduleEntity == null) {
             errors.add(new FieldError("moduleId", "Module does not exist"));
         }
 
-        if(isChapterExistsInModule(request.moduleId(), request.title())){
+        if (isChapterExistsInModule(request.moduleId(), request.title())) {
             errors.add(new FieldError("title", "Chapter with the same title already exists in the module"));
         }
 
-        if(!errors.isEmpty()) {
+        if (!errors.isEmpty()) {
             throw new InvalidInputException(errors);
         }
 
@@ -95,22 +96,22 @@ public class ChapterServiceImpl implements ChapterService {
         ChapterEntity chapterEntity = this.getChapterEntityById(id);
         List<FieldError> errors = new ArrayList<>();
 
-        if(!request.moduleId().equals(chapterEntity.getModule().getId())){
+        if (!request.moduleId().equals(chapterEntity.getModule().getId())) {
             chapterEntity.setModule(moduleService.getModuleEntityById(request.moduleId()));
             chapterEntity.setChapterOrder(findNextChapterOrderNumber(request.moduleId()));
         }
 
-        if(!request.title().equals(chapterEntity.getTitle()) || !request.moduleId().equals(chapterEntity.getModule().getId()) ){
-            if(isChapterExistsInModule(request.moduleId(), request.title())){
+        if (!request.title().equals(chapterEntity.getTitle()) || !request.moduleId().equals(chapterEntity.getModule().getId())) {
+            if (isChapterExistsInModule(request.moduleId(), request.title())) {
                 errors.add(new FieldError("title", "Chapter with the same title already exists in the module"));
-            }else{
+            } else {
                 chapterEntity.setTitle(request.title());
             }
         }
 
         chapterEntity.setStatus(request.status());
 
-        if(!errors.isEmpty()) {
+        if (!errors.isEmpty()) {
             throw new InvalidInputException(errors);
         }
         return mapEntityToChapterResponse(chapterRepository.save(chapterEntity));
@@ -158,7 +159,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    public ChapterEntity getChapterEntityById(Long id){
+    public ChapterEntity getChapterEntityById(Long id) {
         return chapterRepository.findById(id).orElseThrow(() -> new NotFoundException("Chapter with the given id does not exist"));
     }
 
@@ -187,24 +188,24 @@ public class ChapterServiceImpl implements ChapterService {
         return ChapterMapper.toChapterStatCountResponse(chapterRepository.getStatCountByChapterId(id));
     }
 
-    private boolean isChapterExistsInModule(Long moduleId,String chapterName){
+    private boolean isChapterExistsInModule(Long moduleId, String chapterName) {
         return chapterRepository.existsByModuleIdAndTitle(moduleId, chapterName);
     }
 
-    private boolean isChapterOrderExistsInModule(Long moduleId,int chapterOrder){
+    private boolean isChapterOrderExistsInModule(Long moduleId, int chapterOrder) {
         return chapterRepository.existsByModuleIdAndChapterOrder(moduleId, chapterOrder);
 
     }
 
-    private int findNextChapterOrderNumber(Long moduleId){
+    private int findNextChapterOrderNumber(Long moduleId) {
         return countByModuleId(moduleId) + 1;
     }
 
-    private int countByModuleId(Long moduleId){
+    private int countByModuleId(Long moduleId) {
         return chapterRepository.countByModuleId(moduleId);
     }
 
-    private ChapterResponse mapEntityToChapterResponse(ChapterEntity entity){
+    private ChapterResponse mapEntityToChapterResponse(ChapterEntity entity) {
         return ChapterResponse.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())

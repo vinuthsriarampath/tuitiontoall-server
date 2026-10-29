@@ -19,7 +19,7 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record AssignmentSubmissionResponse (
+public record AssignmentSubmissionResponse(
         Long submissionId,
         Long studentId,
         Long assignmentId,
@@ -30,6 +30,5 @@ public record AssignmentSubmissionResponse (
         int attemptNo,
         LocalDateTime submittedAt,
         LocalDateTime lastModifiedDate
-)
-{
+) {
 }

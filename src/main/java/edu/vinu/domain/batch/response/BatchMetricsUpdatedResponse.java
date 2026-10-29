@@ -17,6 +17,6 @@ import edu.vinu.common.response.DashboardKpi;
 import lombok.Builder;
 
 @Builder
-public record BatchMetricsUpdatedResponse (DashboardKpi ongoingBatches) {
+public record BatchMetricsUpdatedResponse(DashboardKpi ongoingBatches) {
 
 }

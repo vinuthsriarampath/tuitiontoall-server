@@ -35,9 +35,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users")
 @SQLDelete(sql = "UPDATE users SET is_disabled = true WHERE id = ?")
-@FilterDef(name = "softDeleteFilter", parameters = @ParamDef(name = "isDisabled",type = Boolean.class))
+@FilterDef(name = "softDeleteFilter", parameters = @ParamDef(name = "isDisabled", type = Boolean.class))
 @Filter(name = "softDeleteFilter", condition = "is_disabled = :isDisabled")
-public class UserEntity{
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -48,9 +48,9 @@ public class UserEntity{
     private String email;
     private String password;
 
-    private boolean isDisabled=false;
+    private boolean isDisabled = false;
 
-    @Column(unique = true , nullable = false)
+    @Column(unique = true, nullable = false)
     private String userSlug;
 
     @Nullable
@@ -60,7 +60,7 @@ public class UserEntity{
     private String banner;
 
     @ManyToOne
-    @JoinColumn(name = "role_id",nullable = false,updatable = false)
+    @JoinColumn(name = "role_id", nullable = false, updatable = false)
     private RoleEntity role;
 
     @OneToOne(mappedBy = "user")
@@ -73,11 +73,11 @@ public class UserEntity{
     private InstituteEntity institute;
 
     @CreationTimestamp
-    @Column(name = "created_date",nullable = false,updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime creationTimeStamp;
 
     @UpdateTimestamp
-    @Column(name = "last_modified_date",insertable = false)
+    @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime updatedAt;
 
 }

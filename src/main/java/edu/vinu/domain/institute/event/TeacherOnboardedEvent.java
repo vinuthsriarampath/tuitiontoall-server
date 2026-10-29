@@ -16,7 +16,7 @@ package edu.vinu.domain.institute.event;
 import lombok.Builder;
 
 @Builder
-public record TeacherOnboardedEvent (
+public record TeacherOnboardedEvent(
         Long instituteId
-){
+) {
 }

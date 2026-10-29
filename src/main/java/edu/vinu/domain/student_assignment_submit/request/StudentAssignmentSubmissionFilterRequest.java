@@ -15,12 +15,13 @@ package edu.vinu.domain.student_assignment_submit.request;
 
 import edu.vinu.domain.student_assignment_submit.enums.AssignmentSubmitStatus;
 
-public record StudentAssignmentSubmissionFilterRequest (
-    Long submissionId,
-    AssignmentSubmitStatus status,
-    String grade,
-    Integer attemptNo,
-    Integer marksGained,
-    Integer minMarksGained,
-    Integer maxMarksGained
-){}
+public record StudentAssignmentSubmissionFilterRequest(
+        Long submissionId,
+        AssignmentSubmitStatus status,
+        String grade,
+        Integer attemptNo,
+        Integer marksGained,
+        Integer minMarksGained,
+        Integer maxMarksGained
+) {
+}

@@ -15,8 +15,8 @@ package edu.vinu.domain.student_batch_enrollment.event;
 
 import java.time.LocalDate;
 
-public record EnrollmentCreatedEvent (
+public record EnrollmentCreatedEvent(
         Long instituteId,
         LocalDate instituteCreatedDate
-){
+) {
 }

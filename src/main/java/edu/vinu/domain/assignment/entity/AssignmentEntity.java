@@ -41,13 +41,13 @@ public class AssignmentEntity {
     @Column(name = "description", columnDefinition = "LONGTEXT")
     private String description;
 
-    @Column(name = "file_name",nullable = false)
+    @Column(name = "file_name", nullable = false)
     private String fileName;
 
-    @Column(name = "total_marks",nullable = false)
+    @Column(name = "total_marks", nullable = false)
     private Integer totalMarks;
 
-    @Column(name = "available_on",nullable = false)
+    @Column(name = "available_on", nullable = false)
     private LocalDateTime availableOn;
 
     @Column(name = "due_date", nullable = false)
@@ -56,10 +56,10 @@ public class AssignmentEntity {
     @Column(name = "late_submission", nullable = false)
     private boolean lateSubmission;
 
-    @Column(name = "resubmission",nullable = false)
+    @Column(name = "resubmission", nullable = false)
     private boolean resubmission;
 
-    @Column(name = "max_attempts",nullable = false)
+    @Column(name = "max_attempts", nullable = false)
     private Integer maxAttempts;
 
     @Enumerated(EnumType.STRING)
@@ -67,10 +67,10 @@ public class AssignmentEntity {
     private AssignmentType type;
 
     @CreationTimestamp
-    @Column(name = "created_date",nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    @Column(name = "last_modified_date",insertable = false)
+    @Column(name = "last_modified_date", insertable = false)
     private LocalDateTime lastModifiedDate;
 }

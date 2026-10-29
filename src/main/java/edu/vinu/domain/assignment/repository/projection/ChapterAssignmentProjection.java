@@ -17,17 +17,30 @@ import java.time.LocalDateTime;
 
 public interface ChapterAssignmentProjection {
     Long getId();
+
     Long getChapterId();
+
     Long getAssignmentId();
+
     String getTopic();
+
     String getDescription();
+
     String getFileName();
+
     Integer getTotalMarks();
+
     LocalDateTime getAvailableOn();
+
     LocalDateTime getDueDate();
+
     boolean getLateSubmission();
+
     boolean getResubmission();
+
     Integer getMaxAttempts();
+
     LocalDateTime getCreatedDate();
+
     LocalDateTime getLastModifiedDate();
 }

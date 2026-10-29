@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @CrossOrigin
 @RestController
 @RequestMapping("api/v2/profile-files")
@@ -35,13 +37,12 @@ public class ProfileFileController {
     private final ProfileFileService profileFileService;
 
     @PostMapping("/upload/{type:dp|banner}")
-    public ResponseEntity<ApiResponse> uploadFile(@PathVariable String type, @RequestParam("file") MultipartFile file){
-        String path = profileFileService.uploadFile(file, type);
-        return ResponseEntity.status(200).body(new ApiResponse("File uploaded successfully", path));
+    public ResponseEntity<ApiResponse<String>> uploadFile(@PathVariable String type, @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.status(200).body(createApiResponse("File uploaded successfully", profileFileService.uploadFile(file, type)));
     }
 
     @GetMapping("/load/{type:dp|banner}/{filename:.+}")
-    public ResponseEntity<byte[]> getFile(@PathVariable("type") String type,@PathVariable("filename") String fileName) throws IOException {
+    public ResponseEntity<byte[]> getFile(@PathVariable("type") String type, @PathVariable("filename") String fileName) throws IOException {
         File file = profileFileService.loadFile(type, fileName);
 
         if (!file.exists() || !file.isFile()) {

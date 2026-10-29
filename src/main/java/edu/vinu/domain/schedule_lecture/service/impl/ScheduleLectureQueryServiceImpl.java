@@ -32,9 +32,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleLectureQueryServiceImpl implements ScheduleLectureQueryService {
     private final ScheduleLectureRepository scheduleLectureRepository;
+
     @Override
     public PaginatedApiResponse<ScheduleLectureResponse> getAllScheduleLecturesByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ScheduleLectureFilterRequest filters) {
-        Pageable pageable = PageRequest.of(page,size, SortUtil.buildSort(direction, sortBy, List.of("created_date")));
+        Pageable pageable = PageRequest.of(page, size, SortUtil.buildSort(direction, sortBy, List.of("created_date")));
         Page<ScheduleLectureResponse> pageData = scheduleLectureRepository.getAllModules(chapterId, filters.scheduleLectureId(), filters.startDate(), filters.startTime(), filters.endTime(), filters.status(), pageable)
                 .map(ScheduleLectureMapper::toScheduleLectureResponse);
 

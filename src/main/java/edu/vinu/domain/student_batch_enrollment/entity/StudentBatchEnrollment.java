@@ -33,7 +33,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "student_batch_enrollment",
         uniqueConstraints = {
-            @UniqueConstraint(columnNames = {"student_id", "batch_id"},name = "uk_student_batch"),
+                @UniqueConstraint(columnNames = {"student_id", "batch_id"}, name = "uk_student_batch"),
         }
 )
 @Builder
@@ -64,6 +64,6 @@ public class StudentBatchEnrollment {
     private BatchEntity batch;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "payment_id",unique = true, nullable = false)
+    @JoinColumn(name = "payment_id", unique = true, nullable = false)
     private Payment payment;
 }

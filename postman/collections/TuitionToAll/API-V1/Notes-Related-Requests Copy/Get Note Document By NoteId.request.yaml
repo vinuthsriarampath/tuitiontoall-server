@@ -1,4 +1,0 @@
-$kind: http-request
-url: http://localhost:8080/notes/getDocumentByNoteId/
-method: GET
-order: 3000

@@ -30,10 +30,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "chapter",
-    uniqueConstraints = {
-        @UniqueConstraint(name = "un_moduleid_chapterorder", columnNames = {"module_id", "chapter_order"}),
-        @UniqueConstraint(name = "un_moduleid_title", columnNames = {"module_id", "title"})
-    }
+        uniqueConstraints = {
+                @UniqueConstraint(name = "un_moduleid_chapterorder", columnNames = {"module_id", "chapter_order"}),
+                @UniqueConstraint(name = "un_moduleid_title", columnNames = {"module_id", "title"})
+        }
 )
 @AllArgsConstructor
 @NoArgsConstructor

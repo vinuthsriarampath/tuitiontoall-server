@@ -21,14 +21,20 @@ import java.time.LocalDateTime;
 
 public interface EnrollmentHistoryProjection {
     Long getEnrollmentId();
+
     StudentBatchEnrollmentStatus getEnrollmentStatus();
+
     LocalDateTime getEnrollmentDate();
 
     Long getBatchId();
+
     String getBatchName();
+
     BatchStatus getBatchStatus();
+
     LocalDate getBatchStartDate();
 
     Long getCourseId();
+
     String getCourseTitle();
 }

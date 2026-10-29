@@ -41,7 +41,7 @@ public class Post {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id",nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
     @Column(name = "caption", columnDefinition = "TEXT")
@@ -56,14 +56,14 @@ public class Post {
     private PostStatus status;
 
     @CreationTimestamp
-    @Column(name = "created_date",nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdDate;
 
     @Column(name = "published_date")
     private LocalDateTime publishedDate;
 
     @UpdateTimestamp
-    @Column(name = "updated_date",insertable = false)
+    @Column(name = "updated_date", insertable = false)
     private LocalDateTime updatedDate;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -23,14 +23,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface StudentRepository extends JpaRepository<StudentEntity,Long> {
+public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
 
-    @Query(value = "SELECT s.* FROM student s JOIN users u ON u.id = s.user_id WHERE u.is_disabled = false",nativeQuery = true)
+    @Query(value = "SELECT s.* FROM student s JOIN users u ON u.id = s.user_id WHERE u.is_disabled = false", nativeQuery = true)
     List<StudentEntity> getAllStudents();
 
-    @Query(value = "SELECT s.* from student s JOIN users u ON u.id = s.user_id WHERE LOWER(s.first_name) LIKE LOWER(CONCAT(:firstName, '%')) AND u.is_disabled = false",nativeQuery = true)
+    @Query(value = "SELECT s.* from student s JOIN users u ON u.id = s.user_id WHERE LOWER(s.first_name) LIKE LOWER(CONCAT(:firstName, '%')) AND u.is_disabled = false", nativeQuery = true)
     List<StudentEntity> getStudentsByFirstNameLike(@Param("firstName") String firstName);
 
-    @Query(value = "SELECT s.* FROM student s JOIN users u ON u.id = s.user_id WHERE u.email = :email AND u.is_disabled = false",nativeQuery = true)
+    @Query(value = "SELECT s.* FROM student s JOIN users u ON u.id = s.user_id WHERE u.email = :email AND u.is_disabled = false", nativeQuery = true)
     Optional<StudentEntity> findStudentByEmail(@Param("email") String email);
 }

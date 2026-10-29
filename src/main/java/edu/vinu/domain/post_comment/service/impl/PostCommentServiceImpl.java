@@ -22,6 +22,7 @@ import edu.vinu.domain.post.services.PostService;
 import edu.vinu.domain.post_comment.dtos.request.PostCommentRequest;
 import edu.vinu.domain.post_comment.dtos.request.PostCommentsFilterRequest;
 import edu.vinu.domain.post_comment.dtos.response.PostCommentDetailedResponse;
+import edu.vinu.domain.post_comment.dtos.response.PostCommentResponse;
 import edu.vinu.domain.post_comment.entity.PostComment;
 import edu.vinu.domain.post_comment.mapper.PostCommentMapper;
 import edu.vinu.domain.post_comment.repository.PostCommentRepository;
@@ -36,6 +37,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static edu.vinu.common.util.ResponseUtil.createApiResponse;
+
 @Service
 @RequiredArgsConstructor
 public class PostCommentServiceImpl implements PostCommentService {
@@ -44,7 +47,7 @@ public class PostCommentServiceImpl implements PostCommentService {
     private final UserService userService;
 
     @Override
-    public ApiResponse comment(Long postId, PostCommentRequest request) {
+    public ApiResponse<PostCommentResponse> comment(Long postId, PostCommentRequest request) {
         Post post = postService.getPostById(postId);
         UserEntity currentUser = userService.getCurrentUser();
 
@@ -56,10 +59,7 @@ public class PostCommentServiceImpl implements PostCommentService {
 
         PostComment save = commentRepository.save(comment);
 
-        return ApiResponse.builder()
-                .message("Comment added successfully")
-                .data(PostCommentMapper.toPostCommentResponse(save))
-                .build();
+        return createApiResponse("Commented successfully!", PostCommentMapper.toPostCommentResponse(save));
     }
 
     @Override

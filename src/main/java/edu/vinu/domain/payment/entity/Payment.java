@@ -47,14 +47,14 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "payment_status")
     @Builder.Default
-    private PaymentStatus status =  PaymentStatus.PENDING;
+    private PaymentStatus status = PaymentStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, name = "payment_method")
     @Builder.Default
     private PaymentMethod paymentMethod = PaymentMethod.CARD;
 
-    @Column(nullable = false,updatable = false, unique = true, name = "transaction_ref")
+    @Column(nullable = false, updatable = false, unique = true, name = "transaction_ref")
     private String transactionRef;
 
     @CreationTimestamp

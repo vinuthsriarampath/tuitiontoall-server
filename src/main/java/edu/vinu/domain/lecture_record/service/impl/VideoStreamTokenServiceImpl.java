@@ -33,13 +33,13 @@ public class VideoStreamTokenServiceImpl implements VideoStreamTokenService {
         String token = UUID.randomUUID().toString();
 
         VideoStreamTokenEntity streamToken = VideoStreamTokenEntity.builder()
-                        .token(token)
-                        .fileName(fileName)
-                        .expiresAt(
-                                LocalDateTime.now()
-                                        .plusHours(24)
-                        )
-                        .build();
+                .token(token)
+                .fileName(fileName)
+                .expiresAt(
+                        LocalDateTime.now()
+                                .plusHours(24)
+                )
+                .build();
 
         tokens.put(token, streamToken);
         return token;
@@ -49,11 +49,11 @@ public class VideoStreamTokenServiceImpl implements VideoStreamTokenService {
     public VideoStreamTokenEntity validateToken(String token) {
         VideoStreamTokenEntity streamToken = tokens.get(token);
 
-        if(streamToken == null){
+        if (streamToken == null) {
             throw new UnauthorizedException("Invalid stream token");
         }
 
-        if(streamToken.getExpiresAt().isBefore(LocalDateTime.now())){
+        if (streamToken.getExpiresAt().isBefore(LocalDateTime.now())) {
             tokens.remove(token);
             throw new UnauthorizedException("Stream token expired");
         }
@@ -62,7 +62,7 @@ public class VideoStreamTokenServiceImpl implements VideoStreamTokenService {
     }
 
     @Override
-    public Map<String, VideoStreamTokenEntity> getAllTokens(){
+    public Map<String, VideoStreamTokenEntity> getAllTokens() {
         return tokens;
     }
 }

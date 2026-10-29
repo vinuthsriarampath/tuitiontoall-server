@@ -1,7 +1,0 @@
-$kind: collection
-name: Announcements
-auth:
-  type: bearer
-  credentials:
-    token: "{{JWT_TOKEN}}"
-order: 2100753577541631

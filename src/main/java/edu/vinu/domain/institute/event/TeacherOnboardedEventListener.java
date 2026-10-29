@@ -28,7 +28,7 @@ public class TeacherOnboardedEventListener {
     private final InstituteDashboardKpiService instituteDashboardKpiService;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handleTeacherOnboardEvent(TeacherOnboardedEvent event){
+    public void handleTeacherOnboardEvent(TeacherOnboardedEvent event) {
         instituteDashboardWebSocketService.updateTeacherMetrics(
                 event.instituteId(),
                 InstituteTeacherMatricsUpdatedResponse.builder()

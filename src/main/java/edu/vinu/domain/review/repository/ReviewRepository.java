@@ -26,23 +26,23 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
 
     @Query(value = """
-    SELECT
-        r.id AS id,
-        r.review AS review,
-        r.rating AS rating,
-        r.created_date AS createdDate,
-        r.last_modified_date AS lastModifiedDate
-    FROM reviews r
-    WHERE r.course_id = :courseId
-    """,
-    countQuery = """
-    SELECT COUNT(*) FROM reviews r WHERE r.course_id = :courseId
-    """, nativeQuery = true)
+            SELECT
+                r.id AS id,
+                r.review AS review,
+                r.rating AS rating,
+                r.created_date AS createdDate,
+                r.last_modified_date AS lastModifiedDate
+            FROM reviews r
+            WHERE r.course_id = :courseId
+            """,
+            countQuery = """
+                    SELECT COUNT(*) FROM reviews r WHERE r.course_id = :courseId
+                    """, nativeQuery = true)
     Page<BasicReviewProjector> findReviewsByCourseId(Long courseId, Pageable pageable);
 
 
     @Query(value = """
-    SELECT COUNT(*) FROM reviews r WHERE r.course_id = :courseId AND r.user_id = :userId
-    """, nativeQuery = true)
+            SELECT COUNT(*) FROM reviews r WHERE r.course_id = :courseId AND r.user_id = :userId
+            """, nativeQuery = true)
     Long countUserReviewsByCourseId(Long courseId, Long userId);
 }
