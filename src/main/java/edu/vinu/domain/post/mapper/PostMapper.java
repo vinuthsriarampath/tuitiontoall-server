@@ -72,7 +72,7 @@ public class PostMapper {
                 .build();
     }
 
-    private static PostStatus toPostStatus(PostCreateStatus createStatus) {
+    public static PostStatus toPostStatus(PostCreateStatus createStatus) {
         if (createStatus == null) {
             return PostStatus.DRAFT;
         }
