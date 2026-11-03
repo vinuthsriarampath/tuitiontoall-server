@@ -18,8 +18,10 @@ import edu.vinu.domain.post_comment.repository.projection.PostCommentDetailedPro
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface PostCommentRepository extends JpaRepository<PostComment, Long> {
@@ -57,4 +59,12 @@ public interface PostCommentRepository extends JpaRepository<PostComment, Long> 
             
             """, nativeQuery = true)
     Page<PostCommentDetailedProjection> findAllByPostId(Long postId, Long userId, String displayName, Pageable pageable);
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+            DELETE FROM post_comments
+            WHERE post_id = :postId
+            """, nativeQuery = true)
+    void deleteByPostId(Long postId);
 }

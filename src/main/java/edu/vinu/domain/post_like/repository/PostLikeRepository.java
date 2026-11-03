@@ -15,8 +15,10 @@ package edu.vinu.domain.post_like.repository;
 
 import edu.vinu.domain.post_like.entity.PostLike;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -38,4 +40,12 @@ public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
             LIMIT 1
             """, nativeQuery = true)
     Optional<PostLike> findByPostIdAndUserId(Long postId, Long id);
+
+    @Modifying
+    @Transactional
+    @Query(value = """
+            DELETE FROM post_like
+            WHERE post_id = :postId
+            """, nativeQuery = true)
+    void deleteByPostId(Long postId);
 }
