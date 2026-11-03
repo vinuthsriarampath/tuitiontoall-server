@@ -31,4 +31,6 @@ public interface PostService {
     Post getPostById(Long postId);
 
     ApiResponse<PostResponse> updatePost(Long postId, PostUpdateRequest request, List<MultipartFile> files);
+
+    ApiResponse<Void> deletePost(Long postId);
 }

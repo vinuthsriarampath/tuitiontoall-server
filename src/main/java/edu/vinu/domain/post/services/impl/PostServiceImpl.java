@@ -28,6 +28,8 @@ import edu.vinu.domain.post.enums.PostStatus;
 import edu.vinu.domain.post.mapper.PostMapper;
 import edu.vinu.domain.post.repository.PostRepository;
 import edu.vinu.domain.post.services.PostService;
+import edu.vinu.domain.post_comment.repository.PostCommentRepository;
+import edu.vinu.domain.post_like.repository.PostLikeRepository;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import edu.vinu.infastructure.service.file_storage.FileService;
@@ -53,6 +55,8 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final FileService fileService;
     private final UserService userService;
+    private final PostLikeRepository postLikeRepository;
+    private final PostCommentRepository postCommentRepository;
 
     @Value("${file.post-path}")
     private String postPath;
@@ -243,6 +247,40 @@ public class PostServiceImpl implements PostService {
             throw e;
         } catch (Exception e) {
             throw new InternalServerErrorException("Failed to update post.");
+        }
+    }
+
+    @Override
+    @Transactional
+    public ApiResponse<Void> deletePost(Long postId) {
+        UserEntity currentUser = userService.getCurrentUser();
+        Post post = getPostById(postId);
+
+        isOwner(post.getUser().getId(), currentUser.getId());
+
+        List<String> filesToDelete = post.getMediaList().stream()
+                .map(PostMedia::getMediaUrl)
+                .toList();
+
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+
+                    @Override
+                    public void afterCommit() {
+                        filesToDelete.forEach(PostServiceImpl.this::deletePostFile);
+                    }
+                }
+        );
+
+        try {
+            postLikeRepository.deleteByPostId(postId);
+            postCommentRepository.deleteByPostId(postId);
+            postRepository.delete(post);
+            return createApiResponse("Post deleted successfully", null);
+        } catch (RuntimeException e){
+            throw e;
+        } catch (Exception e) {
+            throw new InternalServerErrorException("Failed to delete post.");
         }
     }
 

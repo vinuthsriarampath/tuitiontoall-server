@@ -107,5 +107,10 @@ public class PostController {
             @RequestPart(value = "files", required = false) List<MultipartFile> files) {
         return ResponseEntity.ok(postService.updatePost(postId, request, files));
     }
+
+    @DeleteMapping("{postId}")
+    public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long postId){
+        return ResponseEntity.ok(postService.deletePost(postId));
+    }
 }
 
