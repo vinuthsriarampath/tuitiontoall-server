@@ -18,6 +18,7 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.domain.post.dto.request.MyPostsFilterRequests;
 import edu.vinu.domain.post.dto.request.PostCreateRequest;
+import edu.vinu.domain.post.dto.request.PostUpdateRequest;
 import edu.vinu.domain.post.dto.response.FeedPostResponse;
 import edu.vinu.domain.post.dto.response.PostResponse;
 import edu.vinu.domain.post.dto.response.UserPostResponse;
@@ -98,4 +99,13 @@ public class PostController {
     public ResponseEntity<PaginatedApiResponse<PostCommentDetailedResponse>> getPostComments(@PathVariable Long postId, PaginationRequest pagination, PostCommentsFilterRequest filters) {
         return ResponseEntity.ok(postCommentService.getPostComments(postId, pagination, filters));
     }
+
+    @PutMapping("{postId}")
+    public ResponseEntity<ApiResponse<PostResponse>> updatePost(
+            @PathVariable Long postId,
+            @Valid @RequestPart("request") PostUpdateRequest request,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files) {
+        return ResponseEntity.ok(postService.updatePost(postId, request, files));
+    }
 }
+
