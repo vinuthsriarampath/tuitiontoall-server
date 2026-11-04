@@ -16,6 +16,7 @@ package edu.vinu.domain.messaging.entity;
 import edu.vinu.domain.messaging.enums.MessageAttachmentType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +25,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class MessageAttachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
