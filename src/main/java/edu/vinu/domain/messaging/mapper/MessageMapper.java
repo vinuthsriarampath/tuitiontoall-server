@@ -21,9 +21,10 @@ import java.util.List;
 
 public class MessageMapper {
     public static ChatMessageResponse toChatMessageResponse(Message message){
-        List<MessageAttachmentResponse> attachmentResponses = message.getAttachments().stream()
-                .map(MessageAttachmentMapper::toMessageAttachmentResponse)
-                .toList();
+        List<MessageAttachmentResponse> attachmentResponses =
+                message.getAttachments() == null ? List.of() : message.getAttachments().stream()
+                        .map(MessageAttachmentMapper::toMessageAttachmentResponse)
+                        .toList();
 
         return ChatMessageResponse.builder()
                 .id(message.getId())

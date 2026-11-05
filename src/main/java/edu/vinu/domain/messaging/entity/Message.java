@@ -71,5 +71,6 @@ public class Message {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<MessageAttachment> attachments = new ArrayList<>();
 }
