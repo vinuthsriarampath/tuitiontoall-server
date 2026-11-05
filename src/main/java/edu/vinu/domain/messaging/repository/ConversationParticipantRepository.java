@@ -41,5 +41,5 @@ public interface ConversationParticipantRepository extends JpaRepository<Convers
         FROM conversation_participant cp
         WHERE cp.conversation_id = :conversationId AND cp.users_id = :userId
         """, nativeQuery = true)
-    boolean isUserInConversation(@Param("conversationId") Long conversationId, @Param("userId") Long userId);
+    int isUserInConversation(@Param("conversationId") Long conversationId, @Param("userId") Long userId);
 }

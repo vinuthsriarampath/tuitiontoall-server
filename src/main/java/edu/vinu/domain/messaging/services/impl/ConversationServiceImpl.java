@@ -110,7 +110,7 @@ public class ConversationServiceImpl implements ConversationService {
     public Page<ChatMessageResponse> getConversationMessages(Long conversationId, Pageable pageable) {
         UserEntity currentUser = userService.getCurrentUser();
 
-        boolean isParticipant = participantRepository.isUserInConversation(conversationId, currentUser.getId());
+        boolean isParticipant = participantRepository.isUserInConversation(conversationId, currentUser.getId()) == 1;
 
         if (!isParticipant) {
             throw new UnauthorizedException("Unauthorized access to conversation messages");
