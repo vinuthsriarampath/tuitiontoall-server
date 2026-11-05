@@ -51,6 +51,7 @@ public class ConversationMapper {
                 .otherParticipantName(otherName)
                 .otherParticipantSlug(otherSlug)
                 .otherParticipantDp(otherDp)
+                .unreadCount(0L)
                 .build();
     }
 }

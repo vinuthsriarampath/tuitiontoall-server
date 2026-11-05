@@ -14,18 +14,25 @@
 package edu.vinu.domain.messaging.dtos.response;
 
 import edu.vinu.domain.messaging.enums.ConversationType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public record ConversationResponse(
-        Long id,
-        String topic,
-        ConversationType type,
-        LocalDateTime lastMessageAt,
-        String otherParticipantName,
-        String otherParticipantSlug,
-        String otherParticipantDp
-) {
+public class ConversationResponse{
+        private Long id;
+        private String topic;
+        private ConversationType type;
+        private LocalDateTime lastMessageAt;
+        private String otherParticipantName;
+        private String otherParticipantSlug;
+        private String otherParticipantDp;
+        @Builder.Default
+        private Long unreadCount = 0L;
 }
