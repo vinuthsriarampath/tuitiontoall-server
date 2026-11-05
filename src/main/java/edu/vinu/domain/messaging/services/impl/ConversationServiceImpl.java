@@ -123,4 +123,16 @@ public class ConversationServiceImpl implements ConversationService {
 
         return messageRepository.findMessagesByConversationId(conversationId, pageable).map(MessageMapper::toChatMessageResponse);
     }
+
+    @Transactional
+    @Override
+    public void markAsRead(Long conversationId) {
+        UserEntity currentUser = userService.getCurrentUser();
+        ConversationParticipant participant = participantRepository.findByConversationIdAndUserId(conversationId, currentUser.getId());
+
+        if (participant != null) {
+            participant.setLastReadAt(LocalDateTime.now());
+            participantRepository.save(participant);
+        }
+    }
 }

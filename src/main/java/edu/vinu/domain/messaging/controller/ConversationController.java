@@ -63,5 +63,11 @@ public class ConversationController {
         Page<ChatMessageResponse> messages = conversationService.getConversationMessages(conversationId, pageable);
         return ResponseEntity.ok(createPaginatedApiResponse("Messages retrieved successfully", messages));
     }
+
+    @PostMapping("/{conversationId}/read")
+    public ResponseEntity<ApiResponse<Void>> markConversationAsRead(@PathVariable Long conversationId) {
+        conversationService.markAsRead(conversationId);
+        return ResponseEntity.ok(createApiResponse("Marked as read", null));
+    }
 }
 

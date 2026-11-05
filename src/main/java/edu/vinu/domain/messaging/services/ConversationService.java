@@ -24,4 +24,6 @@ public interface ConversationService {
     List<ConversationResponse> getUserConversations();
     ConversationResponse getOrCreateDirectConversation(Long targetUserId);
     Page<ChatMessageResponse> getConversationMessages(Long conversationId, Pageable pageable);
+
+    void markAsRead(Long conversationId);
 }
