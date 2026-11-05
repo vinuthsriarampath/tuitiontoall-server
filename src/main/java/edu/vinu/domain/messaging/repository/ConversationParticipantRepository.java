@@ -58,4 +58,14 @@ public interface ConversationParticipantRepository extends JpaRepository<Convers
           AND (cp.last_read_at IS NULL OR m.sent_at > cp.last_read_at)
         """, nativeQuery = true)
     long countUnreadMessages(@Param("conversationId") Long conversationId, @Param("userId") Long userId);
+
+    /**
+     * Find a specific participant in a conversation by conversation ID and user ID.
+     */
+    @Query(value = """
+        SELECT *
+        FROM conversation_participant cp
+        WHERE cp.conversation_id = :conversationId AND cp.users_id = :userId
+        """, nativeQuery = true)
+    ConversationParticipant findByConversationIdAndUserId(Long conversationId, Long userId);
 }
