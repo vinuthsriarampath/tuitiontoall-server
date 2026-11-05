@@ -98,7 +98,9 @@ public class ConversationServiceImpl implements ConversationService {
                 .joinedAt(LocalDateTime.now())
                 .build();
 
-        participantRepository.saveAll(List.of(participant1, participant2));
+        List<ConversationParticipant> conversationParticipants = participantRepository.saveAll(List.of(participant1, participant2));
+
+        savedConv.setParticipants(conversationParticipants);
 
         return ConversationMapper.toConversationResponse(savedConv, currentUser);
     }
