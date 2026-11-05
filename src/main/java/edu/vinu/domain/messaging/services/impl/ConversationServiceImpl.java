@@ -56,7 +56,12 @@ public class ConversationServiceImpl implements ConversationService {
 
         List<Conversation> conversations = conversationRepository.findAllByUserId(currentUser.getId());
 
-        return conversations.stream().map(conv -> ConversationMapper.toConversationResponse(conv, currentUser)).toList();
+        return conversations.stream().map(conv -> {
+            long unreadCount = participantRepository.countUnreadMessages(conv.getId(), currentUser.getId());
+            ConversationResponse conversationResponse = ConversationMapper.toConversationResponse(conv, currentUser);
+            conversationResponse.setUnreadCount(unreadCount);
+            return conversationResponse;
+        }).toList();
     }
 
     @Override

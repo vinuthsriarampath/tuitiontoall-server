@@ -42,4 +42,20 @@ public interface ConversationParticipantRepository extends JpaRepository<Convers
         WHERE cp.conversation_id = :conversationId AND cp.users_id = :userId
         """, nativeQuery = true)
     int isUserInConversation(@Param("conversationId") Long conversationId, @Param("userId") Long userId);
+
+    /**
+     * count unread messages for a user in a specific conversation.
+     * Counts messages sent after the participant's last_read_at timestamp (excluding own messages).
+     */
+    @Query(value = """
+        SELECT COUNT(m.id)
+        FROM message m
+        JOIN conversation_participant cp ON m.conversation_id = cp.conversation_id
+        WHERE cp.conversation_id = :conversationId
+          AND cp.users_id = :userId
+          AND m.sender_id != :userId
+          AND m.is_deleted = 0
+          AND (cp.last_read_at IS NULL OR m.sent_at > cp.last_read_at)
+        """, nativeQuery = true)
+    long countUnreadMessages(@Param("conversationId") Long conversationId, @Param("userId") Long userId);
 }
