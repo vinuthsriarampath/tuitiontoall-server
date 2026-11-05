@@ -18,6 +18,7 @@ import edu.vinu.domain.messaging.entity.Conversation;
 import edu.vinu.domain.messaging.entity.ConversationParticipant;
 import edu.vinu.domain.messaging.enums.ConversationType;
 import edu.vinu.domain.user.entity.UserEntity;
+import edu.vinu.domain.user.helper.UserHelper;
 
 public class ConversationMapper {
 
@@ -28,7 +29,7 @@ public class ConversationMapper {
         String otherDp = null;
 
         // If it's a DIRECT chat, find the other participant's details for UI rendering
-        if (conv.getType() == ConversationType.DIRECT) {
+        if (conv.getType().equals(ConversationType.DIRECT)) {
             ConversationParticipant otherParticipant = conv.getParticipants().stream()
                     .filter(p -> !p.getUser().getId().equals(currentUser.getId()))
                     .findFirst()
@@ -36,7 +37,7 @@ public class ConversationMapper {
 
             if (otherParticipant != null && otherParticipant.getUser() != null) {
                 UserEntity otherUser = otherParticipant.getUser();
-                otherName = otherUser.getUserSlug(); // or display name if available
+                otherName = UserHelper.getUserDisplayName(otherUser);
                 otherSlug = otherUser.getUserSlug();
                 otherDp = otherUser.getDp();
             }

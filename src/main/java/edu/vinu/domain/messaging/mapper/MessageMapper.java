@@ -16,6 +16,7 @@ package edu.vinu.domain.messaging.mapper;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
 import edu.vinu.domain.messaging.dtos.response.MessageAttachmentResponse;
 import edu.vinu.domain.messaging.entity.Message;
+import edu.vinu.domain.user.helper.UserHelper;
 
 import java.util.List;
 
@@ -26,11 +27,13 @@ public class MessageMapper {
                         .map(MessageAttachmentMapper::toMessageAttachmentResponse)
                         .toList();
 
+        String senderName = UserHelper.getUserDisplayName(message.getSender());
+
         return ChatMessageResponse.builder()
                 .id(message.getId())
                 .conversationId(message.getConversation().getId())
                 .senderId(message.getSender().getId())
-                .senderName(message.getSender().getUserSlug()) // Adjust to display name if available
+                .senderName(senderName) // Adjust to display name if available
                 .senderDp(message.getSender().getDp())
                 .content(message.getContent())
                 .deliveryStatus(message.getDeliveryStatus())
