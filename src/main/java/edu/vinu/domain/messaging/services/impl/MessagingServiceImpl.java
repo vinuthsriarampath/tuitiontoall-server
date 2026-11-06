@@ -17,11 +17,13 @@ import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.domain.messaging.dtos.request.SendMessageRequest;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
 import edu.vinu.domain.messaging.entity.Conversation;
+import edu.vinu.domain.messaging.entity.ConversationParticipant;
 import edu.vinu.domain.messaging.entity.Message;
 import edu.vinu.domain.messaging.entity.MessageAttachment;
 import edu.vinu.domain.messaging.enums.MessageDeliveryStatus;
 import edu.vinu.domain.messaging.enums.MessageDeliveryStatusUpdate;
 import edu.vinu.domain.messaging.mapper.MessageMapper;
+import edu.vinu.domain.messaging.repository.ConversationParticipantRepository;
 import edu.vinu.domain.messaging.repository.ConversationRepository;
 import edu.vinu.domain.messaging.repository.MessageRepository;
 import edu.vinu.domain.messaging.services.MessagingService;
@@ -31,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -39,8 +42,10 @@ public class MessagingServiceImpl implements MessagingService {
     private final UserService userService;
     private final ConversationRepository conversationRepository;
     private final MessageRepository messageRepository;
+    private final ConversationParticipantRepository participantRepository;
 
     @Override
+    @Transactional
     public ChatMessageResponse saveAndProcessMessage(String senderEmail, SendMessageRequest request) {
         UserEntity sender = userService.getUserEntityByEmail(senderEmail);
 
@@ -69,6 +74,14 @@ public class MessagingServiceImpl implements MessagingService {
         }
 
         Message savedMessage = messageRepository.save(message);
+
+        ConversationParticipant senderParticipant = participantRepository
+                .findByConversationIdAndUserId(conversation.getId(), sender.getId());
+
+        if (senderParticipant != null) {
+            senderParticipant.setLastReadAt(LocalDateTime.now());
+            participantRepository.save(senderParticipant);
+        }
 
         return MessageMapper.toChatMessageResponse(savedMessage);
     }
