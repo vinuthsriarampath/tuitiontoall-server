@@ -14,6 +14,7 @@
 package edu.vinu.domain.messaging.controller;
 
 import edu.vinu.domain.messaging.dtos.request.SendMessageRequest;
+import edu.vinu.domain.messaging.dtos.request.UpdateDeliveryStatusRequest;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
 import edu.vinu.domain.messaging.services.MessagingService;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,22 @@ public class MessagingController {
         // 2. Broadcast the message in real-time to all subscribers of this conversation room topic
         String destination = "/topic/chat/" + request.conversationId();
         simpMessagingTemplate.convertAndSend(destination, response);
+    }
+
+    /**
+     * Clients send status updates to: /app/chat.status
+     * Broadcasts status changes (e.g., 'DELIVERED', 'READ')
+     */
+    @MessageMapping("/chat.status")
+    public void updateMessageStatus(@Payload UpdateDeliveryStatusRequest request, Principal principal) {
+        if (principal == null) return;
+
+        // 1. Update status in database
+        messagingService.updateMessagesStatus(request.conversationId(), request.messageIds(), request.status());
+
+        // 2. Broadcast status update event
+        String destination = "/topic/chat/" + request.conversationId() + "/status";
+        simpMessagingTemplate.convertAndSend(destination, request);
     }
 
 }

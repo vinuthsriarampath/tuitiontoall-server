@@ -20,6 +20,7 @@ import edu.vinu.domain.messaging.entity.Conversation;
 import edu.vinu.domain.messaging.entity.Message;
 import edu.vinu.domain.messaging.entity.MessageAttachment;
 import edu.vinu.domain.messaging.enums.MessageDeliveryStatus;
+import edu.vinu.domain.messaging.enums.MessageDeliveryStatusUpdate;
 import edu.vinu.domain.messaging.mapper.MessageMapper;
 import edu.vinu.domain.messaging.repository.ConversationRepository;
 import edu.vinu.domain.messaging.repository.MessageRepository;
@@ -28,6 +29,7 @@ import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -69,6 +71,22 @@ public class MessagingServiceImpl implements MessagingService {
         Message savedMessage = messageRepository.save(message);
 
         return MessageMapper.toChatMessageResponse(savedMessage);
+    }
+
+    @Override
+    @Transactional
+    public void updateMessagesStatus(Long conversationId, List<Long> messageIds, MessageDeliveryStatusUpdate status) {
+        if (messageIds == null || messageIds.isEmpty()) return;
+
+        List<Message> messagesToUpdate = messageRepository.findAllById(messageIds);
+
+        for (Message message : messagesToUpdate) {
+            if (!message.getConversation().getId().equals(conversationId)) {
+                throw new IllegalArgumentException("Message with ID " + message.getId() + " does not belong to conversation " + conversationId);
+            }
+            message.setDeliveryStatus(status.equals(MessageDeliveryStatusUpdate.DELIVERED) ? MessageDeliveryStatus.DELIVERED : MessageDeliveryStatus.READ);
+        }
+        messageRepository.saveAll(messagesToUpdate);
     }
 
 }

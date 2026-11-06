@@ -15,7 +15,12 @@ package edu.vinu.domain.messaging.services;
 
 import edu.vinu.domain.messaging.dtos.request.SendMessageRequest;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
+import edu.vinu.domain.messaging.enums.MessageDeliveryStatusUpdate;
+
+import java.util.List;
 
 public interface MessagingService {
     ChatMessageResponse saveAndProcessMessage(String senderEmail, SendMessageRequest request);
+
+    void updateMessagesStatus(Long aLong, List<Long> longs, MessageDeliveryStatusUpdate status);
 }
