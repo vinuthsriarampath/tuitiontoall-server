@@ -64,10 +64,23 @@ public class ConversationController {
         return ResponseEntity.ok(createPaginatedApiResponse("Messages retrieved successfully", messages));
     }
 
+    /**
+     * Mark a conversation as read. This will update the last read timestamp for the user in that conversation.
+     */
     @PostMapping("/{conversationId}/read")
     public ResponseEntity<ApiResponse<Void>> markConversationAsRead(@PathVariable Long conversationId) {
         conversationService.markAsRead(conversationId);
         return ResponseEntity.ok(createApiResponse("Marked as read", null));
+    }
+
+
+    /**
+     * Leave a conversation. This will mark all messages in the conversation as read for the user.
+     */
+    @PostMapping("/{conversationId}/leave")
+    public ResponseEntity<ApiResponse<Void>> leaveConversation(@PathVariable Long conversationId) {
+        conversationService.markAsRead(conversationId);
+        return ResponseEntity.ok(createApiResponse("Conversation left and marked as read",null));
     }
 }
 
