@@ -54,6 +54,9 @@ file:
   assignment-path: uploads/assignments
   assignment-submission-path: uploads/assignments/submissions
   post-path: uploads/posts
+  message-attachment:
+    temp-path: uploads/message-attachments/temp
+    attachment-path: uploads/message-attachments/attachments
 
 app:
   jwt:
