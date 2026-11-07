@@ -100,6 +100,14 @@ public class ChatAttachmentServiceImpl implements ChatAttachmentService {
         fileService.moveFile(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
     }
 
+    @Override
+    public void moveBackToTempStorage(String fileName) {
+        Path sourcePath = getAttachmentPath().resolve(fileName);
+        Path targetPath = getTempAttachmentPath().resolve(fileName);
+
+        fileService.moveFile(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+    }
+
     private MessageAttachmentType getAttachmentType(String contentType) {
         if (contentType == null) {
             throw new BadRequestException("Content type is required to determine attachment type");

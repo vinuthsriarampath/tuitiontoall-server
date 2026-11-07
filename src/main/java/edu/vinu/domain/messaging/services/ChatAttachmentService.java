@@ -23,4 +23,6 @@ public interface ChatAttachmentService {
     List<TempMessageAttachmentResponse> tempStoreFiles(List<MultipartFile> files);
 
     void moveToPermanentStorage(String tempFileName);
+
+    void moveBackToTempStorage(String fileName);
 }
