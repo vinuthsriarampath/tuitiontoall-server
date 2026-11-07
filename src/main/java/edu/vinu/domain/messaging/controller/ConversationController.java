@@ -15,6 +15,7 @@ package edu.vinu.domain.messaging.controller;
 
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
+import edu.vinu.common.util.SortUtil;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
 import edu.vinu.domain.messaging.dtos.response.ConversationResponse;
 import edu.vinu.domain.messaging.services.ConversationService;
@@ -59,7 +60,7 @@ public class ConversationController {
      */
     @GetMapping("/{conversationId}/messages")
     public ResponseEntity<PaginatedApiResponse<ChatMessageResponse>> getConversationMessages(@PathVariable Long conversationId, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "30") int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, SortUtil.buildSort("desc", List.of("sent_at"), List.of("sent_at")));
         Page<ChatMessageResponse> messages = conversationService.getConversationMessages(conversationId, pageable);
         return ResponseEntity.ok(createPaginatedApiResponse("Messages retrieved successfully", messages));
     }

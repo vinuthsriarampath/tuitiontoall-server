@@ -30,6 +30,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
             SELECT * FROM message m
             WHERE m.conversation_id = :conversationId
               AND m.is_deleted = 0
+            ORDER BY m.sent_at DESC
             """,
             countQuery = """
             SELECT COUNT(*) FROM message m
