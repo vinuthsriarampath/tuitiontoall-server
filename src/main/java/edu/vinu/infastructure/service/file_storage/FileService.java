@@ -232,4 +232,18 @@ public interface FileService {
      * @return the resolved path
      */
     Path resolve(Path directory, String fileName);
+
+
+    /**
+     * Moves a file from the source path to the target path.
+     *
+     * <p>The behavior when the target file already exists depends on the supplied
+     * {@link StandardCopyOption}.</p>
+     *
+     * @param sourcePath the source file path
+     * @param targetPath the target file path
+     * @param standardCopyOption the copy option to apply (e.g. REPLACE_EXISTING)
+     * @throws RuntimeException if the move operation fails
+     */
+    void moveFile(Path sourcePath, Path targetPath, StandardCopyOption standardCopyOption);
 }

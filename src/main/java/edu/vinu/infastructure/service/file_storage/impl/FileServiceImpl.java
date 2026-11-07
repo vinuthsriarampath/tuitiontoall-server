@@ -199,4 +199,13 @@ public class FileServiceImpl implements FileService {
         return directory.resolve(fileName);
     }
 
+    @Override
+    public void moveFile(Path sourcePath, Path targetPath, StandardCopyOption standardCopyOption) {
+        try {
+            Files.move(sourcePath, targetPath, standardCopyOption);
+        } catch (IOException e) {
+            throw new RuntimeException("Error moving file from " + sourcePath + " to " + targetPath, e);
+        }
+    }
+
 }
