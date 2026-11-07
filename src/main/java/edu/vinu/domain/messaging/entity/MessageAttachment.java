@@ -35,7 +35,7 @@ public class MessageAttachment {
     @JoinColumn(name = "message_id", nullable = false)
     private Message message;
 
-    @Column(name = "file_url", nullable = false)
+    @Column(name = "file_url", nullable = false, unique = true)
     private String fileUrl;
 
     @Column(name = "file_name", nullable = false)
