@@ -89,16 +89,25 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public ResourceRegion getRegion(Resource resource, String rangeHeader, long fileSize, long chunkSize) {
+
         try {
+            if (fileSize <= 0) {
+                throw new IllegalArgumentException("File is empty");
+            }
+
+            // No Range header: return the entire file
             if (rangeHeader == null) {
-                long length = Math.min(chunkSize, fileSize);
-                return new ResourceRegion(resource, 0, length);
+                return new ResourceRegion(resource, 0, fileSize);
             }
 
             HttpRange range = HttpRange.parseRanges(rangeHeader).get(0);
 
             long start = range.getRangeStart(fileSize);
             long end = range.getRangeEnd(fileSize);
+
+            if (start >= fileSize || start > end) {
+                throw new IllegalArgumentException("Invalid byte range");
+            }
 
             long length = Math.min(chunkSize, end - start + 1);
 
