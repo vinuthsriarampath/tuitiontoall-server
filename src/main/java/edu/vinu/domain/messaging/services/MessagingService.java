@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.messaging.services;
 
+import edu.vinu.domain.messaging.dtos.request.EditMessageRequest;
 import edu.vinu.domain.messaging.dtos.request.SendMessageRequest;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
 import edu.vinu.domain.messaging.enums.MessageDeliveryStatusUpdate;
@@ -25,4 +26,6 @@ public interface MessagingService {
     void updateMessagesStatus(Long aLong, List<Long> longs, MessageDeliveryStatusUpdate status);
 
     ChatMessageResponse deleteMessage(String senderEmail, Long messageId);
+
+    ChatMessageResponse editMessage(String senderEmail, EditMessageRequest request);
 }

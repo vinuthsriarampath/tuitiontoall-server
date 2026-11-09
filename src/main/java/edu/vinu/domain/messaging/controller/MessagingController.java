@@ -14,6 +14,7 @@
 package edu.vinu.domain.messaging.controller;
 
 import edu.vinu.domain.messaging.dtos.request.DeleteMessageRequest;
+import edu.vinu.domain.messaging.dtos.request.EditMessageRequest;
 import edu.vinu.domain.messaging.dtos.request.SendMessageRequest;
 import edu.vinu.domain.messaging.dtos.request.UpdateDeliveryStatusRequest;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
@@ -81,6 +82,20 @@ public class MessagingController {
 
         // 2. Broadcast deletion event to the active chat room topic
         String destination = "/topic/chat/" + request.conversationId() + "/delete";
+        simpMessagingTemplate.convertAndSend(destination, response);
+    }
+
+    /**
+     * Clients send edit requests to: /app/chat.edit
+     * Broadcasts message edit events to all subscribers of the conversation room topic.
+     */
+    @MessageMapping("/chat.edit")
+    public void editMessage(@Payload EditMessageRequest request, Principal principal) {
+        if (principal == null) return;
+
+        ChatMessageResponse response = messagingService.editMessage(principal.getName(), request);
+
+        String destination = "/topic/chat/" + request.conversationId() + "/edit";
         simpMessagingTemplate.convertAndSend(destination, response);
     }
 

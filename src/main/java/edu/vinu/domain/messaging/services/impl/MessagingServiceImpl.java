@@ -13,9 +13,11 @@
 
 package edu.vinu.domain.messaging.services.impl;
 
+import edu.vinu.common.exception.custom.BadRequestException;
 import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.common.exception.custom.UnauthorizedException;
+import edu.vinu.domain.messaging.dtos.request.EditMessageRequest;
 import edu.vinu.domain.messaging.dtos.request.SendMessageRequest;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
 import edu.vinu.domain.messaging.entity.Conversation;
@@ -143,6 +145,29 @@ public class MessagingServiceImpl implements MessagingService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return MessageMapper.toChatMessageResponse(saved);
+    }
+
+    @Override
+    @Transactional
+    public ChatMessageResponse editMessage(String senderEmail, EditMessageRequest request) {
+        UserEntity user = userService.getUserEntityByEmail(senderEmail);
+
+        Message message = messageRepository.findById(request.messageId())
+                .orElseThrow(() -> new NotFoundException("Message not found"));
+
+        if (!message.getSender().getId().equals(user.getId())) {
+            throw new UnauthorizedException("You can only edit your own messages");
+        }
+
+        if (message.getIsDeleted()) {
+            throw new BadRequestException("Cannot edit a deleted message");
+        }
+
+        message.setContent(request.newContent());
+        message.setIsEdited(true);
+
+        Message saved = messageRepository.save(message);
         return MessageMapper.toChatMessageResponse(saved);
     }
 
