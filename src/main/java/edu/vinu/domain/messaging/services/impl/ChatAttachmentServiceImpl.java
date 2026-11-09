@@ -174,6 +174,12 @@ public class ChatAttachmentServiceImpl implements ChatAttachmentService {
         return fileService.buildPartialResponse(resource, region, mediaType, messageAttachment.getFileName(), fileSize);
     }
 
+    @Override
+    public void deleteAttachment(String fileUrl) {
+        Path filePath = Path.of(attachmentPath, fileUrl);
+        fileService.delete(filePath);
+    }
+
     private MessageAttachmentType getAttachmentType(String contentType) {
         if (contentType == null) {
             throw new BadRequestException("Content type is required to determine attachment type");

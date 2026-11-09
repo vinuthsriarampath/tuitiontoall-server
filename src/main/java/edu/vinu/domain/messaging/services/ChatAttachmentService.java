@@ -32,4 +32,6 @@ public interface ChatAttachmentService {
     ResponseEntity<Resource> loadAttachments(String filename);
 
     ResponseEntity<ResourceRegion> streamAttachment(String filename, String rangeHeader);
+
+    void deleteAttachment(String fileUrl);
 }
