@@ -124,7 +124,6 @@ public class FileServiceImpl implements FileService {
                 .contentType(mediaType)
                 .header(HttpHeaders.ACCEPT_RANGES, "bytes")
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
-                .header(HttpHeaders.CONTENT_LENGTH, String.valueOf(fileSize))
                 .body(region);
     }
 
@@ -211,6 +210,13 @@ public class FileServiceImpl implements FileService {
     @Override
     public void moveFile(Path sourcePath, Path targetPath, StandardCopyOption standardCopyOption) {
         try {
+            if (!exists(sourcePath)) {
+                throw new RuntimeException("File Not found in temp location: " + sourcePath);
+            }
+            if(exists(targetPath)) {
+                throw new RuntimeException("Target file already exists in the target location: " + targetPath);
+            }
+            Files.createDirectories(targetPath.getParent());
             Files.move(sourcePath, targetPath, standardCopyOption);
         } catch (IOException e) {
             throw new RuntimeException("Error moving file from " + sourcePath + " to " + targetPath, e);
