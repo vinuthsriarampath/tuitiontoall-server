@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.messaging.services.impl;
 
+import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.domain.messaging.dtos.request.SendMessageRequest;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
@@ -26,6 +27,7 @@ import edu.vinu.domain.messaging.mapper.MessageMapper;
 import edu.vinu.domain.messaging.repository.ConversationParticipantRepository;
 import edu.vinu.domain.messaging.repository.ConversationRepository;
 import edu.vinu.domain.messaging.repository.MessageRepository;
+import edu.vinu.domain.messaging.services.ChatAttachmentService;
 import edu.vinu.domain.messaging.services.MessagingService;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
@@ -34,6 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,6 +46,7 @@ public class MessagingServiceImpl implements MessagingService {
     private final ConversationRepository conversationRepository;
     private final MessageRepository messageRepository;
     private final ConversationParticipantRepository participantRepository;
+    private final ChatAttachmentService attachmentService;
 
     @Override
     @Transactional
@@ -73,7 +77,18 @@ public class MessagingServiceImpl implements MessagingService {
             message.getAttachments().addAll(attachmentEntities);
         }
 
-        Message savedMessage = messageRepository.save(message);
+        Message savedMessage;
+        List<String> successfullyMovedFiles = new ArrayList<>();
+        try {
+            savedMessage = messageRepository.save(message);
+            savedMessage.getAttachments().forEach(attachment -> {
+                attachmentService.moveToPermanentStorage(attachment.getFileUrl());
+                successfullyMovedFiles.add(attachment.getFileUrl());
+            });
+        } catch (Exception e) {
+            successfullyMovedFiles.forEach(attachmentService::moveBackToTempStorage);
+            throw new InternalServerErrorException("Error occurred while saving and processing message");
+        }
 
         ConversationParticipant senderParticipant = participantRepository
                 .findByConversationIdAndUserId(conversation.getId(), sender.getId());
