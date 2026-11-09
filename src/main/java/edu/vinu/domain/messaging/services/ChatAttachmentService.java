@@ -14,6 +14,9 @@
 package edu.vinu.domain.messaging.services;
 
 import edu.vinu.domain.messaging.dtos.response.TempMessageAttachmentResponse;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourceRegion;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -25,4 +28,8 @@ public interface ChatAttachmentService {
     void moveToPermanentStorage(String tempFileName);
 
     void moveBackToTempStorage(String fileName);
+
+    ResponseEntity<Resource> loadAttachments(String filename);
+
+    ResponseEntity<ResourceRegion> streamAttachment(String filename, String rangeHeader);
 }

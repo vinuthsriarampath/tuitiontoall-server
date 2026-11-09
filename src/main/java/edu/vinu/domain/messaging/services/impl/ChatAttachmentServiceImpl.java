@@ -14,12 +14,20 @@
 package edu.vinu.domain.messaging.services.impl;
 
 import edu.vinu.common.exception.custom.BadRequestException;
+import edu.vinu.common.exception.custom.NotFoundException;
 import edu.vinu.domain.messaging.dtos.response.TempMessageAttachmentResponse;
+import edu.vinu.domain.messaging.entity.MessageAttachment;
 import edu.vinu.domain.messaging.enums.MessageAttachmentType;
+import edu.vinu.domain.messaging.repository.MessageAttachmentRepository;
 import edu.vinu.domain.messaging.services.ChatAttachmentService;
 import edu.vinu.infastructure.service.file_storage.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourceRegion;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,6 +42,7 @@ import java.util.UUID;
 public class ChatAttachmentServiceImpl implements ChatAttachmentService {
 
     private final FileService fileService;
+    private final MessageAttachmentRepository attachmentRepository;
 
     @Value("${file.message-attachment.temp-path}")
     private String tempAttachmentPath;
@@ -106,6 +115,63 @@ public class ChatAttachmentServiceImpl implements ChatAttachmentService {
         Path targetPath = getTempAttachmentPath().resolve(fileName);
 
         fileService.moveFile(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    @Override
+    public ResponseEntity<Resource> loadAttachments(String filename) {
+
+        MessageAttachment messageAttachment = attachmentRepository.findByFileUrl(filename).orElseThrow(() -> new NotFoundException("Attachment not found with filename: " + filename));
+
+        Path filePath = Path.of(attachmentPath, filename);
+
+        if(!fileService.exists(filePath)){
+            throw new NotFoundException("Attachment not found with filename: " + filename);
+        }
+
+        Resource resource = fileService.getResource(getAttachmentPath(), filename);
+        String contentType = fileService.detectContentType(filePath);
+        MediaType mediaType = MediaType.parseMediaType(contentType);
+        long filesize = fileService.size(filePath);
+
+        if(contentType.startsWith("video/")) {
+            throw new BadRequestException("Attachment is a video. Use the stream endpoint for video attachments.");
+        }
+
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + messageAttachment.getFileName() + "\"")
+                .header(HttpHeaders.CONTENT_LENGTH, String.valueOf(filesize))
+                .body(resource);
+    }
+
+    @Override
+    public ResponseEntity<ResourceRegion> streamAttachment(String filename, String rangeHeader) {
+
+        MessageAttachment messageAttachment = attachmentRepository
+                .findByFileUrl(filename)
+                .orElseThrow(() -> new NotFoundException(
+                        "Attachment not found with filename: " + filename
+                ));
+
+        if (!"VIDEO".equals(messageAttachment.getFileType().name())) {
+            throw new BadRequestException("Attachment is not a video");
+        }
+
+        Path filePath = Path.of(attachmentPath, filename);
+
+        if (!fileService.exists(filePath)) {
+            throw new NotFoundException("Attachment not found with filename: " + filename);
+        }
+
+        Resource resource = fileService.getResource(getAttachmentPath(), filename);
+
+        long fileSize = fileService.size(filePath);
+
+        MediaType mediaType = MediaType.parseMediaType(fileService.detectContentType(filePath));
+
+        ResourceRegion region = fileService.getRegion(resource, rangeHeader, fileSize, 1024 * 1024);
+
+        return fileService.buildPartialResponse(resource, region, mediaType, messageAttachment.getFileName(), fileSize);
     }
 
     private MessageAttachmentType getAttachmentType(String contentType) {
