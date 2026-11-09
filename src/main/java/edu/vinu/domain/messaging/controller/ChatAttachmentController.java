@@ -17,11 +17,10 @@ import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.messaging.dtos.response.TempMessageAttachmentResponse;
 import edu.vinu.domain.messaging.services.ChatAttachmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.ResourceRegion;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -40,5 +39,15 @@ public class ChatAttachmentController {
 
         List<TempMessageAttachmentResponse> uploadedFiles = attachmentService.tempStoreFiles(files);
         return ResponseEntity.ok(createApiResponse("Files uploaded successfully for messaging", uploadedFiles));
+    }
+
+    @GetMapping("/load/{filename:.+}")
+    public ResponseEntity<Resource> getAttachment(@PathVariable String filename){
+        return attachmentService.loadAttachments(filename);
+    }
+
+    @GetMapping("/stream/{filename:.+}")
+    public ResponseEntity<ResourceRegion> streamAttachment(@PathVariable String filename, @RequestHeader(value = "Range", required = false) String rangeHeader) {
+        return attachmentService.streamAttachment(filename, rangeHeader);
     }
 }
