@@ -23,4 +23,6 @@ public interface MessagingService {
     ChatMessageResponse saveAndProcessMessage(String senderEmail, SendMessageRequest request);
 
     void updateMessagesStatus(Long aLong, List<Long> longs, MessageDeliveryStatusUpdate status);
+
+    ChatMessageResponse deleteMessage(String senderEmail, Long messageId);
 }

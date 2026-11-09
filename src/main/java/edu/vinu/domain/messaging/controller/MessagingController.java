@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.messaging.controller;
 
+import edu.vinu.domain.messaging.dtos.request.DeleteMessageRequest;
 import edu.vinu.domain.messaging.dtos.request.SendMessageRequest;
 import edu.vinu.domain.messaging.dtos.request.UpdateDeliveryStatusRequest;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
@@ -64,6 +65,23 @@ public class MessagingController {
         // 2. Broadcast status update event
         String destination = "/topic/chat/" + request.conversationId() + "/status";
         simpMessagingTemplate.convertAndSend(destination, request);
+    }
+
+
+    /**
+     * Clients send delete requests to: /app/chat.delete
+     * Broadcasts message deletion events to all subscribers of the conversation room topic.
+     */
+    @MessageMapping("/chat.delete")
+    public void deleteMessage(@Payload DeleteMessageRequest request, Principal principal) {
+        if (principal == null) return;
+
+        // 1. Soft delete message in DB and verify ownership
+        ChatMessageResponse response = messagingService.deleteMessage(principal.getName(), request.messageId());
+
+        // 2. Broadcast deletion event to the active chat room topic
+        String destination = "/topic/chat/" + request.conversationId() + "/delete";
+        simpMessagingTemplate.convertAndSend(destination, response);
     }
 
 }

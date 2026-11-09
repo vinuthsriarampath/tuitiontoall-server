@@ -15,6 +15,7 @@ package edu.vinu.domain.messaging.services.impl;
 
 import edu.vinu.common.exception.custom.InternalServerErrorException;
 import edu.vinu.common.exception.custom.NotFoundException;
+import edu.vinu.common.exception.custom.UnauthorizedException;
 import edu.vinu.domain.messaging.dtos.request.SendMessageRequest;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
 import edu.vinu.domain.messaging.entity.Conversation;
@@ -115,6 +116,34 @@ public class MessagingServiceImpl implements MessagingService {
             message.setDeliveryStatus(status.equals(MessageDeliveryStatusUpdate.DELIVERED) ? MessageDeliveryStatus.DELIVERED : MessageDeliveryStatus.READ);
         }
         messageRepository.saveAll(messagesToUpdate);
+    }
+
+    @Override
+    @Transactional
+    public ChatMessageResponse deleteMessage(String senderEmail, Long messageId) {
+        UserEntity user = userService.getUserEntityByEmail(senderEmail);
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new NotFoundException("Message not found"));
+
+        // Verify sender ownership
+        if (!message.getSender().getId().equals(user.getId())) {
+            throw new UnauthorizedException("You can only delete your own messages");
+        }
+
+        message.setIsDeleted(true);
+        message.setContent("This message was deleted");
+
+        List<MessageAttachment> attachmentsToBeDeleted = new ArrayList<>(message.getAttachments());
+        message.getAttachments().clear();
+
+        Message saved;
+        try {
+            saved = messageRepository.save(message);
+            attachmentsToBeDeleted.forEach(atc -> attachmentService.deleteAttachment(atc.getFileUrl()));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return MessageMapper.toChatMessageResponse(saved);
     }
 
 }
