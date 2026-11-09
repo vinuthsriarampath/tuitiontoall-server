@@ -14,11 +14,11 @@
 package edu.vinu.domain.messaging.services.impl;
 
 import edu.vinu.common.exception.custom.UnauthorizedException;
+import edu.vinu.domain.messaging.dtos.request.ConversationFilterRequest;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
 import edu.vinu.domain.messaging.dtos.response.ConversationResponse;
 import edu.vinu.domain.messaging.entity.Conversation;
 import edu.vinu.domain.messaging.entity.ConversationParticipant;
-import edu.vinu.domain.messaging.entity.Message;
 import edu.vinu.domain.messaging.enums.ConversationParticipantRole;
 import edu.vinu.domain.messaging.enums.ConversationType;
 import edu.vinu.domain.messaging.mapper.ConversationMapper;
@@ -51,10 +51,10 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ConversationResponse> getUserConversations() {
+    public List<ConversationResponse> getUserConversations(ConversationFilterRequest filters) {
         UserEntity currentUser = userService.getCurrentUser();
 
-        List<Conversation> conversations = conversationRepository.findAllByUserId(currentUser.getId());
+        List<Conversation> conversations = conversationRepository.findAllByUserId(currentUser.getId(), filters.searchTerm());
 
         return conversations.stream().map(conv -> {
             long unreadCount = participantRepository.countUnreadMessages(conv.getId(), currentUser.getId());

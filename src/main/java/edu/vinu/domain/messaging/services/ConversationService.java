@@ -13,6 +13,7 @@
 
 package edu.vinu.domain.messaging.services;
 
+import edu.vinu.domain.messaging.dtos.request.ConversationFilterRequest;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
 import edu.vinu.domain.messaging.dtos.response.ConversationResponse;
 import org.springframework.data.domain.Page;
@@ -21,7 +22,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ConversationService {
-    List<ConversationResponse> getUserConversations();
+    List<ConversationResponse> getUserConversations(ConversationFilterRequest filters);
     ConversationResponse getOrCreateDirectConversation(Long targetUserId);
     Page<ChatMessageResponse> getConversationMessages(Long conversationId, Pageable pageable);
 

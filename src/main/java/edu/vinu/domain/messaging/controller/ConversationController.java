@@ -16,6 +16,7 @@ package edu.vinu.domain.messaging.controller;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.common.response.PaginatedApiResponse;
 import edu.vinu.common.util.SortUtil;
+import edu.vinu.domain.messaging.dtos.request.ConversationFilterRequest;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
 import edu.vinu.domain.messaging.dtos.response.ConversationResponse;
 import edu.vinu.domain.messaging.services.ConversationService;
@@ -41,8 +42,8 @@ public class ConversationController {
      * Fetch all conversation threads for the authenticated user.
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ConversationResponse>>> getUserConversations() {
-        List<ConversationResponse> conversations = conversationService.getUserConversations();
+    public ResponseEntity<ApiResponse<List<ConversationResponse>>> getUserConversations(ConversationFilterRequest filters) {
+        List<ConversationResponse> conversations = conversationService.getUserConversations(filters);
         return ResponseEntity.ok(createApiResponse("Conversations retrieved successfully",conversations));
     }
 
