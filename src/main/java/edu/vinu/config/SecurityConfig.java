@@ -63,7 +63,9 @@ public class SecurityConfig {
                                 "/api/v2/resources/download/**",
                                 "/api/v2/assignments/download/**",
                                 "/api/v2/assignment-submissions/download/**",
-                                "/api/v2/posts/media/**"
+                                "/api/v2/posts/media/**",
+                                "/api/v2/chat/attachments/load/**",
+                                "/api/v2/chat/attachments/stream/**"
                         ).permitAll()
                         .requestMatchers("/api/v2/**").authenticated()
                         .anyRequest().permitAll()
