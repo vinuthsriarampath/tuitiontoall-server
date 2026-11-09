@@ -19,6 +19,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MessageAttachmentRepository extends JpaRepository<MessageAttachment, Long> {
@@ -31,4 +32,11 @@ public interface MessageAttachmentRepository extends JpaRepository<MessageAttach
         WHERE ma.message_id = :messageId
         """, nativeQuery = true)
     List<MessageAttachment> findByMessageIdNative(Long messageId);
+
+    @Query(value = """
+            SELECT *
+            FROM message_attachment ma
+            WHERE ma.file_url = :filename
+            """, nativeQuery = true)
+    Optional<MessageAttachment> findByFileUrl(String filename);
 }
