@@ -16,7 +16,9 @@ package edu.vinu.domain.notification.dtos.requests;
 import edu.vinu.domain.notification.enums.NotificationType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
+@Builder
 public record NotificationCreateRequest(
         @NotNull(message = "User ID is required")
         Long userId,
