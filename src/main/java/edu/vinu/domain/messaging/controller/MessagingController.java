@@ -18,7 +18,12 @@ import edu.vinu.domain.messaging.dtos.request.EditMessageRequest;
 import edu.vinu.domain.messaging.dtos.request.SendMessageRequest;
 import edu.vinu.domain.messaging.dtos.request.UpdateDeliveryStatusRequest;
 import edu.vinu.domain.messaging.dtos.response.ChatMessageResponse;
+import edu.vinu.domain.messaging.entity.ConversationParticipant;
+import edu.vinu.domain.messaging.repository.ConversationParticipantRepository;
 import edu.vinu.domain.messaging.services.MessagingService;
+import edu.vinu.domain.notification.dtos.requests.NotificationCreateRequest;
+import edu.vinu.domain.notification.enums.NotificationType;
+import edu.vinu.domain.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -26,12 +31,15 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class MessagingController {
     private final MessagingService messagingService;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final ConversationParticipantRepository participantRepository;
+    private final NotificationService notificationService;
 
     /**
      * Clients send messages to: /app/chat.send
@@ -50,6 +58,27 @@ public class MessagingController {
         // 2. Broadcast the message in real-time to all subscribers of this conversation room topic
         String destination = "/topic/chat/" + request.conversationId();
         simpMessagingTemplate.convertAndSend(destination, response);
+
+        List<Long> userIds = participantRepository.findUserIdsByConversationId(request.conversationId());
+
+        for (Long userId : userIds) {
+            if (userId.equals(response.senderId())){
+                continue;
+            }
+
+            NotificationCreateRequest notificationRequest = NotificationCreateRequest.builder()
+                    .userId(userId)
+                    .title("New message from " + response.senderName())
+                    .content(response.content().length() > 60 ? response.content().substring(0, 60) + "..." : response.content())
+                    .type(NotificationType.CHAT)
+                    .entityType("CONVERSATION")
+                    .entityId(request.conversationId())
+                    .targetRoute("/app/message")
+                    .build();
+
+            notificationService.createNotification(notificationRequest);
+
+        }
     }
 
     /**

@@ -28,19 +28,19 @@ public interface ConversationParticipantRepository extends JpaRepository<Convers
      * Find all participants of a specific conversation room.
      */
     @Query(value = """
-        SELECT * FROM conversation_participant cp
-        WHERE cp.conversation_id = :conversationId
-        """, nativeQuery = true)
+            SELECT * FROM conversation_participant cp
+            WHERE cp.conversation_id = :conversationId
+            """, nativeQuery = true)
     List<ConversationParticipant> findByConversationId(@Param("conversationId") Long conversationId);
 
     /**
      * Check if a user is a participant in a specific conversation room.
      */
     @Query(value = """
-        SELECT IF(COUNT(*) > 0, true, false)
-        FROM conversation_participant cp
-        WHERE cp.conversation_id = :conversationId AND cp.users_id = :userId
-        """, nativeQuery = true)
+            SELECT IF(COUNT(*) > 0, true, false)
+            FROM conversation_participant cp
+            WHERE cp.conversation_id = :conversationId AND cp.users_id = :userId
+            """, nativeQuery = true)
     int isUserInConversation(@Param("conversationId") Long conversationId, @Param("userId") Long userId);
 
     /**
@@ -48,24 +48,32 @@ public interface ConversationParticipantRepository extends JpaRepository<Convers
      * Counts messages sent after the participant's last_read_at timestamp (excluding own messages).
      */
     @Query(value = """
-        SELECT COUNT(m.id)
-        FROM message m
-        JOIN conversation_participant cp ON m.conversation_id = cp.conversation_id
-        WHERE cp.conversation_id = :conversationId
-          AND cp.users_id = :userId
-          AND m.sender_id != :userId
-          AND m.is_deleted = 0
-          AND (cp.last_read_at IS NULL OR m.sent_at > cp.last_read_at)
-        """, nativeQuery = true)
+            SELECT COUNT(m.id)
+            FROM message m
+            JOIN conversation_participant cp ON m.conversation_id = cp.conversation_id
+            WHERE cp.conversation_id = :conversationId
+              AND cp.users_id = :userId
+              AND m.sender_id != :userId
+              AND m.is_deleted = 0
+              AND (cp.last_read_at IS NULL OR m.sent_at > cp.last_read_at)
+            """, nativeQuery = true)
     long countUnreadMessages(@Param("conversationId") Long conversationId, @Param("userId") Long userId);
 
     /**
      * Find a specific participant in a conversation by conversation ID and user ID.
      */
     @Query(value = """
-        SELECT *
-        FROM conversation_participant cp
-        WHERE cp.conversation_id = :conversationId AND cp.users_id = :userId
-        """, nativeQuery = true)
+            SELECT *
+            FROM conversation_participant cp
+            WHERE cp.conversation_id = :conversationId AND cp.users_id = :userId
+            """, nativeQuery = true)
     ConversationParticipant findByConversationIdAndUserId(Long conversationId, Long userId);
+
+    @Query(value = """
+            SELECT u.id
+            FROM conversation_participant cp
+            JOIN users u ON cp.users_id = u.id
+            WHERE cp.conversation_id = :conversationId
+            """, nativeQuery = true)
+    List<Long> findUserIdsByConversationId(Long conversationId);
 }
