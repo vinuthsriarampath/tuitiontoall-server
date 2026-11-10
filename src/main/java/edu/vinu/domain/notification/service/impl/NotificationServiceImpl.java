@@ -21,6 +21,7 @@ import edu.vinu.domain.notification.entity.Notification;
 import edu.vinu.domain.notification.mapper.NotificationMapper;
 import edu.vinu.domain.notification.repository.NotificationRepository;
 import edu.vinu.domain.notification.service.NotificationService;
+import edu.vinu.domain.notification.service.NotificationWebSocketService;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final UserService userService;
     private final NotificationRepository notificationRepository;
+    private final NotificationWebSocketService notificationWebSocketService;
 
     @Override
     public NotificationResponse createNotification(NotificationCreateRequest request) {
@@ -45,7 +47,7 @@ public class NotificationServiceImpl implements NotificationService {
         Notification notification = NotificationMapper.toNotificationEntity(request, user);
         Notification savedNotification = notificationRepository.save(notification);
 
-        // TODO: Trigger WebSocket push notification broadcast here for real-time UI updates
+        notificationWebSocketService.sendNotificationToUser(request.userId(), savedNotification);
 
         return NotificationMapper.toNotificationResponse(savedNotification);
     }
