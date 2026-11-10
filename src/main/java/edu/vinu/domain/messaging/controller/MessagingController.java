@@ -24,6 +24,7 @@ import edu.vinu.domain.messaging.services.MessagingService;
 import edu.vinu.domain.notification.dtos.requests.NotificationCreateRequest;
 import edu.vinu.domain.notification.enums.NotificationType;
 import edu.vinu.domain.notification.service.NotificationService;
+import edu.vinu.infastructure.service.websocket.WebSocketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -40,6 +41,7 @@ public class MessagingController {
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final ConversationParticipantRepository participantRepository;
     private final NotificationService notificationService;
+    private final WebSocketService webSocketService;
 
     /**
      * Clients send messages to: /app/chat.send
@@ -63,6 +65,10 @@ public class MessagingController {
 
         for (Long userId : userIds) {
             if (userId.equals(response.senderId())){
+                continue;
+            }
+
+            if(webSocketService.isUserSubscribed(userId, destination)){
                 continue;
             }
 
