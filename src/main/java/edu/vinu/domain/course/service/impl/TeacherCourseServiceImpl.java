@@ -84,6 +84,11 @@ public class TeacherCourseServiceImpl implements TeacherCourseService {
         return createApiResponse("Teacher's course details retrieved successfully", response);
     }
 
+    @Override
+    public List<Long> getUserIdsOfTeachersAssignedToCourse(Long courseId) {
+        return courseRepository.findUserIdsOfTeachersAssignedToCourse(courseId);
+    }
+
     private TeacherBatchResponse buildBatchResponse(List<TeacherCourseProjection> batchRows) {
         TeacherCourseProjection first = batchRows.get(0);
 

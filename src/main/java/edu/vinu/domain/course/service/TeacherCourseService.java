@@ -16,6 +16,10 @@ package edu.vinu.domain.course.service;
 import edu.vinu.common.response.ApiResponse;
 import edu.vinu.domain.course.response.TeacherCourseViewResponse;
 
+import java.util.List;
+
 public interface TeacherCourseService {
     ApiResponse<TeacherCourseViewResponse> getTeacherDetailedCourse(Long courseId);
+
+    List<Long> getUserIdsOfTeachersAssignedToCourse(Long courseId);
 }

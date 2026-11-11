@@ -207,4 +207,16 @@ public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
             GROUP BY c.id, c.title, i.id, i.institute_name
             """, nativeQuery = true)
     List<TeacherBasicCourseProjection> findPublishedCoursesByTeacherId(Long teacherId);
+
+
+    @Query(value = """
+            SELECT DISTINCT u.id
+            FROM courses c
+            JOIN batch b ON c.id = b.course_id
+            JOIN module m ON b.id = m.batch_id
+            JOIN teacher t ON m.teacher_id = t.id
+            JOIN users u ON t.user_id = u.id
+            WHERE c.id = :courseId
+            """, nativeQuery = true)
+    List<Long> findUserIdsOfTeachersAssignedToCourse(Long courseId);
 }
