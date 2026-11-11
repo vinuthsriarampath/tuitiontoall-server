@@ -20,6 +20,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
@@ -57,6 +58,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     /**
      * Mark a single notification as read, ensuring it belongs to the user.
      */
+    @Transactional
     @Modifying
     @Query(
             value = """
@@ -71,6 +73,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     /**
      * Mark all unread notifications as read for a specific user.
      */
+    @Transactional
     @Modifying
     @Query(
             value = """
