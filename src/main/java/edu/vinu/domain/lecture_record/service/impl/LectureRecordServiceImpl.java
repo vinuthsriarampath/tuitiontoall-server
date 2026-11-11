@@ -28,6 +28,7 @@ import edu.vinu.domain.lecture_record.request.LectureRecordUploadInitRequest;
 import edu.vinu.domain.lecture_record.response.LectureRecordChunkUploadResponse;
 import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
 import edu.vinu.domain.lecture_record.response.LectureRecordUploadInitResponse;
+import edu.vinu.domain.lecture_record.service.LectureRecordNotificationService;
 import edu.vinu.domain.lecture_record.service.LectureRecordService;
 import edu.vinu.infastructure.service.file_storage.FileService;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +60,8 @@ public class LectureRecordServiceImpl implements LectureRecordService {
     private final LectureRecordRepository lectureRecordRepository;
     private final ChapterService chapterService;
     private final FileService fileService;
+    private final LectureRecordNotificationService lectureRecordNotificationService;
+
     @Value("${file.lecture-record.temp-path}")
     private String tempLectureRecordPath;
     @Value("${file.lecture-record.video-path}")
@@ -174,6 +177,8 @@ public class LectureRecordServiceImpl implements LectureRecordService {
         lectureRecordUploadRepository.save(uploadEntity);
 
         fileService.deleteDirectory(uploadDirectory);
+
+        lectureRecordNotificationService.notifyUsers(savedLectureRecord, chapter.getId());
 
         return LectureRecordResponse.builder()
                 .id(savedLectureRecord.getId())
