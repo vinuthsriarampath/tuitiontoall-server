@@ -16,6 +16,7 @@ package edu.vinu.domain.chapter.repository;
 import edu.vinu.domain.chapter.entity.ChapterEntity;
 import edu.vinu.domain.chapter.repository.projection.ChapterDetailedProjection;
 import edu.vinu.domain.chapter.repository.projection.ChapterStatCountProjection;
+import edu.vinu.domain.chapter.response.ChapterHierarchyResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -88,4 +89,18 @@ public interface ChapterRepository extends JpaRepository<ChapterEntity, Long> {
                     """,
             nativeQuery = true)
     ChapterStatCountProjection getStatCountByChapterId(Long chapterId);
+
+    @Query(value = """
+            SELECT
+            ch.id AS chapterId,
+            m.id AS moduleId,
+            b.id AS batchId,
+            c.id AS courseId
+            FROM chapter ch
+            JOIN module m ON ch.module_id = m.id
+            JOIN batch b ON m.batch_id = b.id
+            JOIN courses c ON b.course_id = c.id
+            WHERE ch.id = :chapterId
+            """,nativeQuery = true)
+    Optional<ChapterHierarchyResponse> findChapterHierarchy(Long chapterId);
 }

@@ -21,6 +21,7 @@ import edu.vinu.domain.chapter.request.ChapterCreateRequest;
 import edu.vinu.domain.chapter.request.ChapterDetailsUpdateRequest;
 import edu.vinu.domain.chapter.request.ChapterReorderRequest;
 import edu.vinu.domain.chapter.response.ChapterDetailedResponse;
+import edu.vinu.domain.chapter.response.ChapterHierarchyResponse;
 import edu.vinu.domain.chapter.response.ChapterResponse;
 import edu.vinu.domain.chapter.response.ChapterStatCountResponse;
 import edu.vinu.domain.lecture_record.response.LectureRecordResponse;
@@ -51,4 +52,6 @@ public interface ChapterService {
     PaginatedApiResponse<ChapterAssignmentResponse> getAllChapterAssignmentsByChapter(Long chapterId, int page, int size, String direction, List<String> sortBy, ChapterAssignmentFilterRequest filters);
 
     ChapterStatCountResponse getStatCountByCourseId(Long id);
+
+    ChapterHierarchyResponse getChapterHierarchy(Long chapterId);
 }

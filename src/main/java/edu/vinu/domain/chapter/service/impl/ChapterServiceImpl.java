@@ -28,6 +28,7 @@ import edu.vinu.domain.chapter.request.ChapterDetailsUpdateRequest;
 import edu.vinu.domain.chapter.request.ChapterOrderRequest;
 import edu.vinu.domain.chapter.request.ChapterReorderRequest;
 import edu.vinu.domain.chapter.response.ChapterDetailedResponse;
+import edu.vinu.domain.chapter.response.ChapterHierarchyResponse;
 import edu.vinu.domain.chapter.response.ChapterResponse;
 import edu.vinu.domain.chapter.response.ChapterStatCountResponse;
 import edu.vinu.domain.chapter.service.ChapterService;
@@ -186,6 +187,11 @@ public class ChapterServiceImpl implements ChapterService {
     @Override
     public ChapterStatCountResponse getStatCountByCourseId(Long id) {
         return ChapterMapper.toChapterStatCountResponse(chapterRepository.getStatCountByChapterId(id));
+    }
+
+    @Override
+    public ChapterHierarchyResponse getChapterHierarchy(Long chapterId) {
+        return chapterRepository.findChapterHierarchy(chapterId).orElseThrow(()-> new NotFoundException("Chapter with the given id does not exist"));
     }
 
     private boolean isChapterExistsInModule(Long moduleId, String chapterName) {
