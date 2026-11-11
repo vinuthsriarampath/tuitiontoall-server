@@ -321,6 +321,16 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         return studentBatchEnrollmentRepository.getRecentEnrollmentByStudent(studentId, 5).stream().map(StudentBatchEnrollmentMapper::toRecentEnrollmentResponse).toList();
     }
 
+    @Override
+    public List<Long> getUserIdsEnrolledInBatch(Long batchId) {
+        return studentBatchEnrollmentRepository.getUserIdsEnrolledInBatch(batchId);
+    }
+
+    @Override
+    public List<Long> getUserIdsEnrolledInCourse(Long courseId) {
+        return studentBatchEnrollmentRepository.getUserIdsEnrolledInCourse(courseId);
+    }
+
     private List<TrendPoint> getHourlyStudentEnrollmentTrend(Long instituteId, LocalDateTime start, LocalDateTime end) {
         List<TrendPointProjection> hourlyTrendProjection = studentBatchEnrollmentRepository.getHourlyStudentEnrollmentTrend(instituteId, start, end);
         return TrendBuilder.build(start, end, TrendType.HOUR, hourlyTrendProjection);

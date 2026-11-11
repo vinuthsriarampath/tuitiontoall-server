@@ -343,4 +343,25 @@ public interface StudentBatchEnrollmentRepository extends JpaRepository<StudentB
             LIMIT :limit
             """, nativeQuery = true)
     List<RecentEnrollmentProjection> getRecentEnrollmentByStudent(Long studentId, int limit);
+
+    @Query(value = """
+            SELECT u.id
+            FROM student_batch_enrollment sbe
+            JOIN student s ON s.id = sbe.student_id
+            JOIN users u ON u.id = s.user_id
+            WHERE sbe.batch_id = :batchId
+            """, nativeQuery = true)
+    List<Long> getUserIdsEnrolledInBatch(Long batchId);
+
+    @Query(value = """
+            SELECT DISTINCT u.id
+            FROM student_batch_enrollment sbe
+            JOIN batch b ON b.id = sbe.batch_id
+            JOIN courses c ON c.id = b.course_id
+            JOIN student s ON s.id = sbe.student_id
+            JOIN users u ON u.id = s.user_id
+            WHERE c.id = :courseId
+            """, nativeQuery = true)
+    List<Long> getUserIdsEnrolledInCourse(Long courseId);
 }
+

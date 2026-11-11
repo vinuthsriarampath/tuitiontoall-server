@@ -53,4 +53,8 @@ public interface EnrollmentService {
     OverallEnrollmentResponse getOverallEnrollmentStatsByInstitute(Long instituteId, LocalDate instituteStartDate);
 
     List<RecentEnrollmentResponse> getRecent5EnrollmentsByStudent(Long studentId);
+
+    List<Long> getUserIdsEnrolledInBatch(Long batchId);
+
+    List<Long> getUserIdsEnrolledInCourse(Long courseId);
 }
