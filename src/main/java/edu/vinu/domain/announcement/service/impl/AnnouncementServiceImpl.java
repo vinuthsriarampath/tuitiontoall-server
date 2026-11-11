@@ -29,6 +29,7 @@ import edu.vinu.domain.announcement.request.create.enums.AnnouncementCreateStatu
 import edu.vinu.domain.announcement.request.update.AnnouncementUpdateRequest;
 import edu.vinu.domain.announcement.request.update.AnnouncementVisibilityUpdateRequest;
 import edu.vinu.domain.announcement.response.AnnouncementResponse;
+import edu.vinu.domain.announcement.service.AnnouncementNotificationService;
 import edu.vinu.domain.announcement.service.AnnouncementService;
 import edu.vinu.domain.auth.service.UserAuthenticationService;
 import edu.vinu.domain.batch.entity.BatchEntity;
@@ -37,6 +38,8 @@ import edu.vinu.domain.course.entity.CourseEntity;
 import edu.vinu.domain.course.service.CourseService;
 import edu.vinu.domain.institute.entity.InstituteEntity;
 import edu.vinu.domain.institute.service.InstituteService;
+import edu.vinu.domain.notification.dtos.requests.NotificationCreateRequest;
+import edu.vinu.domain.notification.enums.NotificationType;
 import edu.vinu.domain.student.entity.StudentEntity;
 import edu.vinu.domain.teacher.entity.TeacherEntity;
 import edu.vinu.domain.user.entity.UserEntity;
@@ -62,8 +65,10 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     private final BatchService batchService;
     private final UserAuthenticationService userAuthenticationService;
     private final InstituteService instituteService;
+    private final AnnouncementNotificationService announcementNotificationService;
 
     @Override
+    @Transactional
     public AnnouncementResponse createAnnouncement(AnnouncementCreateRequest request) {
 
         validateExpireAt(request.getExpireAt());
@@ -85,7 +90,11 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
         applyVisibility(announcementEntity, request.getVisibility(), request.getCourseId(), request.getBatchId(), instituteEntity);
 
-        return mapToAnnouncementResponse(announcementRepository.save(announcementEntity));
+        AnnouncementEntity saved = announcementRepository.save(announcementEntity);
+
+        announcementNotificationService.notifyUsers(saved, request.getCourseId(), request.getBatchId());
+
+        return mapToAnnouncementResponse(saved);
 
     }
 
