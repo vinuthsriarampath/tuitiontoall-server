@@ -235,5 +235,10 @@ public class InstituteTeacherServiceImpl implements InstituteTeacherService {
         return entity.getTeacher();
     }
 
+    @Override
+    public List<Long> getUserIdsWorksInInstitute(Long instituteId) {
+        return instituteTeacherRepository.getUserIdsByInstituteId(instituteId);
+    }
+
 
 }

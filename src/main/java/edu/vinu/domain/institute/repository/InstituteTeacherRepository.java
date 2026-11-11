@@ -198,4 +198,13 @@ public interface InstituteTeacherRepository extends JpaRepository<InstituteTeach
             WHERE it.teacher_id = :teacherId
             """, nativeQuery = true)
     List<TeachingProjection> getTeachingByTeacherId(Long teacherId);
+
+    @Query(value = """
+            SELECT u.id
+            FROM institute_teacher it
+            JOIN teacher t ON it.teacher_id = t.id
+            JOIN users u ON t.user_id = u.id
+            WHERE it.institute_id = :instituteId
+            """, nativeQuery = true)
+    List<Long> getUserIdsByInstituteId(Long instituteId);
 }

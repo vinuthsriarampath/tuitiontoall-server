@@ -39,4 +39,6 @@ public interface InstituteTeacherService {
     List<TeacherBasicResponse> getAllTeachersByCurrentInstitute();
 
     TeacherEntity getCurrentInstituteRelatedTeacherEntityById(Long id);
+
+    List<Long> getUserIdsWorksInInstitute(Long instituteId);
 }
