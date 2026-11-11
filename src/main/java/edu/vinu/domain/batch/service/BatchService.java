@@ -49,4 +49,6 @@ public interface BatchService {
     PaginatedApiResponse<BatchDetailedResponse> getAllBatches(PaginationRequest pagination, BatchFilterRequest filters);
 
     int countAssignedBatchesToTeacher(Long teacherId, BatchStatus batchStatus);
+
+    List<Long> getUserIdsOfTeachersAssignedToBatch(Long batchId);
 }

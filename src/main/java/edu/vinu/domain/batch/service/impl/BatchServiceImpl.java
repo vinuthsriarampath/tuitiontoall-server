@@ -246,6 +246,11 @@ public class BatchServiceImpl implements BatchService {
         return batchRepository.countBatchesByTeacherIdAndStatus(teacherId, batchStatus != null ? batchStatus.name() : null);
     }
 
+    @Override
+    public List<Long> getUserIdsOfTeachersAssignedToBatch(Long batchId) {
+        return batchRepository.findUserIdsOfTeachersAssignedToBatch(batchId);
+    }
+
     private Boolean isBatchStartDateValid(LocalDate date) {
         return !date.isBefore(LocalDate.now());
     }

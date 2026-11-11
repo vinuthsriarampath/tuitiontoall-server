@@ -225,4 +225,14 @@ public interface BatchRepository extends JpaRepository<BatchEntity, Long> {
             AND (:batchStatus IS NULL OR b.batch_status = :batchStatus)
             """, nativeQuery = true)
     int countBatchesByTeacherIdAndStatus(Long teacherId, String batchStatus);
+
+    @Query(value = """
+            SELECT DISTINCT u.id
+            FROM batch b
+            JOIN module m ON b.id = m.batch_id
+            JOIN teacher t ON m.teacher_id = t.id
+            JOIN users u ON t.user_id = u.id
+            WHERE b.id = :batchId
+            """, nativeQuery = true)
+    List<Long> findUserIdsOfTeachersAssignedToBatch(Long batchId);
 }
