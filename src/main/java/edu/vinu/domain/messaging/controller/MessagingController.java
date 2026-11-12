@@ -72,10 +72,20 @@ public class MessagingController {
                 continue;
             }
 
+            String notificationContent ;
+
+            if (!response.content().isEmpty()){
+                notificationContent = response.content();
+            } else if (!response.attachments().isEmpty()){
+                notificationContent = "Sent an attachment";
+            } else {
+                notificationContent = "Sent a message";
+            }
+
             NotificationCreateRequest notificationRequest = NotificationCreateRequest.builder()
                     .userId(userId)
-                    .title("New message from " + response.senderName())
-                    .content(response.content().length() > 60 ? response.content().substring(0, 60) + "..." : response.content())
+                    .title(response.senderName())
+                    .content(notificationContent)
                     .type(NotificationType.CHAT)
                     .entityType("CONVERSATION")
                     .entityId(request.conversationId())
