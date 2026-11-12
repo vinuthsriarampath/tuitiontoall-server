@@ -27,6 +27,7 @@ import edu.vinu.domain.resource.request.ResourceInitRequest;
 import edu.vinu.domain.resource.response.ResourceChunkUploadResponse;
 import edu.vinu.domain.resource.response.ResourceInitResponse;
 import edu.vinu.domain.resource.response.ResourceResponse;
+import edu.vinu.domain.resource.service.ResourceNotificationService;
 import edu.vinu.domain.resource.service.ResourceService;
 import edu.vinu.infastructure.service.file_storage.FileService;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +56,8 @@ public class ResourceServiceImpl implements ResourceService {
     private final ResourceUploadRepository resourceUploadRepository;
     private final ChapterService chapterService;
     private final FileService fileService;
+    private final ResourceNotificationService resourceNotificationService;
+
     @Value("${file.chapter-resource.temp-path}")
     private String tempResourcePath;
     @Value("${file.chapter-resource.resource-path}")
@@ -157,6 +160,8 @@ public class ResourceServiceImpl implements ResourceService {
         resourceUploadRepository.save(uploadEntity);
 
         fileService.deleteDirectory(uploadDirectory);
+
+        resourceNotificationService.notifyUsers(savedResourcesEntity, chapterEntity.getId());
 
         return ResourceMapper.toResourceResponse(savedResourcesEntity);
     }
