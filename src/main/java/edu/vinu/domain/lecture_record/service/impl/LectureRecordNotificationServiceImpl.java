@@ -50,8 +50,8 @@ public class LectureRecordNotificationServiceImpl implements LectureRecordNotifi
         userIds.forEach(userId -> notificationService.createNotification(
                 NotificationCreateRequest.builder()
                         .userId(userId)
-                        .title("New Lecture Record")
-                        .content("A new lecture record has been uploaded!")
+                        .title("New Lecture Record!")
+                        .content(lectureRecord.getTitle())
                         .type(NotificationType.LECTURE)
                         .entityType("LECTURE_RECORD")
                         .entityId(lectureRecord.getId())
