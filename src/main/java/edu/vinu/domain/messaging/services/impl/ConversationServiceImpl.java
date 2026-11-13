@@ -57,7 +57,7 @@ public class ConversationServiceImpl implements ConversationService {
         List<Conversation> conversations = conversationRepository.findAllByUserId(currentUser.getId(), filters.searchTerm());
 
         return conversations.stream().map(conv -> {
-            long unreadCount = participantRepository.countUnreadMessages(conv.getId(), currentUser.getId());
+            long unreadCount = participantRepository.countUnreadMessagesByConversation(conv.getId(), currentUser.getId());
             ConversationResponse conversationResponse = ConversationMapper.toConversationResponse(conv, currentUser);
             conversationResponse.setUnreadCount(unreadCount);
             return conversationResponse;
@@ -134,5 +134,11 @@ public class ConversationServiceImpl implements ConversationService {
             participant.setLastReadAt(LocalDateTime.now());
             participantRepository.save(participant);
         }
+    }
+
+    @Override
+    public long getUnreadMessageCount() {
+        UserEntity currentUser = userService.getCurrentUser();
+        return participantRepository.countTotalUnreadMessages(currentUser.getId());
     }
 }

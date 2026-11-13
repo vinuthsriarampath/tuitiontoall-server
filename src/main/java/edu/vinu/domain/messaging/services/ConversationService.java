@@ -27,4 +27,6 @@ public interface ConversationService {
     Page<ChatMessageResponse> getConversationMessages(Long conversationId, Pageable pageable);
 
     void markAsRead(Long conversationId);
+
+    long getUnreadMessageCount();
 }

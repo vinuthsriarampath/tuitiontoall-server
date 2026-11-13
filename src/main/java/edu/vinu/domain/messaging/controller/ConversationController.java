@@ -44,7 +44,7 @@ public class ConversationController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<ConversationResponse>>> getUserConversations(ConversationFilterRequest filters) {
         List<ConversationResponse> conversations = conversationService.getUserConversations(filters);
-        return ResponseEntity.ok(createApiResponse("Conversations retrieved successfully",conversations));
+        return ResponseEntity.ok(createApiResponse("Conversations retrieved successfully", conversations));
     }
 
     /**
@@ -53,7 +53,7 @@ public class ConversationController {
     @PostMapping("/direct/{targetUserId}")
     public ResponseEntity<ApiResponse<ConversationResponse>> getOrCreateDirectConversation(@PathVariable Long targetUserId) {
         ConversationResponse conversation = conversationService.getOrCreateDirectConversation(targetUserId);
-        return ResponseEntity.ok(createApiResponse("Conversation ready",conversation));
+        return ResponseEntity.ok(createApiResponse("Conversation ready", conversation));
     }
 
     /**
@@ -82,7 +82,16 @@ public class ConversationController {
     @PostMapping("/{conversationId}/leave")
     public ResponseEntity<ApiResponse<Void>> leaveConversation(@PathVariable Long conversationId) {
         conversationService.markAsRead(conversationId);
-        return ResponseEntity.ok(createApiResponse("Conversation left and marked as read",null));
+        return ResponseEntity.ok(createApiResponse("Conversation left and marked as read", null));
+    }
+
+    /**
+     * Get total unread message count for the authenticated user across all conversations.
+     */
+    @GetMapping("/unread-count")
+    public ResponseEntity<ApiResponse<Long>> getUnreadMessageCount() {
+        long unreadCount = conversationService.getUnreadMessageCount();
+        return ResponseEntity.ok(createApiResponse("Unread message count retrieved successfully", unreadCount));
     }
 }
 
