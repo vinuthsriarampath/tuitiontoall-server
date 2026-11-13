@@ -50,14 +50,14 @@ public interface ConversationParticipantRepository extends JpaRepository<Convers
     @Query(value = """
             SELECT COUNT(m.id)
             FROM message m
-            JOIN conversation_participant cp ON m.conversation_id = cp.conversation_id
+            INNER JOIN conversation_participant cp ON cp.conversation_id = m.conversation_id
             WHERE cp.conversation_id = :conversationId
               AND cp.users_id = :userId
-              AND m.sender_id != :userId
-              AND m.is_deleted = 0
+              AND m.sender_id <> :userId
+              AND m.is_deleted = false
               AND (cp.last_read_at IS NULL OR m.sent_at > cp.last_read_at)
             """, nativeQuery = true)
-    long countUnreadMessages(@Param("conversationId") Long conversationId, @Param("userId") Long userId);
+    long countUnreadMessagesByConversation(@Param("conversationId") Long conversationId, @Param("userId") Long userId);
 
     /**
      * Find a specific participant in a conversation by conversation ID and user ID.
@@ -76,4 +76,15 @@ public interface ConversationParticipantRepository extends JpaRepository<Convers
             WHERE cp.conversation_id = :conversationId
             """, nativeQuery = true)
     List<Long> findUserIdsByConversationId(Long conversationId);
+
+    @Query(value = """
+            SELECT count(m.id)
+            FROM conversation_participant cp
+            INNER JOIN message m ON m.conversation_id = cp.conversation_id
+            WHERE cp.users_id = :userId
+              AND m.sender_id != :userId
+              AND m.is_deleted = 0
+              AND (cp.last_read_at IS NULL OR m.sent_at > cp.last_read_at)
+            """, nativeQuery = true)
+    long countTotalUnreadMessages(Long userId);
 }
