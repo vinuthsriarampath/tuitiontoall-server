@@ -26,6 +26,7 @@ import edu.vinu.domain.messaging.entity.Message;
 import edu.vinu.domain.messaging.entity.MessageAttachment;
 import edu.vinu.domain.messaging.enums.MessageDeliveryStatus;
 import edu.vinu.domain.messaging.enums.MessageDeliveryStatusUpdate;
+import edu.vinu.domain.messaging.events.ConversationMessageReceivedEvent;
 import edu.vinu.domain.messaging.mapper.MessageMapper;
 import edu.vinu.domain.messaging.repository.ConversationParticipantRepository;
 import edu.vinu.domain.messaging.repository.ConversationRepository;
@@ -35,6 +36,7 @@ import edu.vinu.domain.messaging.services.MessagingService;
 import edu.vinu.domain.user.entity.UserEntity;
 import edu.vinu.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,13 +52,28 @@ public class MessagingServiceImpl implements MessagingService {
     private final MessageRepository messageRepository;
     private final ConversationParticipantRepository participantRepository;
     private final ChatAttachmentService attachmentService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
     public ChatMessageResponse saveAndProcessMessage(String senderEmail, SendMessageRequest request) {
         UserEntity sender = userService.getUserEntityByEmail(senderEmail);
 
-        Conversation conversation = conversationRepository.findById(request.conversationId()).orElseThrow(() -> new NotFoundException("Conversation not found with id: " + request.conversationId()));
+        Conversation conversation = conversationRepository.findById(request.conversationId())
+                .orElseThrow(() -> new NotFoundException(
+                        "Conversation not found with id: " + request.conversationId()
+                ));
+
+        // Verify that the sender is a participant.
+        ConversationParticipant senderParticipant =
+                participantRepository.findByConversationIdAndUserId(
+                        conversation.getId(),
+                        sender.getId()
+                );
+
+        if (senderParticipant == null) {
+            throw new UnauthorizedException("You are not a participant of this conversation");
+        }
 
         Message message = Message.builder()
                 .conversation(conversation)
@@ -67,41 +84,64 @@ public class MessagingServiceImpl implements MessagingService {
                 .isDeleted(false)
                 .build();
 
+        // Process attachments.
         if (request.attachments() != null && !request.attachments().isEmpty()) {
-            List<MessageAttachment> attachmentEntities = request.attachments().stream().map(att ->
-                    MessageAttachment.builder()
+
+            List<MessageAttachment> attachmentEntities = request.attachments()
+                    .stream()
+                    .map(att -> MessageAttachment.builder()
                             .message(message)
                             .fileUrl(att.fileUrl())
                             .fileName(att.fileName())
                             .fileType(att.fileType())
                             .fileSize(att.fileSize())
                             .build()
-            ).toList();
+                    )
+                    .toList();
+
             message.getAttachments().addAll(attachmentEntities);
         }
 
         Message savedMessage;
+
         List<String> successfullyMovedFiles = new ArrayList<>();
+
         try {
             savedMessage = messageRepository.save(message);
+
             savedMessage.getAttachments().forEach(attachment -> {
                 attachmentService.moveToPermanentStorage(attachment.getFileUrl());
                 successfullyMovedFiles.add(attachment.getFileUrl());
             });
+
         } catch (Exception e) {
-            successfullyMovedFiles.forEach(attachmentService::moveBackToTempStorage);
+
+            successfullyMovedFiles.forEach(
+                    attachmentService::moveBackToTempStorage
+            );
+
             throw new InternalServerErrorException("Error occurred while saving and processing message");
         }
 
-        ConversationParticipant senderParticipant = participantRepository
-                .findByConversationIdAndUserId(conversation.getId(), sender.getId());
+        // Update sender's read timestamp.
+        senderParticipant.setLastReadAt(LocalDateTime.now());
+        participantRepository.save(senderParticipant);
 
-        if (senderParticipant != null) {
-            senderParticipant.setLastReadAt(LocalDateTime.now());
-            participantRepository.save(senderParticipant);
+        ChatMessageResponse response = MessageMapper.toChatMessageResponse(savedMessage);
+
+        // Publish an event for every other participant.
+        List<Long> participantIds = participantRepository.findUserIdsByConversationId(conversation.getId());
+
+        for (Long recipientId : participantIds) {
+
+            if (recipientId.equals(sender.getId())) {
+                continue;
+            }
+
+            eventPublisher.publishEvent(new ConversationMessageReceivedEvent(recipientId, conversation.getId(), savedMessage.getId()));
         }
 
-        return MessageMapper.toChatMessageResponse(savedMessage);
+        return response;
     }
 
     @Override
