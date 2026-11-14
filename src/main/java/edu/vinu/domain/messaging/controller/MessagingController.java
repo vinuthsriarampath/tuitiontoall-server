@@ -39,9 +39,6 @@ import java.util.List;
 public class MessagingController {
     private final MessagingService messagingService;
     private final SimpMessagingTemplate simpMessagingTemplate;
-    private final ConversationParticipantRepository participantRepository;
-    private final NotificationService notificationService;
-    private final WebSocketService webSocketService;
 
     /**
      * Clients send messages to: /app/chat.send
@@ -52,49 +49,13 @@ public class MessagingController {
             return; // Reject if unauthenticated
         }
 
-        String senderEmail = principal.getName();
-
         // 1. Save message to database & update conversation timestamp
-        ChatMessageResponse response = messagingService.saveAndProcessMessage(senderEmail, request);
+        ChatMessageResponse response = messagingService.saveAndProcessMessage(principal.getName(), request);
 
         // 2. Broadcast the message in real-time to all subscribers of this conversation room topic
         String destination = "/topic/chat/" + request.conversationId();
+
         simpMessagingTemplate.convertAndSend(destination, response);
-
-        List<Long> userIds = participantRepository.findUserIdsByConversationId(request.conversationId());
-
-        for (Long userId : userIds) {
-            if (userId.equals(response.senderId())){
-                continue;
-            }
-
-            if(webSocketService.isUserSubscribed(userId, destination)){
-                continue;
-            }
-
-            String notificationContent ;
-
-            if (!response.content().isEmpty()){
-                notificationContent = response.content();
-            } else if (!response.attachments().isEmpty()){
-                notificationContent = "Sent an attachment";
-            } else {
-                notificationContent = "Sent a message";
-            }
-
-            NotificationCreateRequest notificationRequest = NotificationCreateRequest.builder()
-                    .userId(userId)
-                    .title(response.senderName())
-                    .content(notificationContent)
-                    .type(NotificationType.CHAT)
-                    .entityType("CONVERSATION")
-                    .entityId(request.conversationId())
-                    .targetRoute("/app/message")
-                    .build();
-
-            notificationService.createNotification(notificationRequest);
-
-        }
     }
 
     /**
